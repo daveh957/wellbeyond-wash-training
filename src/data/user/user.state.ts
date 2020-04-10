@@ -1,7 +1,9 @@
 export interface UserState {
-  isLoggedin: boolean;
+  id?: string;
+  email?: string;
   username?: string;
+  displayName?: string;
+  isLoggedIn: boolean;
   darkMode: boolean;
-  hasSeenTutorial: boolean;
   loading: boolean;
 };

@@ -41,7 +41,7 @@ const Support: React.FC<SupportProps> = () => {
       <IonContent>
 
         <div className="login-logo">
-          <img src="assets/img/appicon.svg" alt="Ionic logo" />
+          <img src="assets/img/appicon.png" alt="Ionic logo" />
         </div>
 
         <form noValidate onSubmit={send}>
@@ -66,9 +66,9 @@ const Support: React.FC<SupportProps> = () => {
             </IonCol>
           </IonRow>
         </form>
-       
+
       </IonContent>
-     
+
       <IonToast
         isOpen={showToast}
         duration={3000}

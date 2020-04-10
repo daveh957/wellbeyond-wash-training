@@ -11,10 +11,7 @@ import './Menu.css'
 
 const routes = {
   appPages: [
-    { title: 'Schedule', path: '/tabs/schedule', icon: calendarOutline },
-    { title: 'Speakers', path: '/tabs/speakers', icon: peopleOutline },
-    { title: 'Map', path: '/tabs/map', icon: mapOutline },
-    { title: 'About', path: '/tabs/about', icon: informationCircleOutline }
+    { title: 'Subjects', path: '/tabs/training', icon: calendarOutline },
   ],
   loggedInPages: [
     { title: 'Account', path: '/account', icon: person },
@@ -66,7 +63,7 @@ const Menu: React.FC<MenuProps> = ({ darkMode, history, isAuthenticated, setDark
     <IonMenu  type="overlay" disabled={!menuEnabled} contentId="main">
       <IonContent forceOverscroll={false}>
         <IonList lines="none">
-          <IonListHeader>Conference</IonListHeader>
+          <IonListHeader>Training</IonListHeader>
           {renderlistItems(routes.appPages)}
         </IonList>
         <IonList lines="none">
@@ -78,15 +75,6 @@ const Menu: React.FC<MenuProps> = ({ darkMode, history, isAuthenticated, setDark
             <IonToggle checked={darkMode} onClick={() => setDarkMode(!darkMode)} />
           </IonItem>
         </IonList>
-        <IonList lines="none">
-          <IonListHeader>Tutorial</IonListHeader>
-          <IonItem button onClick={() => {
-            history.push('/tutorial');
-          }}>
-            <IonIcon slot="start" icon={hammer} />
-            Show Tutorial
-          </IonItem>
-        </IonList>
       </IonContent>
     </IonMenu>
   );
@@ -95,7 +83,7 @@ const Menu: React.FC<MenuProps> = ({ darkMode, history, isAuthenticated, setDark
 export default connect<{}, StateProps, {}>({
   mapStateToProps: (state) => ({
     darkMode: state.user.darkMode,
-    isAuthenticated: state.user.isLoggedin,
+    isAuthenticated: state.user.isLoggedIn,
     menuEnabled: state.data.menuEnabled
   }),
   mapDispatchToProps: ({

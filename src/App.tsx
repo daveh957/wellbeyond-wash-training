@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Redirect, Route } from 'react-router-dom';
 import { IonApp, IonRouterOutlet, IonSplitPane } from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
@@ -23,18 +23,21 @@ import '@ionic/react/css/display.css';
 
 /* Theme variables */
 import './theme/variables.css';
+
+/* Firebase */
+import * as firebase from 'firebase';
+import { firebaseConfig } from './FIREBASE_CONFIG';
+
 import MainTabs from './pages/MainTabs';
 import { connect } from './data/connect';
 import { AppContextProvider } from './data/AppContext';
-import { loadConfData } from './data/sessions/sessions.actions';
-import { setIsLoggedIn, setUsername, loadUserData } from './data/user/user.actions';
+import { loadUserData, logoutUser, setisLoggedIn, setUsername } from './data/user/user.actions';
+import { loadLessonData } from './data/lessons/lesson.actions';
+import { authCheck } from './data/user/userApi';
 import Account from './pages/Account';
 import Login from './pages/Login';
 import Signup from './pages/Signup';
 import Support from './pages/Support';
-import Tutorial from './pages/Tutorial';
-import HomeOrTutorial from './components/HomeOrTutorial';
-import { Schedule } from "./models/Schedule";
 
 const App: React.FC = () => {
   return (
@@ -46,52 +49,60 @@ const App: React.FC = () => {
 
 interface StateProps {
   darkMode: boolean;
-  schedule: Schedule;
 }
 
 interface DispatchProps {
-  loadConfData: typeof loadConfData;
+  loadLessonData: typeof loadLessonData;
   loadUserData: typeof loadUserData;
-  setIsLoggedIn: typeof setIsLoggedIn;
-  setUsername: typeof setUsername;
+  logoutUser: typeof logoutUser;
+  setisLoggedIn: typeof setisLoggedIn;
+  setUsername: typeof setisLoggedIn;
 }
 
 interface IonicAppProps extends StateProps, DispatchProps { }
 
-const IonicApp: React.FC<IonicAppProps> = ({ darkMode, schedule, setIsLoggedIn, setUsername, loadConfData, loadUserData }) => {
+if (!firebase.apps.length) {
+  firebase.initializeApp(firebaseConfig);
+}
+
+const IonicApp: React.FC<IonicAppProps> = ({ darkMode,   loadLessonData, loadUserData, logoutUser, setisLoggedIn, setUsername: setUsernameAction }) => {
 
   useEffect(() => {
+    firebase.auth().onAuthStateChanged(async user => {
+      if (user != null) {
+        console.log("We are authenticated now!");
+        setisLoggedIn(true);
+        setUsername(user.uid);
+      } else {
+        console.log("We did not authenticate.");
+        setisLoggedIn(false);
+        setUsername(undefined);
+      }
+    });
     loadUserData();
-    loadConfData();
-    // eslint-disable-next-line
+    loadLessonData();
   }, []);
 
   return (
-    schedule.groups.length === 0 ? (
-      <div></div>
-    ) : (
-        <IonApp className={`${darkMode ? 'dark-theme' : ''}`}>
-          <IonReactRouter>
-            <IonSplitPane contentId="main">
-              <Menu />
-              <IonRouterOutlet id="main">
-                <Route path="/tabs" component={MainTabs} />
-                <Route path="/account" component={Account} />
-                <Route path="/login" component={Login} />
-                <Route path="/signup" component={Signup} />
-                <Route path="/support" component={Support} />
-                <Route path="/tutorial" component={Tutorial} />
-                <Route path="/logout" render={() => {
-                  setIsLoggedIn(false);
-                  setUsername(undefined);
-                  return <Redirect to="/tabs" />
-                }} />
-                <Route path="/" component={HomeOrTutorial} exact />
-              </IonRouterOutlet>
-            </IonSplitPane>
-          </IonReactRouter>
-        </IonApp>
-      )
+      <IonApp className={`${darkMode ? 'dark-theme' : ''}`}>
+        <IonReactRouter>
+          <IonSplitPane contentId="main">
+            <Menu />
+            <IonRouterOutlet id="main">
+              <Route path="/tabs" component={MainTabs} />
+              <Route path="/account" component={Account} />
+              <Route path="/login" component={Login} />
+              <Route path="/signup" component={Signup} />
+              <Route path="/support" component={Support} />
+              <Route path="/logout" render={() => {
+                logoutUser();
+                return <Redirect to="/tabs" />
+              }} />
+              <Route path="/" render={() => <Redirect to="/tabs" />} exact={true} />
+            </IonRouterOutlet>
+          </IonSplitPane>
+        </IonReactRouter>
+      </IonApp>
   )
 }
 
@@ -100,8 +111,10 @@ export default App;
 const IonicAppConnected = connect<{}, StateProps, DispatchProps>({
   mapStateToProps: (state) => ({
     darkMode: state.user.darkMode,
-    schedule: state.data.schedule
+    subjects: state.data.subjects,
+    lessons: state.data.lessons
   }),
-  mapDispatchToProps: { loadConfData, loadUserData, setIsLoggedIn, setUsername },
+  // @ts-ignore
+  mapDispatchToProps: { loadLessonData, loadUserData, logoutUser, setisLoggedIn, setUsername },
   component: IonicApp
 });

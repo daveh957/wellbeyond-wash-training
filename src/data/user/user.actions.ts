@@ -1,11 +1,11 @@
-import { getUserData, setIsLoggedInData, setUsernameData, setHasSeenTutorialData } from '../dataApi';
+import { loginWithEmail, logout, getUserProfile } from './userApi';
 import { ActionType } from '../../util/types';
 import { UserState } from './user.state';
 
-
 export const loadUserData = () => async (dispatch: React.Dispatch<any>) => {
   dispatch(setLoading(true));
-  const data = await getUserData();
+  const data = await getUserProfile();
+  // @ts-ignore
   dispatch(setData(data));
   dispatch(setLoading(false));
 }
@@ -20,34 +20,29 @@ export const setData = (data: Partial<UserState>) => ({
   data
 } as const);
 
-export const logoutUser = () => async (dispatch: React.Dispatch<any>) => {
-  await setIsLoggedInData(false);
-  dispatch(setUsername());
-};
-
-export const setIsLoggedIn = (loggedIn: boolean) => async (dispatch: React.Dispatch<any>) => {
-  await setIsLoggedInData(loggedIn);
-  return ({
-    type: 'set-is-loggedin',
-    loggedIn
-  } as const)
-};
-
-export const setUsername = (username?: string) => async (dispatch: React.Dispatch<any>) => {
-  await setUsernameData(username);
+export const setUsername = (username?: string) => {
   return ({
     type: 'set-username',
     username
   } as const);
 };
 
-export const setHasSeenTutorial = (hasSeenTutorial: boolean) => async (dispatch: React.Dispatch<any>) => {
-  await setHasSeenTutorialData(hasSeenTutorial);
+export const setisLoggedIn = (loggedIn: boolean) => {
   return ({
-    type: 'set-has-seen-tutorial',
-    hasSeenTutorial
-  } as const);
-} 
+    type: 'set-is-loggedin',
+    loggedIn
+  } as const)
+};
+
+export const loginUser = (email: string, password: string) => async (dispatch: React.Dispatch<any>) => {
+  await loginWithEmail(email, password);
+  dispatch(loadUserData());
+};
+
+export const logoutUser = () => async (dispatch: React.Dispatch<any>) => {
+  await logout();
+  dispatch(loadUserData());
+};
 
 export const setDarkMode = (darkMode: boolean) => ({
   type: 'set-dark-mode',
@@ -57,7 +52,6 @@ export const setDarkMode = (darkMode: boolean) => ({
 export type UserActions =
   | ActionType<typeof setLoading>
   | ActionType<typeof setData>
-  | ActionType<typeof setIsLoggedIn>
+  | ActionType<typeof setisLoggedIn>
   | ActionType<typeof setUsername>
-  | ActionType<typeof setHasSeenTutorial>
   | ActionType<typeof setDarkMode>

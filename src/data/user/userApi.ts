@@ -1,0 +1,110 @@
+import * as firebase from 'firebase';
+import {NewUserInfo} from '../../models/User';
+
+/**
+ * so this function is called when the authentication state changes
+ * in the application, a side effect of that is that we need to get
+ * the rest of the user data from the user collection, that is
+ * done with the _handleAuthedUser callback
+ */
+export const authCheck = async (_handleAuthedUser: any) => {
+  return new Promise(resolve => {
+    // Listen for authentication state to change.
+    firebase.auth().onAuthStateChanged(async user => {
+      if (user != null) {
+        console.log("We are authenticated now!");
+
+        return resolve(await _handleAuthedUser(user));
+      } else {
+        console.log("We did not authenticate.");
+        _handleAuthedUser(null);
+        return resolve(null);
+      }
+    });
+  });
+};
+
+/**
+ *
+ * @param {*} email
+ * @param {*} password
+ */
+export const loginWithEmail = (email:string, password:string) => {
+  return firebase.auth().signInWithEmailAndPassword(email, password);
+};
+
+export const getCurrentUser = () => {
+  return firebase.auth().currentUser;
+};
+/**
+ *
+ */
+export const logout = () => {
+  return firebase.auth().signOut();
+};
+
+/**
+ *
+ * @param {*} userInfo.lastName
+ * @param {*} userInfo.firstName
+ * @param {*} userInfo.email
+ * @param {*} userInfo.password
+ */
+export const registerUser = async (userInfo: NewUserInfo) => {
+  console.log("in registerUser");
+  return firebase
+    .auth()
+    .createUserWithEmailAndPassword(userInfo.email, userInfo.password)
+    .then(newUser => {
+      return firebase
+        .firestore()
+        .collection("users")
+        // @ts-ignore
+        .doc(newUser.user.uid)
+        .set({
+          // @ts-ignore
+          email: newUser.user.email
+        })
+        .then(() => {
+          return { ...newUser };
+        });
+    });
+};
+
+/**
+ *
+ */
+export const getUserProfile = async () => {
+  let user = firebase.auth().currentUser;
+  console.log(user);
+
+  if (!user || !user.uid) {
+    return null;
+  }
+
+  var userRef = firebase
+    .firestore()
+    .collection("users")
+    .doc(user ? user.uid : undefined);
+
+  return userRef
+    .get()
+    .then(doc => {
+      if (doc.exists) {
+        console.log("Document data:", doc.data());
+        return {
+          ...doc.data(),
+          id: user ? user.uid : undefined,
+          email: user ? user.email : undefined,
+          displayName: user ? user.displayName : undefined
+        };
+      } else {
+        // doc.data() will be undefined in this case
+        console.log("No such document!", user ? user.uid : undefined);
+        return null;
+      }
+    })
+    .catch(error => {
+      console.log("Error getting document:", error);
+    });
+};

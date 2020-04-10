@@ -1,13 +1,10 @@
 import React  from 'react';
 import { IonTabs, IonRouterOutlet, IonTabBar, IonTabButton, IonIcon, IonLabel } from '@ionic/react';
 import { Route, Redirect } from 'react-router';
-import { calendar, location, informationCircle, people } from 'ionicons/icons';
-import SchedulePage from './SchedulePage';
-import SpeakerList from './SpeakerList';
-import SpeakerDetail from './SpeakerDetail';
-import SessionDetail from './SessionDetail';
-import MapView from './MapView';
-import About from './About';
+import { book, help } from 'ionicons/icons';
+import TrainingPage from './TrainingPage';
+import Subject from './SubjectPage';
+import LessonDetail from './LessonDetail';
 
 interface MainTabsProps { }
 
@@ -16,35 +13,23 @@ const MainTabs: React.FC<MainTabsProps> = () => {
   return (
     <IonTabs>
       <IonRouterOutlet>
-        <Redirect exact path="/tabs" to="/tabs/schedule" />
+        <Redirect exact path="/tabs" to="/tabs/training" />
         {/*
           Using the render method prop cuts down the number of renders your components will have due to route changes.
           Use the component prop when your component depends on the RouterComponentProps passed in automatically.
         */}
-        <Route path="/tabs/schedule" render={() => <SchedulePage />} exact={true} />
-        <Route path="/tabs/speakers" render={() => <SpeakerList />} exact={true} />
-        <Route path="/tabs/speakers/:id" component={SpeakerDetail} exact={true} />
-        <Route path="/tabs/schedule/:id" component={SessionDetail} />
-        <Route path="/tabs/speakers/sessions/:id" component={SessionDetail} />
-        <Route path="/tabs/map" render={() => <MapView />} exact={true} />
-        <Route path="/tabs/about" render={() => <About />} exact={true} />
+        <Route path="/tabs/training" render={() => <TrainingPage />} exact={true} />
+        <Route path="/tabs/subjects/:id" component={Subject} exact={true} />
+        <Route path="/tabs/lessons/:id" component={LessonDetail} exact={true} />
       </IonRouterOutlet>
       <IonTabBar slot="bottom">
-        <IonTabButton tab="schedule" href="/tabs/schedule">
-          <IonIcon icon={calendar} />
-          <IonLabel>Schedule</IonLabel>
+        <IonTabButton tab="training" href="/tabs/training">
+          <IonIcon icon={book} />
+          <IonLabel>Training</IonLabel>
         </IonTabButton>
-        <IonTabButton tab="speakers" href="/tabs/speakers">
-          <IonIcon icon={people} />
-          <IonLabel>Speakers</IonLabel>
-        </IonTabButton>
-        <IonTabButton tab="map" href="/tabs/map">
-          <IonIcon icon={location} />
-          <IonLabel>Map</IonLabel>
-        </IonTabButton>
-        <IonTabButton tab="about" href="/tabs/about">
-          <IonIcon icon={informationCircle} />
-          <IonLabel>About</IonLabel>
+        <IonTabButton tab="support" href="/support">
+          <IonIcon icon={help} />
+          <IonLabel>Support</IonLabel>
         </IonTabButton>
       </IonTabBar>
     </IonTabs>
