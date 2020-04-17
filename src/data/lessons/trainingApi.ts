@@ -1,9 +1,9 @@
 import * as firebase from 'firebase';
-import {Subject, Lesson} from '../../models/Lesson';
+import {Subject, Lesson} from '../../models/Training';
 
 export const loadData = async (collectionPath:string) : Promise<any> => {
   let results = Array();
-  firebase.firestore().collection(collectionPath)
+  return firebase.firestore().collection(collectionPath)
     .get()
     .then(querySnapshot => {
       querySnapshot.forEach(doc => {

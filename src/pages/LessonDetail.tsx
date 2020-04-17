@@ -8,7 +8,7 @@ import { IonHeader, IonLabel, IonToolbar, IonButtons, IonContent, IonButton, Ion
 import { connect } from '../data/connect';
 import * as selectors from '../data/selectors';
 
-import { Subject, Lesson, LessonPage } from '../models/Lesson';
+import { Subject, Lesson, LessonPage } from '../models/Training';
 
 interface OwnProps extends RouteComponentProps {
   subject?: Subject;

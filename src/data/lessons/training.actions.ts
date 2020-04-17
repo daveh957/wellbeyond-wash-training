@@ -1,18 +1,18 @@
 import { ActionType } from '../../util/types';
-import { loadData } from './lessonApi'
+import { loadData } from './trainingApi'
 import { TrainingState } from './training.state';
-import {Subject, Lesson} from '../../models/Lesson';
+import { Subject, Lesson } from '../../models/Training';
 
-export const loadLessonData = () => async (dispatch: React.Dispatch<any>) => {
+export const loadLessonData = () => (async (dispatch: React.Dispatch<any>) => {
   dispatch(setLoading(true));
-  const subjects:Subject[] = await loadData('subjects');
-  const lessons:Lesson[] = await loadData('lessons');
+  let subjects:Subject[] = await loadData('subjects');
+  let lessons:Lesson[] = await loadData('lessons');
   dispatch(setData({lessons, subjects}));
   dispatch(setLoading(false));
-}
+})
 
 export const setData = (data: Partial<TrainingState>) => ({
-  type: 'set-lesson-data',
+  type: 'set-training-data',
   data
 } as const);
 
@@ -26,6 +26,7 @@ export const setMenuEnabled = (menuEnabled: boolean) => ({
   menuEnabled
 } as const);
 
-export type LessonActions =
+export type TrainingActions =
+  | ActionType<typeof setData>
   | ActionType<typeof setLoading>
   | ActionType<typeof setMenuEnabled>

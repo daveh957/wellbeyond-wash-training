@@ -1,8 +1,11 @@
-import { LessonActions } from './lesson.actions';
+import { TrainingActions } from './training.actions';
 import { TrainingState } from './training.state';
 
-export const lessonReducer = (state: TrainingState, action: LessonActions): TrainingState => {
+export const trainingReducer = (state: TrainingState, action: TrainingActions): TrainingState => {
   switch (action.type) {
+    case 'set-training-data': {
+      return { ...state, ...action.data };
+    }
     case 'set-training-loading': {
       return { ...state, loading: action.isLoading };
     }

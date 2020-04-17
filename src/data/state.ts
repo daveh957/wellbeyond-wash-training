@@ -1,5 +1,5 @@
 import { combineReducers } from './combineReducers';
-import { lessonReducer } from './lessons/lesson.reducer';
+import { trainingReducer } from './lessons/training.reducer';
 import { userReducer } from './user/user.reducer';
 
 export const initialState: AppState = {
@@ -17,7 +17,7 @@ export const initialState: AppState = {
 };
 
 export const reducers = combineReducers({
-  data: lessonReducer,
+  data: trainingReducer,
   user: userReducer
 });
 

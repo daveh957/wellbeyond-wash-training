@@ -32,7 +32,7 @@ import MainTabs from './pages/MainTabs';
 import { connect } from './data/connect';
 import { AppContextProvider } from './data/AppContext';
 import { loadUserData, logoutUser, setisLoggedIn, setUsername } from './data/user/user.actions';
-import { loadLessonData } from './data/lessons/lesson.actions';
+import { loadLessonData } from './data/lessons/training.actions';
 import { authCheck } from './data/user/userApi';
 import Account from './pages/Account';
 import Login from './pages/Login';

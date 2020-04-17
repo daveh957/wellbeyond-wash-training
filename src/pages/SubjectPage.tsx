@@ -1,15 +1,15 @@
 import React from 'react';
 import { IonHeader, IonToolbar, IonTitle, IonContent, IonPage, IonButtons, IonMenuButton, IonGrid, IonRow, IonCol } from '@ionic/react';
 import LessonItem from '../components/LessonItem';
-import { Subject, Lesson } from '../models/Lesson';
+import { Subject, Lesson } from '../models/Training';
 import { connect } from '../data/connect';
 import * as selectors from '../data/selectors';
 import './SubjectPage.scss';
 import {RouteComponentProps} from "react-router";
 
 interface OwnProps extends RouteComponentProps {
-  subject?: Subject;
-  lessons?: Lesson[];
+  subject: Subject;
+  lessons: Lesson[];
 };
 
 interface StateProps {
@@ -19,7 +19,7 @@ interface DispatchProps { };
 
 interface SubjectProps extends OwnProps, StateProps, DispatchProps { };
 
-const SubjectPage: React.FC<SubjectProps> = ({ subject, lessons }) => {
+const SubjectPage: React.FC<SubjectProps> = ({ subject, lessons}) => {
 
   return (
     <IonPage id="lesson-list">
@@ -28,21 +28,22 @@ const SubjectPage: React.FC<SubjectProps> = ({ subject, lessons }) => {
           <IonButtons slot="start">
             <IonMenuButton />
           </IonButtons>
-          <IonTitle>Lessons</IonTitle>
+          <IonTitle>{subject ? subject.name : 'Subject'}</IonTitle>
         </IonToolbar>
       </IonHeader>
 
-      <IonContent fullscreen={true}>
-        <IonHeader collapse="condense">
-          <IonToolbar>
-            <IonTitle size="large">Lessons</IonTitle>
-          </IonToolbar>
-        </IonHeader>
+      { subject ?
+        <IonContent fullscreen={true}>
+          <IonHeader collapse="condense">
+            <IonToolbar>
+              <IonTitle size="large">{subject.name}</IonTitle>
+            </IonToolbar>
+          </IonHeader>
 
           <IonGrid fixed>
             <IonRow>
               {lessons && lessons.map(lesson => (
-                <IonCol size="12" size-md="6" key={lesson.id}>
+                <IonCol size="6" key={lesson.id}>
                   <LessonItem
                     key={lesson.id}
                     lesson={lesson}
@@ -51,7 +52,9 @@ const SubjectPage: React.FC<SubjectProps> = ({ subject, lessons }) => {
               ))}
             </IonRow>
           </IonGrid>
-      </IonContent>
+        </IonContent>
+        : undefined
+      }
     </IonPage>
   );
 };

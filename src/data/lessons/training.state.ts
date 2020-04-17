@@ -1,4 +1,4 @@
-import { Subject, Lesson } from '../../models/Lesson';
+import { Subject, Lesson } from '../../models/Training';
 export interface TrainingState {
   subjects: Subject[];
   lessons: Lesson[];

@@ -1,33 +1,33 @@
 import React, { useState, useRef } from 'react';
 
-import { IonToolbar, IonContent, IonPage, IonButtons, IonTitle, IonMenuButton, IonHeader, useIonViewWillEnter } from '@ionic/react';
+import { IonToolbar, IonContent, IonPage, IonButtons, IonTitle, IonMenuButton, IonHeader, IonList, IonItemGroup, IonItemDivider, IonLabel, IonListHeader } from '@ionic/react';
 
 import './TrainingPage.scss'
 
-import { setMenuEnabled } from '../data/lessons/lesson.actions';
 import * as selectors from '../data/selectors';
 import { connect } from '../data/connect';
-import { Subject } from '../models/Lesson';
+import { Subject, Lesson } from '../models/Training';
+import SubjectItem from "../components/SubjectItem";
 
 interface OwnProps {
 }
 
 interface StateProps {
-  subjects: Subject[]
+  subjects: Subject[],
+  lessons: Lesson[]
 }
 
 interface DispatchProps {
-  setMenuEnabled: typeof setMenuEnabled;
 }
 
 type TrainingPageProps = OwnProps & StateProps & DispatchProps;
 
-const TrainingPage: React.FC<TrainingPageProps> = ({ subjects, setMenuEnabled}) => {
+const TrainingPage: React.FC<TrainingPageProps> = ({ subjects, lessons}) => {
 
   const pageRef = useRef<HTMLElement>(null);
 
   return (
-    <IonPage ref={pageRef} id="training-page">
+    <IonPage ref={pageRef} id="subject-list">
       <IonHeader translucent={true}>
         <IonToolbar>
           <IonButtons slot="start">
@@ -37,7 +37,23 @@ const TrainingPage: React.FC<TrainingPageProps> = ({ subjects, setMenuEnabled}) 
         </IonToolbar>
       </IonHeader>
       <IonContent fullscreen={true}>
-
+        {subjects.length ?
+          (<IonList>
+            {subjects.filter(subject => subject.name && !subject.name.match(/test/i)).map((subject, index: number) => (
+              <IonItemGroup key={`subject-${index}`}>
+                <IonItemDivider sticky>
+                  <SubjectItem subject={subject} />
+                </IonItemDivider>
+              </IonItemGroup>))
+            }
+          </IonList>)
+        :
+          <IonList>
+            <IonListHeader>
+              No Subjects Found
+            </IonListHeader>
+          </IonList>
+        }
       </IonContent>
     </IonPage>
   );
@@ -45,7 +61,8 @@ const TrainingPage: React.FC<TrainingPageProps> = ({ subjects, setMenuEnabled}) 
 
 export default connect<OwnProps, StateProps, DispatchProps>({
   mapStateToProps: (state) => ({
-    subjects: selectors.getSubjects(state)
+    subjects: selectors.getSubjects(state),
+    lessons: selectors.getLessons(state)
   }),
   component: React.memo(TrainingPage)
 });

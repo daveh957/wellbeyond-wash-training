@@ -8,6 +8,8 @@ import { connect } from '../data/connect';
 import { setDarkMode } from '../data/user/user.actions';
 
 import './Menu.css'
+import {Subject} from "../models/Training";
+import * as selectors from "../data/selectors";
 
 const routes = {
   appPages: [
@@ -28,6 +30,7 @@ const routes = {
 interface Pages {
   title: string,
   path: string,
+  src?: string,
   icon: string,
   routerDirection?: string
 }
@@ -35,6 +38,7 @@ interface StateProps {
   darkMode: boolean;
   isAuthenticated: boolean;
   menuEnabled: boolean;
+  subjects: Subject[]
 }
 
 interface DispatchProps {
@@ -43,7 +47,7 @@ interface DispatchProps {
 
 interface MenuProps extends RouteComponentProps, StateProps, DispatchProps { }
 
-const Menu: React.FC<MenuProps> = ({ darkMode, history, isAuthenticated, setDarkMode, menuEnabled }) => {
+const Menu: React.FC<MenuProps> = ({ darkMode, history, isAuthenticated, setDarkMode, menuEnabled, subjects }) => {
   const location = useLocation();
 
   function renderlistItems(list: Pages[]) {
@@ -52,8 +56,21 @@ const Menu: React.FC<MenuProps> = ({ darkMode, history, isAuthenticated, setDark
       .map(p => (
         <IonMenuToggle key={p.title} auto-hide="false">
           <IonItem detail={false} routerLink={p.path} routerDirection="none" className={location.pathname.startsWith(p.path) ? 'selected' : undefined}>
-            <IonIcon slot="start" icon={p.icon} />
+            <IonIcon slot="start" src={p.src} icon={p.src ? undefined: p.icon} />
             <IonLabel>{p.title}</IonLabel>
+          </IonItem>
+        </IonMenuToggle>
+      ));
+  }
+
+  function renderSubjects() {
+    return subjects
+      .filter(subject => subject.name && !subject.name.match(/test/i))
+      .map(subject => (
+        <IonMenuToggle key={subject.id} auto-hide="false">
+          <IonItem detail={false} routerLink={'/tabs/subjects/'+subject.id} routerDirection="none" className={location.pathname.endsWith(subject.id) ? 'selected' : undefined}>
+            <IonIcon slot="start" src={subject.photo}/>
+            <IonLabel>{subject.name}</IonLabel>
           </IonItem>
         </IonMenuToggle>
       ));
@@ -64,7 +81,7 @@ const Menu: React.FC<MenuProps> = ({ darkMode, history, isAuthenticated, setDark
       <IonContent forceOverscroll={false}>
         <IonList lines="none">
           <IonListHeader>Training</IonListHeader>
-          {renderlistItems(routes.appPages)}
+          {renderSubjects()}
         </IonList>
         <IonList lines="none">
           <IonListHeader>Account</IonListHeader>
@@ -84,7 +101,8 @@ export default connect<{}, StateProps, {}>({
   mapStateToProps: (state) => ({
     darkMode: state.user.darkMode,
     isAuthenticated: state.user.isLoggedIn,
-    menuEnabled: state.data.menuEnabled
+    menuEnabled: state.data.menuEnabled,
+    subjects: selectors.getSubjects(state)
   }),
   mapDispatchToProps: ({
     setDarkMode
