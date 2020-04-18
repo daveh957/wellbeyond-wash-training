@@ -1,10 +1,10 @@
 {
-  "name": "ionic-react-conference-app",
+  "name": "wellbeyond-wash-training",
   "version": "0.0.1",
   "private": true,
   "dependencies": {
     "@capacitor/android": "^2.0.1",
-    "@capacitor/core": "2.0.1",
+    "@capacitor/core": "^2.0.1",
     "@ionic-native/intercom": "^5.23.0",
     "@ionic-native/video-player": "^5.23.0",
     "@ionic/pwa-elements": "^1.5.2",
@@ -17,7 +17,9 @@
     "@types/react-dom": "^16.9.6",
     "@types/react-router": "^5.1.5",
     "@types/react-router-dom": "^5.1.4",
+    "cloudinary-core": "^2.8.2",
     "cloudinary-react": "^1.4.0",
+    "cloudinary-video-player": "^1.3.4",
     "cordova-plugin-intercom": "^8.0.0",
     "firebase": "^7.14.0",
     "ionicons": "^5.0.1",
@@ -28,7 +30,8 @@
     "react-router": "^5.1.2",
     "react-router-dom": "^5.1.2",
     "react-scripts": "3.2.0",
-    "reselect": "^4.0.0"
+    "reselect": "^4.0.0",
+    "video-react": "^0.14.1"
   },
   "scripts": {
     "start": "react-scripts start",

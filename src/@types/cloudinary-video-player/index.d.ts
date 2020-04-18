@@ -1,1 +1,0 @@
-declare module 'cloudinary-video-player';

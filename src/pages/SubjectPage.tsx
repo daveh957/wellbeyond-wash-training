@@ -46,6 +46,7 @@ const SubjectPage: React.FC<SubjectProps> = ({ subject, lessons}) => {
                 <IonCol size="6" key={lesson.id}>
                   <LessonItem
                     key={lesson.id}
+                    subject={subject}
                     lesson={lesson}
                   />
                 </IonCol>
