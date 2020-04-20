@@ -6,6 +6,8 @@ import { connect } from '../data/connect';
 import * as selectors from '../data/selectors';
 import './SubjectPage.scss';
 import {RouteComponentProps} from "react-router";
+import { useTranslation } from "react-i18next";
+import i18n from '../i18n';
 
 interface OwnProps extends RouteComponentProps {
   subject: Subject;
@@ -21,6 +23,7 @@ interface SubjectProps extends OwnProps, StateProps, DispatchProps { };
 
 const SubjectPage: React.FC<SubjectProps> = ({ subject, lessons}) => {
 
+  const { t } = useTranslation(['translation'], {i18n} );
   return (
     <IonPage id="lesson-list">
       <IonHeader translucent={true}>
@@ -28,7 +31,7 @@ const SubjectPage: React.FC<SubjectProps> = ({ subject, lessons}) => {
           <IonButtons slot="start">
             <IonMenuButton />
           </IonButtons>
-          <IonTitle>{subject ? subject.name : 'Subject'}</IonTitle>
+          <IonTitle>{subject ? subject.name : t('resources.subjects.name')}</IonTitle>
         </IonToolbar>
       </IonHeader>
 

@@ -5,6 +5,8 @@ import './Login.scss';
 import { loginUser } from '../data/user/user.actions';
 import { connect } from '../data/connect';
 import { RouteComponentProps } from 'react-router';
+import {useTranslation} from "react-i18next";
+import i18n from "../i18n";
 
 interface OwnProps extends RouteComponentProps {}
 
@@ -21,6 +23,8 @@ const Login: React.FC<LoginProps> = ({loginUser, history}) => {
   const [formSubmitted, setFormSubmitted] = useState(false);
   const [usernameError, setUsernameError] = useState(false);
   const [passwordError, setPasswordError] = useState(false);
+
+  const { t } = useTranslation(['translation'], {i18n} );
 
   const login = async (e: React.FormEvent) => {
     e.preventDefault();

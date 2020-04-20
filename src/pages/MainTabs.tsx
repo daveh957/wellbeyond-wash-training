@@ -2,6 +2,8 @@ import React  from 'react';
 import { IonTabs, IonRouterOutlet, IonTabBar, IonTabButton, IonIcon, IonLabel } from '@ionic/react';
 import { Route, Redirect } from 'react-router';
 import { book, help } from 'ionicons/icons';
+import { useTranslation } from "react-i18next";
+import i18n from '../i18n';
 import TrainingPage from './TrainingPage';
 import SubjectPage from './SubjectPage';
 import LessonPage from './LessonPage';

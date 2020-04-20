@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { IonHeader, IonToolbar, IonTitle, IonContent, IonPage, IonButtons, IonMenuButton, IonRow, IonCol, IonButton, IonList, IonItem, IonLabel, IonInput, IonText } from '@ionic/react';
 import './Login.scss';
+import { useTranslation } from "react-i18next";
+import i18n from '../i18n';
 import { connect } from '../data/connect';
 import { RouteComponentProps } from 'react-router';
 
@@ -18,6 +20,8 @@ const Login: React.FC<LoginProps> = ({ history}) => {
   const [formSubmitted, setFormSubmitted] = useState(false);
   const [usernameError, setUsernameError] = useState(false);
   const [passwordError, setPasswordError] = useState(false);
+
+  const { t } = useTranslation(['translation'], {i18n} );
 
   const login = async (e: React.FormEvent) => {
     e.preventDefault();

@@ -13,6 +13,8 @@ import {
   IonPage,
   IonTitle, IonMenuButton, IonCardContent, IonItem, IonSlides, IonSlide, IonCard, IonCardHeader, IonFooter
 } from '@ionic/react'
+import { useTranslation } from "react-i18next";
+import i18n from '../i18n';
 
 import { connect } from '../data/connect';
 import * as selectors from '../data/selectors';
@@ -21,10 +23,11 @@ import { Subject, Lesson, LessonPage } from '../models/Training';
 import {CloudinaryContext, Image, Video} from "cloudinary-react";
 import VideoPlayer from '../components/VideoPlayer';
 import {cloudinaryConfig} from "../CLOUDINARY_CONFIG";
+import LessonPageDetail from "../components/LessonPageDetail";
 
 interface OwnProps extends RouteComponentProps {
-  subject?: Subject;
-  lesson?: Lesson;
+  subject: Subject;
+  lesson: Lesson;
 }
 
 interface StateProps {
@@ -36,6 +39,7 @@ interface LessonProps extends OwnProps, StateProps, DispatchProps {}
 
 const LessonDetailsPage: React.FC<LessonProps> = ({ subject,lesson }) => {
 
+  const { t } = useTranslation(['translation'], {i18n} );
   const [sliderId , setSliderId] = useState('slider-' + (lesson ? lesson.id : ''));
   const [slider , setSlider] = useState();
   const [pageNum, setPageNum] = useState(0);
@@ -76,23 +80,7 @@ const LessonDetailsPage: React.FC<LessonProps> = ({ subject,lesson }) => {
         {lesson.pages && lesson.pages.map((page, idx) =>  {
           return (
             <IonSlide>
-              <IonCard>
-                <IonCardHeader>
-                  <h2>{page.title}</h2>
-                </IonCardHeader>
-                <IonCardContent class='lesson-text'>
-                  <div dangerouslySetInnerHTML={{__html: page.text}}></div>
-                  {page.photo ?
-                    <CloudinaryContext cloudName={cloudinaryConfig.cloudName}>
-                      <Image publicId={page.photo}>
-                      </Image>
-                    </CloudinaryContext>
-                    : undefined}
-                  {page.video ?
-                    <VideoPlayer id={`video-${lesson.id}-${idx}`} src={page.video}  />
-                    : undefined}
-                </IonCardContent>
-              </IonCard>
+              <LessonPageDetail subject={subject} lesson={lesson} page={page} idx={idx} />
             </IonSlide>
           );
           })
@@ -109,7 +97,7 @@ const LessonDetailsPage: React.FC<LessonProps> = ({ subject,lesson }) => {
             <IonButtons slot="start">
               <IonBackButton defaultHref={subject ? `/tabs/subjects/${subject.id}` : '/tabs/training'} />
             </IonButtons>
-            <IonTitle>{lesson ? lesson.name : 'Lesson'}</IonTitle>
+            <IonTitle>{lesson ? lesson.name : t('resources.lessons.name')}</IonTitle>
           </IonToolbar>
         </IonHeader>
 
@@ -124,8 +112,8 @@ const LessonDetailsPage: React.FC<LessonProps> = ({ subject,lesson }) => {
       </IonContent>
       <IonFooter>
         <IonToolbar>
-          <IonButton slot='start' onClick={slidePrev}>Prev</IonButton>
-          <IonButton slot='end' onClick={slideNext}>Next</IonButton>
+          <IonButton slot='start' onClick={slidePrev}>{t('buttons.previous')}</IonButton>
+          <IonButton slot='end' onClick={slideNext}>{t('buttons.next')}</IonButton>
         </IonToolbar>
       </IonFooter>
     </IonPage>

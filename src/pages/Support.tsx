@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import { IonHeader, IonToolbar, IonTitle, IonContent, IonPage, IonButtons, IonMenuButton, IonRow, IonCol, IonButton, IonList, IonItem, IonLabel, IonText, IonTextarea, IonToast } from '@ionic/react';
+import { useTranslation } from "react-i18next";
+import i18n from '../i18n';
 import './Login.scss';
 import { connect } from '../data/connect';
 
@@ -15,6 +17,8 @@ const Support: React.FC<SupportProps> = () => {
   const [formSubmitted, setFormSubmitted] = useState(false);
   const [messageError, setMessageError] = useState(false);
   const [showToast, setShowToast] = useState(false);
+
+  const { t } = useTranslation(['translation'], {i18n} );
 
   const send = (e: React.FormEvent) => {
     e.preventDefault();

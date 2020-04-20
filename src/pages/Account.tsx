@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { IonHeader, IonToolbar, IonTitle, IonContent, IonPage, IonButtons, IonMenuButton, IonList, IonItem, IonAlert } from '@ionic/react';
 import './Account.scss';
+import { useTranslation } from "react-i18next";
+import i18n from '../i18n';
 import { setUsername } from '../data/user/user.actions';
 import { connect } from '../data/connect';
 import { RouteComponentProps } from 'react-router';
@@ -20,6 +22,7 @@ interface AccountProps extends OwnProps, StateProps, DispatchProps { }
 const Account: React.FC<AccountProps> = ({ setUsername, username }) => {
 
   const [showAlert, setShowAlert] = useState(false);
+  const { t } = useTranslation(['translation'], {i18n} );
 
   const clicked = (text: string) => {
     console.log(`Clicked ${text}`);

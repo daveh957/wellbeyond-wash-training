@@ -4,6 +4,8 @@ import { IonToolbar, IonContent, IonPage, IonButtons, IonTitle, IonMenuButton, I
 
 import './TrainingPage.scss'
 
+import { useTranslation } from "react-i18next";
+import i18n from '../i18n';
 import * as selectors from '../data/selectors';
 import { connect } from '../data/connect';
 import { Subject, Lesson } from '../models/Training';
@@ -25,6 +27,8 @@ type TrainingPageProps = OwnProps & StateProps & DispatchProps;
 const TrainingPage: React.FC<TrainingPageProps> = ({ subjects, lessons}) => {
 
   const pageRef = useRef<HTMLElement>(null);
+
+  const { t } = useTranslation(['translation'], {i18n} );
 
   return (
     <IonPage ref={pageRef} id="subject-list">
@@ -50,7 +54,7 @@ const TrainingPage: React.FC<TrainingPageProps> = ({ subjects, lessons}) => {
         :
           <IonList>
             <IonListHeader>
-              No Subjects Found
+              {t('resources.subjects.nonefound')}
             </IonListHeader>
           </IonList>
         }
