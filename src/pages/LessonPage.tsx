@@ -24,6 +24,7 @@ import {CloudinaryContext, Image, Video} from "cloudinary-react";
 import VideoPlayer from '../components/VideoPlayer';
 import {cloudinaryConfig} from "../CLOUDINARY_CONFIG";
 import LessonPageDetail from "../components/LessonPageDetail";
+import {Redirect} from "react-router-dom";
 
 interface OwnProps extends RouteComponentProps {
   subject: Subject;
@@ -31,13 +32,14 @@ interface OwnProps extends RouteComponentProps {
 }
 
 interface StateProps {
+  isLoggedIn?: boolean,
 }
 
 interface DispatchProps {}
 
 interface LessonProps extends OwnProps, StateProps, DispatchProps {}
 
-const LessonDetailsPage: React.FC<LessonProps> = ({ subject,lesson }) => {
+const LessonDetailsPage: React.FC<LessonProps> = ({ subject,lesson, isLoggedIn }) => {
 
   const { t } = useTranslation(['translation'], {i18n} );
   const [sliderId , setSliderId] = useState('slider-' + (lesson ? lesson.id : ''));
@@ -89,6 +91,10 @@ const LessonDetailsPage: React.FC<LessonProps> = ({ subject,lesson }) => {
     );
   }
 
+  if (isLoggedIn === false) {
+    return <Redirect to="/login" />
+  }
+
   return (
     <IonPage id="lesson-detail">
       <IonContent>
@@ -112,7 +118,7 @@ const LessonDetailsPage: React.FC<LessonProps> = ({ subject,lesson }) => {
       </IonContent>
       <IonFooter>
         <IonToolbar>
-          <IonButton slot='start' onClick={slidePrev}>{t('buttons.previous')}</IonButton>
+          <IonButton slot='start' onClick={slidePrev}>{t('buttons.prev')}</IonButton>
           <IonButton slot='end' onClick={slideNext}>{t('buttons.next')}</IonButton>
         </IonToolbar>
       </IonFooter>
@@ -124,7 +130,8 @@ const LessonDetailsPage: React.FC<LessonProps> = ({ subject,lesson }) => {
 export default connect({
   mapStateToProps: (state, ownProps) => ({
     subject: selectors.getSubject(state, ownProps),
-    lesson: selectors.getLesson(state, ownProps)
+    lesson: selectors.getLesson(state, ownProps),
+    isLoggedIn: state.user.isLoggedIn
   }),
   component: LessonDetailsPage
 });

@@ -10,13 +10,15 @@ import * as selectors from '../data/selectors';
 import { connect } from '../data/connect';
 import { Subject, Lesson } from '../models/Training';
 import SubjectItem from "../components/SubjectItem";
+import {Redirect} from "react-router-dom";
 
 interface OwnProps {
 }
 
 interface StateProps {
   subjects: Subject[],
-  lessons: Lesson[]
+  lessons: Lesson[],
+  isLoggedIn?: boolean,
 }
 
 interface DispatchProps {
@@ -24,11 +26,19 @@ interface DispatchProps {
 
 type TrainingPageProps = OwnProps & StateProps & DispatchProps;
 
-const TrainingPage: React.FC<TrainingPageProps> = ({ subjects, lessons}) => {
+const TrainingPage: React.FC<TrainingPageProps> = ({ subjects, lessons, isLoggedIn}) => {
 
   const pageRef = useRef<HTMLElement>(null);
-
   const { t } = useTranslation(['translation'], {i18n} );
+  const filteredSubjects = subjects ? subjects.filter(subject => subject.name && !subject.name.match(/test/i)) : [];
+
+  if (isLoggedIn === false) {
+    return <Redirect to="/login" />
+  }
+
+  if (filteredSubjects.length === 1) {
+    return <Redirect to={`/tabs/subjects/${filteredSubjects[0].id}`} />
+  }
 
   return (
     <IonPage ref={pageRef} id="subject-list">
@@ -41,9 +51,9 @@ const TrainingPage: React.FC<TrainingPageProps> = ({ subjects, lessons}) => {
         </IonToolbar>
       </IonHeader>
       <IonContent fullscreen={true}>
-        {subjects.length ?
+        {filteredSubjects.length ?
           (<IonList>
-            {subjects.filter(subject => subject.name && !subject.name.match(/test/i)).map((subject, index: number) => (
+            {filteredSubjects.map((subject, index: number) => (
               <IonItemGroup key={`subject-${index}`}>
                 <IonItemDivider sticky>
                   <SubjectItem subject={subject} />
@@ -66,7 +76,8 @@ const TrainingPage: React.FC<TrainingPageProps> = ({ subjects, lessons}) => {
 export default connect<OwnProps, StateProps, DispatchProps>({
   mapStateToProps: (state) => ({
     subjects: selectors.getSubjects(state),
-    lessons: selectors.getLessons(state)
+    lessons: selectors.getLessons(state),
+    isLoggedIn: state.user.isLoggedIn
   }),
   component: React.memo(TrainingPage)
 });

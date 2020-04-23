@@ -1,4 +1,4 @@
-import { loginWithEmail, logout, getUserProfile } from './userApi';
+import { loginWithEmail, logout, getUserProfile, registerWithEmail } from './userApi';
 import { ActionType } from '../../util/types';
 import { UserState } from './user.state';
 
@@ -27,7 +27,7 @@ export const setUsername = (username?: string) => {
   } as const);
 };
 
-export const setisLoggedIn = (loggedIn: boolean) => {
+export const setIsLoggedIn = (loggedIn: boolean) => {
   return ({
     type: 'set-is-loggedin',
     loggedIn
@@ -36,6 +36,11 @@ export const setisLoggedIn = (loggedIn: boolean) => {
 
 export const loginUser = (email: string, password: string) => async (dispatch: React.Dispatch<any>) => {
   await loginWithEmail(email, password);
+  dispatch(loadUserData());
+};
+
+export const registerUser = (email: string, password: string) => async (dispatch: React.Dispatch<any>) => {
+  await registerWithEmail(email, password);
   dispatch(loadUserData());
 };
 
@@ -52,6 +57,6 @@ export const setDarkMode = (darkMode: boolean) => ({
 export type UserActions =
   | ActionType<typeof setLoading>
   | ActionType<typeof setData>
-  | ActionType<typeof setisLoggedIn>
+  | ActionType<typeof setIsLoggedIn>
   | ActionType<typeof setUsername>
   | ActionType<typeof setDarkMode>

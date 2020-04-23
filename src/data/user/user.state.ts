@@ -3,7 +3,7 @@ export interface UserState {
   email?: string;
   username?: string;
   displayName?: string;
-  isLoggedIn: boolean;
+  isLoggedIn?: boolean;
   darkMode: boolean;
   loading: boolean;
 };

@@ -11,8 +11,9 @@ export const initialState: AppState = {
   },
   user: {
     darkMode: false,
-    isLoggedIn: false,
-    loading: false
+    isLoggedIn: undefined,
+    loading: false,
+    username: undefined
   }
 };
 

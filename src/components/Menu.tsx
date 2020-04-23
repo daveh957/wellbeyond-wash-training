@@ -35,7 +35,7 @@ interface Pages {
 }
 interface StateProps {
   darkMode: boolean;
-  isAuthenticated: boolean;
+  isLoggedIn?: boolean;
   menuEnabled: boolean;
   subjects: Subject[]
 }
@@ -46,7 +46,7 @@ interface DispatchProps {
 
 interface MenuProps extends RouteComponentProps, StateProps, DispatchProps { }
 
-const Menu: React.FC<MenuProps> = ({ darkMode, history, isAuthenticated, setDarkMode, menuEnabled, subjects }) => {
+const Menu: React.FC<MenuProps> = ({ darkMode, history, isLoggedIn, setDarkMode, menuEnabled, subjects }) => {
   const location = useLocation();
   const { t } = useTranslation(['translation'], {i18n} );
 
@@ -85,7 +85,7 @@ const Menu: React.FC<MenuProps> = ({ darkMode, history, isAuthenticated, setDark
         </IonList>
         <IonList lines="none">
           <IonListHeader>{t('menu.account')}</IonListHeader>
-          {isAuthenticated ? renderlistItems(routes.loggedInPages) : renderlistItems(routes.loggedOutPages)}
+          {isLoggedIn ? renderlistItems(routes.loggedInPages) : renderlistItems(routes.loggedOutPages)}
           <IonItem>
             <IonIcon slot="start" icon={moonOutline}></IonIcon>
             <IonLabel>{t('menu.darkMode')}</IonLabel>
@@ -100,7 +100,7 @@ const Menu: React.FC<MenuProps> = ({ darkMode, history, isAuthenticated, setDark
 export default connect<{}, StateProps, {}>({
   mapStateToProps: (state) => ({
     darkMode: state.user.darkMode,
-    isAuthenticated: state.user.isLoggedIn,
+    isLoggedIn: state.user.isLoggedIn,
     menuEnabled: state.data.menuEnabled,
     subjects: selectors.getSubjects(state)
   }),

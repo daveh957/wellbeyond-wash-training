@@ -5,15 +5,17 @@ import { useTranslation } from "react-i18next";
 import i18n from '../i18n';
 import { connect } from '../data/connect';
 import { RouteComponentProps } from 'react-router';
+import {registerUser} from "../data/user/user.actions";
 
 interface OwnProps extends RouteComponentProps {}
 
 interface DispatchProps {
+  registerUser: typeof registerUser;
 }
 
-interface LoginProps extends OwnProps,  DispatchProps { }
+interface SignupProps extends OwnProps,  DispatchProps { }
 
-const Login: React.FC<LoginProps> = ({ history}) => {
+const Signup: React.FC<SignupProps> = ({registerUser,  history}) => {
 
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
@@ -23,7 +25,7 @@ const Login: React.FC<LoginProps> = ({ history}) => {
 
   const { t } = useTranslation(['translation'], {i18n} );
 
-  const login = async (e: React.FormEvent) => {
+  const signup = async (e: React.FormEvent) => {
     e.preventDefault();
     setFormSubmitted(true);
     if(!username) {
@@ -34,6 +36,7 @@ const Login: React.FC<LoginProps> = ({ history}) => {
     }
 
     if(username && password) {
+      await registerUser(username, password);
       history.push('/tabs/training', {direction: 'none'});
     }
   };
@@ -50,11 +53,11 @@ const Login: React.FC<LoginProps> = ({ history}) => {
       </IonHeader>
       <IonContent>
 
-        <div className="login-logo">
-          <img src="assets/img/appicon.png" alt="Ionic logo" />
+        <div className="login">
+          <img src="assets/img/appicon.png" alt="WellBeyond logo" />
         </div>
 
-        <form noValidate onSubmit={login}>
+        <form noValidate onSubmit={signup}>
           <IonList>
             <IonItem>
               <IonLabel position="stacked" color="primary">Username</IonLabel>
@@ -103,6 +106,7 @@ const Login: React.FC<LoginProps> = ({ history}) => {
 
 export default connect<OwnProps, {}, DispatchProps>({
   mapDispatchToProps: {
+    registerUser,
   },
-  component: Login
+  component: Signup
 })

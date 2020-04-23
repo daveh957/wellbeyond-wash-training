@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { Redirect, Route } from 'react-router-dom';
-import { IonApp, IonRouterOutlet, IonSplitPane } from '@ionic/react';
+import { IonApp, IonRouterOutlet, IonSplitPane, } from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
+import Intercom from 'react-intercom';
 
 import Menu from './components/Menu';
 
@@ -31,13 +32,14 @@ import { firebaseConfig } from './FIREBASE_CONFIG';
 import MainTabs from './pages/MainTabs';
 import { connect } from './data/connect';
 import { AppContextProvider } from './data/AppContext';
-import { loadUserData, logoutUser, setisLoggedIn, setUsername } from './data/user/user.actions';
+import { loadUserData, logoutUser, setIsLoggedIn, setUsername } from './data/user/user.actions';
 import { loadLessonData } from './data/lessons/training.actions';
 import { authCheck } from './data/user/userApi';
 import Account from './pages/Account';
 import Login from './pages/Login';
 import Signup from './pages/Signup';
 import Support from './pages/Support';
+import HomeOrLogin from "./pages/HomeOrLogin";
 
 const App: React.FC = () => {
   return (
@@ -49,14 +51,15 @@ const App: React.FC = () => {
 
 interface StateProps {
   darkMode: boolean;
+  isLoggedIn?: boolean;
 }
 
 interface DispatchProps {
   loadLessonData: typeof loadLessonData;
   loadUserData: typeof loadUserData;
   logoutUser: typeof logoutUser;
-  setisLoggedIn: typeof setisLoggedIn;
-  setUsername: typeof setisLoggedIn;
+  setIsLoggedIn: typeof setIsLoggedIn;
+  setUsername: typeof setUsername;
 }
 
 interface IonicAppProps extends StateProps, DispatchProps { }
@@ -65,24 +68,36 @@ if (!firebase.apps.length) {
   firebase.initializeApp(firebaseConfig);
 }
 
-const IonicApp: React.FC<IonicAppProps> = ({ darkMode,   loadLessonData, loadUserData, logoutUser, setisLoggedIn, setUsername: setUsernameAction }) => {
+const IonicApp: React.FC<IonicAppProps> = ({ darkMode, isLoggedIn,   loadLessonData, loadUserData, logoutUser, setIsLoggedIn, setUsername}) => {
+
+  const [intercomUser, setIntercomUser] = useState();
 
   useEffect(() => {
+    const getUserHash = firebase.functions().httpsCallable('getUserHash');
     firebase.auth().onAuthStateChanged(async user => {
       if (user != null) {
         console.log("We are authenticated now!");
-        setisLoggedIn(true);
+        setIsLoggedIn(true);
         setUsername(user.uid);
+        loadLessonData();
+        getUserHash().then(function(result) {
+          setIntercomUser({
+            email: user.email,
+            name: user.displayName,
+            user_hash: result.data.hash
+          });
+        });
       } else {
         console.log("We did not authenticate.");
-        setisLoggedIn(false);
+        setIsLoggedIn(false);
         setUsername(undefined);
+        setIntercomUser(undefined);
       }
     });
     loadUserData();
-    loadLessonData();
   }, []);
 
+  // @ts-ignore
   return (
       <IonApp className={`${darkMode ? 'dark-theme' : ''}`}>
         <IonReactRouter>
@@ -96,12 +111,16 @@ const IonicApp: React.FC<IonicAppProps> = ({ darkMode,   loadLessonData, loadUse
               <Route path="/support" component={Support} />
               <Route path="/logout" render={() => {
                 logoutUser();
-                return <Redirect to="/tabs" />
+                return <Redirect to="/login" />
               }} />
-              <Route path="/" render={() => <Redirect to="/tabs" />} exact={true} />
+              <Route path="/" component={HomeOrLogin} exact />
             </IonRouterOutlet>
           </IonSplitPane>
         </IonReactRouter>
+
+        <div className="app">
+          <Intercom appID="ywg09h0a" { ...intercomUser } />
+        </div>
       </IonApp>
   )
 }
@@ -112,9 +131,10 @@ const IonicAppConnected = connect<{}, StateProps, DispatchProps>({
   mapStateToProps: (state) => ({
     darkMode: state.user.darkMode,
     subjects: state.data.subjects,
-    lessons: state.data.lessons
+    lessons: state.data.lessons,
+    isLoggedIn: state.user.isLoggedIn
   }),
   // @ts-ignore
-  mapDispatchToProps: { loadLessonData, loadUserData, logoutUser, setisLoggedIn, setUsername },
+  mapDispatchToProps: { loadLessonData, loadUserData, logoutUser, setIsLoggedIn, setUsername },
   component: IonicApp
 });

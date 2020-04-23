@@ -1,7 +1,8 @@
 export default {
   translation: {
     app: {
-      title: 'Well Aware WASH'
+      title: 'WellBeyond Mobile App',
+      logo: 'WellBeyond Log',
     },
     menu: {
       training: 'Training',

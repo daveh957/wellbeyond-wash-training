@@ -45,16 +45,14 @@ export const logout = () => {
 
 /**
  *
- * @param {*} userInfo.lastName
- * @param {*} userInfo.firstName
- * @param {*} userInfo.email
- * @param {*} userInfo.password
+ * @param email
+ * @param password
  */
-export const registerUser = async (userInfo: NewUserInfo) => {
-  console.log("in registerUser");
+export const registerWithEmail = async (email: string, password: string) => {
+  console.log("in registerWithEmail");
   return firebase
     .auth()
-    .createUserWithEmailAndPassword(userInfo.email, userInfo.password)
+    .createUserWithEmailAndPassword(email, password)
     .then(newUser => {
       return firebase
         .firestore()

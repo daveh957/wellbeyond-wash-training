@@ -8,6 +8,7 @@ import './SubjectPage.scss';
 import {RouteComponentProps} from "react-router";
 import { useTranslation } from "react-i18next";
 import i18n from '../i18n';
+import {Redirect} from "react-router-dom";
 
 interface OwnProps extends RouteComponentProps {
   subject: Subject;
@@ -15,15 +16,21 @@ interface OwnProps extends RouteComponentProps {
 };
 
 interface StateProps {
+  isLoggedIn?: boolean;
 };
 
 interface DispatchProps { };
 
 interface SubjectProps extends OwnProps, StateProps, DispatchProps { };
 
-const SubjectPage: React.FC<SubjectProps> = ({ subject, lessons}) => {
+const SubjectPage: React.FC<SubjectProps> = ({ subject, lessons, isLoggedIn}) => {
 
   const { t } = useTranslation(['translation'], {i18n} );
+
+  if (isLoggedIn === false) {
+    return <Redirect to="/login" />
+  }
+
   return (
     <IonPage id="lesson-list">
       <IonHeader translucent={true}>
@@ -66,7 +73,8 @@ const SubjectPage: React.FC<SubjectProps> = ({ subject, lessons}) => {
 export default connect<OwnProps, StateProps, DispatchProps>({
   mapStateToProps: (state, ownProps) => ({
     subject: selectors.getSubject(state, ownProps),
-    lessons: selectors.getSubjectLessons(state, ownProps)
+    lessons: selectors.getSubjectLessons(state, ownProps),
+    isLoggedIn: state.user.isLoggedIn
   }),
   component: SubjectPage
 });

@@ -6,10 +6,13 @@ import i18n from '../i18n';
 import { setUsername } from '../data/user/user.actions';
 import { connect } from '../data/connect';
 import { RouteComponentProps } from 'react-router';
+import {Redirect} from "react-router-dom";
+import * as selectors from "../data/selectors";
 
 interface OwnProps extends RouteComponentProps { }
 
 interface StateProps {
+  isLoggedIn?: boolean;
   username?: string;
 }
 
@@ -19,13 +22,17 @@ interface DispatchProps {
 
 interface AccountProps extends OwnProps, StateProps, DispatchProps { }
 
-const Account: React.FC<AccountProps> = ({ setUsername, username }) => {
+const Account: React.FC<AccountProps> = ({ setUsername, username, isLoggedIn, history }) => {
 
   const [showAlert, setShowAlert] = useState(false);
   const { t } = useTranslation(['translation'], {i18n} );
 
   const clicked = (text: string) => {
     console.log(`Clicked ${text}`);
+  }
+
+  if (isLoggedIn === false) {
+    return <Redirect to="/login" />
   }
 
   return (
@@ -81,7 +88,8 @@ const Account: React.FC<AccountProps> = ({ setUsername, username }) => {
 
 export default connect<OwnProps, StateProps, DispatchProps>({
   mapStateToProps: (state) => ({
-    username: state.user.email
+    username: selectors.getUsername(state),
+    isLoggedIn: state.user.isLoggedIn
   }),
   mapDispatchToProps: {
     setUsername,

@@ -7,16 +7,23 @@ import { connect } from '../data/connect';
 import { RouteComponentProps } from 'react-router';
 import {useTranslation} from "react-i18next";
 import i18n from "../i18n";
+import * as selectors from "../data/selectors";
+import {Redirect} from "react-router-dom";
 
 interface OwnProps extends RouteComponentProps {}
+
+interface StateProps {
+  username?: string;
+  isLoggedIn?: boolean;
+}
 
 interface DispatchProps {
   loginUser: typeof loginUser;
 }
 
-interface LoginProps extends OwnProps,  DispatchProps { }
+interface LoginProps extends OwnProps, StateProps,  DispatchProps { }
 
-const Login: React.FC<LoginProps> = ({loginUser, history}) => {
+const Login: React.FC<LoginProps> = ({loginUser, isLoggedIn, history}) => {
 
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
@@ -38,7 +45,9 @@ const Login: React.FC<LoginProps> = ({loginUser, history}) => {
 
     if(username && password) {
       await loginUser(username, password);
-      history.push('/tabs/training', {direction: 'none'});
+      setTimeout( function() {
+        history.push('/tabs/training', {direction: 'none'});
+        }, 200);
     }
   };
 
@@ -55,7 +64,7 @@ const Login: React.FC<LoginProps> = ({loginUser, history}) => {
       <IonContent>
 
         <div className="login-logo">
-          <img src="assets/img/appicon.png" alt="Ionic logo" />
+          <img src="assets/img/appicon.png" alt="WellBeyond logo" />
         </div>
 
         <form noValidate onSubmit={login}>
@@ -106,5 +115,8 @@ export default connect<OwnProps, {}, DispatchProps>({
   mapDispatchToProps: {
     loginUser
   },
+  mapStateToProps: (state) => ({
+    isLoggedIn: state.user.isLoggedIn
+  }),
   component: Login
 })
