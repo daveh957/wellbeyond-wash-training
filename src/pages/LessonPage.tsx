@@ -118,8 +118,8 @@ const LessonDetailsPage: React.FC<LessonProps> = ({ subject,lesson, isLoggedIn }
       </IonContent>
       <IonFooter>
         <IonToolbar>
-          <IonButton slot='start' onClick={slidePrev}>{t('buttons.prev')}</IonButton>
-          <IonButton slot='end' onClick={slideNext}>{t('buttons.next')}</IonButton>
+          <IonButton slot='start' onClick={slidePrev}>{t('buttons.previous')}</IonButton>
+          <IonButton slot='start' onClick={slideNext}>{t('buttons.next')}</IonButton>
         </IonToolbar>
       </IonFooter>
     </IonPage>

@@ -119,7 +119,7 @@ const IonicApp: React.FC<IonicAppProps> = ({ darkMode, isLoggedIn,   loadLessonD
         </IonReactRouter>
 
         <div className="app">
-          <Intercom appID="ywg09h0a" { ...intercomUser } />
+          <Intercom appID="ywg09h0a" alignment={'right'} { ...intercomUser } />
         </div>
       </IonApp>
   )
