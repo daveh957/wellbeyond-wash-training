@@ -19,7 +19,6 @@
     "@types/react-router-dom": "^5.1.4",
     "cloudinary-core": "^2.8.2",
     "cloudinary-react": "^1.4.0",
-    "cloudinary-video-player": "^1.3.4",
     "cordova-plugin-intercom": "^8.0.0",
     "firebase": "^7.14.0",
     "i18next": "^19.4.2",
@@ -37,8 +36,9 @@
     "video-react": "^0.14.1"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
+    "start": "ionic serve",
+    "build": "ionic build",
+    "deploy": "firebase deploy --only hosting:wellbeyond-wash-training",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },

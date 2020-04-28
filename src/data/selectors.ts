@@ -5,6 +5,9 @@ import { Lesson } from '../models/Training';
 export const getUsername = (state: AppState) => {
   return state.user.username;
 }
+export const getUserLessons = (state: AppState) => {
+  return state.user.lessons || [];
+}
 export const getSubjects = (state: AppState) => {
   return state.data.subjects;
 }
@@ -31,6 +34,12 @@ export const getLesson = createSelector(
   getLessons, getLessonIdParam,
   (lessons, id) => {
     return lessons.find(l => l.id === id);
+  }
+);
+export const getUserLesson = createSelector(
+  getUserLessons, getLessonIdParam,
+  (lessons, id) => {
+    return lessons.find(l => l.lessonId === id);
   }
 );
 

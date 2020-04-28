@@ -5,14 +5,17 @@ import { Player, BigPlayButton, ControlBar } from 'video-react';
 interface VideoPlayerProps {
   id: string;
   src: string;
+  setVideoState?(state:object): void
 }
 
 
-const VideoPlayer: React.FC<VideoPlayerProps> = ({ id,src}) => {
+const VideoPlayer: React.FC<VideoPlayerProps> = ({ id,src, setVideoState}) => {
 
   const [player , setPlayer] = useState();
-  const handleStateChange = (state:any) => {
-    console.log(state);
+  const handleStateChange = (state:object) => {
+    if (setVideoState) {
+      setVideoState(state);
+    }
   };
   useEffect(() => {
     if (player) {

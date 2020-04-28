@@ -1,3 +1,5 @@
+import { UserLesson} from "../../models/User";
+
 export interface UserState {
   id?: string;
   email?: string;
@@ -6,4 +8,5 @@ export interface UserState {
   isLoggedIn?: boolean;
   darkMode: boolean;
   loading: boolean;
+  lessons?: Array<UserLesson>;
 };

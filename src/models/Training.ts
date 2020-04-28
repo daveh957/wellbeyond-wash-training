@@ -6,12 +6,20 @@ export interface LessonPage {
   video?: string
 }
 
+export interface Question {
+  questionType: string;
+  questionText: string;
+  choices?: Array<{value: string}>;
+  correctAnswer: string|number;
+}
+
 export interface Lesson {
   id: string;
   name: string;
   description: string;
   photo: string;
   pages: LessonPage[]; // Embedded list
+  questions: [Question]; // Embedded list
 }
 
 export interface Subject {

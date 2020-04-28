@@ -1,5 +1,5 @@
 import { combineReducers } from './combineReducers';
-import { trainingReducer } from './lessons/training.reducer';
+import { trainingReducer } from './training/training.reducer';
 import { userReducer } from './user/user.reducer';
 
 export const initialState: AppState = {
@@ -13,7 +13,8 @@ export const initialState: AppState = {
     darkMode: false,
     isLoggedIn: undefined,
     loading: false,
-    username: undefined
+    username: undefined,
+    lessons: []
   }
 };
 

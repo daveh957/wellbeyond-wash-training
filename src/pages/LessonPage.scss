@@ -1,5 +1,18 @@
 #lesson-detail {
+  .lesson-slide {
+    padding-bottom: 140px;
+  }
   .lesson-text {
     text-align: justify;
   }
+  .lesson-logo {
+    max-height: 400px;
+    max-width: 400px;
+    width: 100%;
+    margin: auto;
+  }
+  .lesson-card {
+    width: 100%
+  }
+
 }

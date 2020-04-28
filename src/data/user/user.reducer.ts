@@ -12,7 +12,8 @@ export function userReducer(state: UserState, action: UserActions): UserState {
     case 'set-dark-mode':
       return { ...state, darkMode: action.darkMode };
     case 'set-is-loggedin':
-      // @ts-ignore
       return { ...state, isLoggedIn: action.loggedIn };
+    case 'set-user-lessons':
+      return { ...state, lessons: action.lessons };
   }
 }

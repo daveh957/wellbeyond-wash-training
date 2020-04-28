@@ -1,4 +1,4 @@
-import React, { useEffect, useState, Fragment } from 'react';
+import React, {useEffect, useState, Fragment, useRef, MutableRefObject} from 'react';
 import { RouteComponentProps } from 'react-router';
 
 import './LessonPage.scss';
@@ -20,11 +20,13 @@ import { connect } from '../data/connect';
 import * as selectors from '../data/selectors';
 
 import { Subject, Lesson, LessonPage } from '../models/Training';
+import { UserLesson } from '../models/User';
 import {CloudinaryContext, Image, Video} from "cloudinary-react";
-import VideoPlayer from '../components/VideoPlayer';
 import {cloudinaryConfig} from "../CLOUDINARY_CONFIG";
 import LessonPageDetail from "../components/LessonPageDetail";
 import {Redirect} from "react-router-dom";
+import QuestionDetail from "../components/QuestionDetail";
+import {startLesson} from "../data/user/user.actions";
 
 interface OwnProps extends RouteComponentProps {
   subject: Subject;
@@ -33,31 +35,98 @@ interface OwnProps extends RouteComponentProps {
 
 interface StateProps {
   isLoggedIn?: boolean,
+  userLesson: UserLesson
 }
 
-interface DispatchProps {}
+interface DispatchProps {
+  startLesson: typeof startLesson;
+}
 
 interface LessonProps extends OwnProps, StateProps, DispatchProps {}
 
-const LessonDetailsPage: React.FC<LessonProps> = ({ subject,lesson, isLoggedIn }) => {
+const LessonDetailsPage: React.FC<LessonProps> = ({ subject,lesson, userLesson, isLoggedIn, startLesson }) => {
 
   const { t } = useTranslation(['translation'], {i18n} );
-  const [sliderId , setSliderId] = useState('slider-' + (lesson ? lesson.id : ''));
-  const [slider , setSlider] = useState();
-  const [pageNum, setPageNum] = useState(0);
-  const [showIntro, setShowIntro] = useState(true);
-  const [showQuestions, setShowQuestions] = useState(false);
+  const slider:MutableRefObject<any> = useRef(null);
+  const [slides ,setSlides] = useState(new Array<JSX.Element>());
+  const [lessonStarted,setLessonStarted] = useState(false);
 
   useEffect(() => {
-    setSlider(document.getElementById(sliderId));
-  });
+    if (isLoggedIn && lesson && !lessonStarted) {
+      setLessonStarted(true);
+      startLesson(lesson.id);
+    }
+  },[isLoggedIn, lesson])
 
+  useEffect(() => {
+    let slideIdx = 0;
+    if (lesson) {
+      slides.push(
+          <IonCard className='lesson-card'>
+            <IonCardContent className='lesson-text'>
+              <CloudinaryContext cloudName={cloudinaryConfig.cloudName}>
+                <Image publicId={lesson.photo} className={'lesson-logo'}>
+                </Image>
+              </CloudinaryContext>
+              <div dangerouslySetInnerHTML={{__html: lesson.description}}></div>
+              <IonButton expand='block' onClick={slideNext}>{t('buttons.next')}</IonButton>
+            </IonCardContent>
+          </IonCard>
+      );
+      if (lesson.questions && false) {
+        lesson.questions.map((question, idx) => {
+          slideIdx++;
+          slides.push(
+              <QuestionDetail subject={subject} lesson={lesson} question={question} idx={idx} unlock={unlockNext}
+                              prev={slidePrev} next={slideNext} showExplanation={false}/>
+          );
+        });
+      }
+      if (lesson.pages) {
+        lesson.pages.map((page, idx) => {
+          slideIdx++;
+          slides.push(
+              <LessonPageDetail subject={subject} lesson={lesson} page={page} idx={idx} unlock={unlockNext}
+                                prev={slidePrev} next={slideNext}/>
+          );
+        });
+      }
+      if (lesson.questions) {
+        lesson.questions.map((question, idx) => {
+          slides.push(
+            <QuestionDetail subject={subject} lesson={lesson} question={question} idx={idx} unlock={unlockNext}
+                            prev={slidePrev} next={slideNext} showExplanation={true}/>
+          );
+        });
+      }
+      setSlides(slides);
+    }
+  },[lesson]);
+
+  const contentRef = useRef(null);
+  const scrollToTop= () => {
+    // @ts-ignore
+    contentRef.current.scrollToTop();
+  };
 
   const slideNext = () => {
-    slider.slideNext();
+    unlockNext();
+    scrollToTop();
+    slider.current.slideNext();
   }
   const slidePrev = () => {
-    slider.slidePrev();
+    scrollToTop();
+    slider.current.slidePrev();
+  }
+  const lockNext = () => {
+    return slider.current.lockSwipeToNext(true);
+  }
+  const unlockNext = () => {
+    return slider.current.lockSwipeToNext(false);
+  }
+  const slideChanged = (event: CustomEvent<void>) => {
+    scrollToTop();
+    slider.current.lockSwipeToNext(true);
   }
 
   const slideOpts = {
@@ -65,39 +134,13 @@ const LessonDetailsPage: React.FC<LessonProps> = ({ subject,lesson, isLoggedIn }
     speed: 400
   };
 
-  const renderLessonSlides: any = (lesson:Lesson) => {
-    return (
-      <IonSlides pager={true} options={slideOpts} id={sliderId}>
-        <IonSlide>
-          <IonCard>
-            <IonCardContent class='lesson-text'>
-              <CloudinaryContext cloudName={cloudinaryConfig.cloudName}>
-                <Image publicId={lesson.photo}>
-                </Image>
-              </CloudinaryContext>
-              <div dangerouslySetInnerHTML={{__html: lesson.description}}></div>
-            </IonCardContent>
-          </IonCard>
-        </IonSlide>
-        {lesson.pages && lesson.pages.map((page, idx) =>  {
-          return (
-            <IonSlide>
-              <LessonPageDetail subject={subject} lesson={lesson} page={page} idx={idx} />
-            </IonSlide>
-          );
-          })
-        }
-      </IonSlides>
-    );
-  }
-
   if (isLoggedIn === false) {
     return <Redirect to="/login" />
   }
 
   return (
     <IonPage id="lesson-detail">
-      <IonContent>
+      <IonContent scrollEvents={true}>
         <IonHeader translucent={true}>
           <IonToolbar>
             <IonButtons slot="start">
@@ -108,29 +151,35 @@ const LessonDetailsPage: React.FC<LessonProps> = ({ subject,lesson, isLoggedIn }
         </IonHeader>
 
         { lesson ?
-          <IonContent fullscreen={true}>
+          <IonContent ref={contentRef} fullscreen={true}>
             <IonHeader collapse="condense">
             </IonHeader>
-            { renderLessonSlides(lesson) }
+            <IonSlides  ref={slider} options={slideOpts} id={`${lesson.id}-slider`} onIonSlideDidChange={slideChanged}>
+              {slides.map ((slide, idx) => {
+                return (
+                  <IonSlide className='lesson-slide' id={`${lesson.id}-slide-${idx+1}`}>
+                    {slide}
+                  </IonSlide>
+                )
+              })}
+            </IonSlides>
           </IonContent>
           : undefined
         }
       </IonContent>
-      <IonFooter>
-        <IonToolbar>
-          <IonButton slot='start' onClick={slidePrev}>{t('buttons.previous')}</IonButton>
-          <IonButton slot='start' onClick={slideNext}>{t('buttons.next')}</IonButton>
-        </IonToolbar>
-      </IonFooter>
     </IonPage>
   );
 };
 
 
 export default connect({
+  mapDispatchToProps: {
+    startLesson
+  },
   mapStateToProps: (state, ownProps) => ({
     subject: selectors.getSubject(state, ownProps),
     lesson: selectors.getLesson(state, ownProps),
+    userLesson: selectors.getUserLesson(state, ownProps),
     isLoggedIn: state.user.isLoggedIn
   }),
   component: LessonDetailsPage

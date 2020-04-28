@@ -1,5 +1,5 @@
 import * as firebase from 'firebase';
-import {NewUserInfo} from '../../models/User';
+import {UserLesson} from "../../models/User";
 
 /**
  * so this function is called when the authentication state changes
@@ -104,5 +104,54 @@ export const getUserProfile = async () => {
     })
     .catch(error => {
       console.log("Error getting document:", error);
+    });
+};
+
+export const getUserLessons = async () => {
+  let user = firebase.auth().currentUser;
+  if (!user || !user.uid) {
+    return null;
+  }
+
+  return firebase
+    .firestore()
+    .collection("users")
+    .doc(user.uid)
+    .collection('lessons')
+    .get()
+    .then(querySnapshot => {
+      const lessons = new Array<any>();
+      querySnapshot.forEach(function(doc) {
+        if (doc.exists) {
+          lessons.push(doc.data());
+        }
+      });
+      return lessons;
+    })
+    .catch(error => {
+      console.log("Error getting document:", error);
+    });
+};
+
+export const createOrUpdateUserLesson = async (lesson:UserLesson) => {
+  let user = firebase.auth().currentUser;
+  if (!user || !user.uid) {
+    return null;
+  }
+  if (!lesson.id) {
+    lesson.id = user.uid + ':' + lesson.lessonId;
+  }
+  return firebase
+    .firestore()
+    .collection("users")
+    .doc(user.uid)
+    .collection('lessons')
+    .doc(lesson.id)
+    .set(lesson, { merge: true })
+    .then(() => {
+      return lesson;
+    })
+    .catch(error => {
+      console.log("Error writing document:", error);
     });
 };

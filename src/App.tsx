@@ -33,7 +33,7 @@ import MainTabs from './pages/MainTabs';
 import { connect } from './data/connect';
 import { AppContextProvider } from './data/AppContext';
 import { loadUserData, logoutUser, setIsLoggedIn, setUsername } from './data/user/user.actions';
-import { loadLessonData } from './data/lessons/training.actions';
+import { loadLessonData } from './data/training/training.actions';
 import { authCheck } from './data/user/userApi';
 import Account from './pages/Account';
 import Login from './pages/Login';
@@ -93,8 +93,8 @@ const IonicApp: React.FC<IonicAppProps> = ({ darkMode, isLoggedIn,   loadLessonD
         setUsername(undefined);
         setIntercomUser(undefined);
       }
+      loadUserData();
     });
-    loadUserData();
   }, []);
 
   // @ts-ignore
