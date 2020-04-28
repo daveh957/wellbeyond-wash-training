@@ -21,24 +21,27 @@ interface QuestionDetailProps {
   lesson: Lesson;
   question: Question;
   idx: number;
-  showExplanation: boolean;
-  unlock(): void;
-  prev(): void;
+  preLesson: boolean;
+  save(question:Question, preLesson: boolean, answer:string|number): void;
   next(): void;
 }
 
-const QuestionDetail: React.FC<QuestionDetailProps> = ({ subject,lesson, question, idx, showExplanation, unlock, next}) => {
+const QuestionDetail: React.FC<QuestionDetailProps> = ({ subject,lesson, question, idx, preLesson, save, next}) => {
 
   const { t } = useTranslation(['translation'], {i18n} );
   const [answer, setAnswer] = useState<string|number>();
   const [showNext, setShowNext] = useState<boolean>();
+  const [lockAnswer, setLockAnswer] = useState<boolean>();
   const handleAnswer = (value:(string|number)) => {
     setAnswer(value);
+    save(question, preLesson, value);
+    if (!preLesson) {
+      setLockAnswer(true)
+    }
   }
   useEffect(() => {
     if (answer) {
       setShowNext(true);
-      unlock();
     }
   }, [answer]);
 
@@ -52,11 +55,11 @@ const QuestionDetail: React.FC<QuestionDetailProps> = ({ subject,lesson, questio
           <IonRadioGroup value={answer} onIonChange={e => handleAnswer(e.detail.value)}>
             <IonItem>
               <IonLabel>Yes</IonLabel>
-              <IonRadio slot="start" value="yes" />
+              <IonRadio disabled={lockAnswer} slot="start" value="yes" />
             </IonItem>
             <IonItem>
               <IonLabel>No</IonLabel>
-              <IonRadio slot="start" value="no" />
+              <IonRadio disabled={lockAnswer} slot="start" value="no" />
             </IonItem>
           </IonRadioGroup>
         </IonList>
@@ -65,11 +68,11 @@ const QuestionDetail: React.FC<QuestionDetailProps> = ({ subject,lesson, questio
     else if (question.questionType === 'choose-one' && question.choices) {
       return (
         <IonList>
-          <IonRadioGroup value={answer} onIonChange={e => setAnswer(e.detail.value)}>
+          <IonRadioGroup value={answer} onIonChange={e => handleAnswer(e.detail.value)}>
             {question.choices.map((choice) =>  {
               return <IonItem>
                 <IonLabel>{choice.value}</IonLabel>
-                <IonRadio slot="start" value={choice.value} />
+                <IonRadio disabled={lockAnswer} slot="start" value={choice.value} />
               </IonItem>
             })}
           </IonRadioGroup>
@@ -80,17 +83,10 @@ const QuestionDetail: React.FC<QuestionDetailProps> = ({ subject,lesson, questio
       return (
         <IonList>
           <IonItem>
-            <IonInput type="number" value={answer} placeholder={t('questions.enterNumber')} onIonChange={e => setAnswer(parseInt(e.detail.value!, 10))}></IonInput>
+            <IonInput disabled={lockAnswer} type="number" value={answer} placeholder={t('questions.enterNumber')} onIonChange={e => handleAnswer(parseInt(e.detail.value!, 10))}></IonInput>
           </IonItem>
         </IonList>
       );
-    }
-  }
-
-
-  const renderExplanation:any = (question:Question, answer:(string|number)) => {
-    if (!question || !answer || !showExplanation) {
-      return;
     }
   }
 
@@ -102,7 +98,15 @@ const QuestionDetail: React.FC<QuestionDetailProps> = ({ subject,lesson, questio
       </IonCardHeader>
       <IonCardContent className='question-answer'>
         {renderQuestionContent(question)}
-        {renderExplanation(question, answer)}
+        {question && answer && !preLesson ?
+          <div className='question-explanation'>
+            {answer === question.correctAnswer ?
+              <div>Great job, you got it right.</div>
+            :
+            <div>Sorry, you got it wrong.</div>}
+            <div dangerouslySetInnerHTML={{__html: question.explanation || ''}}></div>
+          </div>
+          : undefined }
         <IonButton expand='block' disabled={!showNext} onClick={next}>{t('buttons.next')}</IonButton>
       </IonCardContent>
     </IonCard>

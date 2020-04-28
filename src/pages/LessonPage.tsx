@@ -19,14 +19,14 @@ import i18n from '../i18n';
 import { connect } from '../data/connect';
 import * as selectors from '../data/selectors';
 
-import { Subject, Lesson, LessonPage } from '../models/Training';
-import { UserLesson } from '../models/User';
+import { Subject, Lesson, Question } from '../models/Training';
+import {Answer, UserLesson} from '../models/User';
 import {CloudinaryContext, Image, Video} from "cloudinary-react";
 import {cloudinaryConfig} from "../CLOUDINARY_CONFIG";
 import LessonPageDetail from "../components/LessonPageDetail";
 import {Redirect} from "react-router-dom";
 import QuestionDetail from "../components/QuestionDetail";
-import {startLesson} from "../data/user/user.actions";
+import {startLesson, updateLesson} from "../data/user/user.actions";
 
 interface OwnProps extends RouteComponentProps {
   subject: Subject;
@@ -40,16 +40,31 @@ interface StateProps {
 
 interface DispatchProps {
   startLesson: typeof startLesson;
+  updateLesson: typeof updateLesson;
 }
 
 interface LessonProps extends OwnProps, StateProps, DispatchProps {}
 
-const LessonDetailsPage: React.FC<LessonProps> = ({ subject,lesson, userLesson, isLoggedIn, startLesson }) => {
+const LessonDetailsPage: React.FC<LessonProps> = ({ subject,lesson, userLesson, isLoggedIn, startLesson, updateLesson }) => {
 
   const { t } = useTranslation(['translation'], {i18n} );
   const slider:MutableRefObject<any> = useRef(null);
   const [slides ,setSlides] = useState(new Array<JSX.Element>());
   const [lessonStarted,setLessonStarted] = useState(false);
+  
+  const saveAnswer = (question:Question, preLesson:boolean, answer:(string|number)) => {
+    userLesson.answers = userLesson.answers || new Array<Answer>();
+    let ans = userLesson.answers.find(element => element.question === question.questionText);
+    if (!ans) {
+      ans = {
+        question: question.questionText,
+        correctAnswer: question.correctAnswer
+      };
+      userLesson.answers.push(ans);
+    }
+    ans[preLesson ? 'answerBefore' : 'answerAfter'] = answer;
+    updateLesson(userLesson);
+  };
 
   useEffect(() => {
     if (isLoggedIn && lesson && !lessonStarted) {
@@ -58,51 +73,6 @@ const LessonDetailsPage: React.FC<LessonProps> = ({ subject,lesson, userLesson, 
     }
   },[isLoggedIn, lesson])
 
-  useEffect(() => {
-    let slideIdx = 0;
-    if (lesson) {
-      slides.push(
-          <IonCard className='lesson-card'>
-            <IonCardContent className='lesson-text'>
-              <CloudinaryContext cloudName={cloudinaryConfig.cloudName}>
-                <Image publicId={lesson.photo} className={'lesson-logo'}>
-                </Image>
-              </CloudinaryContext>
-              <div dangerouslySetInnerHTML={{__html: lesson.description}}></div>
-              <IonButton expand='block' onClick={slideNext}>{t('buttons.next')}</IonButton>
-            </IonCardContent>
-          </IonCard>
-      );
-      if (lesson.questions && false) {
-        lesson.questions.map((question, idx) => {
-          slideIdx++;
-          slides.push(
-              <QuestionDetail subject={subject} lesson={lesson} question={question} idx={idx} unlock={unlockNext}
-                              prev={slidePrev} next={slideNext} showExplanation={false}/>
-          );
-        });
-      }
-      if (lesson.pages) {
-        lesson.pages.map((page, idx) => {
-          slideIdx++;
-          slides.push(
-              <LessonPageDetail subject={subject} lesson={lesson} page={page} idx={idx} unlock={unlockNext}
-                                prev={slidePrev} next={slideNext}/>
-          );
-        });
-      }
-      if (lesson.questions) {
-        lesson.questions.map((question, idx) => {
-          slides.push(
-            <QuestionDetail subject={subject} lesson={lesson} question={question} idx={idx} unlock={unlockNext}
-                            prev={slidePrev} next={slideNext} showExplanation={true}/>
-          );
-        });
-      }
-      setSlides(slides);
-    }
-  },[lesson]);
-
   const contentRef = useRef(null);
   const scrollToTop= () => {
     // @ts-ignore
@@ -110,19 +80,13 @@ const LessonDetailsPage: React.FC<LessonProps> = ({ subject,lesson, userLesson, 
   };
 
   const slideNext = () => {
-    unlockNext();
     scrollToTop();
+    slider.current.lockSwipeToNext(false);
     slider.current.slideNext();
   }
   const slidePrev = () => {
     scrollToTop();
     slider.current.slidePrev();
-  }
-  const lockNext = () => {
-    return slider.current.lockSwipeToNext(true);
-  }
-  const unlockNext = () => {
-    return slider.current.lockSwipeToNext(false);
   }
   const slideChanged = (event: CustomEvent<void>) => {
     scrollToTop();
@@ -155,10 +119,36 @@ const LessonDetailsPage: React.FC<LessonProps> = ({ subject,lesson, userLesson, 
             <IonHeader collapse="condense">
             </IonHeader>
             <IonSlides  ref={slider} options={slideOpts} id={`${lesson.id}-slider`} onIonSlideDidChange={slideChanged}>
-              {slides.map ((slide, idx) => {
+              <IonSlide className='lesson-slide'>
+                <IonCard className='lesson-card'>
+                  <IonCardContent className='lesson-text'>
+                    <CloudinaryContext cloudName={cloudinaryConfig.cloudName}>
+                      <Image publicId={lesson.photo} className={'lesson-logo'}>
+                      </Image>
+                    </CloudinaryContext>
+                    <div dangerouslySetInnerHTML={{__html: lesson.description}}></div>
+                    <IonButton expand='block' onClick={slideNext}>{t('buttons.next')}</IonButton>
+                  </IonCardContent>
+                </IonCard>
+              </IonSlide>
+              {lesson.questions && lesson.questions.map ((question, idx) => {
                 return (
-                  <IonSlide className='lesson-slide' id={`${lesson.id}-slide-${idx+1}`}>
-                    {slide}
+                  <IonSlide className='lesson-slide' id={`${lesson.id}-bq-${idx+1}`}>
+                    <QuestionDetail subject={subject} lesson={lesson} question={question} idx={idx} next={slideNext} save={saveAnswer} preLesson={true}/>
+                  </IonSlide>
+                )
+              })}
+              {lesson.pages && lesson.pages.map ((page, idx) => {
+                return (
+                  <IonSlide className='lesson-slide' id={`${lesson.id}-lp-${idx+1}`}>
+                    <LessonPageDetail subject={subject} lesson={lesson} page={page} idx={idx} next={slideNext}/>
+                  </IonSlide>
+                )
+              })}
+              {lesson.questions && lesson.questions.map ((question, idx) => {
+                return (
+                  <IonSlide className='lesson-slide' id={`${lesson.id}-aq-${idx+1}`}>
+                    <QuestionDetail subject={subject} lesson={lesson} question={question} idx={idx} next={slideNext} save={saveAnswer} preLesson={false}/>
                   </IonSlide>
                 )
               })}
@@ -174,7 +164,8 @@ const LessonDetailsPage: React.FC<LessonProps> = ({ subject,lesson, userLesson, 
 
 export default connect({
   mapDispatchToProps: {
-    startLesson
+    startLesson,
+    updateLesson
   },
   mapStateToProps: (state, ownProps) => ({
     subject: selectors.getSubject(state, ownProps),

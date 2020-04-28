@@ -11,6 +11,7 @@ export interface Question {
   questionText: string;
   choices?: Array<{value: string}>;
   correctAnswer: string|number;
+  explanation?: string;
 }
 
 export interface Lesson {

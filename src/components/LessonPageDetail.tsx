@@ -13,12 +13,10 @@ interface LessonPageDetailProps {
   lesson: Lesson;
   page: LessonPage;
   idx: number;
-  unlock(): void;
-  prev(): void;
   next(): void;
 }
 
-const LessonPageDetail: React.FC<LessonPageDetailProps> = ({ subject,lesson, page, idx, unlock, prev, next}) => {
+const LessonPageDetail: React.FC<LessonPageDetailProps> = ({ subject,lesson, page, idx, next}) => {
 
   const { t } = useTranslation(['translation'], {i18n} );
   const [videoViewed, setVideoViewed] = useState();
@@ -27,7 +25,6 @@ const LessonPageDetail: React.FC<LessonPageDetailProps> = ({ subject,lesson, pag
   useEffect(() => {
     if (page && (videoViewed || !page.video)) {
       setShowNext(true);
-      unlock();
     }
   }, [page, videoViewed]);
   useEffect(() => {

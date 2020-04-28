@@ -32,6 +32,13 @@ export const startLesson = (lessonId: string) => async (dispatch: React.Dispatch
   dispatch(setLoading(false));
 }
 
+export const updateLesson = (lesson: UserLesson) => async (dispatch: React.Dispatch<any>) => {
+  dispatch(setLoading(true));
+  dispatch(setUserLesson(lesson));
+  await createOrUpdateUserLesson(lesson);
+  dispatch(setLoading(false));
+}
+
 export const setLoading = (isLoading: boolean) => ({
   type: 'set-user-loading',
   isLoading
@@ -81,6 +88,11 @@ export const setUserLessons = (lessons: Array<UserLesson>) => ({
   lessons
 } as const);
 
+export const setUserLesson = (lesson: UserLesson) => ({
+  type: 'set-user-lesson',
+  lesson
+} as const);
+
 export type UserActions =
   | ActionType<typeof setLoading>
   | ActionType<typeof setData>
@@ -88,3 +100,4 @@ export type UserActions =
   | ActionType<typeof setUsername>
   | ActionType<typeof setDarkMode>
   | ActionType<typeof setUserLessons>
+  | ActionType<typeof setUserLesson>

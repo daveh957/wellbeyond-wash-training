@@ -9,4 +9,4 @@ export interface UserState {
   darkMode: boolean;
   loading: boolean;
   lessons?: Array<UserLesson>;
-};
+}
