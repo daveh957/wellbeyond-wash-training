@@ -27,6 +27,8 @@ import LessonPageDetail from "../components/LessonPageDetail";
 import {Redirect} from "react-router-dom";
 import QuestionDetail from "../components/QuestionDetail";
 import {startLesson, updateLesson} from "../data/user/user.actions";
+import LessonIntro from "../components/LessonIntro";
+import LessonSummary from "../components/LessonSummary";
 
 interface OwnProps extends RouteComponentProps {
   subject: Subject;
@@ -64,6 +66,10 @@ const LessonDetailsPage: React.FC<LessonProps> = ({ subject,lesson, userLesson, 
     }
     ans[preLesson ? 'answerBefore' : 'answerAfter'] = answer;
     updateLesson(userLesson);
+  };
+
+  const done = () => {
+
   };
 
   useEffect(() => {
@@ -104,7 +110,6 @@ const LessonDetailsPage: React.FC<LessonProps> = ({ subject,lesson, userLesson, 
     updateLesson(userLesson);
     slideNext();
   }
-
   const slideOpts = {
     initialSlide: 0,
     speed: 400
@@ -125,52 +130,43 @@ const LessonDetailsPage: React.FC<LessonProps> = ({ subject,lesson, userLesson, 
             <IonTitle>{lesson ? lesson.name : t('resources.lessons.name')}</IonTitle>
           </IonToolbar>
         </IonHeader>
-
         { lesson ?
           <IonContent ref={contentRef} fullscreen={true}>
             <IonHeader collapse="condense">
             </IonHeader>
             <IonSlides  ref={slider} options={slideOpts} id={`${lesson.id}-slider`} onIonSlideDidChange={slideChanged}>
-              <IonSlide className='lesson-slide'>
-                <IonCard className='lesson-card'>
-                  <IonCardContent className='lesson-text'>
-                    <CloudinaryContext cloudName={cloudinaryConfig.cloudName}>
-                      <Image publicId={lesson.photo} className={'lesson-logo'}>
-                      </Image>
-                    </CloudinaryContext>
-                    <div dangerouslySetInnerHTML={{__html: lesson.description}}></div>
-                    <IonButton expand='block' onClick={slideNext}>{t('buttons.next')}</IonButton>
-                  </IonCardContent>
-                </IonCard>
+              <IonSlide className='lesson-slide' id={`${lesson.id}-intro`}>
+                <LessonIntro subject={subject} lesson={lesson} userLesson={userLesson} next={slideNext} />
               </IonSlide>
-              {lesson.questions && lesson.questions.map ((question, idx) => {
+              {(!userLesson || !userLesson.completed) && lesson.questions && lesson.questions.map ((question, idx) => {
                 return (
                   <IonSlide className='lesson-slide' id={`${lesson.id}-bq-${idx+1}`}>
-                    <QuestionDetail subject={subject} lesson={lesson} question={question} idx={idx} next={slideNext} save={saveAnswer} preLesson={true}/>
+                    <QuestionDetail subject={subject} lesson={lesson} question={question}
+                                    questionNum={idx+1} questionCount={lesson.questions.length}
+                                    next={slideNext} save={saveAnswer} preLesson={true}/>
                   </IonSlide>
                 )
               })}
               {lesson.pages && lesson.pages.map ((page, idx) => {
                 return (
                   <IonSlide className='lesson-slide' id={`${lesson.id}-lp-${idx+1}`}>
-                    <LessonPageDetail subject={subject} lesson={lesson} page={page} idx={idx} next={slideNext}/>
+                    <LessonPageDetail subject={subject} lesson={lesson} page={page} pageNum={idx+1} pageCount={lesson.pages.length} skipVideo={!!(userLesson && userLesson.completed)} next={slideNext} />
                   </IonSlide>
                 )
               })}
               {lesson.questions && lesson.questions.map ((question, idx) => {
-                if (idx+1 === lesson.questions.length) {
-                  return (
-                    <IonSlide className='lesson-slide' id={`${lesson.id}-aq-${idx+1}`}>
-                      <QuestionDetail subject={subject} lesson={lesson} question={question} idx={idx} next={handleLessonComplete} save={saveAnswer} preLesson={false}/>
-                    </IonSlide>
-                  )
-                }
                 return (
                   <IonSlide className='lesson-slide' id={`${lesson.id}-aq-${idx+1}`}>
-                    <QuestionDetail subject={subject} lesson={lesson} question={question} idx={idx} next={slideNext} save={saveAnswer} preLesson={false}/>
+                    <QuestionDetail subject={subject} lesson={lesson} question={question}
+                                    questionNum={idx+1} questionCount={lesson.questions.length}
+                                    priorAnswers={userLesson && userLesson.answers}
+                                    next={idx+1 === lesson.questions.length ? handleLessonComplete : slideNext} save={saveAnswer} preLesson={false}/>
                   </IonSlide>
                 )
               })}
+              <IonSlide className='lesson-slide' id={`${lesson.id}-summary`}>
+                <LessonSummary subject={subject} lesson={lesson} userLesson={userLesson} next={done} />
+              </IonSlide>
             </IonSlides>
           </IonContent>
           : undefined

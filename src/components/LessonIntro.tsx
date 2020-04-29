@@ -9,14 +9,14 @@ import {useTranslation} from "react-i18next";
 import i18n from "../i18n";
 
 
-interface LessonSummaryProps {
+interface LessonIntroProps {
   subject: Subject,
   lesson: Lesson;
   userLesson: UserLesson;
   next(): void;
 }
 
-const LessonSummary: React.FC<LessonSummaryProps> = ({ subject,lesson, next}) => {
+const LessonIntro: React.FC<LessonIntroProps> = ({ subject,lesson, next}) => {
   const { t } = useTranslation(['translation'], {i18n} );
   return (
     <IonCard className='lesson-card'>
@@ -33,4 +33,4 @@ const LessonSummary: React.FC<LessonSummaryProps> = ({ subject,lesson, next}) =>
   );
 };
 
-export default LessonSummary;
+export default LessonIntro;

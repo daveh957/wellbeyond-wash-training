@@ -12,21 +12,23 @@ interface LessonPageDetailProps {
   subject: Subject,
   lesson: Lesson;
   page: LessonPage;
-  idx: number;
+  pageNum: number;
+  pageCount: number;
+  skipVideo?: boolean;
   next(): void;
 }
 
-const LessonPageDetail: React.FC<LessonPageDetailProps> = ({ subject,lesson, page, idx, next}) => {
+const LessonPageDetail: React.FC<LessonPageDetailProps> = ({ subject,lesson, page, pageNum, pageCount, skipVideo, next}) => {
 
   const { t } = useTranslation(['translation'], {i18n} );
   const [videoViewed, setVideoViewed] = useState();
   const [showNext, setShowNext] = useState();
   const [videoState, setVideoState] = useState();
   useEffect(() => {
-    if (page && (videoViewed || !page.video)) {
+    if (page && (videoViewed || skipVideo || !page.video)) {
       setShowNext(true);
     }
-  }, [page, videoViewed]);
+  }, [page, videoViewed, skipVideo]);
   useEffect(() => {
     if (videoState) {
       if (videoState.ended) {
@@ -52,7 +54,7 @@ const LessonPageDetail: React.FC<LessonPageDetailProps> = ({ subject,lesson, pag
           </CloudinaryContext>
           : undefined}
         {page.video ?
-          <VideoPlayer id={`video-${lesson.id}-${idx}`} src={page.video} setVideoState={setVideoState}  />
+          <VideoPlayer id={`video-${lesson.id}-${pageNum}`} src={page.video} setVideoState={setVideoState}  />
           : undefined}
         <IonButton expand='block' disabled={!showNext} onClick={next}>{t('buttons.next')}</IonButton>
       </IonCardContent>
