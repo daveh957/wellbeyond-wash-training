@@ -16,6 +16,8 @@ export interface UserLesson {
   lessonId: string;
   started?: Date;
   completed?: Date;
+  preScore: number;
+  score: number;
   answers: Array<Answer>;
 }
 

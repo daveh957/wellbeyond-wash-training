@@ -51,7 +51,7 @@ const LessonDetailsPage: React.FC<LessonProps> = ({ subject,lesson, userLesson, 
   const slider:MutableRefObject<any> = useRef(null);
   const [slides ,setSlides] = useState(new Array<JSX.Element>());
   const [lessonStarted,setLessonStarted] = useState(false);
-  
+
   const saveAnswer = (question:Question, preLesson:boolean, answer:(string|number)) => {
     userLesson.answers = userLesson.answers || new Array<Answer>();
     let ans = userLesson.answers.find(element => element.question === question.questionText);
@@ -91,6 +91,18 @@ const LessonDetailsPage: React.FC<LessonProps> = ({ subject,lesson, userLesson, 
   const slideChanged = (event: CustomEvent<void>) => {
     scrollToTop();
     slider.current.lockSwipeToNext(true);
+  }
+  const handleLessonComplete = () => {
+    userLesson.completed = userLesson.completed || new Date();
+    let correct = 0, preCorrect = 0;
+    userLesson.answers.map(a => {
+      if (a.answerAfter === a.correctAnswer) correct++;
+      if (a.answerBefore === a.correctAnswer) preCorrect++;
+    });
+    userLesson.preScore = userLesson.answers.length ? Math.round((100*preCorrect) / userLesson.answers.length) : 0;
+    userLesson.score = userLesson.answers.length ? Math.round((100*correct) / userLesson.answers.length) : 0;
+    updateLesson(userLesson);
+    slideNext();
   }
 
   const slideOpts = {
@@ -146,6 +158,13 @@ const LessonDetailsPage: React.FC<LessonProps> = ({ subject,lesson, userLesson, 
                 )
               })}
               {lesson.questions && lesson.questions.map ((question, idx) => {
+                if (idx+1 === lesson.questions.length) {
+                  return (
+                    <IonSlide className='lesson-slide' id={`${lesson.id}-aq-${idx+1}`}>
+                      <QuestionDetail subject={subject} lesson={lesson} question={question} idx={idx} next={handleLessonComplete} save={saveAnswer} preLesson={false}/>
+                    </IonSlide>
+                  )
+                }
                 return (
                   <IonSlide className='lesson-slide' id={`${lesson.id}-aq-${idx+1}`}>
                     <QuestionDetail subject={subject} lesson={lesson} question={question} idx={idx} next={slideNext} save={saveAnswer} preLesson={false}/>
