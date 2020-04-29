@@ -6,7 +6,7 @@ export const getUsername = (state: AppState) => {
   return state.user.username;
 }
 export const getUserLessons = (state: AppState) => {
-  return state.user.lessons || [];
+  return state.user.lessons;
 }
 export const getSubjects = (state: AppState) => {
   return state.data.subjects;
@@ -39,7 +39,7 @@ export const getLesson = createSelector(
 export const getUserLesson = createSelector(
   getUserLessons, getLessonIdParam,
   (lessons, id) => {
-    return lessons.find(l => l.lessonId === id);
+    return lessons && lessons.find(l => l.lessonId === id);
   }
 );
 

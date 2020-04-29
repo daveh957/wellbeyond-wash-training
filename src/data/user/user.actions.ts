@@ -10,6 +10,7 @@ export const loadUserData = () => async (dispatch: React.Dispatch<any>) => {
   // @ts-ignore
   dispatch(setData(data));
   const lessons = await getUserLessons();
+  dispatch(setUserLessons(lessons || []));
   // @ts-ignore
   dispatch(setLoading(false));
 }
