@@ -26,7 +26,7 @@ const LessonItem: React.FC<LessonItemProps> = ({ subject,lesson, completed, clic
           </IonCardHeader>
 
           <IonCardContent>
-            <IonItem button detail={false} lines="none" className="lesson-item" disabled={!clickable} routerLink={`/tabs/subjects/${subject.id}/lessons/${lesson.id}`}>
+            <IonItem button detail={false} lines="none" className="lesson-item" disabled={!clickable} routerLink={`/tabs/subjects/${subject.id}/lessons/${lesson.id}?completed=${completed}`}>
               <CloudinaryContext cloudName={cloudinaryConfig.cloudName}>
                 <Image publicId={getPublicId(lesson.photo)}>
                   <Transformation width="400" crop="scale" />

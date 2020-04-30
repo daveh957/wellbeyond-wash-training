@@ -134,6 +134,7 @@ export const getUserLessons = async () => {
 };
 
 export const createOrUpdateUserLesson = async (lesson:UserLesson) => {
+  console.log(lesson);
   let user = firebase.auth().currentUser;
   if (!user || !user.uid) {
     return null;
@@ -147,7 +148,7 @@ export const createOrUpdateUserLesson = async (lesson:UserLesson) => {
     .doc(user.uid)
     .collection('lessons')
     .doc(lesson.id)
-    .set(lesson, { merge: true })
+    .set(lesson)
     .then(() => {
       return lesson;
     })

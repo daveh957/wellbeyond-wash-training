@@ -41,7 +41,7 @@ const SubjectPage: React.FC<SubjectProps> = ({ subject, lessons, userLessons, is
         const pl = idx>0 && lessons[idx-1];
         const currentLesson = userLessons.find(ul => {return ul.lessonId === l.id});
         const previousLesson = pl && userLessons.find(ul => {return ul.lessonId === pl.id});
-        flags.push({completed: !!(currentLesson && currentLesson.completed), clickable: !!((currentLesson && currentLesson.completed) || (previousLesson && previousLesson.completed))});
+        flags.push({completed: !!(currentLesson && currentLesson.completed), clickable: !!(idx === 0 || (currentLesson && currentLesson.completed) || (previousLesson && previousLesson.completed))});
       });
       setLessonFlags(flags);
     }

@@ -25,7 +25,7 @@ interface QuestionDetailProps {
   questionCount: number;
   preLesson: boolean;
   priorAnswers?: Answer[];
-  save(question:Question, preLesson: boolean, answer:string|number): void;
+  save(question:Question, preLesson: boolean, answer:string|number|void): void;
   next(): void;
 }
 
@@ -37,7 +37,10 @@ const QuestionDetail: React.FC<QuestionDetailProps> = ({ subject,lesson, questio
   const [lockAnswer, setLockAnswer] = useState<boolean>();
   const handleAnswer = (value:(string|number)) => {
     setAnswer(value);
-    save(question, preLesson, value);
+  }
+  const handleNext = () => {
+    save(question, preLesson, answer);
+    next();
   }
   useEffect(() => {
     if (answer) {
@@ -48,7 +51,7 @@ const QuestionDetail: React.FC<QuestionDetailProps> = ({ subject,lesson, questio
     }
   }, [answer]);
   useEffect(() => {
-    if (priorAnswers) {
+    if (priorAnswers && priorAnswers.length) {
       const ans = priorAnswers.find(element => element.question === question.questionText);
       if (ans) {
         setAnswer(ans.answerAfter);
@@ -107,11 +110,11 @@ const QuestionDetail: React.FC<QuestionDetailProps> = ({ subject,lesson, questio
             {answer === question.correctAnswer ?
               <div>Great job, you got it right.</div>
             :
-            <div>Sorry, you got it wrong.</div>}
+            <div>Sorry, you got it wrong. The correct answer is <strong>{question.correctAnswer}</strong>.</div>}
             <div dangerouslySetInnerHTML={{__html: question.explanation || ''}}></div>
           </div>
           : undefined }
-        <IonButton expand='block' disabled={!showNext} onClick={next}>{t('buttons.next')}</IonButton>
+        <IonButton expand='block' disabled={!showNext} onClick={handleNext}>{t('buttons.next')}</IonButton>
       </IonCardContent>
     </IonCard>
   );

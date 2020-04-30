@@ -2,7 +2,6 @@ import { loginWithEmail, logout, getUserProfile, getUserLessons, registerWithEma
 import { ActionType } from '../../util/types';
 import { UserState } from './user.state';
 import { UserLesson, Answer } from '../../models/User';
-import { AppState } from '../state';
 
 export const loadUserData = () => async (dispatch: React.Dispatch<any>) => {
   dispatch(setLoading(true));

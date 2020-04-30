@@ -1,7 +1,7 @@
 import React from 'react';
 import { Subject, Lesson } from '../models/Training';
 import { UserLesson } from '../models/User';
-import {IonCard, IonCardContent, IonButton, } from '@ionic/react';
+import {IonCard, IonCardContent, IonButton, IonCardSubtitle, IonCardTitle, IonCardHeader,} from '@ionic/react';
 import {CloudinaryContext, Image, Transformation} from 'cloudinary-react';
 import { cloudinaryConfig } from "../CLOUDINARY_CONFIG";
 import { getPublicId} from "../util/cloudinary";
@@ -16,18 +16,15 @@ interface LessonSummaryProps {
   next(): void;
 }
 
-const LessonSummary: React.FC<LessonSummaryProps> = ({ subject,lesson, next}) => {
+const LessonSummary: React.FC<LessonSummaryProps> = ({ subject,lesson, userLesson, next}) => {
   const { t } = useTranslation(['translation'], {i18n} );
   return (
     <IonCard className='lesson-card'>
       <IonCardContent className='lesson-text'>
-        <CloudinaryContext cloudName={cloudinaryConfig.cloudName}>
-          <Image publicId={getPublicId(lesson.photo)} className={'lesson-logo'}>
-            <Transformation width="600" crop="scale" />
-          </Image>
-        </CloudinaryContext>
-        <div dangerouslySetInnerHTML={{__html: lesson.description}}></div>
-        <IonButton expand='block' onClick={next}>{t('buttons.next')}</IonButton>
+        <IonCardSubtitle>Lesson completed</IonCardSubtitle>
+        <IonCardTitle>{lesson.name}</IonCardTitle>
+        <p>You have successfully completed this module and correctly answered {userLesson.score}% of the questions.</p>
+        <IonButton expand='block' onClick={next}>{t('buttons.done')}</IonButton>
       </IonCardContent>
     </IonCard>
   );

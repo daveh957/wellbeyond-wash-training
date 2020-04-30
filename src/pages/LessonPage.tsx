@@ -47,11 +47,11 @@ interface DispatchProps {
 
 interface LessonProps extends OwnProps, StateProps, DispatchProps {}
 
-const LessonDetailsPage: React.FC<LessonProps> = ({ subject,lesson, userLesson, isLoggedIn, startLesson, updateLesson }) => {
+const LessonDetailsPage: React.FC<LessonProps> = ({ history, subject,lesson, userLesson, isLoggedIn, startLesson, updateLesson }) => {
 
   const { t } = useTranslation(['translation'], {i18n} );
   const slider:MutableRefObject<any> = useRef(null);
-  const [slides ,setSlides] = useState(new Array<JSX.Element>());
+  const [beforeQuestions ,setBeforeQuestions] = useState<Question[]>();
   const [lessonStarted,setLessonStarted] = useState(false);
 
   const saveAnswer = (question:Question, preLesson:boolean, answer:(string|number)) => {
@@ -69,15 +69,9 @@ const LessonDetailsPage: React.FC<LessonProps> = ({ subject,lesson, userLesson, 
   };
 
   const done = () => {
-
+    slider.current.slideTo(0);
+    history.push('/tabs/subjects/'+subject.id, {direction: 'forward'});
   };
-
-  useEffect(() => {
-    if (isLoggedIn && lesson && !lessonStarted) {
-      setLessonStarted(true);
-      startLesson(lesson.id);
-    }
-  },[isLoggedIn, lesson])
 
   const contentRef = useRef(null);
   const scrollToTop= () => {
@@ -114,66 +108,77 @@ const LessonDetailsPage: React.FC<LessonProps> = ({ subject,lesson, userLesson, 
     initialSlide: 0,
     speed: 400
   };
+  useEffect(() => {
+    if (isLoggedIn && lesson && !lessonStarted) {
+      setLessonStarted(true);
+      startLesson(lesson.id);
+    }
+    if (userLesson && lesson) {
+      setBeforeQuestions(beforeQuestions || (!userLesson.completed ? lesson.questions: undefined));
+    }
+  },[isLoggedIn, lesson, userLesson])
 
   if (isLoggedIn === false) {
     return <Redirect to="/login" />
   }
 
-  return (
+  return (lesson && userLesson ?
     <IonPage id="lesson-detail">
       <IonContent scrollEvents={true}>
         <IonHeader translucent={true}>
           <IonToolbar>
             <IonButtons slot="start">
-              <IonBackButton defaultHref={subject ? `/tabs/subjects/${subject.id}` : '/tabs/training'} />
+              <IonBackButton defaultHref={subject ? `/tabs/subjects/${subject.id}` : '/tabs/training'}/>
             </IonButtons>
             <IonTitle>{lesson ? lesson.name : t('resources.lessons.name')}</IonTitle>
           </IonToolbar>
         </IonHeader>
-        { lesson ?
+        {lesson ?
           <IonContent ref={contentRef} fullscreen={true}>
             <IonHeader collapse="condense">
             </IonHeader>
-            <IonSlides  ref={slider} options={slideOpts} id={`${lesson.id}-slider`} onIonSlideDidChange={slideChanged}>
+            <IonSlides ref={slider} options={slideOpts} id={`${lesson.id}-slider`} onIonSlideDidChange={slideChanged}>
               <IonSlide className='lesson-slide' id={`${lesson.id}-intro`}>
-                <LessonIntro subject={subject} lesson={lesson} userLesson={userLesson} next={slideNext} />
+                <LessonIntro subject={subject} lesson={lesson} userLesson={userLesson} next={slideNext}/>
               </IonSlide>
-              {(!userLesson || !userLesson.completed) && lesson.questions && lesson.questions.map ((question, idx) => {
+              {beforeQuestions && beforeQuestions.map((question:Question, idx:number) => {
                 return (
-                  <IonSlide className='lesson-slide' id={`${lesson.id}-bq-${idx+1}`}>
+                  <IonSlide className='lesson-slide' id={`${lesson.id}-bq-${idx + 1}`}>
                     <QuestionDetail subject={subject} lesson={lesson} question={question}
-                                    questionNum={idx+1} questionCount={lesson.questions.length}
+                                    questionNum={idx + 1} questionCount={lesson.questions.length}
                                     next={slideNext} save={saveAnswer} preLesson={true}/>
                   </IonSlide>
                 )
               })}
-              {lesson.pages && lesson.pages.map ((page, idx) => {
+              {lesson.pages && lesson.pages.map((page, idx) => {
                 return (
-                  <IonSlide className='lesson-slide' id={`${lesson.id}-lp-${idx+1}`}>
-                    <LessonPageDetail subject={subject} lesson={lesson} page={page} pageNum={idx+1} pageCount={lesson.pages.length} skipVideo={!!(userLesson && userLesson.completed)} next={slideNext} />
+                  <IonSlide className='lesson-slide' id={`${lesson.id}-lp-${idx + 1}`}>
+                    <LessonPageDetail subject={subject} lesson={lesson} page={page} pageNum={idx + 1}
+                                      pageCount={lesson.pages.length} skipVideo={!!(userLesson && userLesson.completed)}
+                                      next={slideNext}/>
                   </IonSlide>
                 )
               })}
-              {lesson.questions && lesson.questions.map ((question, idx) => {
+              {lesson.questions && lesson.questions.map((question, idx) => {
                 return (
-                  <IonSlide className='lesson-slide' id={`${lesson.id}-aq-${idx+1}`}>
+                  <IonSlide className='lesson-slide' id={`${lesson.id}-aq-${idx + 1}`}>
                     <QuestionDetail subject={subject} lesson={lesson} question={question}
-                                    questionNum={idx+1} questionCount={lesson.questions.length}
+                                    questionNum={idx + 1} questionCount={lesson.questions.length}
                                     priorAnswers={userLesson && userLesson.answers}
-                                    next={idx+1 === lesson.questions.length ? handleLessonComplete : slideNext} save={saveAnswer} preLesson={false}/>
+                                    next={idx + 1 === lesson.questions.length ? handleLessonComplete : slideNext}
+                                    save={saveAnswer} preLesson={false}/>
                   </IonSlide>
                 )
               })}
               <IonSlide className='lesson-slide' id={`${lesson.id}-summary`}>
-                <LessonSummary subject={subject} lesson={lesson} userLesson={userLesson} next={done} />
+                <LessonSummary subject={subject} lesson={lesson} userLesson={userLesson} next={done}/>
               </IonSlide>
             </IonSlides>
           </IonContent>
           : undefined
         }
       </IonContent>
-    </IonPage>
-  );
+    </IonPage> : null);
 };
 
 

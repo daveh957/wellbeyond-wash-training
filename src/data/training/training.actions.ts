@@ -1,12 +1,19 @@
 import { ActionType } from '../../util/types';
 import { loadData } from './trainingApi'
 import { TrainingState } from './training.state';
-import { Subject, Lesson } from '../../models/Training';
+import {Subject, Lesson, Question} from '../../models/Training';
 
 export const loadLessonData = () => (async (dispatch: React.Dispatch<any>) => {
   dispatch(setLoading(true));
   let subjects:Subject[] = await loadData('subjects');
   let lessons:Lesson[] = await loadData('lessons');
+  if (lessons && lessons.length) {
+    lessons.map(lesson => {
+      if (lesson.questions) {
+        lesson.questions = lesson.questions.filter((q:Question) => q.questionType && q.questionText && q.correctAnswer);
+      }
+    });
+  }
   dispatch(setData({lessons, subjects}));
   dispatch(setLoading(false));
 })

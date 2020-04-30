@@ -20,7 +20,7 @@ export interface Lesson {
   description: string;
   photo: string;
   pages: LessonPage[]; // Embedded list
-  questions: [Question]; // Embedded list
+  questions: Question[]; // Embedded list
 }
 
 export interface Subject {

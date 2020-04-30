@@ -16,7 +16,7 @@ interface LessonIntroProps {
   next(): void;
 }
 
-const LessonIntro: React.FC<LessonIntroProps> = ({ subject,lesson, next}) => {
+const LessonIntro: React.FC<LessonIntroProps> = ({ subject,lesson, userLesson, next}) => {
   const { t } = useTranslation(['translation'], {i18n} );
   return (
     <IonCard className='lesson-card'>
@@ -27,6 +27,11 @@ const LessonIntro: React.FC<LessonIntroProps> = ({ subject,lesson, next}) => {
           </Image>
         </CloudinaryContext>
         <div dangerouslySetInnerHTML={{__html: lesson.description}}></div>
+        {userLesson.completed ?
+          <p>{t('resources.lessons.intro.completed')}</p>
+        :
+          <p>{t('resources.lessons.intro.firsttime')} </p>
+        }
         <IonButton expand='block' onClick={next}>{t('buttons.next')}</IonButton>
       </IonCardContent>
     </IonCard>
