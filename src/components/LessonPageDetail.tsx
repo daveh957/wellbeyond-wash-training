@@ -1,11 +1,22 @@
 import React, {useEffect, useState} from 'react';
 import { Subject, Lesson, LessonPage } from '../models/Training';
-import {IonCard, IonCardHeader, IonItem, IonLabel, IonCardContent, IonSlide, IonButton} from '@ionic/react';
+import {
+  IonCard,
+  IonCardHeader,
+  IonItem,
+  IonLabel,
+  IonCardContent,
+  IonSlide,
+  IonButton,
+  IonHeader,
+  IonSlides, IonContent
+} from '@ionic/react';
 import {CloudinaryContext, Image, Transformation} from 'cloudinary-react';
 import { cloudinaryConfig } from "../CLOUDINARY_CONFIG";
 import VideoPlayer from "./VideoPlayer";
 import {useTranslation} from "react-i18next";
 import i18n from "../i18n";
+import LessonIntro from "./LessonIntro";
 
 
 interface LessonPageDetailProps {
@@ -24,8 +35,14 @@ const LessonPageDetail: React.FC<LessonPageDetailProps> = ({ subject,lesson, pag
   const [videoViewed, setVideoViewed] = useState();
   const [showNext, setShowNext] = useState();
   const [videoState, setVideoState] = useState();
+
+  const slideOpts = {
+    zoom: {
+      maxRatio: 2
+    }
+  };
   useEffect(() => {
-    if (page && (videoViewed || skipVideo || !page.video)) {
+    if (page) {
       setShowNext(true);
     }
   }, [page, videoViewed, skipVideo]);
@@ -34,7 +51,7 @@ const LessonPageDetail: React.FC<LessonPageDetailProps> = ({ subject,lesson, pag
       if (videoState.ended) {
         setVideoViewed(true);
       }
-      if (videoState.currentTime > 0 && videoState.duration > 0 && (videoState.duration / videoState.currentTime) < 2) {
+      if (videoState.currentTime > 0 && videoState.duration > 0 && (videoState.currentTime / videoState.duration) > 0.8) {
         setVideoViewed(true);
       }
     }
@@ -48,10 +65,16 @@ const LessonPageDetail: React.FC<LessonPageDetailProps> = ({ subject,lesson, pag
       <IonCardContent class='lesson-text'>
         <div dangerouslySetInnerHTML={{__html: page.text}}></div>
         {page.photo ?
-          <CloudinaryContext cloudName={cloudinaryConfig.cloudName}>
-            <Image publicId={page.photo}>
-            </Image>
-          </CloudinaryContext>
+          <IonSlides options={slideOpts} >
+            <IonSlide className='lesson-photo-slide'>
+              <div className='swiper-zoom-container'>
+                <CloudinaryContext cloudName={cloudinaryConfig.cloudName}>
+                  <Image publicId={page.photo}>
+                  </Image>
+                </CloudinaryContext>
+              </div>
+            </IonSlide>
+          </IonSlides>
           : undefined}
         {page.video ?
           <VideoPlayer id={`video-${lesson.id}-${pageNum}`} src={page.video} setVideoState={setVideoState}  />
