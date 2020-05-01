@@ -13,7 +13,6 @@ export const authCheck = async (_handleAuthedUser: any) => {
     firebase.auth().onAuthStateChanged(async user => {
       if (user != null) {
         console.log("We are authenticated now!");
-
         return resolve(await _handleAuthedUser(user));
       } else {
         console.log("We did not authenticate.");
@@ -154,5 +153,66 @@ export const createOrUpdateUserLesson = async (lesson:UserLesson) => {
     })
     .catch(error => {
       console.log("Error writing document:", error);
+    });
+};
+
+export const updateEmail = async (email: string) => {
+  let user = firebase.auth().currentUser;
+  if (!user || !user.uid) {
+    return null;
+  }
+  return user
+    .updateEmail(email)
+    .then(() => {
+      return firebase
+        .firestore()
+        .collection("users")
+        // @ts-ignore
+        .doc(user.uid)
+        .set({
+          // @ts-ignore
+          email: email
+        })
+        .then(() => {
+          return user;
+        });
+    });
+};
+
+export const updateProfile = async (profile: {name: string, organization: string, photoURL: string}) => {
+  let user = firebase.auth().currentUser;
+  if (!user || !user.uid) {
+    return null;
+  }
+  return user
+    .updateProfile({displayName: profile.name, photoURL: profile.photoURL})
+    .then(() => {
+      if (!profile.organization) {
+        return user;
+      }
+      return firebase
+        .firestore()
+        .collection("users")
+        // @ts-ignore
+        .doc(user.uid)
+        .set({
+          // @ts-ignore
+          organization: organization
+        })
+        .then(() => {
+          return user;
+        });
+    });
+};
+
+export const updatePassword = async (password: string) => {
+  let user = firebase.auth().currentUser;
+  if (!user || !user.uid) {
+    return null;
+  }
+  return user
+    .updatePassword(password)
+    .then(() => {
+      return user;
     });
 };
