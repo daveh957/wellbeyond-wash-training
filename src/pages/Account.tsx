@@ -3,7 +3,6 @@ import { IonHeader, IonToolbar, IonTitle, IonContent, IonPage, IonButtons, IonMe
 import './Account.scss';
 import { useTranslation } from "react-i18next";
 import i18n from '../i18n';
-import { setUsername } from '../data/user/user.actions';
 import { connect } from '../data/connect';
 import { RouteComponentProps } from 'react-router';
 import {Redirect} from "react-router-dom";
@@ -13,16 +12,18 @@ interface OwnProps extends RouteComponentProps { }
 
 interface StateProps {
   isLoggedIn?: boolean;
-  username?: string;
+  name?: string;
+  email?: string;
+  photoURL?: string;
+  organization?: string;
 }
 
 interface DispatchProps {
-  setUsername: typeof setUsername;
 }
 
 interface AccountProps extends OwnProps, StateProps, DispatchProps { }
 
-const Account: React.FC<AccountProps> = ({ setUsername, username, isLoggedIn, history }) => {
+const Account: React.FC<AccountProps> = ({ name, email, photoURL, organization, isLoggedIn, history }) => {
 
   const [showAlert, setShowAlert] = useState(false);
   const { t } = useTranslation(['translation'], {i18n} );
@@ -46,53 +47,30 @@ const Account: React.FC<AccountProps> = ({ setUsername, username, isLoggedIn, hi
         </IonToolbar>
       </IonHeader>
       <IonContent>
-        {username &&
-          (<div className="ion-padding-top ion-text-center">
+          <div className="ion-padding-top ion-text-center">
             <img src="https://www.gravatar.com/avatar?d=mm&s=140" alt="avatar" />
-            <h2>{ username }</h2>
+            <h2>{ name }</h2>
+            <h2>{ email }</h2>
             <IonList inset>
-              <IonItem onClick={() => clicked('Update Picture')}>Update Picture</IonItem>
-              <IonItem onClick={() => setShowAlert(true)}>Change Username</IonItem>
+              <IonItem onClick={() => clicked('Update Picture')}>Change Photo</IonItem>
+              <IonItem onClick={() => setShowAlert(true)}>Change Email</IonItem>
               <IonItem onClick={() => clicked('Change Password')}>Change Password</IonItem>
-              <IonItem routerLink="/support" routerDirection="none">Support</IonItem>
-              <IonItem routerLink="/logout" routerDirection="none">Logout</IonItem>
             </IonList>
-          </div>)
-        }
+          </div>
       </IonContent>
-      <IonAlert
-        isOpen={showAlert}
-        header="Change Username"
-        buttons={[
-          'Cancel',
-          {
-            text: 'Ok',
-            handler: (data) => {
-              setUsername(data.username);
-            }
-          }
-        ]}
-        inputs={[
-          {
-            type: 'text',
-            name: 'username',
-            value: username,
-            placeholder: 'username'
-          }
-        ]}
-        onDidDismiss={() => setShowAlert(false)}
-      />
     </IonPage>
   );
 };
 
 export default connect<OwnProps, StateProps, DispatchProps>({
   mapStateToProps: (state) => ({
-    username: selectors.getUsername(state),
+    name: state.user.name,
+    email: state.user.email,
+    organization: state.user.organization,
+    photoURL: state.user.photoURL,
     isLoggedIn: state.user.isLoggedIn
   }),
   mapDispatchToProps: {
-    setUsername,
   },
   component: Account
 })

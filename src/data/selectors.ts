@@ -2,9 +2,6 @@ import { createSelector } from 'reselect';
 import { AppState } from './state';
 import { Lesson } from '../models/Training';
 
-export const getUsername = (state: AppState) => {
-  return state.user.username;
-}
 export const getUserLessons = (state: AppState) => {
   return state.user.lessons;
 }

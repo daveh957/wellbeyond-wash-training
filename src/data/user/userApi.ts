@@ -93,7 +93,8 @@ export const getUserProfile = async () => {
           ...doc.data(),
           id: user ? user.uid : undefined,
           email: user ? user.email : undefined,
-          displayName: user ? user.displayName : undefined
+          name: user ? user.displayName : undefined,
+          photoURL: user ? user.photoURL : undefined,
         };
       } else {
         // doc.data() will be undefined in this case
@@ -179,7 +180,7 @@ export const updateEmail = async (email: string) => {
     });
 };
 
-export const updateProfile = async (profile: {name: string, organization: string, photoURL: string}) => {
+export const updateProfile = async (profile: {name?: string, organization?: string, photoURL?: string}) => {
   let user = firebase.auth().currentUser;
   if (!user || !user.uid) {
     return null;
@@ -197,7 +198,7 @@ export const updateProfile = async (profile: {name: string, organization: string
         .doc(user.uid)
         .set({
           // @ts-ignore
-          organization: organization
+          organization: profile.organization
         })
         .then(() => {
           return user;

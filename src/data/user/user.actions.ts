@@ -1,4 +1,4 @@
-import { loginWithEmail, logout, getUserProfile, getUserLessons, registerWithEmail, createOrUpdateUserLesson } from './userApi';
+import { loginWithEmail, logout, getUserProfile, getUserLessons, registerWithEmail, updateProfile, updateEmail, updatePassword, createOrUpdateUserLesson } from './userApi';
 import { ActionType } from '../../util/types';
 import { UserState } from './user.state';
 import { Registration, UserLesson, Answer } from '../../models/User';
@@ -49,13 +49,6 @@ export const setData = (data: Partial<UserState>) => ({
   data
 } as const);
 
-export const setUsername = (username?: string) => {
-  return ({
-    type: 'set-username',
-    username
-  } as const);
-};
-
 export const setIsLoggedIn = (loggedIn: boolean) => {
   return ({
     type: 'set-is-loggedin',
@@ -70,6 +63,7 @@ export const loginUser = (email: string, password: string) => async (dispatch: R
 
 export const registerUser = ({name, email, password, organization}:Registration) => async (dispatch: React.Dispatch<any>) => {
   await registerWithEmail(email, password);
+  await updateProfile({name: name, organization: organization})
   dispatch(loadUserData());
 };
 
@@ -97,7 +91,6 @@ export type UserActions =
   | ActionType<typeof setLoading>
   | ActionType<typeof setData>
   | ActionType<typeof setIsLoggedIn>
-  | ActionType<typeof setUsername>
   | ActionType<typeof setDarkMode>
   | ActionType<typeof setUserLessons>
   | ActionType<typeof setUserLesson>

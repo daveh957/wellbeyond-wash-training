@@ -13,7 +13,6 @@ export const initialState: AppState = {
     darkMode: false,
     isLoggedIn: undefined,
     loading: false,
-    username: undefined,
     lessons: []
   }
 };

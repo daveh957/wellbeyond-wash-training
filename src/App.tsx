@@ -32,7 +32,7 @@ import { firebaseConfig } from './FIREBASE_CONFIG';
 import MainTabs from './pages/MainTabs';
 import { connect } from './data/connect';
 import { AppContextProvider } from './data/AppContext';
-import { loadUserData, logoutUser, setIsLoggedIn, setUsername } from './data/user/user.actions';
+import { loadUserData, logoutUser, setIsLoggedIn } from './data/user/user.actions';
 import { loadLessonData } from './data/training/training.actions';
 import { authCheck } from './data/user/userApi';
 import Account from './pages/Account';
@@ -59,7 +59,6 @@ interface DispatchProps {
   loadUserData: typeof loadUserData;
   logoutUser: typeof logoutUser;
   setIsLoggedIn: typeof setIsLoggedIn;
-  setUsername: typeof setUsername;
 }
 
 interface IonicAppProps extends StateProps, DispatchProps { }
@@ -68,7 +67,7 @@ if (!firebase.apps.length) {
   firebase.initializeApp(firebaseConfig);
 }
 
-const IonicApp: React.FC<IonicAppProps> = ({ darkMode, isLoggedIn,   loadLessonData, loadUserData, logoutUser, setIsLoggedIn, setUsername}) => {
+const IonicApp: React.FC<IonicAppProps> = ({ darkMode, isLoggedIn,   loadLessonData, loadUserData, logoutUser, setIsLoggedIn}) => {
 
   const [intercomUser, setIntercomUser] = useState();
 
@@ -78,7 +77,6 @@ const IonicApp: React.FC<IonicAppProps> = ({ darkMode, isLoggedIn,   loadLessonD
       if (user != null) {
         console.log("We are authenticated now!");
         setIsLoggedIn(true);
-        setUsername(user.uid);
         loadLessonData();
         getUserHash().then(function(result) {
           setIntercomUser({
@@ -90,7 +88,6 @@ const IonicApp: React.FC<IonicAppProps> = ({ darkMode, isLoggedIn,   loadLessonD
       } else {
         console.log("We did not authenticate.");
         setIsLoggedIn(false);
-        setUsername(undefined);
         setIntercomUser(undefined);
       }
       loadUserData();
@@ -135,6 +132,6 @@ const IonicAppConnected = connect<{}, StateProps, DispatchProps>({
     isLoggedIn: state.user.isLoggedIn
   }),
   // @ts-ignore
-  mapDispatchToProps: { loadLessonData, loadUserData, logoutUser, setIsLoggedIn, setUsername },
+  mapDispatchToProps: { loadLessonData, loadUserData, logoutUser, setIsLoggedIn },
   component: IonicApp
 });

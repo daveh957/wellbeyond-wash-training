@@ -31,7 +31,7 @@ const Signup: React.FC<SignupProps> = ({registerUser,  history}) => {
   const [formSubmitted, setFormSubmitted] = useState(false);
 
   const handleChange = (field:string, value:string) => {
-    formErrors[field] = false;
+    formErrors[field] = null;
     setFormErrors(formErrors);
     formValues[field] = value;
     setFormValues(formValues);
