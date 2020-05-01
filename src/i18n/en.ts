@@ -18,6 +18,25 @@ export default {
       next: 'Next',
       done: 'Done'
     },
+    registration: {
+      labels: {
+        name: 'First and Last Name',
+        email: 'Email Address',
+        password: 'Password (8 characters minimum)',
+        passwordRepeat: 'Repeat Password',
+        organization: 'Organization Name (optional)'
+      },
+      errors: {
+        nameRequired: 'Name is required',
+        emailRequired: 'Email is required',
+        passwordRequired: 'Password is required',
+        passwordLength: 'Password must be at least 8 characters',
+        passwordMismatch: 'Passwords don\'t match',
+      },
+      buttons: {
+
+      }
+    },
     resources: {
       subjects: {
         name: 'Subject',

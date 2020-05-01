@@ -1,7 +1,7 @@
 import { loginWithEmail, logout, getUserProfile, getUserLessons, registerWithEmail, createOrUpdateUserLesson } from './userApi';
 import { ActionType } from '../../util/types';
 import { UserState } from './user.state';
-import { UserLesson, Answer } from '../../models/User';
+import { Registration, UserLesson, Answer } from '../../models/User';
 
 export const loadUserData = () => async (dispatch: React.Dispatch<any>) => {
   dispatch(setLoading(true));
@@ -68,7 +68,7 @@ export const loginUser = (email: string, password: string) => async (dispatch: R
   dispatch(loadUserData());
 };
 
-export const registerUser = (email: string, password: string) => async (dispatch: React.Dispatch<any>) => {
+export const registerUser = ({name, email, password, organization}:Registration) => async (dispatch: React.Dispatch<any>) => {
   await registerWithEmail(email, password);
   dispatch(loadUserData());
 };

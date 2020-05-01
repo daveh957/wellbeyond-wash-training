@@ -1,7 +1,8 @@
-export interface UserInfo {
+export interface Registration {
   email: string;
   name: string;
-  companyName?: string;
+  password: string;
+  organization?: string;
 }
 
 export interface Answer {

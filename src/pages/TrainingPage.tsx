@@ -40,7 +40,7 @@ const TrainingPage: React.FC<TrainingPageProps> = ({ subjects, lessons, isLogged
     return <Redirect to={`/tabs/subjects/${filteredSubjects[0].id}`} />
   }
 
-  return (
+  return (subjects ?
     <IonPage ref={pageRef} id="subject-list">
       <IonHeader translucent={true}>
         <IonToolbar>
@@ -69,7 +69,7 @@ const TrainingPage: React.FC<TrainingPageProps> = ({ subjects, lessons, isLogged
           </IonList>
         }
       </IonContent>
-    </IonPage>
+    </IonPage> : null
   );
 };
 
