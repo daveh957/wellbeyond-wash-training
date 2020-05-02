@@ -36,8 +36,10 @@
     "video-react": "^0.14.1"
   },
   "scripts": {
-    "start": "ionic serve",
-    "build": "ionic build",
+    "start": "ionic serve ./custom-sw.js",
+    "build-sw": "node ./src/sw-build.js",
+    "clean-cra-sw": "rm -f build/precache-manifest.*.js && rm -f build/service-worker.js",
+    "build": "ionic build && npm run build-sw && npm run clean-cra-sw",
     "deploy": "firebase deploy --only hosting:wellbeyond-wash-training",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
