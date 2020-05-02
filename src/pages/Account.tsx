@@ -6,6 +6,7 @@ import i18n from '../i18n';
 import { connect } from '../data/connect';
 import { RouteComponentProps } from 'react-router';
 import {Redirect} from "react-router-dom";
+import {getGravatarUrl} from "../util/gravatar";
 import * as selectors from "../data/selectors";
 
 interface OwnProps extends RouteComponentProps { }
@@ -48,7 +49,7 @@ const Account: React.FC<AccountProps> = ({ name, email, photoURL, organization, 
       </IonHeader>
       <IonContent>
           <div className="ion-padding-top ion-text-center">
-            <img src="https://www.gravatar.com/avatar?d=mm&s=140" alt="avatar" />
+            <img src={getGravatarUrl(email)} alt="avatar" />
             <h2>{ name }</h2>
             <h2>{ email }</h2>
             <IonList inset>
