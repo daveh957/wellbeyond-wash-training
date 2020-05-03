@@ -1,3 +1,5 @@
+/* eslint-disable no-restricted-globals */
+/* eslint-disable no-undef */
 if ("function" === typeof importScripts) {
   importScripts(
     "https://storage.googleapis.com/workbox-cdn/releases/3.5.0/workbox-sw.js"
@@ -8,7 +10,7 @@ if ("function" === typeof importScripts) {
     console.log("Workbox is loaded");
 
     // Disable logging
-    workbox.setConfig({ debug: false });
+    workbox.setConfig({ debug: true });
 
     //`generateSW` and `generateSWString` provide the option
     // to force update an exiting service worker.
@@ -16,7 +18,7 @@ if ("function" === typeof importScripts) {
     // manually overriding the skipWaiting();
     self.addEventListener("install", (event) => {
       self.skipWaiting();
-      window.location.reload();
+      // window.location.reload();
     });
 
     // Manual injection point for manifest files.
@@ -38,13 +40,26 @@ if ("function" === typeof importScripts) {
 
     // Image caching
     workbox.routing.registerRoute(
-      /\.(?:png|gif|jpg|jpeg|svg)$/,
+      /https:\/\/res\.cloudinary\.com\/.*\.(?:png|jpg|jpeg|svg|gif)/,
       workbox.strategies.cacheFirst({
-        cacheName: "images",
+        cacheName: 'image-cache',
         plugins: [
-          new workbox.expiration.Plugin({
-            maxEntries: 60,
-            maxAgeSeconds: 30 * 24 * 60 * 60, // 30 Days
+          new workbox.cacheableResponse.Plugin({
+            statuses: [200]
+          }),
+        ]
+      })
+    );
+
+    // Video caching
+    workbox.routing.registerRoute(
+      /https:\/\/res\.cloudinary\.com\/.*\.(?:mp4)/,
+      workbox.strategies.cacheFirst({
+        cacheName: "video-cache",
+        plugins: [
+          new workbox.rangeRequests.Plugin(),
+          new workbox.cacheableResponse.Plugin({
+            statuses: [200]
           }),
         ],
       })

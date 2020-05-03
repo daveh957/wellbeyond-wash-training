@@ -69,7 +69,7 @@ const LessonPageDetail: React.FC<LessonPageDetailProps> = ({ subject,lesson, pag
             <IonSlide className='lesson-photo-slide'>
               <div className='swiper-zoom-container'>
                 <CloudinaryContext cloudName={cloudinaryConfig.cloudName}>
-                  <Image publicId={page.photo}>
+                  <Image publicId={page.photo} crossorigin='anonymous'>
                   </Image>
                 </CloudinaryContext>
               </div>
@@ -77,7 +77,7 @@ const LessonPageDetail: React.FC<LessonPageDetailProps> = ({ subject,lesson, pag
           </IonSlides>
           : undefined}
         {page.video ?
-          <VideoPlayer id={`video-${lesson.id}-${pageNum}`} src={page.video} setVideoState={setVideoState}  />
+          <VideoPlayer id={`video-${lesson.id}-${pageNum}`} src={page.video} setVideoState={setVideoState} />
           : undefined}
         <IonButton expand='block' disabled={!showNext} onClick={next}>{t('buttons.next')}</IonButton>
       </IonCardContent>

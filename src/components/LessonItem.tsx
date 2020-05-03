@@ -28,7 +28,7 @@ const LessonItem: React.FC<LessonItemProps> = ({ subject,lesson, completed, clic
           <IonCardContent>
             <IonItem button detail={false} lines="none" className="lesson-item" disabled={!clickable} routerLink={`/tabs/subjects/${subject.id}/lessons/${lesson.id}?completed=${completed}`}>
               <CloudinaryContext cloudName={cloudinaryConfig.cloudName}>
-                <Image publicId={getPublicId(lesson.photo)}>
+                <Image publicId={getPublicId(lesson.photo)} crossorigin='anonymous'>
                   <Transformation width="400" crop="scale" />
                   {completed && <Transformation overlay={{fontFamily: "helvetica", fontSize: 100, fontWeight: "bold", text: "Completed"}} gravity="north" y="20" angle="-45" color="#999999" opacity="50" />}
                 </Image>
