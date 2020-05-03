@@ -22,7 +22,7 @@ const LessonIntro: React.FC<LessonIntroProps> = ({ subject,lesson, userLesson, n
     <IonCard className='lesson-card'>
       <IonCardContent className='lesson-text'>
         <CloudinaryContext cloudName={cloudinaryConfig.cloudName}>
-          <Image publicId={getPublicId(lesson.photo)} className={'lesson-logo'} crossorigin='anonymous'>
+          <Image publicId={getPublicId(lesson.photo)} className={'lesson-logo'} crossOrigin='anonymous'>
             <Transformation width="600" crop="scale" />
           </Image>
         </CloudinaryContext>

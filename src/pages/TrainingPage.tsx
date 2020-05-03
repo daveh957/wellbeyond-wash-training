@@ -1,6 +1,6 @@
 import React, { useState, useRef } from 'react';
 
-import { IonToolbar, IonContent, IonPage, IonButtons, IonTitle, IonMenuButton, IonHeader, IonList, IonItemGroup, IonItemDivider, IonLabel, IonListHeader } from '@ionic/react';
+import { IonToolbar, IonContent, IonPage, IonButtons, IonTitle, IonMenuButton, IonHeader, IonList, IonItemGroup, IonItemDivider, IonLabel, IonListHeader, IonLoading } from '@ionic/react';
 
 import './TrainingPage.scss'
 
@@ -62,11 +62,11 @@ const TrainingPage: React.FC<TrainingPageProps> = ({ subjects, lessons, isLogged
             }
           </IonList>)
         :
-          <IonList>
-            <IonListHeader>
-              {t('resources.subjects.nonefound')}
-            </IonListHeader>
-          </IonList>
+          <IonLoading
+            isOpen={!subjects}
+            message={'Please wait...'}
+            duration={5000}
+          />
         }
       </IonContent>
     </IonPage> : null

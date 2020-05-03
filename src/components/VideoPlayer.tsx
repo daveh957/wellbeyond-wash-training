@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import "./VideoPlayer.scss";
 import { Player, BigPlayButton, ControlBar } from 'video-react';
+import {Image} from "cloudinary-react";
 
 interface VideoPlayerProps {
   id: string;
@@ -24,7 +25,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ id,src, setVideoState}) => {
   }, [player]);
 
   return (
-    <Player id={id} ref={(self:any) => { setPlayer(self) }} playsInline={true} fluid={true}>
+    <Player id={id} ref={(self:any) => { setPlayer(self) }} playsInline={true} fluid={true} crossOrigin='anonymous'>
       <source src={src} />
       <BigPlayButton position="center" />
       <ControlBar autoHide={false} />

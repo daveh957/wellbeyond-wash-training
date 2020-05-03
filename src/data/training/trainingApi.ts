@@ -20,3 +20,13 @@ export const loadData = async (collectionPath:string) : Promise<any> => {
       return error;
     })
 };
+
+export const addVideoToCache = async (url:string) : Promise<any> => {
+  const cache = await caches.open('video-cache');
+  await cache.add(url);
+}
+
+export const addImageToCache = async (url:string) : Promise<any> => {
+  const cache = await caches.open('image-cache');
+  await cache.add(url);
+}

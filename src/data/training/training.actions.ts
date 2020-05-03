@@ -1,5 +1,5 @@
 import { ActionType } from '../../util/types';
-import { loadData } from './trainingApi'
+import { loadData, addImageToCache, addVideoToCache } from './trainingApi'
 import { TrainingState } from './training.state';
 import {Subject, Lesson, Question} from '../../models/Training';
 
@@ -16,7 +16,27 @@ export const loadLessonData = () => (async (dispatch: React.Dispatch<any>) => {
   }
   dispatch(setData({lessons, subjects}));
   dispatch(setLoading(false));
-})
+  cacheImagesAndVideos(lessons, subjects);
+});
+
+export const cacheImagesAndVideos = (lessons:Lesson[], subjects:Subject[]) => {
+  if (lessons && lessons.length) {
+    lessons.map(lesson => {
+      lesson.photo && addImageToCache(lesson.photo);
+      if (lesson.pages && lesson.pages.length) {
+        lesson.pages.map(page => {
+          page.photo && addImageToCache(page.photo);
+          page.video && addImageToCache(page.video);
+        });
+      }
+    });
+  }
+  if (subjects && subjects.length) {
+    subjects.map(subject => {
+      subject.photo && addImageToCache(subject.photo);
+    });
+  }
+};
 
 export const setData = (data: Partial<TrainingState>) => ({
   type: 'set-training-data',

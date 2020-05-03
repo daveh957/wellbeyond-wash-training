@@ -69,7 +69,7 @@ const LessonPageDetail: React.FC<LessonPageDetailProps> = ({ subject,lesson, pag
             <IonSlide className='lesson-photo-slide'>
               <div className='swiper-zoom-container'>
                 <CloudinaryContext cloudName={cloudinaryConfig.cloudName}>
-                  <Image publicId={page.photo} crossorigin='anonymous'>
+                  <Image publicId={page.photo} crossOrigin='anonymous'>
                   </Image>
                 </CloudinaryContext>
               </div>

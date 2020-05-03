@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Redirect, Route } from 'react-router-dom';
-import { IonApp, IonRouterOutlet, IonSplitPane, } from '@ionic/react';
+import { IonApp, IonRouterOutlet, IonSplitPane, IonContent, IonButton, IonLoading, } from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
 import Intercom from 'react-intercom';
 
@@ -40,6 +40,7 @@ import Login from './pages/Login';
 import Signup from './pages/Signup';
 import Support from './pages/Support';
 import HomeOrLogin from "./pages/HomeOrLogin";
+import { Lesson, Subject } from './models/Training';
 
 const App: React.FC = () => {
   return (
@@ -82,17 +83,17 @@ if (!firebase.apps.length) {
     });
 }
 
-const IonicApp: React.FC<IonicAppProps> = ({ darkMode, isLoggedIn,   loadLessonData, loadUserData, logoutUser, setIsLoggedIn}) => {
+const IonicApp: React.FC<IonicAppProps> = ({ darkMode, isLoggedIn, loadLessonData, loadUserData, logoutUser, setIsLoggedIn}) => {
 
   const [intercomUser, setIntercomUser] = useState();
 
   useEffect(() => {
     const getUserHash = firebase.functions().httpsCallable('getUserHash');
+    loadLessonData();
     firebase.auth().onAuthStateChanged(async user => {
       if (user != null) {
         console.log("We are authenticated now!");
         setIsLoggedIn(true);
-        loadLessonData();
         getUserHash().then(function(result) {
           setIntercomUser({
             email: user.email,
@@ -142,8 +143,6 @@ export default App;
 const IonicAppConnected = connect<{}, StateProps, DispatchProps>({
   mapStateToProps: (state) => ({
     darkMode: state.user.darkMode,
-    subjects: state.data.subjects,
-    lessons: state.data.lessons,
     isLoggedIn: state.user.isLoggedIn
   }),
   // @ts-ignore
