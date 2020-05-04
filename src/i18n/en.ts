@@ -16,7 +16,10 @@ export default {
     buttons: {
       previous: 'Prev',
       next: 'Next',
-      done: 'Done'
+      done: 'Done',
+      close: 'Close',
+      zoomIn: '+',
+      zoomOut: '-'
     },
     registration: {
       labels: {
@@ -46,6 +49,9 @@ export default {
       lessons: {
         name: 'Lesson',
         name_plural: 'Lessons',
+        imageZoom: 'Image Zoom',
+        imageZoomHelp: 'Use pinching gestures the controls below zoom in and out',
+        imageZoomToolbar: 'Zoom +/-',
         intro: {
           completed: 'You have already completed this module, but you can come back here any time to review.',
           firsttime: 'Before you start the module, we\'re going to ask you a few questions to see how much you already know.  We\'ll ask you these questions again after you have completed the module.'

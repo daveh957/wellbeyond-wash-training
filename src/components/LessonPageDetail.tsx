@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useState, Fragment, MutableRefObject, useRef} from 'react';
 import { Subject, Lesson, LessonPage } from '../models/Training';
 import {
   IonCard,
@@ -9,13 +9,12 @@ import {
   IonSlide,
   IonButton,
   IonHeader,
-  IonSlides, IonContent
+  IonSlides, IonContent, IonModal, IonToolbar, IonButtons, IonBackButton, IonTitle, IonList, IonText
 } from '@ionic/react';
-import { cloudinaryConfig } from "../CLOUDINARY_CONFIG";
 import VideoPlayer from "./VideoPlayer";
 import {useTranslation} from "react-i18next";
 import i18n from "../i18n";
-import LessonIntro from "./LessonIntro";
+import '../pages/LessonPage.scss';
 
 
 interface LessonPageDetailProps {
@@ -33,11 +32,31 @@ const LessonPageDetail: React.FC<LessonPageDetailProps> = ({ subject,lesson, pag
   const { t } = useTranslation(['translation'], {i18n} );
   const [videoViewed, setVideoViewed] = useState();
   const [showNext, setShowNext] = useState();
+  const [showModal, setShowModal] = useState();
   const [videoState, setVideoState] = useState();
+  const openModal = () => {setShowModal(true)};
+  const closeModal = () => {setShowModal(false)};
 
+  const slider:MutableRefObject<any> = useRef(null);
+  const zoomIn = () => {
+    slider.current.getSwiper().then((swiper:any) => {
+      if (swiper && swiper.zoom) {
+        swiper.zoom.enable();
+        swiper.zoom.in();
+      }
+    });
+  }
+  const zoomOut = () => {
+    slider.current.getSwiper().then((swiper:any) => {
+      if (swiper && swiper.zoom) {
+        swiper.zoom.enable();
+        swiper.zoom.out();
+      }
+    });
+  }
   const slideOpts = {
     zoom: {
-      maxRatio: 2
+      maxRatio: 4
     }
   };
   useEffect(() => {
@@ -57,28 +76,42 @@ const LessonPageDetail: React.FC<LessonPageDetailProps> = ({ subject,lesson, pag
   }, [videoState]);
 
   return (
-    <IonCard>
-      <IonCardHeader>
-        <h2>{page.title}</h2>
-      </IonCardHeader>
-      <IonCardContent class='lesson-text'>
-        <div dangerouslySetInnerHTML={{__html: page.text}}></div>
-        {page.photo ?
-          <IonSlides options={slideOpts} >
+    <Fragment>
+      <IonCard>
+        <IonCardHeader>
+          <h2>{page.title}</h2>
+        </IonCardHeader>
+        <IonCardContent class='lesson-text'>
+          <div dangerouslySetInnerHTML={{__html: page.text}}></div>
+          {page.photo && <img src={page.photo} crossOrigin='anonymous' onClick={openModal} />}
+          {page.video && <VideoPlayer id={`video-${lesson.id}-${pageNum}`} src={page.video} setVideoState={setVideoState} />}
+          <IonButton expand='block' disabled={!showNext} onClick={next}>{t('buttons.next')}</IonButton>
+        </IonCardContent>
+      </IonCard>
+      <IonModal isOpen={showModal}>
+        <IonHeader>
+          <IonToolbar>
+            <IonButtons slot="end">
+              <IonButton onClick={closeModal}>
+                {t('buttons.close')}
+              </IonButton>
+            </IonButtons>
+            <IonTitle>{t('resources.lessons.imageZoom')}</IonTitle>
+          </IonToolbar>
+        </IonHeader>
+        <IonContent>
+          <IonSlides ref={slider} options={slideOpts} >
             <IonSlide className='lesson-photo-slide'>
               <div className='swiper-zoom-container'>
-                <img src={page.photo} crossOrigin='anonymous'>
-                </img>
+                <img src={page.photo} />
               </div>
             </IonSlide>
           </IonSlides>
-          : undefined}
-        {page.video ?
-          <VideoPlayer id={`video-${lesson.id}-${pageNum}`} src={page.video} setVideoState={setVideoState} />
-          : undefined}
-        <IonButton expand='block' disabled={!showNext} onClick={next}>{t('buttons.next')}</IonButton>
-      </IonCardContent>
-    </IonCard>
+          <IonButton onClick={zoomIn} color="medium">{t('buttons.zoomIn')}</IonButton>
+          <IonButton onClick={zoomOut} color="medium">{t('buttons.zoomOut')}</IonButton>
+        </IonContent>
+      </IonModal>
+    </Fragment>
   );
 };
 

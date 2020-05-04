@@ -36,6 +36,7 @@
     "video-react": "^0.14.1"
   },
   "scripts": {
+    "lint:fix": "eslint src/**/*.js --fix",
     "start": "ionic serve ./custom-sw.js",
     "build-sw": "node ./src/sw-build.js",
     "clean-cra-sw": "rm -f build/precache-manifest.*.js && rm -f build/service-worker.js",
