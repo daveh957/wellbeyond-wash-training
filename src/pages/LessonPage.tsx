@@ -21,7 +21,6 @@ import * as selectors from '../data/selectors';
 
 import { Subject, Lesson, Question } from '../models/Training';
 import {Answer, UserLesson} from '../models/User';
-import {CloudinaryContext, Image, Video} from "cloudinary-react";
 import {cloudinaryConfig} from "../CLOUDINARY_CONFIG";
 import LessonPageDetail from "../components/LessonPageDetail";
 import {Redirect} from "react-router-dom";

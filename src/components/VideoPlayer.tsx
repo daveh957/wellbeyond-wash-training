@@ -1,7 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import "./VideoPlayer.scss";
 import { Player, BigPlayButton, ControlBar } from 'video-react';
-import {Image} from "cloudinary-react";
 
 interface VideoPlayerProps {
   id: string;

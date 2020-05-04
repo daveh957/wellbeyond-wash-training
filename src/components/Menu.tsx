@@ -16,12 +16,10 @@ import * as selectors from "../data/selectors";
 const routes = {
   loggedInPages: [
     { title: 'menu.account', path: '/account', icon: person },
-    { title: 'menu.support', path: '/support', icon: help },
     { title: 'menu.logout', path: '/logout', icon: logOut }
   ],
   loggedOutPages: [
     { title: 'menu.login', path: '/login', icon: logIn },
-    { title: 'menu.support', path: '/support', icon: help },
     { title: 'menu.signup', path: '/signup', icon: personAdd }
   ]
 };

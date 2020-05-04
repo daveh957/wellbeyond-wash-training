@@ -11,7 +11,6 @@ import {
   IonHeader,
   IonSlides, IonContent
 } from '@ionic/react';
-import {CloudinaryContext, Image, Transformation} from 'cloudinary-react';
 import { cloudinaryConfig } from "../CLOUDINARY_CONFIG";
 import VideoPlayer from "./VideoPlayer";
 import {useTranslation} from "react-i18next";
@@ -68,10 +67,8 @@ const LessonPageDetail: React.FC<LessonPageDetailProps> = ({ subject,lesson, pag
           <IonSlides options={slideOpts} >
             <IonSlide className='lesson-photo-slide'>
               <div className='swiper-zoom-container'>
-                <CloudinaryContext cloudName={cloudinaryConfig.cloudName}>
-                  <Image publicId={page.photo} crossOrigin='anonymous'>
-                  </Image>
-                </CloudinaryContext>
+                <img src={page.photo} crossOrigin='anonymous'>
+                </img>
               </div>
             </IonSlide>
           </IonSlides>

@@ -2,6 +2,7 @@ import { ActionType } from '../../util/types';
 import { loadData, addImageToCache, addVideoToCache } from './trainingApi'
 import { TrainingState } from './training.state';
 import {Subject, Lesson, Question} from '../../models/Training';
+import {getLessonIconUrl} from "../../util/cloudinary";
 
 export const loadLessonData = () => (async (dispatch: React.Dispatch<any>) => {
   dispatch(setLoading(true));
@@ -22,7 +23,8 @@ export const loadLessonData = () => (async (dispatch: React.Dispatch<any>) => {
 export const cacheImagesAndVideos = (lessons:Lesson[], subjects:Subject[]) => {
   if (lessons && lessons.length) {
     lessons.map(lesson => {
-      lesson.photo && addImageToCache(lesson.photo);
+      lesson.photo && addImageToCache(getLessonIconUrl(lesson.photo, false));
+      lesson.photo && addImageToCache(getLessonIconUrl(lesson.photo, true));
       if (lesson.pages && lesson.pages.length) {
         lesson.pages.map(page => {
           page.photo && addImageToCache(page.photo);

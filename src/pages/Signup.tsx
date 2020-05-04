@@ -70,7 +70,7 @@ const Signup: React.FC<SignupProps> = ({registerUser,  history}) => {
       </IonHeader>
       <IonContent>
 
-        <div className="login">
+        <div className="login-logo">
           <img src="assets/img/appicon.png" alt="WellBeyond logo" />
         </div>
 

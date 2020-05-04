@@ -2,9 +2,8 @@ import React from 'react';
 import { Subject, Lesson } from '../models/Training';
 import { UserLesson } from '../models/User';
 import {IonCard, IonCardContent, IonButton, } from '@ionic/react';
-import {CloudinaryContext, Image, Transformation} from 'cloudinary-react';
 import { cloudinaryConfig } from "../CLOUDINARY_CONFIG";
-import { getPublicId} from "../util/cloudinary";
+import {getLessonIconUrl, getPublicId} from "../util/cloudinary";
 import {useTranslation} from "react-i18next";
 import i18n from "../i18n";
 
@@ -21,11 +20,8 @@ const LessonIntro: React.FC<LessonIntroProps> = ({ subject,lesson, userLesson, n
   return (
     <IonCard className='lesson-card'>
       <IonCardContent className='lesson-text'>
-        <CloudinaryContext cloudName={cloudinaryConfig.cloudName}>
-          <Image publicId={getPublicId(lesson.photo)} className={'lesson-logo'} crossOrigin='anonymous'>
-            <Transformation width="600" crop="scale" />
-          </Image>
-        </CloudinaryContext>
+        <img src={getLessonIconUrl(lesson.photo, false)} crossOrigin='anonymous'>
+        </img>
         <div dangerouslySetInnerHTML={{__html: lesson.description}}></div>
         {userLesson.completed ?
           <p>{t('resources.lessons.intro.completed')}</p>
