@@ -61,6 +61,7 @@ export const registerWithEmail = async (email: string, password: string) => {
         .set({
           // @ts-ignore
           email: newUser.user.email
+
         })
         .then(() => {
           return { ...newUser };

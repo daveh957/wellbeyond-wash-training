@@ -7,16 +7,22 @@ import { connect } from '../data/connect';
 import { RouteComponentProps } from 'react-router';
 import {registerUser} from "../data/user/user.actions";
 import { Registration } from "../models/User";
+import {Redirect} from "react-router-dom";
 
 interface OwnProps extends RouteComponentProps {}
+
+interface StateProps {
+  isLoggedIn?: boolean;
+  loginError?: any;
+}
 
 interface DispatchProps {
   registerUser: typeof registerUser;
 }
 
-interface SignupProps extends OwnProps,  DispatchProps { }
+interface SignupProps extends OwnProps, StateProps, DispatchProps { }
 
-const Signup: React.FC<SignupProps> = ({registerUser,  history}) => {
+const Signup: React.FC<SignupProps> = ({registerUser, isLoggedIn, loginError}) => {
 
   const [formValues, setFormValues] = useState<any>({
     name: '',
@@ -53,12 +59,11 @@ const Signup: React.FC<SignupProps> = ({registerUser,  history}) => {
     e.preventDefault();
     setFormSubmitted(true);
     if(validate()) {
-      await registerUser(sanitizeFormValues(formValues));
-      history.push('/tabs/training', {direction: 'none'});
+      registerUser(sanitizeFormValues(formValues));
     }
   };
 
-  return (
+  return isLoggedIn ? <Redirect to="/tabs" /> : (
     <IonPage id="signup-page">
       <IonHeader>
         <IonToolbar>
@@ -141,6 +146,12 @@ const Signup: React.FC<SignupProps> = ({registerUser,  history}) => {
             </IonItem>
           </IonList>
 
+          {formSubmitted && loginError && <IonText color="danger">
+            <p className="ion-padding-start">
+              {loginError.message}
+            </p>
+          </IonText>}
+
           <IonRow>
             <IonCol>
               <IonButton type="submit" expand="block">Create</IonButton>
@@ -158,5 +169,9 @@ export default connect<OwnProps, {}, DispatchProps>({
   mapDispatchToProps: {
     registerUser,
   },
+  mapStateToProps: (state) => ({
+    isLoggedIn: state.user.isLoggedIn,
+    loginError: state.user.loginError
+  }),
   component: Signup
 })

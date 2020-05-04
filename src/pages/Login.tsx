@@ -13,8 +13,8 @@ import {Redirect} from "react-router-dom";
 interface OwnProps extends RouteComponentProps {}
 
 interface StateProps {
-  username?: string;
   isLoggedIn?: boolean;
+  loginError?: any;
 }
 
 interface DispatchProps {
@@ -23,7 +23,7 @@ interface DispatchProps {
 
 interface LoginProps extends OwnProps, StateProps,  DispatchProps { }
 
-const Login: React.FC<LoginProps> = ({loginUser, isLoggedIn, history}) => {
+const Login: React.FC<LoginProps> = ({loginUser, isLoggedIn, loginError}) => {
 
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
@@ -44,14 +44,11 @@ const Login: React.FC<LoginProps> = ({loginUser, isLoggedIn, history}) => {
     }
 
     if(username && password) {
-      await loginUser(username, password);
-      setTimeout( function() {
-        history.push('/tabs/training', {direction: 'none'});
-        }, 200);
+      loginUser(username, password);
     }
   };
 
-  return (
+  return isLoggedIn ? <Redirect to="/tabs" /> : (
     <IonPage id="login-page">
       <IonHeader>
         <IonToolbar>
@@ -95,6 +92,12 @@ const Login: React.FC<LoginProps> = ({loginUser, isLoggedIn, history}) => {
             </IonText>}
           </IonList>
 
+          {formSubmitted && loginError && <IonText color="danger">
+            <p className="ion-padding-start">
+              {loginError.message}
+            </p>
+          </IonText>}
+
           <IonRow>
             <IonCol>
               <IonButton type="submit" expand="block">Login</IonButton>
@@ -116,7 +119,8 @@ export default connect<OwnProps, {}, DispatchProps>({
     loginUser
   },
   mapStateToProps: (state) => ({
-    isLoggedIn: state.user.isLoggedIn
+    isLoggedIn: state.user.isLoggedIn,
+    loginError: state.user.loginError
   }),
   component: Login
 })

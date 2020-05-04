@@ -22,20 +22,22 @@ export const loadLessonData = () => (async (dispatch: React.Dispatch<any>) => {
 
 export const cacheImagesAndVideos = (lessons:Lesson[], subjects:Subject[]) => {
   if (lessons && lessons.length) {
-    lessons.map(lesson => {
-      lesson.photo && addImageToCache(getLessonIconUrl(lesson.photo, false));
-      lesson.photo && addImageToCache(getLessonIconUrl(lesson.photo, true));
+    lessons.map(async lesson => {
+      if (lesson.photo) {
+        await addImageToCache(getLessonIconUrl(lesson.photo, false));
+        await addImageToCache(getLessonIconUrl(lesson.photo, true));
+      }
       if (lesson.pages && lesson.pages.length) {
-        lesson.pages.map(page => {
-          page.photo && addImageToCache(page.photo);
-          page.video && addImageToCache(page.video);
+        lesson.pages.map(async page => {
+          page.photo && await addImageToCache(page.photo);
+          page.video && await addVideoToCache(page.video);
         });
       }
     });
   }
   if (subjects && subjects.length) {
-    subjects.map(subject => {
-      subject.photo && addImageToCache(subject.photo);
+    subjects.map(async subject => {
+      subject.photo && await addImageToCache(subject.photo);
     });
   }
 };

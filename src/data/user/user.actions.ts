@@ -3,6 +3,13 @@ import { ActionType } from '../../util/types';
 import { UserState } from './user.state';
 import { Registration, UserLesson, Answer } from '../../models/User';
 
+const setLoginError = (error: any) => {
+  return ({
+    type: 'set-login-error',
+    loginError: error
+  } as const)
+};
+
 export const loadUserData = () => async (dispatch: React.Dispatch<any>) => {
   dispatch(setLoading(true));
   const data = await getUserProfile();
@@ -57,14 +64,34 @@ export const setIsLoggedIn = (loggedIn: boolean) => {
 };
 
 export const loginUser = (email: string, password: string) => async (dispatch: React.Dispatch<any>) => {
-  await loginWithEmail(email, password);
-  dispatch(loadUserData());
+  setLoginError(null);
+  loginWithEmail(email, password)
+    .then(() => {
+      dispatch(loadUserData());
+    })
+    .catch(error => {
+      dispatch(setLoginError(error));
+      console.log("Error logging in:", error);
+    });
 };
 
 export const registerUser = ({name, email, password, organization}:Registration) => async (dispatch: React.Dispatch<any>) => {
-  await registerWithEmail(email, password);
-  await updateProfile({name: name, organization: organization})
-  dispatch(loadUserData());
+  setLoginError(null);
+  registerWithEmail(email, password)
+    .then(() => {
+      updateProfile({name: name, organization: organization})
+        .then(() => {
+          dispatch(loadUserData());
+        })
+        .catch(error => {
+          dispatch(setLoginError(error));
+          console.log("Error logging in:", error);
+        });
+    })
+    .catch(error => {
+      dispatch(setLoginError(error));
+      console.log("Error logging in:", error);
+    });
 };
 
 export const logoutUser = () => async (dispatch: React.Dispatch<any>) => {
@@ -91,6 +118,7 @@ export type UserActions =
   | ActionType<typeof setLoading>
   | ActionType<typeof setData>
   | ActionType<typeof setIsLoggedIn>
+  | ActionType<typeof setLoginError>
   | ActionType<typeof setDarkMode>
   | ActionType<typeof setUserLessons>
   | ActionType<typeof setUserLesson>
