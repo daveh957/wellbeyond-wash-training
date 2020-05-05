@@ -21,11 +21,10 @@ import * as selectors from '../data/selectors';
 
 import { Subject, Lesson, Question } from '../models/Training';
 import {Answer, UserLesson} from '../models/User';
-import {cloudinaryConfig} from "../CLOUDINARY_CONFIG";
 import LessonPageDetail from "../components/LessonPageDetail";
 import {Redirect} from "react-router-dom";
 import QuestionDetail from "../components/QuestionDetail";
-import {startLesson, updateLesson} from "../data/user/user.actions";
+import {updateLesson} from "../data/user/user.actions";
 import LessonIntro from "../components/LessonIntro";
 import LessonSummary from "../components/LessonSummary";
 
@@ -36,17 +35,17 @@ interface OwnProps extends RouteComponentProps {
 
 interface StateProps {
   isLoggedIn?: boolean,
+  trainerMode?: boolean,
   userLesson: UserLesson
 }
 
 interface DispatchProps {
-  startLesson: typeof startLesson;
   updateLesson: typeof updateLesson;
 }
 
 interface LessonProps extends OwnProps, StateProps, DispatchProps {}
 
-const LessonDetailsPage: React.FC<LessonProps> = ({ history, subject,lesson, userLesson, isLoggedIn, startLesson, updateLesson }) => {
+const LessonDetailsPage: React.FC<LessonProps> = ({ history, subject,lesson, userLesson, isLoggedIn, updateLesson }) => {
 
   const { t } = useTranslation(['translation'], {i18n} );
   const slider:MutableRefObject<any> = useRef(null);
@@ -108,12 +107,13 @@ const LessonDetailsPage: React.FC<LessonProps> = ({ history, subject,lesson, use
     speed: 400
   };
   useEffect(() => {
-    if (isLoggedIn && lesson && !lessonStarted) {
+    if (isLoggedIn && lesson && userLesson) {
       setLessonStarted(true);
-      startLesson(lesson.id);
-    }
-    if (userLesson && lesson) {
       setBeforeQuestions(beforeQuestions || (!userLesson.completed ? lesson.questions: undefined));
+      if (!userLesson.started) {
+        userLesson.started = new Date();
+        updateLesson(userLesson);
+      }
     }
   },[isLoggedIn, lesson, userLesson])
 
@@ -183,14 +183,14 @@ const LessonDetailsPage: React.FC<LessonProps> = ({ history, subject,lesson, use
 
 export default connect({
   mapDispatchToProps: {
-    startLesson,
     updateLesson
   },
   mapStateToProps: (state, ownProps) => ({
     subject: selectors.getSubject(state, ownProps),
     lesson: selectors.getLesson(state, ownProps),
     userLesson: selectors.getUserLesson(state, ownProps),
-    isLoggedIn: state.user.isLoggedIn
+    isLoggedIn: state.user.isLoggedIn,
+    trainerMode: state.user.trainerMode
   }),
   component: LessonDetailsPage
 });

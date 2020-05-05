@@ -1,5 +1,6 @@
 import * as firebase from 'firebase';
 import {UserLesson} from "../../models/User";
+import {UserLessons} from "./user.state";
 
 /**
  * so this function is called when the authentication state changes
@@ -109,6 +110,7 @@ export const getUserProfile = async () => {
 };
 
 export const getUserLessons = async () => {
+  const lessons:UserLessons = {};
   let user = firebase.auth().currentUser;
   if (!user || !user.uid) {
     return null;
@@ -121,16 +123,17 @@ export const getUserLessons = async () => {
     .collection('lessons')
     .get()
     .then(querySnapshot => {
-      const lessons = new Array<any>();
       querySnapshot.forEach(function(doc) {
         if (doc.exists) {
-          lessons.push(doc.data());
+          const data = doc.data() as UserLesson;
+          lessons[data.lessonId] = data;
         }
       });
       return lessons;
     })
     .catch(error => {
       console.log("Error getting document:", error);
+      return lessons;
     });
 };
 

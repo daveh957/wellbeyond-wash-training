@@ -53,6 +53,7 @@ const App: React.FC = () => {
 interface StateProps {
   darkMode: boolean;
   isLoggedIn?: boolean;
+  loading: boolean;
 }
 
 interface DispatchProps {
@@ -83,7 +84,7 @@ if (!firebase.apps.length) {
     });
 }
 
-const IonicApp: React.FC<IonicAppProps> = ({ darkMode, isLoggedIn, loadLessonData, loadUserData, logoutUser, setIsLoggedIn}) => {
+const IonicApp: React.FC<IonicAppProps> = ({ darkMode, isLoggedIn, loading, loadLessonData, loadUserData, logoutUser, setIsLoggedIn}) => {
 
   const [intercomUser, setIntercomUser] = useState();
 
@@ -131,6 +132,10 @@ const IonicApp: React.FC<IonicAppProps> = ({ darkMode, isLoggedIn, loadLessonDat
           </IonSplitPane>
         </IonReactRouter>
 
+          <IonLoading
+            isOpen={loading}
+            message={'Please wait...'}
+          />
         <div className="app">
           <Intercom appID="ywg09h0a" alignment={'right'} { ...intercomUser } />
         </div>
@@ -143,7 +148,8 @@ export default App;
 const IonicAppConnected = connect<{}, StateProps, DispatchProps>({
   mapStateToProps: (state) => ({
     darkMode: state.user.darkMode,
-    isLoggedIn: state.user.isLoggedIn
+    isLoggedIn: state.user.isLoggedIn,
+    loading: state.user.loading
   }),
   // @ts-ignore
   mapDispatchToProps: { loadLessonData, loadUserData, logoutUser, setIsLoggedIn },

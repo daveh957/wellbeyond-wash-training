@@ -1,6 +1,6 @@
 import { loginWithEmail, logout, getUserProfile, getUserLessons, registerWithEmail, updateProfile, updateEmail, updatePassword, createOrUpdateUserLesson } from './userApi';
 import { ActionType } from '../../util/types';
-import { UserState } from './user.state';
+import { UserState, UserLessons } from './user.state';
 import { Registration, UserLesson, Answer } from '../../models/User';
 
 const setLoginError = (error: any) => {
@@ -16,26 +16,7 @@ export const loadUserData = () => async (dispatch: React.Dispatch<any>) => {
   // @ts-ignore
   dispatch(setData(data));
   const lessons = await getUserLessons();
-  dispatch(setUserLessons(lessons || []));
-  // @ts-ignore
-  dispatch(setLoading(false));
-}
-
-export const startLesson = (lessonId: string) => async (dispatch: React.Dispatch<any>) => {
-  dispatch(setLoading(true));
-  let lessons = await getUserLessons();
-  lessons = lessons || new Array<UserLesson>();
-  let lesson = lessons.find(element => element.lessonId === lessonId);
-  if (!lesson) {
-    lesson = {
-      lessonId: lessonId,
-      answers: new Array<Answer>()
-    };
-    lessons.push(lesson);
-  }
-  lesson.started = lesson.started || new Date();
-  await createOrUpdateUserLesson(lesson);
-  dispatch(setUserLessons(lessons));
+  dispatch(setUserLessons(lessons|| {}));
   dispatch(setLoading(false));
 }
 
@@ -104,7 +85,12 @@ export const setDarkMode = (darkMode: boolean) => ({
   darkMode
 } as const);
 
-export const setUserLessons = (lessons: Array<UserLesson>) => ({
+export const setTrainerMode = (trainerMode: boolean) => ({
+  type: 'set-trainer-mode',
+  trainerMode
+} as const);
+
+export const setUserLessons = (lessons: UserLessons) => ({
   type: 'set-user-lessons',
   lessons
 } as const);
@@ -120,5 +106,6 @@ export type UserActions =
   | ActionType<typeof setIsLoggedIn>
   | ActionType<typeof setLoginError>
   | ActionType<typeof setDarkMode>
+  | ActionType<typeof setTrainerMode>
   | ActionType<typeof setUserLessons>
   | ActionType<typeof setUserLesson>

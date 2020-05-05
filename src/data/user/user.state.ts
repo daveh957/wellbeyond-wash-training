@@ -1,5 +1,9 @@
 import { UserLesson} from "../../models/User";
 
+export interface UserLessons {
+  [lessonId:string] : UserLesson
+}
+
 export interface UserState {
   id?: string;
   email?: string;
@@ -9,6 +13,7 @@ export interface UserState {
   loginError?: any;
   isLoggedIn?: boolean;
   darkMode: boolean;
+  trainerMode: boolean;
   loading: boolean;
-  lessons?: Array<UserLesson>;
+  lessons?: UserLessons;
 }

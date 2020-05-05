@@ -11,6 +11,9 @@ export const getSubjects = (state: AppState) => {
 export const getLessons = (state: AppState) => {
   return state.data.lessons;
 }
+export const getUserId = (state: AppState) => {
+  return state.user.id;
+}
 
 const getSubjectIdParam = (_state: AppState, props: any) => {
   return props.match.params['subjectId'];
@@ -34,9 +37,11 @@ export const getLesson = createSelector(
   }
 );
 export const getUserLesson = createSelector(
-  getUserLessons, getLessonIdParam,
-  (lessons, id) => {
-    return lessons && lessons.find(l => l.lessonId === id);
+  getUserLessons, getLessonIdParam, getUserId,
+  (lessons, id, userId) => {
+    if (lessons && id && userId) {
+      return lessons[id] || {id:userId + ':' + id, lessonId: id, answers: []}
+    }
   }
 );
 

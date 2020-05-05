@@ -3,6 +3,7 @@ import { IonHeader, IonToolbar, IonTitle, IonContent, IonPage, IonButtons, IonMe
 import LessonItem from '../components/LessonItem';
 import { Subject, Lesson } from '../models/Training';
 import { UserLesson } from '../models/User';
+import { UserLessons } from '../data/user/user.state';
 import { connect } from '../data/connect';
 import * as selectors from '../data/selectors';
 import './SubjectPage.scss';
@@ -18,7 +19,8 @@ interface OwnProps extends RouteComponentProps {
 
 interface StateProps {
   isLoggedIn?: boolean;
-  userLessons?: UserLesson[];
+  trainerMode: boolean;
+  userLessons?: UserLessons;
 }
 
 interface LessonFlags {
@@ -30,7 +32,7 @@ interface DispatchProps { }
 
 interface SubjectProps extends OwnProps, StateProps, DispatchProps { }
 
-const SubjectPage: React.FC<SubjectProps> = ({ subject, lessons, userLessons, isLoggedIn}) => {
+const SubjectPage: React.FC<SubjectProps> = ({ subject, lessons, userLessons, isLoggedIn, trainerMode}) => {
 
   const { t } = useTranslation(['translation'], {i18n} );
   const [lessonFlags, setLessonFlags] = useState<LessonFlags[]>();
@@ -39,18 +41,13 @@ const SubjectPage: React.FC<SubjectProps> = ({ subject, lessons, userLessons, is
       const flags = new Array<LessonFlags>();
       lessons.map((l, idx) => {
         const pl = idx>0 && lessons[idx-1];
-        const currentLesson = userLessons.find(ul => {return ul.lessonId === l.id});
-        const previousLesson = pl && userLessons.find(ul => {return ul.lessonId === pl.id});
+        const currentLesson = userLessons[l.id];
+        const previousLesson = pl && userLessons[pl.id];
         flags.push({completed: !!(currentLesson && currentLesson.completed), clickable: !!(idx === 0 || (currentLesson && currentLesson.completed) || (previousLesson && previousLesson.completed))});
       });
       setLessonFlags(flags);
     }
   }, [lessons, userLessons]);
-  const findUserLesson = (lesson:Lesson) => {
-    if (userLessons) {
-      return userLessons.find(ul => {return ul.lessonId === lesson.id});
-    }
-  }
 
   if (isLoggedIn === false) {
     return <Redirect to="/login" />
@@ -102,7 +99,8 @@ export default connect<OwnProps, StateProps, DispatchProps>({
     subject: selectors.getSubject(state, ownProps),
     lessons: selectors.getSubjectLessons(state, ownProps),
     userLessons: selectors.getUserLessons(state),
-    isLoggedIn: state.user.isLoggedIn
+    isLoggedIn: state.user.isLoggedIn,
+    trainerMode: state.user.trainerMode
   }),
   component: SubjectPage
 });

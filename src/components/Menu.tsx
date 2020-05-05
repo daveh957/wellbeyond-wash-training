@@ -2,12 +2,12 @@ import React, { useState } from 'react';
 import { RouteComponentProps, withRouter, useLocation } from 'react-router';
 
 import { IonContent, IonIcon, IonItem, IonLabel, IonList, IonListHeader, IonMenu, IonMenuToggle, IonToggle } from '@ionic/react';
-import { calendarOutline, hammer, moonOutline, help, informationCircleOutline, logIn, logOut, mapOutline, peopleOutline, person, personAdd } from 'ionicons/icons';
+import { calendarOutline, trainOutline, moonOutline, help, informationCircleOutline, logIn, logOut, mapOutline, peopleOutline, person, personAdd } from 'ionicons/icons';
 import { useTranslation } from "react-i18next";
 import i18n from '../i18n';
 
 import { connect } from '../data/connect';
-import { setDarkMode } from '../data/user/user.actions';
+import { setDarkMode, setTrainerMode } from '../data/user/user.actions';
 
 import './Menu.css'
 import {Subject} from "../models/Training";
@@ -33,6 +33,7 @@ interface Pages {
 }
 interface StateProps {
   darkMode: boolean;
+  trainerMode: boolean;
   isLoggedIn?: boolean;
   menuEnabled: boolean;
   subjects: Subject[]
@@ -40,11 +41,12 @@ interface StateProps {
 
 interface DispatchProps {
   setDarkMode: typeof setDarkMode
+  setTrainerMode: typeof setTrainerMode
 }
 
 interface MenuProps extends RouteComponentProps, StateProps, DispatchProps { }
 
-const Menu: React.FC<MenuProps> = ({ darkMode, history, isLoggedIn, setDarkMode, menuEnabled, subjects }) => {
+const Menu: React.FC<MenuProps> = ({ darkMode, trainerMode, history, isLoggedIn, setDarkMode, setTrainerMode, menuEnabled, subjects }) => {
   const location = useLocation();
   const { t } = useTranslation(['translation'], {i18n} );
 
@@ -89,6 +91,11 @@ const Menu: React.FC<MenuProps> = ({ darkMode, history, isLoggedIn, setDarkMode,
             <IonLabel>{t('menu.darkMode')}</IonLabel>
             <IonToggle checked={darkMode} onClick={() => setDarkMode(!darkMode)} />
           </IonItem>
+          <IonItem>
+            <IonIcon slot="start" icon={trainOutline}></IonIcon>
+            <IonLabel>{t('menu.trainerMode')}</IonLabel>
+            <IonToggle checked={trainerMode} onClick={() => setTrainerMode(!trainerMode)} />
+          </IonItem>
         </IonList>
       </IonContent>
     </IonMenu>
@@ -98,12 +105,14 @@ const Menu: React.FC<MenuProps> = ({ darkMode, history, isLoggedIn, setDarkMode,
 export default connect<{}, StateProps, {}>({
   mapStateToProps: (state) => ({
     darkMode: state.user.darkMode,
+    trainerMode: state.user.trainerMode,
     isLoggedIn: state.user.isLoggedIn,
     menuEnabled: state.data.menuEnabled,
     subjects: selectors.getSubjects(state)
   }),
   mapDispatchToProps: ({
-    setDarkMode
+    setDarkMode,
+    setTrainerMode
   }),
   component: withRouter(Menu)
 })

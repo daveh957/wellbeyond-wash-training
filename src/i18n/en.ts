@@ -12,6 +12,7 @@ export default {
       signup: 'Signup',
       support: 'Support',
       darkMode: 'Dark Mode',
+      trainerMode: 'Trainer Mode',
     },
     buttons: {
       previous: 'Prev',

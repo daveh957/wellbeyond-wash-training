@@ -19,6 +19,7 @@ interface StateProps {
   subjects: Subject[],
   lessons: Lesson[],
   isLoggedIn?: boolean,
+  trainerMode: boolean,
 }
 
 interface DispatchProps {
@@ -26,7 +27,7 @@ interface DispatchProps {
 
 type TrainingPageProps = OwnProps & StateProps & DispatchProps;
 
-const TrainingPage: React.FC<TrainingPageProps> = ({ subjects, lessons, isLoggedIn}) => {
+const TrainingPage: React.FC<TrainingPageProps> = ({ subjects, lessons, isLoggedIn, trainerMode}) => {
 
   const pageRef = useRef<HTMLElement>(null);
   const { t } = useTranslation(['translation'], {i18n} );
@@ -77,7 +78,8 @@ export default connect<OwnProps, StateProps, DispatchProps>({
   mapStateToProps: (state) => ({
     subjects: selectors.getSubjects(state),
     lessons: selectors.getLessons(state),
-    isLoggedIn: state.user.isLoggedIn
+    isLoggedIn: state.user.isLoggedIn,
+    trainerMode: state.user.trainerMode
   }),
   component: React.memo(TrainingPage)
 });
