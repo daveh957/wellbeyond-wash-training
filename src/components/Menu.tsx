@@ -80,7 +80,7 @@ const Menu: React.FC<MenuProps> = ({ darkMode, trainerMode, history, isLoggedIn,
     <IonMenu  type="overlay" disabled={!menuEnabled} contentId="main">
       <IonContent forceOverscroll={false}>
         <IonList lines="none">
-          <IonListHeader>{t('training')}</IonListHeader>
+          <IonListHeader>{t('menu.training')}</IonListHeader>
           {renderSubjects()}
         </IonList>
         <IonList lines="none">
@@ -91,16 +91,19 @@ const Menu: React.FC<MenuProps> = ({ darkMode, trainerMode, history, isLoggedIn,
             <IonLabel>{t('menu.darkMode')}</IonLabel>
             <IonToggle checked={darkMode} onClick={() => setDarkMode(!darkMode)} />
           </IonItem>
-          <IonItem>
-            <IonIcon slot="start" icon={trainOutline}></IonIcon>
-            <IonLabel>{t('menu.trainerMode')}</IonLabel>
-            <IonToggle checked={trainerMode} onClick={() => setTrainerMode(!trainerMode)} />
-          </IonItem>
         </IonList>
       </IonContent>
     </IonMenu>
   );
 };
+
+/*
+          <IonItem>
+            <IonIcon slot="start" icon={trainOutline}></IonIcon>
+            <IonLabel>{t('menu.trainerMode')}</IonLabel>
+            <IonToggle checked={trainerMode} onClick={() => setTrainerMode(!trainerMode)} />
+          </IonItem>
+ */
 
 export default connect<{}, StateProps, {}>({
   mapStateToProps: (state) => ({

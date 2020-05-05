@@ -43,11 +43,11 @@ const SubjectPage: React.FC<SubjectProps> = ({ subject, lessons, userLessons, is
         const pl = idx>0 && lessons[idx-1];
         const currentLesson = userLessons[l.id];
         const previousLesson = pl && userLessons[pl.id];
-        flags.push({completed: !!(currentLesson && currentLesson.completed), clickable: !!(idx === 0 || (currentLesson && currentLesson.completed) || (previousLesson && previousLesson.completed))});
+        flags.push({completed: !!(currentLesson && currentLesson.completed), clickable: !!(trainerMode || idx === 0 || (currentLesson && currentLesson.completed) || (previousLesson && previousLesson.completed))});
       });
       setLessonFlags(flags);
     }
-  }, [lessons, userLessons]);
+  }, [lessons, userLessons, trainerMode]);
 
   if (isLoggedIn === false) {
     return <Redirect to="/login" />
@@ -98,7 +98,7 @@ export default connect<OwnProps, StateProps, DispatchProps>({
   mapStateToProps: (state, ownProps) => ({
     subject: selectors.getSubject(state, ownProps),
     lessons: selectors.getSubjectLessons(state, ownProps),
-    userLessons: selectors.getUserLessons(state),
+    userLessons: state.user.lessons,
     isLoggedIn: state.user.isLoggedIn,
     trainerMode: state.user.trainerMode
   }),

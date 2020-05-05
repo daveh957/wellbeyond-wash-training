@@ -11,6 +11,7 @@ import {
   IonHeader,
   IonSlides, IonContent, IonModal, IonToolbar, IonButtons, IonBackButton, IonTitle, IonList, IonText
 } from '@ionic/react';
+import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
 import VideoPlayer from "./VideoPlayer";
 import {useTranslation} from "react-i18next";
 import i18n from "../i18n";
@@ -24,10 +25,11 @@ interface LessonPageDetailProps {
   pageNum: number;
   pageCount: number;
   skipVideo?: boolean;
+  trainerMode?: boolean;
   next(): void;
 }
 
-const LessonPageDetail: React.FC<LessonPageDetailProps> = ({ subject,lesson, page, pageNum, pageCount, skipVideo, next}) => {
+const LessonPageDetail: React.FC<LessonPageDetailProps> = ({ subject,lesson, page, pageNum, pageCount, skipVideo, trainerMode, next}) => {
 
   const { t } = useTranslation(['translation'], {i18n} );
   const [videoViewed, setVideoViewed] = useState();
@@ -37,28 +39,6 @@ const LessonPageDetail: React.FC<LessonPageDetailProps> = ({ subject,lesson, pag
   const openModal = () => {setShowModal(true)};
   const closeModal = () => {setShowModal(false)};
 
-  const slider:MutableRefObject<any> = useRef(null);
-  const zoomIn = () => {
-    slider.current.getSwiper().then((swiper:any) => {
-      if (swiper && swiper.zoom) {
-        swiper.zoom.enable();
-        swiper.zoom.in();
-      }
-    });
-  }
-  const zoomOut = () => {
-    slider.current.getSwiper().then((swiper:any) => {
-      if (swiper && swiper.zoom) {
-        swiper.zoom.enable();
-        swiper.zoom.out();
-      }
-    });
-  }
-  const slideOpts = {
-    zoom: {
-      maxRatio: 4
-    }
-  };
   useEffect(() => {
     if (page) {
       setShowNext(true);
@@ -100,15 +80,24 @@ const LessonPageDetail: React.FC<LessonPageDetailProps> = ({ subject,lesson, pag
           </IonToolbar>
         </IonHeader>
         <IonContent>
-          <IonSlides ref={slider} options={slideOpts} >
-            <IonSlide className='lesson-photo-slide'>
-              <div className='swiper-zoom-container'>
-                <img src={page.photo} />
-              </div>
-            </IonSlide>
-          </IonSlides>
-          <IonButton onClick={zoomIn} color="medium">{t('buttons.zoomIn')}</IonButton>
-          <IonButton onClick={zoomOut} color="medium">{t('buttons.zoomOut')}</IonButton>
+          <TransformWrapper
+            defaultScale={1}
+          >
+            {({ zoomIn, zoomOut, resetTransform, ...rest }:any) => (
+              <React.Fragment>
+                <div className="tools">
+                  <IonButton onClick={zoomIn} color='medium'>+</IonButton>
+                  <IonButton onClick={zoomOut} color='medium'>-</IonButton>
+                  <IonButton onClick={resetTransform} color='medium'>x</IonButton>
+                </div>
+                <TransformComponent>
+                  <div style={{padding: '100px 0 300px 0'}}>
+                    <img src={page.photo} alt={page.title + ' photo'} />
+                  </div>
+                </TransformComponent>
+              </React.Fragment>
+            )}
+          </TransformWrapper>
         </IonContent>
       </IonModal>
     </Fragment>

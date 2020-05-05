@@ -15,7 +15,7 @@ const LessonItem: React.FC<LessonItemProps> = ({ subject,lesson, completed, clic
   return (
       <IonCard className="lesson-card">
           <IonCardHeader>
-            <IonItem button detail={false} lines="none" className="lesson-item" routerLink={`/tabs/subjects/${subject.id}/lessons/${lesson.id}`}>
+            <IonItem button detail={false} lines="none" className="lesson-item" disabled={!clickable} routerLink={`/tabs/subjects/${subject.id}/lessons/${lesson.id}`}>
               <IonLabel>
                 <h2>{lesson.name}</h2>
               </IonLabel>

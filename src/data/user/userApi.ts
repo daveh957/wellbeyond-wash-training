@@ -152,7 +152,7 @@ export const createOrUpdateUserLesson = async (lesson:UserLesson) => {
     .doc(user.uid)
     .collection('lessons')
     .doc(lesson.id)
-    .set(lesson)
+    .set(lesson, { merge: true })
     .then(() => {
       return lesson;
     })

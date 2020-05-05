@@ -19,9 +19,11 @@ const LessonSummary: React.FC<LessonSummaryProps> = ({ subject,lesson, userLesso
   const { t } = useTranslation(['translation'], {i18n} );
   return (
     <IonCard className='lesson-card'>
-      <IonCardContent className='lesson-text'>
+      <IonCardHeader>
         <IonCardSubtitle>Lesson completed</IonCardSubtitle>
         <IonCardTitle>{lesson.name}</IonCardTitle>
+      </IonCardHeader>
+      <IonCardContent className='lesson-text'>
         <p>You have successfully completed this module and correctly answered {userLesson.score}% of the questions.</p>
         <IonButton expand='block' onClick={next}>{t('buttons.done')}</IonButton>
       </IonCardContent>

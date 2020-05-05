@@ -24,7 +24,7 @@ import {Answer, UserLesson} from '../models/User';
 import LessonPageDetail from "../components/LessonPageDetail";
 import {Redirect} from "react-router-dom";
 import QuestionDetail from "../components/QuestionDetail";
-import {updateLesson} from "../data/user/user.actions";
+import {updateLesson, setUserLesson} from "../data/user/user.actions";
 import LessonIntro from "../components/LessonIntro";
 import LessonSummary from "../components/LessonSummary";
 
@@ -41,18 +41,22 @@ interface StateProps {
 
 interface DispatchProps {
   updateLesson: typeof updateLesson;
+  setUserLesson: typeof setUserLesson;
 }
 
 interface LessonProps extends OwnProps, StateProps, DispatchProps {}
 
-const LessonDetailsPage: React.FC<LessonProps> = ({ history, subject,lesson, userLesson, isLoggedIn, updateLesson }) => {
+const LessonDetailsPage: React.FC<LessonProps> = ({ history, subject,lesson, userLesson, isLoggedIn, trainerMode, updateLesson }) => {
 
   const { t } = useTranslation(['translation'], {i18n} );
   const slider:MutableRefObject<any> = useRef(null);
   const [beforeQuestions ,setBeforeQuestions] = useState<Question[]>();
   const [lessonStarted,setLessonStarted] = useState(false);
 
-  const saveAnswer = (question:Question, preLesson:boolean, answer:(string|number)) => {
+  const saveAnswer = (question:Question, preLesson:boolean, answer?:(string|number)) => {
+    if (!answer) {
+      return;
+    }
     userLesson.answers = userLesson.answers || new Array<Answer>();
     let ans = userLesson.answers.find(element => element.question === question.questionText);
     if (!ans) {
@@ -63,7 +67,7 @@ const LessonDetailsPage: React.FC<LessonProps> = ({ history, subject,lesson, use
       userLesson.answers.push(ans);
     }
     ans[preLesson ? 'answerBefore' : 'answerAfter'] = answer;
-    updateLesson(userLesson);
+    (trainerMode ? setUserLesson : updateLesson)(userLesson); // Only update the DB if not in trainer mode
   };
 
   const done = () => {
@@ -97,9 +101,9 @@ const LessonDetailsPage: React.FC<LessonProps> = ({ history, subject,lesson, use
       if (a.answerAfter === a.correctAnswer) correct++;
       if (a.answerBefore === a.correctAnswer) preCorrect++;
     });
-    userLesson.preScore = userLesson.answers.length ? Math.round((100*preCorrect) / userLesson.answers.length) : 0;
-    userLesson.score = userLesson.answers.length ? Math.round((100*correct) / userLesson.answers.length) : 0;
-    updateLesson(userLesson);
+    userLesson.preScore = userLesson.answers.length ? Math.round((100*preCorrect) / lesson.questions.length) : 0;
+    userLesson.score = userLesson.answers.length ? Math.round((100*correct) / lesson.questions.length) : 0;
+    (trainerMode ? setUserLesson : updateLesson)(userLesson); // Only update the DB if not in trainer mode
     slideNext();
   }
   const slideOpts = {
@@ -112,7 +116,7 @@ const LessonDetailsPage: React.FC<LessonProps> = ({ history, subject,lesson, use
       setBeforeQuestions(beforeQuestions || (!userLesson.completed ? lesson.questions: undefined));
       if (!userLesson.started) {
         userLesson.started = new Date();
-        updateLesson(userLesson);
+        (trainerMode ? setUserLesson : updateLesson)(userLesson); // Only update the DB if not in trainer mode
       }
     }
   },[isLoggedIn, lesson, userLesson])
@@ -145,7 +149,7 @@ const LessonDetailsPage: React.FC<LessonProps> = ({ history, subject,lesson, use
                   <IonSlide className='lesson-slide' id={`${lesson.id}-bq-${idx + 1}`}>
                     <QuestionDetail subject={subject} lesson={lesson} question={question}
                                     questionNum={idx + 1} questionCount={lesson.questions.length}
-                                    next={slideNext} save={saveAnswer} preLesson={true}/>
+                                    next={slideNext} save={saveAnswer} preLesson={true} trainerMode={trainerMode}/>
                   </IonSlide>
                 )
               })}
@@ -154,7 +158,7 @@ const LessonDetailsPage: React.FC<LessonProps> = ({ history, subject,lesson, use
                   <IonSlide className='lesson-slide' id={`${lesson.id}-lp-${idx + 1}`}>
                     <LessonPageDetail subject={subject} lesson={lesson} page={page} pageNum={idx + 1}
                                       pageCount={lesson.pages.length} skipVideo={!!(userLesson && userLesson.completed)}
-                                      next={slideNext}/>
+                                      next={slideNext} trainerMode={trainerMode}/>
                   </IonSlide>
                 )
               })}
@@ -165,7 +169,7 @@ const LessonDetailsPage: React.FC<LessonProps> = ({ history, subject,lesson, use
                                     questionNum={idx + 1} questionCount={lesson.questions.length}
                                     priorAnswers={userLesson && userLesson.answers}
                                     next={idx + 1 === lesson.questions.length ? handleLessonComplete : slideNext}
-                                    save={saveAnswer} preLesson={false}/>
+                                    save={saveAnswer} preLesson={false} trainerMode={trainerMode}/>
                   </IonSlide>
                 )
               })}
@@ -183,7 +187,8 @@ const LessonDetailsPage: React.FC<LessonProps> = ({ history, subject,lesson, use
 
 export default connect({
   mapDispatchToProps: {
-    updateLesson
+    updateLesson,
+    setUserLesson
   },
   mapStateToProps: (state, ownProps) => ({
     subject: selectors.getSubject(state, ownProps),

@@ -14,16 +14,24 @@
   .lesson-card {
     width: 100%
   }
+  .lesson-photo-slider {
+    max-width: 100%;
+    height: initial;
+    overflow: auto;
+  }
   .lesson-photo-slide {
     max-width: 100%;
+    height: 100%;
+    overflow: auto;
   }
-  .image-zoom {
+  .image-zoom-container {
+    padding-top: 100px;
+    padding-bottom: 300px;
+  }
+  .image-zoom-image {
     max-width: 100%;
-    margin: auto;
-  }
-  .image-zoom-help {
-    padding: 20px 0 0 0;
-    text-align: center;
+    max-height: 100%;
     display: block;
+    margin: auto;
   }
 }

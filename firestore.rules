@@ -1,4 +1,4 @@
-rules_version = '2';
+rules_version = '3';
 service cloud.firestore {
   match /databases/{database}/documents {
 
@@ -11,7 +11,31 @@ service cloud.firestore {
     // Make sure to write security rules for your app before that time, or else
     // your app will lose access to your Firestore database
     match /{document=**} {
-      allow read, write: if request.time < timestamp.date(2020, 5, 7);
+      allow read, write: if request.time < timestamp.date(2020, 5, 14);
+    }
+
+    // Match any document in the 'subjects' collection
+    match /subjects/{subject} {
+      allow read: if true;
+      allow write: if get(/databases/$(database)/documents/admins/$(request.auth.uid)).data.isAdmin == true
+    }
+
+    // Match any document in the 'lessons' collection
+    match /lessons/{lessons} {
+      allow read: if true;
+      allow write: if get(/databases/$(database)/documents/admins/$(request.auth.uid)).data.isAdmin == true
+    }
+
+    // Make sure the uid of the requesting user matches name of the user
+    // document. The wildcard expression {userId} makes the userId variable
+    // available in rules.
+    match /users/{userId} {
+      allow read, update, delete: if request.auth.uid == userId;
+      allow create: if request.auth.uid != null;
+    }
+    match /users/{userId}/{collectionName}/{document=**} {
+      allow read: if request.auth.uid == userId;
+      allow write: if request.auth.uid == userId;
     }
   }
 }

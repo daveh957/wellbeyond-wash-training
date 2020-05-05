@@ -24,16 +24,17 @@ interface QuestionDetailProps {
   questionNum: number;
   questionCount: number;
   preLesson: boolean;
+  trainerMode?: boolean;
   priorAnswers?: Answer[];
   save(question:Question, preLesson: boolean, answer:string|number|void): void;
   next(): void;
 }
 
-const QuestionDetail: React.FC<QuestionDetailProps> = ({ subject,lesson, question, questionNum, questionCount, preLesson, priorAnswers, save, next}) => {
+const QuestionDetail: React.FC<QuestionDetailProps> = ({ question, questionNum, questionCount, preLesson, trainerMode, priorAnswers, save, next}) => {
 
   const { t } = useTranslation(['translation'], {i18n} );
   const [answer, setAnswer] = useState<string|number>();
-  const [showNext, setShowNext] = useState<boolean>();
+  const [showNext, setShowNext] = useState<boolean>(!!trainerMode);
   const [lockAnswer, setLockAnswer] = useState<boolean>();
   const handleAnswer = (value:(string|number)) => {
     setAnswer(value);

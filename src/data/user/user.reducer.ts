@@ -18,7 +18,7 @@ export function userReducer(state: UserState, action: UserActions): UserState {
     case 'set-user-lessons':
       return { ...state, lessons: action.lessons };
     case 'set-user-lesson':
-      let lessons = state.lessons || {};
+      let lessons = Object.assign({}, state.lessons);
       lessons[action.lesson.lessonId] = action.lesson;
       return { ...state, lessons: lessons };
   }
