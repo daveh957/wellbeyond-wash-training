@@ -5,11 +5,12 @@ import { Player, BigPlayButton, ControlBar } from 'video-react';
 interface VideoPlayerProps {
   id: string;
   src: string;
+  setVideoPlayer?(state:object): void
   setVideoState?(state:object): void
 }
 
 
-const VideoPlayer: React.FC<VideoPlayerProps> = ({ id,src, setVideoState}) => {
+const VideoPlayer: React.FC<VideoPlayerProps> = ({ id,src, setVideoPlayer, setVideoState}) => {
 
   const [player , setPlayer] = useState();
   const handleStateChange = (state:object) => {
@@ -20,6 +21,9 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ id,src, setVideoState}) => {
   useEffect(() => {
     if (player) {
       player.subscribeToStateChange(handleStateChange);
+      if (setVideoPlayer) {
+        setVideoPlayer(player);
+      }
     }
   }, [player]);
 

@@ -1,4 +1,4 @@
-import React, {useEffect, useState, Fragment, MutableRefObject, useRef} from 'react';
+import React, {useEffect, useState, Fragment, } from 'react';
 import { Subject, Lesson, LessonPage } from '../models/Training';
 import {
   IonCard,
@@ -9,8 +9,7 @@ import {
   IonSlide,
   IonButton,
   IonHeader,
-  IonSlides, IonContent, IonModal, IonToolbar, IonButtons, IonBackButton, IonTitle, IonList, IonText
-} from '@ionic/react';
+  IonSlides, IonContent, IonModal, IonToolbar, IonButtons, IonTitle, } from '@ionic/react';
 import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
 import VideoPlayer from "./VideoPlayer";
 import {useTranslation} from "react-i18next";
@@ -36,8 +35,15 @@ const LessonPageDetail: React.FC<LessonPageDetailProps> = ({ subject,lesson, pag
   const [showNext, setShowNext] = useState();
   const [showModal, setShowModal] = useState();
   const [videoState, setVideoState] = useState();
+  const [videoPlayer, setVideoPlayer] = useState();
   const openModal = () => {setShowModal(true)};
   const closeModal = () => {setShowModal(false)};
+  const nextSlide = () => {
+    if (videoPlayer) {
+      videoPlayer.pause();
+    }
+    next();
+  };
 
   useEffect(() => {
     if (page) {
@@ -64,8 +70,8 @@ const LessonPageDetail: React.FC<LessonPageDetailProps> = ({ subject,lesson, pag
         <IonCardContent class='lesson-text'>
           <div dangerouslySetInnerHTML={{__html: page.text}}></div>
           {page.photo && <img src={page.photo} crossOrigin='anonymous' onClick={openModal} />}
-          {page.video && <VideoPlayer id={`video-${lesson.id}-${pageNum}`} src={page.video} setVideoState={setVideoState} />}
-          <IonButton expand='block' disabled={!showNext} onClick={next}>{t('buttons.next')}</IonButton>
+          {page.video && <VideoPlayer id={`video-${lesson.id}-${pageNum}`} src={page.video} setVideoPlayer={setVideoPlayer} setVideoState={setVideoState} />}
+          <IonButton expand='block' disabled={!showNext} onClick={nextSlide}>{t('buttons.next')}</IonButton>
         </IonCardContent>
       </IonCard>
       <IonModal isOpen={showModal}>
