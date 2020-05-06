@@ -31,17 +31,12 @@ const TrainingPage: React.FC<TrainingPageProps> = ({ subjects, lessons, isLogged
 
   const pageRef = useRef<HTMLElement>(null);
   const { t } = useTranslation(['translation'], {i18n} );
-  const filteredSubjects = subjects ? subjects.filter(subject => subject.name && !subject.name.match(/test/i)) : [];
 
-  if (isLoggedIn === false) {
-    return <Redirect to="/login" />
+  if (subjects && subjects.length === 1) {
+    return <Redirect to={`/tabs/subjects/${subjects[0].id}`} />
   }
 
-  if (filteredSubjects.length === 1) {
-    return <Redirect to={`/tabs/subjects/${filteredSubjects[0].id}`} />
-  }
-
-  return (subjects ?
+  return (
     <IonPage ref={pageRef} id="subject-list">
       <IonHeader translucent={true}>
         <IonToolbar>
@@ -52,9 +47,9 @@ const TrainingPage: React.FC<TrainingPageProps> = ({ subjects, lessons, isLogged
         </IonToolbar>
       </IonHeader>
       <IonContent fullscreen={true}>
-        {filteredSubjects.length ?
+        {subjects && subjects.length ?
           (<IonList>
-            {filteredSubjects.map((subject, index: number) => (
+            {subjects.map((subject, index: number) => (
               <IonItemGroup key={`subject-${index}`}>
                 <IonItemDivider sticky>
                   <SubjectItem subject={subject} />
@@ -70,7 +65,7 @@ const TrainingPage: React.FC<TrainingPageProps> = ({ subjects, lessons, isLogged
           />
         }
       </IonContent>
-    </IonPage> : null
+    </IonPage>
   );
 };
 

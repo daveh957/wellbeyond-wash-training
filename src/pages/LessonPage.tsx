@@ -125,7 +125,7 @@ const LessonDetailsPage: React.FC<LessonProps> = ({ history, subject,lesson, use
     return <Redirect to="/login" />
   }
 
-  return (lesson && userLesson ?
+  return (
     <IonPage id="lesson-detail">
       <IonContent scrollEvents={true}>
         <IonHeader translucent={true}>
@@ -181,7 +181,7 @@ const LessonDetailsPage: React.FC<LessonProps> = ({ history, subject,lesson, use
           : undefined
         }
       </IonContent>
-    </IonPage> : null);
+    </IonPage>);
 };
 
 

@@ -53,7 +53,7 @@ const SubjectPage: React.FC<SubjectProps> = ({ subject, lessons, userLessons, is
     return <Redirect to="/login" />
   }
 
-  return (subject && lessons && userLessons ?
+  return (
     <IonPage id="lesson-list">
       <IonHeader translucent={true}>
         <IonToolbar>
@@ -90,7 +90,7 @@ const SubjectPage: React.FC<SubjectProps> = ({ subject, lessons, userLessons, is
         </IonContent>
         : undefined
       }
-    </IonPage> : null
+    </IonPage>
   );
 };
 

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { Redirect, Route } from 'react-router-dom';
-import { IonApp, IonRouterOutlet, IonSplitPane, IonContent, IonButton, IonLoading, } from '@ionic/react';
+import { Redirect, Route, useHistory } from 'react-router-dom';
+import { IonApp, IonRouterOutlet, IonSplitPane, IonLoading, } from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
 import Intercom from 'react-intercom';
 
@@ -90,10 +90,10 @@ const IonicApp: React.FC<IonicAppProps> = ({ darkMode, isLoggedIn, loading, load
 
   useEffect(() => {
     const getUserIdHash = firebase.functions().httpsCallable('getUserIdHash');
-    loadLessonData();
     firebase.auth().onAuthStateChanged(async user => {
       if (user != null) {
         console.log("We are authenticated now!");
+        loadLessonData();
         setIsLoggedIn(true);
         getUserIdHash().then(function(result) {
           setIntercomUser({
