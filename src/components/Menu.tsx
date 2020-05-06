@@ -101,7 +101,7 @@ const Menu: React.FC<MenuProps> = ({ darkMode, trainerMode, isLoggedIn, setDarkM
             <IonLabel>{t('menu.darkMode')}</IonLabel>
             <IonToggle checked={darkMode} onClick={() => setDarkMode(!darkMode)} />
           </IonItem>
-          {isLoggedIn && <IonItem>
+          {isLoggedIn && (process.env.NODE_ENV !== 'production') && <IonItem>
             <IonIcon slot="start" icon={trainOutline}></IonIcon>
             <IonLabel>{t('menu.trainerMode')}</IonLabel>
             <IonToggle checked={trainerMode} onClick={() => setTrainerMode(!trainerMode)} />
