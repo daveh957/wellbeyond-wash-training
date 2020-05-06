@@ -16,3 +16,11 @@ exports.getUserHash = functions.https.onCall((data, context) => {
     .digest('hex');
   return {email: context.auth.token.email, hash: hash};
 });
+exports.getUserIdHash = functions.https.onCall((data, context) => {
+  const identifier = context.auth.token.uid;
+  const hash = crypto
+    .createHmac('sha256', INTERCOM_SECRET_KEY)
+    .update(identifier)
+    .digest('hex');
+  return {hash: hash};
+});

@@ -89,16 +89,18 @@ const IonicApp: React.FC<IonicAppProps> = ({ darkMode, isLoggedIn, loading, load
   const [intercomUser, setIntercomUser] = useState();
 
   useEffect(() => {
-    const getUserHash = firebase.functions().httpsCallable('getUserHash');
+    const getUserIdHash = firebase.functions().httpsCallable('getUserIdHash');
     loadLessonData();
     firebase.auth().onAuthStateChanged(async user => {
       if (user != null) {
         console.log("We are authenticated now!");
         setIsLoggedIn(true);
-        getUserHash().then(function(result) {
+        getUserIdHash().then(function(result) {
           setIntercomUser({
-            email: user.email,
-            name: user.displayName,
+            user_id: user.uid,
+            phone: user.phoneNumber || undefined,
+            email: user.email || undefined,
+            name: user.displayName || undefined,
             user_hash: result.data.hash
           });
         });
