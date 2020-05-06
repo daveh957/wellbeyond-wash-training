@@ -11,19 +11,19 @@ service cloud.firestore {
     // Make sure to write security rules for your app before that time, or else
     // your app will lose access to your Firestore database
     match /{document=**} {
-      allow read, write: if request.time < timestamp.date(2020, 5, 14);
+      allow read, write: if get(/databases/$(database)/documents/admins/$(request.auth.uid)).data.isAdmin == true;
     }
 
     // Match any document in the 'subjects' collection
     match /subjects/{subject} {
       allow read: if true;
-      allow write: if get(/databases/$(database)/documents/admins/$(request.auth.uid)).data.isAdmin == true
+      allow write: if get(/databases/$(database)/documents/admins/$(request.auth.uid)).data.isAdmin == true;
     }
 
     // Match any document in the 'lessons' collection
     match /lessons/{lessons} {
       allow read: if true;
-      allow write: if get(/databases/$(database)/documents/admins/$(request.auth.uid)).data.isAdmin == true
+      allow write: if get(/databases/$(database)/documents/admins/$(request.auth.uid)).data.isAdmin == true;
     }
 
     // Make sure the uid of the requesting user matches name of the user
