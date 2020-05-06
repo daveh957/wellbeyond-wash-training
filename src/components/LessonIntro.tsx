@@ -17,17 +17,19 @@ interface LessonIntroProps {
 const LessonIntro: React.FC<LessonIntroProps> = ({ lesson, userLesson, next}) => {
   const [lessonIcon, setLessonIcon] = useState();
   useEffect(() => {
-    setLessonIcon(getLessonIconUrl(lesson.photo, false));
+    if (lesson && lesson.photo) {
+      setLessonIcon(getLessonIconUrl(lesson.photo, false));
+    }
   },[lesson]);
   const { t } = useTranslation(['translation'], {i18n} );
 
   return (
     <IonCard className='lesson-card'>
       <IonCardContent className='lesson-text'>
-        <img src={lessonIcon} crossOrigin='anonymous'>
+        <img src={lessonIcon} crossOrigin='anonymous' alt="">
         </img>
         <div dangerouslySetInnerHTML={{__html: lesson.description}}></div>
-        {userLesson.completed ?
+        {userLesson && userLesson.completed ?
           <p>{t('resources.lessons.intro.completed')}</p>
         :
           <p>{t('resources.lessons.intro.firsttime')} </p>

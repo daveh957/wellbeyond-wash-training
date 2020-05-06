@@ -15,7 +15,9 @@ const LessonItem: React.FC<LessonItemProps> = ({ subject,lesson, completed, clic
 
   const [lessonIcon, setLessonIcon] = useState();
   useEffect(() => {
-    setLessonIcon(getLessonIconUrl(lesson.photo, completed));
+    if (lesson && lesson.photo) {
+      setLessonIcon(getLessonIconUrl(lesson.photo, completed));
+    }
   },[lesson, completed]);
 
   return (

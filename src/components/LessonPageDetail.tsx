@@ -64,7 +64,7 @@ const LessonPageDetail: React.FC<LessonPageDetailProps> = ({ lesson, page, pageN
   }, [videoState]);
 
   return (
-    <Fragment>
+    page && <Fragment>
       <IonCard>
         <IonCardHeader>
           <h2>{page.title}</h2>
