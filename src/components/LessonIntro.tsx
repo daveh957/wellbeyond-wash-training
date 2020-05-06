@@ -1,9 +1,8 @@
-import React from 'react';
-import { Subject, Lesson } from '../models/Training';
-import { UserLesson } from '../models/User';
-import {IonCard, IonCardContent, IonButton, } from '@ionic/react';
-import { cloudinaryConfig } from "../CLOUDINARY_CONFIG";
-import {getLessonIconUrl, getPublicId} from "../util/cloudinary";
+import React, {useEffect, useState} from 'react';
+import {Lesson, Subject} from '../models/Training';
+import {UserLesson} from '../models/User';
+import {IonButton, IonCard, IonCardContent,} from '@ionic/react';
+import {getLessonIconUrl} from "../util/cloudinary";
 import {useTranslation} from "react-i18next";
 import i18n from "../i18n";
 
@@ -15,12 +14,17 @@ interface LessonIntroProps {
   next(): void;
 }
 
-const LessonIntro: React.FC<LessonIntroProps> = ({ subject,lesson, userLesson, next}) => {
+const LessonIntro: React.FC<LessonIntroProps> = ({ lesson, userLesson, next}) => {
+  const [lessonIcon, setLessonIcon] = useState();
+  useEffect(() => {
+    setLessonIcon(getLessonIconUrl(lesson.photo, false));
+  },[lesson]);
   const { t } = useTranslation(['translation'], {i18n} );
+
   return (
     <IonCard className='lesson-card'>
       <IonCardContent className='lesson-text'>
-        <img src={getLessonIconUrl(lesson.photo, false)} crossOrigin='anonymous'>
+        <img src={lessonIcon} crossOrigin='anonymous'>
         </img>
         <div dangerouslySetInnerHTML={{__html: lesson.description}}></div>
         {userLesson.completed ?

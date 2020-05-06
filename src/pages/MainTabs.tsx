@@ -1,6 +1,6 @@
-import React  from 'react';
-import { IonRouterOutlet } from '@ionic/react';
-import { Route, Redirect } from 'react-router';
+import React from 'react';
+import {IonRouterOutlet} from '@ionic/react';
+import {Redirect, Route} from 'react-router';
 import TrainingPage from './TrainingPage';
 import SubjectPage from './SubjectPage';
 import LessonPage from './LessonPage';

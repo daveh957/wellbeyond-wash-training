@@ -1,9 +1,7 @@
 import React from 'react';
-import { Subject, Lesson } from '../models/Training';
-import { UserLesson } from '../models/User';
-import {IonCard, IonCardContent, IonButton, IonCardSubtitle, IonCardTitle, IonCardHeader,} from '@ionic/react';
-import { cloudinaryConfig } from "../CLOUDINARY_CONFIG";
-import { getPublicId} from "../util/cloudinary";
+import {Lesson, Subject} from '../models/Training';
+import {UserLesson} from '../models/User';
+import {IonButton, IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle,} from '@ionic/react';
 import {useTranslation} from "react-i18next";
 import i18n from "../i18n";
 

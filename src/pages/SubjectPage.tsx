@@ -1,14 +1,24 @@
-import React, { useState, useEffect } from 'react';
-import { IonHeader, IonToolbar, IonTitle, IonContent, IonPage, IonButtons, IonMenuButton, IonGrid, IonRow, IonCol } from '@ionic/react';
+import React, {useEffect, useState} from 'react';
+import {
+  IonButtons,
+  IonCol,
+  IonContent,
+  IonGrid,
+  IonHeader,
+  IonMenuButton,
+  IonPage,
+  IonRow,
+  IonTitle,
+  IonToolbar
+} from '@ionic/react';
 import LessonItem from '../components/LessonItem';
-import { Subject, Lesson } from '../models/Training';
-import { UserLesson } from '../models/User';
-import { UserLessons } from '../data/user/user.state';
-import { connect } from '../data/connect';
+import {Lesson, Subject} from '../models/Training';
+import {UserLessons} from '../data/user/user.state';
+import {connect} from '../data/connect';
 import * as selectors from '../data/selectors';
 import './SubjectPage.scss';
 import {RouteComponentProps} from "react-router";
-import { useTranslation } from "react-i18next";
+import {useTranslation} from "react-i18next";
 import i18n from '../i18n';
 import {Redirect} from "react-router-dom";
 

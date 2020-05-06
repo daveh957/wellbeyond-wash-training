@@ -1,30 +1,31 @@
-import React, {useEffect, useState, Fragment, useRef, MutableRefObject} from 'react';
-import { RouteComponentProps } from 'react-router';
+import React, {MutableRefObject, useEffect, useRef, useState} from 'react';
+import {RouteComponentProps} from 'react-router';
 
 import './LessonPage.scss';
 
 import {
-  IonHeader,
-  IonToolbar,
+  IonBackButton,
   IonButtons,
   IonContent,
-  IonButton,
-  IonBackButton,
+  IonHeader,
   IonPage,
-  IonTitle, IonMenuButton, IonCardContent, IonItem, IonSlides, IonSlide, IonCard, IonCardHeader, IonFooter
+  IonSlide,
+  IonSlides,
+  IonTitle,
+  IonToolbar
 } from '@ionic/react'
-import { useTranslation } from "react-i18next";
+import {useTranslation} from "react-i18next";
 import i18n from '../i18n';
 
-import { connect } from '../data/connect';
+import {connect} from '../data/connect';
 import * as selectors from '../data/selectors';
 
-import { Subject, Lesson, Question } from '../models/Training';
+import {Lesson, Question, Subject} from '../models/Training';
 import {Answer, UserLesson} from '../models/User';
 import LessonPageDetail from "../components/LessonPageDetail";
 import {Redirect} from "react-router-dom";
 import QuestionDetail from "../components/QuestionDetail";
-import {updateLesson, setUserLesson} from "../data/user/user.actions";
+import {setUserLesson, updateLesson} from "../data/user/user.actions";
 import LessonIntro from "../components/LessonIntro";
 import LessonSummary from "../components/LessonSummary";
 
@@ -51,7 +52,6 @@ const LessonDetailsPage: React.FC<LessonProps> = ({ history, subject,lesson, use
   const { t } = useTranslation(['translation'], {i18n} );
   const slider:MutableRefObject<any> = useRef(null);
   const [beforeQuestions ,setBeforeQuestions] = useState<Question[]>();
-  const [lessonStarted,setLessonStarted] = useState(false);
 
   const saveAnswer = (question:Question, preLesson:boolean, answer?:(string|number)) => {
     if (!answer) {
@@ -86,17 +86,14 @@ const LessonDetailsPage: React.FC<LessonProps> = ({ history, subject,lesson, use
     slider.current.lockSwipeToNext(false);
     slider.current.slideNext();
   }
-  const slidePrev = () => {
-    scrollToTop();
-    slider.current.slidePrev();
-  }
-  const slideChanged = (event: CustomEvent<void>) => {
+  const slideChanged = (_event: CustomEvent<void>) => {
     scrollToTop();
     slider.current.lockSwipeToNext(true);
   }
   const handleLessonComplete = () => {
     userLesson.completed = userLesson.completed || new Date();
     let correct = 0, preCorrect = 0;
+    // eslint-disable-next-line array-callback-return
     userLesson.answers.map(a => {
       if (a.answerAfter === a.correctAnswer) correct++;
       if (a.answerBefore === a.correctAnswer) preCorrect++;
@@ -112,14 +109,18 @@ const LessonDetailsPage: React.FC<LessonProps> = ({ history, subject,lesson, use
   };
   useEffect(() => {
     if (isLoggedIn && lesson && userLesson) {
-      setLessonStarted(true);
       setBeforeQuestions(beforeQuestions || (!userLesson.completed ? lesson.questions: undefined));
       if (!userLesson.started) {
         userLesson.started = new Date();
-        (trainerMode ? setUserLesson : updateLesson)(userLesson); // Only update the DB if not in trainer mode
+        if (trainerMode) { // Only update the DB if not in trainer mode
+          setUserLesson(userLesson);
+        }
+        else {
+          updateLesson(userLesson);
+        }
       }
     }
-  },[isLoggedIn, lesson, userLesson])
+  },[isLoggedIn, lesson, userLesson, trainerMode])
 
   if (isLoggedIn === false) {
     return <Redirect to="/login" />
@@ -146,7 +147,7 @@ const LessonDetailsPage: React.FC<LessonProps> = ({ history, subject,lesson, use
               </IonSlide>
               {beforeQuestions && beforeQuestions.map((question:Question, idx:number) => {
                 return (
-                  <IonSlide className='lesson-slide' id={`${lesson.id}-bq-${idx + 1}`}>
+                  <IonSlide className='lesson-slide' key={`${lesson.id}-bq-${idx + 1}`}>
                     <QuestionDetail subject={subject} lesson={lesson} question={question}
                                     questionNum={idx + 1} questionCount={lesson.questions.length}
                                     next={slideNext} save={saveAnswer} preLesson={true} trainerMode={trainerMode}/>
@@ -155,7 +156,7 @@ const LessonDetailsPage: React.FC<LessonProps> = ({ history, subject,lesson, use
               })}
               {lesson.pages && lesson.pages.map((page, idx) => {
                 return (
-                  <IonSlide className='lesson-slide' id={`${lesson.id}-lp-${idx + 1}`}>
+                  <IonSlide className='lesson-slide' key={`${lesson.id}-lp-${idx + 1}`}>
                     <LessonPageDetail subject={subject} lesson={lesson} page={page} pageNum={idx + 1}
                                       pageCount={lesson.pages.length} skipVideo={!!(userLesson && userLesson.completed)}
                                       next={slideNext} trainerMode={trainerMode}/>
@@ -164,7 +165,7 @@ const LessonDetailsPage: React.FC<LessonProps> = ({ history, subject,lesson, use
               })}
               {lesson.questions && lesson.questions.map((question, idx) => {
                 return (
-                  <IonSlide className='lesson-slide' id={`${lesson.id}-aq-${idx + 1}`}>
+                  <IonSlide className='lesson-slide' key={`${lesson.id}-aq-${idx + 1}`}>
                     <QuestionDetail subject={subject} lesson={lesson} question={question}
                                     questionNum={idx + 1} questionCount={lesson.questions.length}
                                     priorAnswers={userLesson && userLesson.answers}

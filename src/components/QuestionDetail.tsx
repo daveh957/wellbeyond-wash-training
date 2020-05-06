@@ -1,18 +1,19 @@
-import React, {useEffect, Fragment, useState} from 'react';
-import { Subject, Lesson, Question } from '../models/Training';
-import { Answer } from '../models/User';
+import React, {useEffect, useState} from 'react';
+import {Lesson, Question, Subject} from '../models/Training';
+import {Answer} from '../models/User';
 import {
+  IonButton,
   IonCard,
-  IonCardHeader,
-  IonItem,
-  IonLabel,
   IonCardContent,
-  IonSlide,
+  IonCardHeader,
   IonCardSubtitle,
   IonCardTitle,
+  IonInput,
+  IonItem,
+  IonLabel,
   IonList,
-  IonRadioGroup,
-  IonListHeader, IonRadio, IonInput, IonButton
+  IonRadio,
+  IonRadioGroup
 } from '@ionic/react';
 import {useTranslation} from "react-i18next";
 import i18n from "../i18n";
@@ -50,7 +51,7 @@ const QuestionDetail: React.FC<QuestionDetailProps> = ({ question, questionNum, 
         setLockAnswer(true)
       }
     }
-  }, [answer]);
+  }, [answer, preLesson]);
   useEffect(() => {
     if (priorAnswers && priorAnswers.length) {
       const ans = priorAnswers.find(element => element.question === question.questionText);
@@ -58,7 +59,7 @@ const QuestionDetail: React.FC<QuestionDetailProps> = ({ question, questionNum, 
         setAnswer(ans.answerAfter);
       }
     }
-  }, [priorAnswers]);
+  }, [priorAnswers, question]);
 
   return (
     <IonCard className='lesson-card'>
@@ -87,8 +88,8 @@ const QuestionDetail: React.FC<QuestionDetailProps> = ({ question, questionNum, 
           (question && question.questionType === 'choose-one' && question.choices &&
             <IonList>
               <IonRadioGroup value={answer} onIonChange={e => handleAnswer(e.detail.value)}>
-                {question.choices.map((choice) =>  {
-                  return <IonItem>
+                {question.choices.map((choice, idx) =>  {
+                  return <IonItem key={`q-${questionNum}-${idx}`}>
                     <IonLabel>{choice.value}</IonLabel>
                     <IonRadio disabled={lockAnswer} slot="start" value={choice.value} />
                   </IonItem>
@@ -101,7 +102,7 @@ const QuestionDetail: React.FC<QuestionDetailProps> = ({ question, questionNum, 
           (question && question.questionType === 'number' &&
             <IonList>
               <IonItem>
-                <IonInput disabled={lockAnswer} type="number" value={answer} placeholder={t('questions.enterNumber')} onIonChange={e => handleAnswer(parseInt(e.detail.value!, 10))}></IonInput>
+                <IonInput disabled={lockAnswer} type="number" value={answer} placeholder={t('questions.enterNumber')} onIonChange={e => handleAnswer(parseInt(e.detail.value!, 10))}/>
               </IonItem>
             </IonList>
           )

@@ -1,14 +1,26 @@
-import React, { useState, useRef } from 'react';
+import React, {useRef} from 'react';
 
-import { IonToolbar, IonContent, IonPage, IonButtons, IonTitle, IonMenuButton, IonHeader, IonList, IonItemGroup, IonItemDivider, IonLabel, IonListHeader, IonLoading } from '@ionic/react';
+import {
+  IonButtons,
+  IonContent,
+  IonHeader,
+  IonItemDivider,
+  IonItemGroup,
+  IonList,
+  IonLoading,
+  IonMenuButton,
+  IonPage,
+  IonTitle,
+  IonToolbar
+} from '@ionic/react';
 
 import './TrainingPage.scss'
 
-import { useTranslation } from "react-i18next";
+import {useTranslation} from "react-i18next";
 import i18n from '../i18n';
 import * as selectors from '../data/selectors';
-import { connect } from '../data/connect';
-import { Subject, Lesson } from '../models/Training';
+import {connect} from '../data/connect';
+import {Lesson, Subject} from '../models/Training';
 import SubjectItem from "../components/SubjectItem";
 import {Redirect} from "react-router-dom";
 
@@ -31,6 +43,10 @@ const TrainingPage: React.FC<TrainingPageProps> = ({ subjects, lessons, isLogged
 
   const pageRef = useRef<HTMLElement>(null);
   const { t } = useTranslation(['translation'], {i18n} );
+
+  if (isLoggedIn === false) {
+    return <Redirect to={`/login`} />
+  }
 
   if (subjects && subjects.length === 1) {
     return <Redirect to={`/tabs/subjects/${subjects[0].id}`} />

@@ -1,9 +1,26 @@
-import React, { useState } from 'react';
-import { IonHeader, IonToolbar, IonTitle, IonContent, IonPage, IonButtons, IonMenuButton, IonRow, IonCol, IonButton, IonList, IonItem, IonLabel, IonText, IonTextarea, IonToast } from '@ionic/react';
-import { useTranslation } from "react-i18next";
+import React, {useState} from 'react';
+import {
+  IonButton,
+  IonButtons,
+  IonCol,
+  IonContent,
+  IonHeader,
+  IonItem,
+  IonLabel,
+  IonList,
+  IonMenuButton,
+  IonPage,
+  IonRow,
+  IonText,
+  IonTextarea,
+  IonTitle,
+  IonToast,
+  IonToolbar
+} from '@ionic/react';
+import {useTranslation} from "react-i18next";
 import i18n from '../i18n';
 import './Login.scss';
-import { connect } from '../data/connect';
+import {connect} from '../data/connect';
 
 interface OwnProps { }
 

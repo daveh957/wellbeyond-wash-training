@@ -11,4 +11,4 @@ export function combineReducers<R extends any>(reducers: R) {
     return newState;
   }
   return combinedReducer;
-};
+}

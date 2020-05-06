@@ -1,6 +1,6 @@
 import React from 'react';
-import { connect } from '../data/connect';
-import { Redirect } from 'react-router';
+import {connect} from '../data/connect';
+import {Redirect} from 'react-router';
 import {IonContent, IonLoading} from '@ionic/react';
 
 interface StateProps {

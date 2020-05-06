@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import "./VideoPlayer.scss";
-import { Player, BigPlayButton, ControlBar } from 'video-react';
+import {BigPlayButton, ControlBar, Player} from 'video-react';
 
 interface VideoPlayerProps {
   id: string;

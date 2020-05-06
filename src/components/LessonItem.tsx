@@ -1,7 +1,7 @@
-import React from 'react';
-import { Subject, Lesson } from '../models/Training';
-import { IonCard, IonCardHeader, IonItem, IonLabel, IonCardContent } from '@ionic/react';
-import { getLessonIconUrl} from "../util/cloudinary";
+import React, {useEffect, useState} from 'react';
+import {Lesson, Subject} from '../models/Training';
+import {IonCard, IonCardContent, IonCardHeader, IonItem, IonLabel} from '@ionic/react';
+import {getLessonIconUrl} from "../util/cloudinary";
 
 
 interface LessonItemProps {
@@ -12,6 +12,12 @@ interface LessonItemProps {
 }
 
 const LessonItem: React.FC<LessonItemProps> = ({ subject,lesson, completed, clickable}) => {
+
+  const [lessonIcon, setLessonIcon] = useState();
+  useEffect(() => {
+    setLessonIcon(getLessonIconUrl(lesson.photo, completed));
+  },[lesson, completed]);
+
   return (
       <IonCard className="lesson-card">
           <IonCardHeader>
@@ -24,7 +30,7 @@ const LessonItem: React.FC<LessonItemProps> = ({ subject,lesson, completed, clic
 
           <IonCardContent>
             <IonItem button detail={false} lines="none" className="lesson-item" disabled={!clickable} routerLink={`/tabs/subjects/${subject.id}/lessons/${lesson.id}?completed=${completed}`}>
-              <img src={getLessonIconUrl(lesson.photo, completed)} crossOrigin='anonymous' />
+              <img src={lessonIcon} crossOrigin='anonymous' />
             </IonItem>
           </IonCardContent>
       </IonCard>

@@ -1,13 +1,27 @@
-import React, { useState } from 'react';
-import firebase from "firebase";
-import { IonHeader, IonToolbar, IonTitle, IonContent, IonPage, IonButtons, IonMenuButton, IonRow, IonCol, IonButton, IonList, IonItem, IonLabel, IonInput, IonText } from '@ionic/react';
+import React, {useState} from 'react';
+import {
+  IonButton,
+  IonButtons,
+  IonCol,
+  IonContent,
+  IonHeader,
+  IonInput,
+  IonItem,
+  IonLabel,
+  IonList,
+  IonMenuButton,
+  IonPage,
+  IonRow,
+  IonText,
+  IonTitle,
+  IonToolbar
+} from '@ionic/react';
 import './Login.scss';
-import { loginUser } from '../data/user/user.actions';
-import { connect } from '../data/connect';
-import { RouteComponentProps } from 'react-router';
+import {loginUser} from '../data/user/user.actions';
+import {connect} from '../data/connect';
+import {RouteComponentProps} from 'react-router';
 import {useTranslation} from "react-i18next";
 import i18n from "../i18n";
-import * as selectors from "../data/selectors";
 import {Redirect} from "react-router-dom";
 
 interface OwnProps extends RouteComponentProps {}

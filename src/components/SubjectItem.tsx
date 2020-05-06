@@ -1,6 +1,6 @@
 import React from 'react';
-import { Subject } from '../models/Training';
-import { IonCard, IonCardHeader, IonItem, IonLabel, IonCardContent } from '@ionic/react';
+import {Subject} from '../models/Training';
+import {IonCard, IonCardContent, IonCardHeader, IonItem, IonLabel} from '@ionic/react';
 
 
 interface SubjectItemProps {

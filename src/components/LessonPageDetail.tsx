@@ -1,16 +1,18 @@
-import React, {useEffect, useState, Fragment, } from 'react';
-import { Subject, Lesson, LessonPage } from '../models/Training';
+import React, {Fragment, useEffect, useState,} from 'react';
+import {Lesson, LessonPage, Subject} from '../models/Training';
 import {
-  IonCard,
-  IonCardHeader,
-  IonItem,
-  IonLabel,
-  IonCardContent,
-  IonSlide,
   IonButton,
+  IonButtons,
+  IonCard,
+  IonCardContent,
+  IonCardHeader,
+  IonContent,
   IonHeader,
-  IonSlides, IonContent, IonModal, IonToolbar, IonButtons, IonTitle, } from '@ionic/react';
-import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
+  IonModal,
+  IonTitle,
+  IonToolbar,
+} from '@ionic/react';
+import {TransformComponent, TransformWrapper} from "react-zoom-pan-pinch";
 import VideoPlayer from "./VideoPlayer";
 import {useTranslation} from "react-i18next";
 import i18n from "../i18n";
@@ -28,7 +30,7 @@ interface LessonPageDetailProps {
   next(): void;
 }
 
-const LessonPageDetail: React.FC<LessonPageDetailProps> = ({ subject,lesson, page, pageNum, pageCount, skipVideo, trainerMode, next}) => {
+const LessonPageDetail: React.FC<LessonPageDetailProps> = ({ lesson, page, pageNum, skipVideo, next}) => {
 
   const { t } = useTranslation(['translation'], {i18n} );
   const [videoViewed, setVideoViewed] = useState();
@@ -69,7 +71,7 @@ const LessonPageDetail: React.FC<LessonPageDetailProps> = ({ subject,lesson, pag
         </IonCardHeader>
         <IonCardContent class='lesson-text'>
           <div dangerouslySetInnerHTML={{__html: page.text}}></div>
-          {page.photo && <img src={page.photo} crossOrigin='anonymous' onClick={openModal} />}
+          {page.photo && <img src={page.photo} crossOrigin='anonymous' onClick={openModal} alt={page.title + ' photo'}/>}
           {page.video && <VideoPlayer id={`video-${lesson.id}-${pageNum}`} src={page.video} setVideoPlayer={setVideoPlayer} setVideoState={setVideoState} />}
           <IonButton expand='block' disabled={!showNext} onClick={nextSlide}>{t('buttons.next')}</IonButton>
         </IonCardContent>
@@ -89,7 +91,7 @@ const LessonPageDetail: React.FC<LessonPageDetailProps> = ({ subject,lesson, pag
           <TransformWrapper
             defaultScale={1}
           >
-            {({ zoomIn, zoomOut, resetTransform, ...rest }:any) => (
+            {({ zoomIn, zoomOut, resetTransform }:any) => (
               <React.Fragment>
                 <div className="tools">
                   <IonButton onClick={zoomIn} color='medium'>+</IonButton>
@@ -98,7 +100,7 @@ const LessonPageDetail: React.FC<LessonPageDetailProps> = ({ subject,lesson, pag
                 </div>
                 <TransformComponent>
                   <div style={{padding: '100px 0 300px 0'}}>
-                    <img src={page.photo} alt={page.title + ' photo'} />
+                    <img src={page.photo} alt={page.title + ' photo'} crossOrigin='anonymous'/>
                   </div>
                 </TransformComponent>
               </React.Fragment>
