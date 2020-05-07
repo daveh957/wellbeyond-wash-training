@@ -11,6 +11,8 @@ export function userReducer(state: UserState, action: UserActions): UserState {
       return { ...state, darkMode: action.darkMode };
     case 'set-trainer-mode':
       return { ...state, trainerMode: action.trainerMode };
+    case 'set-accepted-terms':
+      return { ...state, acceptedTerms: action.acceptedTerms };
     case 'set-is-loggedin':
       return { ...state, isLoggedIn: action.loggedIn };
     case 'set-login-error':

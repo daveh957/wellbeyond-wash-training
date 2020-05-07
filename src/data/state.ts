@@ -14,6 +14,7 @@ export const initialState: AppState = {
     trainerMode: false,
     isLoggedIn: undefined,
     loading: false,
+    acceptedTerms: false,
     lessons: {}
   }
 };

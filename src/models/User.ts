@@ -12,6 +12,11 @@ export interface Answer {
   correctAnswer?: string | number;
 }
 
+export interface PageView {
+  attestationChecked?: boolean;
+  videoWatched?: boolean;
+}
+
 export interface UserLesson {
   id?: string;
   lessonId: string;
@@ -20,5 +25,6 @@ export interface UserLesson {
   preScore: number;
   score: number;
   answers: Array<Answer>;
+  pageViews: Array<PageView>;
 }
 

@@ -56,7 +56,8 @@ export default {
         intro: {
           completed: 'You have already completed this module, but you can come back here any time to review.',
           firsttime: 'Before you start the module, we\'re going to ask you a few questions to see how much you already know.  We\'ll ask you these questions again after you have completed the module.'
-        }
+        },
+        attestationHeader: 'Please confirm that you undertand this information by checking the box below.'
       }
     }
   }

@@ -88,6 +88,11 @@ export const setTrainerMode = (trainerMode: boolean) => ({
   trainerMode
 } as const);
 
+export const setAcceptedTerms = (acceptedTerms: boolean) => ({
+  type: 'set-accepted-terms',
+  acceptedTerms
+} as const);
+
 export const setUserLessons = (lessons: UserLessons) => ({
   type: 'set-user-lessons',
   lessons
@@ -105,5 +110,6 @@ export type UserActions =
   | ActionType<typeof setLoginError>
   | ActionType<typeof setDarkMode>
   | ActionType<typeof setTrainerMode>
+  | ActionType<typeof setAcceptedTerms>
   | ActionType<typeof setUserLessons>
   | ActionType<typeof setUserLesson>

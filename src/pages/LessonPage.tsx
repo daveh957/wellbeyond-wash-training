@@ -1,4 +1,4 @@
-import React, {useContext, useEffect, useState} from 'react';
+import React, {ChangeEvent, useContext, useEffect, useState} from 'react';
 import {RouteComponentProps} from 'react-router';
 
 import './LessonPage.scss';
@@ -9,12 +9,12 @@ import {
   IonCard,
   IonCardContent,
   IonCardHeader,
-  IonCardSubtitle,
+  IonCardSubtitle, IonCheckbox, IonCol,
   IonContent,
-  IonFooter,
-  IonHeader,
+  IonFooter, IonGrid,
+  IonHeader, IonItem, IonLabel, IonList, IonListHeader,
   IonMenuButton,
-  IonPage,
+  IonPage, IonRow, IonText,
   IonTitle,
   IonToolbar,
   NavContext
@@ -26,7 +26,7 @@ import {connect} from '../data/connect';
 import * as selectors from '../data/selectors';
 
 import {Lesson, LessonPage, Subject} from '../models/Training';
-import {UserLesson} from '../models/User';
+import {UserLesson, PageView} from '../models/User';
 import {Redirect} from "react-router-dom";
 import {setUserLesson, updateLesson} from "../data/user/user.actions";
 import VideoPlayer from "../components/VideoPlayer";
@@ -64,6 +64,24 @@ const LessonPagePage: React.FC<LessonPageProps> = ({ subject, lesson, page, idx,
   const [videoState, setVideoState] = useState();
   const [videoPlayer, setVideoPlayer] = useState();
   const [showModal, setShowModal] = useState();
+  const [pageView, setPageView] = useState();
+
+  useEffect(() => {
+    let pageView:PageView = {};
+    if (lesson && page && userLesson) {
+      userLesson.pageViews = userLesson.pageViews || [];
+      if (userLesson.pageViews.length !== lesson.pages.length) {
+        userLesson.pageViews.length = 0;
+        lesson.pages.map((p) => {userLesson.pageViews.push({})});
+        setUserLesson(userLesson);
+      }
+      const pageView = userLesson.pageViews[idx];
+      setPageView(pageView);
+      if (pageView.attestationChecked || !page.attestation) {
+        setShowNext(true);
+      }
+    }
+  },[lesson, page, userLesson, idx]);
 
   useEffect(() => {
     if (isLoggedIn && lesson) {
@@ -97,23 +115,46 @@ const LessonPagePage: React.FC<LessonPageProps> = ({ subject, lesson, page, idx,
 
   useEffect(() => {
     if (videoState) {
-      if (videoState.ended) {
-        setVideoViewed(true);
-      }
-      if (videoState.currentTime > 0 && videoState.duration > 0 && (videoState.currentTime / videoState.duration) > 0.8) {
-        setVideoViewed(true); // 80% is good enough
+      if (videoState.ended || (videoState.currentTime > 0 && videoState.duration > 0 && (videoState.currentTime / videoState.duration) > 0.8)) {
+        pageView.videoWatched = true;
+        setPageView(pageView);
       }
     }
   }, [videoState]);
 
   const openModal = () => {setShowModal(true)};
   const closeModal = () => {setShowModal(false)};
+  const setAttestationChecked = (checked:boolean) => {
+    pageView.attestationChecked = checked;
+    setPageView(pageView);
+    setShowNext(checked);
+  }
+  const savePageView = () => {
+    if (pageView) {
+      if (page.video) {
+        pageView.videoWatched = !!pageView.videoWatched;
+      }
+      if (page.attestation) {
+        pageView.attestationChecked = !!pageView.attestationChecked;
+      }
+      userLesson.pageViews[idx] = pageView;
+      if (trainerMode) { // Only update the DB if not in trainer mode
+        setUserLesson(userLesson);
+        // TODO: Update training session
+      }
+      else {
+        updateLesson(userLesson);
+      }
+    }
+  }
   const handleNext = (e:any) => {
     e.preventDefault();
+    savePageView();
     navigate(nextUrl, 'forward');
   }
   const handlePrev = (e:any) => {
     e.preventDefault();
+    savePageView();
     navigate(prevUrl, 'back');
   }
 
@@ -140,18 +181,68 @@ const LessonPagePage: React.FC<LessonPageProps> = ({ subject, lesson, page, idx,
             </IonCardHeader>
             <IonCardContent class='lesson-text'>
               <div dangerouslySetInnerHTML={{__html: page.text}}></div>
-              {page.photo && <img src={page.photo} crossOrigin='anonymous' onClick={openModal} alt={page.title + ' photo'}/>}
-              {page.video && <VideoPlayer id={`video-${lesson.id}-${idx}`} src={page.video} setVideoPlayer={setVideoPlayer} setVideoState={setVideoState} />}
+              {page.photo &&
+                <IonGrid>
+                  <IonRow>
+                    <IonCol>
+                      <img src={page.photo} crossOrigin='anonymous' onClick={openModal} alt={page.title + ' photo'}/>
+                    </IonCol>
+                  </IonRow>
+                  {page.photoCaption &&
+                    <IonRow>
+                      <IonCol>
+                        <IonText color='medium'>
+                          <div className='ion-text-center'>{page.photoCaption}</div>
+                        </IonText>
+                      </IonCol>
+                    </IonRow>
+                  }
+                </IonGrid>
+              }
+              {page.video &&
+                <IonGrid>
+                  <IonRow>
+                    <IonCol>
+                      <VideoPlayer id={`video-${lesson.id}-${idx}`} src={page.video} setVideoPlayer={setVideoPlayer} setVideoState={setVideoState} />
+                    </IonCol>
+                  </IonRow>
+                  {page.videoCaption &&
+                  <IonRow>
+                    <IonCol>
+                      <IonText color='medium'>
+                        <div className='ion-text-center'>{page.videoCaption}</div>
+                      </IonText>
+                    </IonCol>
+                  </IonRow>
+                  }
+                </IonGrid>
+              }
             </IonCardContent>
           </IonCard>
-          {page.photo && <ImageZoomModal showModal={showModal} closeModal={closeModal} image={page.photo || ''} title={page.title} />}
+          {page.attestation && pageView &&
+            <IonList>
+              <IonListHeader>
+                {t('resources.lessons.attestationHeader')}
+              </IonListHeader>
+              <IonItem>
+                <IonLabel>
+                  {page.attestation}
+                </IonLabel>
+                <IonCheckbox color="primary" checked={pageView.attestationChecked} slot="start" onIonChange={(e:CustomEvent) => setAttestationChecked(e.detail.checked)}>
+                </IonCheckbox>
+              </IonItem>
+            </IonList>
+          }
+          {page.photo &&
+            <ImageZoomModal showModal={showModal} closeModal={closeModal} image={page.photo || ''} title={page.title} />
+          }
         </IonContent>
         }
       <IonFooter>
         <IonToolbar>
           <IonButtons slot={'start'}>
             <IonButton fill="solid" color="primary" onClick={handlePrev}>{t('buttons.previous')}</IonButton>
-            <IonButton fill="solid" color="primary" onClick={handleNext}>{t('buttons.next')}</IonButton>
+            <IonButton fill="solid" color="primary" disabled={!showNext} onClick={handleNext}>{t('buttons.next')}</IonButton>
           </IonButtons>
         </IonToolbar>
       </IonFooter>

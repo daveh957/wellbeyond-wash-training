@@ -3,7 +3,10 @@ export interface LessonPage {
   title: string,
   text: string,
   photo?: string,
-  video?: string
+  video?: string,
+  photoCaption?: string,
+  videoCaption?: string,
+  attestation?: string
 }
 
 export interface Question {
