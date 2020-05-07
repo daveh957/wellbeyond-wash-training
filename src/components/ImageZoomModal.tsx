@@ -1,13 +1,5 @@
-import React, {Fragment, useEffect, useState,} from 'react';
-import {
-  IonButton,
-  IonButtons,
-  IonContent,
-  IonHeader,
-  IonModal,
-  IonTitle,
-  IonToolbar,
-} from '@ionic/react';
+import React from 'react';
+import {IonButton, IonButtons, IonContent, IonHeader, IonModal, IonTitle, IonToolbar,} from '@ionic/react';
 import {TransformComponent, TransformWrapper} from "react-zoom-pan-pinch";
 import {useTranslation} from "react-i18next";
 import i18n from "../i18n";

@@ -11,11 +11,20 @@ import {
   IonCardHeader,
   IonCardSubtitle,
   IonCardTitle,
-  IonContent, IonFooter,
-  IonHeader, IonInput, IonItem, IonLabel, IonList, IonMenuButton,
-  IonPage, IonRadio, IonRadioGroup,
+  IonContent,
+  IonFooter,
+  IonHeader,
+  IonInput,
+  IonItem,
+  IonLabel,
+  IonList,
+  IonMenuButton,
+  IonPage,
+  IonRadio,
+  IonRadioGroup,
   IonTitle,
-  IonToolbar, NavContext
+  IonToolbar,
+  NavContext
 } from '@ionic/react'
 import {useTranslation} from "react-i18next";
 import i18n from '../i18n';
@@ -23,7 +32,7 @@ import i18n from '../i18n';
 import {connect} from '../data/connect';
 import * as selectors from '../data/selectors';
 
-import {Lesson, Subject, Question} from '../models/Training';
+import {Lesson, Question, Subject} from '../models/Training';
 import {Answer, UserLesson} from '../models/User';
 import {Redirect} from "react-router-dom";
 import {setUserLesson, updateLesson} from "../data/user/user.actions";
@@ -68,7 +77,7 @@ const QuestionPreviewPage: React.FC<QuestionPageProps> = ({ subject, lesson, que
       }
     }
     setAnswer(priorAnswer);
-    setShowNext(!!priorAnswer);
+    setShowNext(false);
   },[userLesson, question]);
 
   useEffect(() => {

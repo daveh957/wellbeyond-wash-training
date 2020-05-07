@@ -4,7 +4,6 @@ import {RouteComponentProps} from 'react-router';
 import './LessonPage.scss';
 
 import {
-  IonBackButton,
   IonButton,
   IonButtons,
   IonCard,
@@ -12,8 +11,10 @@ import {
   IonCardHeader,
   IonCardSubtitle,
   IonCardTitle,
-  IonContent, IonFooter,
-  IonHeader, IonMenuButton,
+  IonContent,
+  IonFooter,
+  IonHeader,
+  IonMenuButton,
   IonPage,
   IonTitle,
   IonToolbar

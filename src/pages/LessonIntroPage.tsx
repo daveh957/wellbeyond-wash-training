@@ -1,19 +1,23 @@
-import React, {MutableRefObject, useEffect, useRef, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {RouteComponentProps} from 'react-router';
 
 import './LessonPage.scss';
 
 import {
-  IonBackButton, IonButton,
-  IonButtons, IonCard, IonCardContent,
+  IonButton,
+  IonButtons,
+  IonCard,
+  IonCardContent,
+  IonCardHeader,
+  IonCardSubtitle,
+  IonCardTitle,
   IonContent,
-  IonHeader, IonItem, IonMenuButton,
+  IonFooter,
+  IonHeader,
+  IonMenuButton,
   IonPage,
-  IonSlide,
-  IonSlides,
   IonTitle,
-  IonToolbar,
-  IonFooter, IonCardHeader, IonCardSubtitle, IonCardTitle
+  IonToolbar
 } from '@ionic/react'
 import {useTranslation} from "react-i18next";
 import i18n from '../i18n';
@@ -21,14 +25,10 @@ import i18n from '../i18n';
 import {connect} from '../data/connect';
 import * as selectors from '../data/selectors';
 
-import {Lesson, Question, Subject} from '../models/Training';
-import {Answer, UserLesson} from '../models/User';
-import LessonPageDetail from "../components/LessonPageDetail";
+import {Lesson, Subject} from '../models/Training';
+import {UserLesson} from '../models/User';
 import {Redirect} from "react-router-dom";
-import QuestionDetail from "../components/QuestionDetail";
 import {setUserLesson, updateLesson} from "../data/user/user.actions";
-import LessonIntro from "../components/LessonIntro";
-import LessonSummary from "../components/LessonSummary";
 import {getLessonIconUrl} from "../util/cloudinary";
 
 interface OwnProps extends RouteComponentProps {

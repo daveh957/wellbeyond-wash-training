@@ -1,13 +1,5 @@
-import React, {useState,} from 'react';
-import {
-  IonButton,
-  IonButtons,
-  IonContent,
-  IonHeader,
-  IonModal,
-  IonTitle,
-  IonToolbar,
-} from '@ionic/react';
+import React from 'react';
+import {IonButton, IonButtons, IonContent, IonHeader, IonModal, IonTitle, IonToolbar,} from '@ionic/react';
 import {useTranslation} from "react-i18next";
 import i18n from "../i18n";
 
