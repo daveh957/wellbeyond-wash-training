@@ -23,7 +23,7 @@ const LessonItem: React.FC<LessonItemProps> = ({ subject,lesson, completed, clic
   return (
       <IonCard className="lesson-card">
           <IonCardHeader>
-            <IonItem button detail={false} lines="none" className="lesson-item" disabled={!clickable} routerLink={`/tabs/subjects/${subject.id}/lessons/${lesson.id}`}>
+            <IonItem button detail={false} lines="none" className="lesson-item" disabled={!clickable} routerLink={`/tabs/subjects/${subject.id}/lessons/${lesson.id}/intro`}>
               <IonLabel>
                 <h2>{lesson.name}</h2>
               </IonLabel>
@@ -31,7 +31,7 @@ const LessonItem: React.FC<LessonItemProps> = ({ subject,lesson, completed, clic
           </IonCardHeader>
 
           <IonCardContent>
-            <IonItem button detail={false} lines="none" className="lesson-item" disabled={!clickable} routerLink={`/tabs/subjects/${subject.id}/lessons/${lesson.id}?completed=${completed}`}>
+            <IonItem button detail={false} lines="none" className="lesson-item" disabled={!clickable} routerLink={`/tabs/subjects/${subject.id}/lessons/${lesson.id}/intro`}>
               <img src={lessonIcon} crossOrigin='anonymous' />
             </IonItem>
           </IonCardContent>

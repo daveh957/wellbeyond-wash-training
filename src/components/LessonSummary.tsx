@@ -1,7 +1,7 @@
 import React from 'react';
 import {Lesson, Subject} from '../models/Training';
 import {UserLesson} from '../models/User';
-import {IonButton, IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle,} from '@ionic/react';
+import {IonButton, IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle, IonItem,} from '@ionic/react';
 import {useTranslation} from "react-i18next";
 import i18n from "../i18n";
 
@@ -23,7 +23,7 @@ const LessonSummary: React.FC<LessonSummaryProps> = ({ subject,lesson, userLesso
       </IonCardHeader>
       <IonCardContent className='lesson-text'>
         <p>You have successfully completed this module and correctly answered {userLesson.score}% of the questions.</p>
-        <IonButton expand='block' onClick={next}>{t('buttons.done')}</IonButton>
+        <IonButton expand='block' onClick={next} routerLink={`/tabs/subjects/${subject.id}`}>{t('buttons.done')}</IonButton>
       </IonCardContent>
     </IonCard>
   );

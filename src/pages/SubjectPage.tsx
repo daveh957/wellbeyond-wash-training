@@ -76,12 +76,6 @@ const SubjectPage: React.FC<SubjectProps> = ({ subject, lessons, userLessons, is
 
       { subject ?
         <IonContent fullscreen={true}>
-          <IonHeader collapse="condense">
-            <IonToolbar>
-              <IonTitle size="large">{subject.name}</IonTitle>
-            </IonToolbar>
-          </IonHeader>
-
           <IonGrid fixed>
             <IonRow>
               {lessons && lessons.map((lesson, idx) => (

@@ -21,10 +21,8 @@ export const loadUserData = () => async (dispatch: React.Dispatch<any>) => {
 }
 
 export const updateLesson = (lesson: UserLesson) => async (dispatch: React.Dispatch<any>) => {
-  dispatch(setLoading(true));
   dispatch(setUserLesson(lesson));
   createOrUpdateUserLesson(lesson); // Don't wait for it to complete since we have offline support
-  dispatch(setLoading(false));
 }
 
 export const setLoading = (isLoading: boolean) => ({
