@@ -55,6 +55,7 @@ const LessonPagePage: React.FC<LessonPageProps> = ({ subject, lesson, page, idx,
 
   const {navigate} = useContext(NavContext);
   const { t } = useTranslation(['translation'], {i18n} );
+
   const [nextUrl, setNextUrl] = useState();
   const [prevUrl, setPrevUrl] = useState();
   const [videoViewed, setVideoViewed] = useState();
@@ -62,8 +63,7 @@ const LessonPagePage: React.FC<LessonPageProps> = ({ subject, lesson, page, idx,
   const [videoState, setVideoState] = useState();
   const [videoPlayer, setVideoPlayer] = useState();
   const [showModal, setShowModal] = useState();
-  const openModal = () => {setShowModal(true)};
-  const closeModal = () => {setShowModal(false)};
+
   useEffect(() => {
     if (isLoggedIn && lesson) {
       const path = '/tabs/subjects/' + subject.id + '/lessons/' + lesson.id;
@@ -94,11 +94,23 @@ const LessonPagePage: React.FC<LessonPageProps> = ({ subject, lesson, page, idx,
     }
   },[isLoggedIn, lesson, idx]);
 
+  useEffect(() => {
+    if (videoState) {
+      if (videoState.ended) {
+        setVideoViewed(true);
+      }
+      if (videoState.currentTime > 0 && videoState.duration > 0 && (videoState.currentTime / videoState.duration) > 0.8) {
+        setVideoViewed(true); // 80% is good enough
+      }
+    }
+  }, [videoState]);
+
+  const openModal = () => {setShowModal(true)};
+  const closeModal = () => {setShowModal(false)};
   const handleNext = (e:any) => {
     e.preventDefault();
     navigate(nextUrl, 'forward');
   }
-
   const handlePrev = (e:any) => {
     e.preventDefault();
     navigate(prevUrl, 'back');

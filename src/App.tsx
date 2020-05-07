@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import { Redirect, Route, useHistory } from 'react-router-dom';
-import { IonApp, IonRouterOutlet, IonSplitPane, IonLoading, } from '@ionic/react';
+import { IonApp, IonRouterOutlet, IonSplitPane, IonLoading} from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
 import Intercom from 'react-intercom';
 
@@ -41,6 +41,8 @@ import Signup from './pages/Signup';
 import Support from './pages/Support';
 import HomeOrLogin from "./pages/HomeOrLogin";
 import { Lesson, Subject } from './models/Training';
+import {useTranslation} from "react-i18next";
+import i18n from "./i18n";
 
 const App: React.FC = () => {
   return (
@@ -86,7 +88,8 @@ if (!firebase.apps.length) {
 
 const IonicApp: React.FC<IonicAppProps> = ({ darkMode, isLoggedIn, loading, loadLessonData, loadUserData, logoutUser, setIsLoggedIn}) => {
 
-  const [intercomUser, setIntercomUser] = useState();
+  const { t } = useTranslation(['translation'], {i18n} );
+  const [intercomUser, setIntercomUser] = useState()
 
   useEffect(() => {
     const getUserIdHash = firebase.functions().httpsCallable('getUserIdHash');

@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import {RouteComponentProps} from 'react-router';
 
 import './LessonPage.scss';
@@ -16,7 +16,7 @@ import {
   IonHeader, IonInput, IonItem, IonLabel, IonList, IonMenuButton,
   IonPage, IonRadio, IonRadioGroup,
   IonTitle,
-  IonToolbar
+  IonToolbar, NavContext
 } from '@ionic/react'
 import {useTranslation} from "react-i18next";
 import i18n from '../i18n';
@@ -33,6 +33,7 @@ interface OwnProps extends RouteComponentProps {
   subject: Subject;
   lesson: Lesson;
   question: Question;
+  priorAnswer?: string|number;
   idx: number;
   isPreview: boolean;
 }
@@ -50,42 +51,44 @@ interface DispatchProps {
 
 interface QuestionPageProps extends OwnProps, StateProps, DispatchProps {}
 
-const QuestionPage: React.FC<QuestionPageProps> = ({ history, subject, lesson, question, idx, isPreview, userLesson, isLoggedIn, trainerMode, updateLesson, setUserLesson }) => {
+const QuestionPage: React.FC<QuestionPageProps> = ({ subject, lesson, question, priorAnswer, idx, isPreview, userLesson, isLoggedIn, trainerMode, updateLesson, setUserLesson }) => {
 
+  const {navigate} = useContext(NavContext);
   const { t } = useTranslation(['translation'], {i18n} );
   const [nextUrl, setNextUrl] = useState();
   const [prevUrl, setPrevUrl] = useState();
-  const [answer, setAnswer] = useState<string|number>();
-  const [showNext, setShowNext] = useState<boolean>(!!trainerMode);
+  const [answer, setAnswer] = useState<string|number|undefined>(priorAnswer);
+  const [showNext, setShowNext] = useState<boolean>(!!trainerMode || !!priorAnswer);
   const [lockAnswer, setLockAnswer] = useState<boolean>();
   const handleAnswer = (value:(string|number)) => {
     setAnswer(value);
-  }
-  const handleNext = () => {
-    saveAnswer(question, isPreview, answer);
-    history.push(nextUrl, 'forward');
-  }
-  const saveAnswer = (question:Question, preLesson:boolean, answer?:(string|number)) => {
-    if (!answer) {
-      return;
-    }
-    userLesson.answers = userLesson.answers || new Array<Answer>();
-    let ans = userLesson.answers.find(element => element.question === question.questionText);
-    if (!ans) {
-      ans = {
-        question: question.questionText,
-        correctAnswer: question.correctAnswer
-      };
-      userLesson.answers.push(ans);
-    }
-    ans[preLesson ? 'answerBefore' : 'answerAfter'] = answer;
-    if (trainerMode) { // Only update the DB if not in trainer mode
+    if (value) {
+      userLesson.answers = userLesson.answers || new Array<Answer>();
+      let ans = userLesson.answers.find(element => element.question === question.questionText);
+      if (!ans) {
+        ans = {
+          question: question.questionText,
+          correctAnswer: question.correctAnswer
+        };
+        userLesson.answers.push(ans);
+      }
+      ans[isPreview ? 'answerBefore' : 'answerAfter'] = value;
       setUserLesson(userLesson);
+      setShowNext(true);
     }
-    else {
-      updateLesson(userLesson);
+  }
+
+  const handleNext = () => {
+    if (answer) {
+      if (trainerMode) { // Only update the DB if not in trainer mode
+        // TODO: Update training session
+      }
+      else {
+        updateLesson(userLesson);
+      }
     }
-  };
+    navigate(nextUrl, 'forward');
+  }
 
   useEffect(() => {
     if (isLoggedIn && lesson) {
@@ -195,7 +198,7 @@ const QuestionPage: React.FC<QuestionPageProps> = ({ history, subject, lesson, q
         <IonToolbar>
           <IonButtons slot={'start'}>
             <IonButton fill="solid" color="primary" routerLink={prevUrl} routerDirection='back'>{t('buttons.previous')}</IonButton>
-            <IonButton fill="solid" color="primary" onClick={handleNext}>{t('buttons.next')}</IonButton>
+            <IonButton fill="solid" color="primary"  disabled={!showNext} onClick={handleNext}>{t('buttons.next')}</IonButton>
           </IonButtons>
         </IonToolbar>
       </IonFooter>
@@ -212,6 +215,7 @@ export default connect({
     subject: selectors.getSubject(state, ownProps),
     lesson: selectors.getLesson(state, ownProps),
     question: selectors.getQuestion(state, ownProps),
+    priorAnswer: selectors.getPriorAnswer(state, ownProps),
     idx: selectors.getQuestionIdx(state, ownProps),
     isPreview: selectors.isPreview(state, ownProps),
     userLesson: selectors.getUserLesson(state, ownProps),

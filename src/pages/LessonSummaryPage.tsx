@@ -12,7 +12,7 @@ import {
   IonCardHeader,
   IonCardSubtitle,
   IonCardTitle,
-  IonContent,
+  IonContent, IonFooter,
   IonHeader, IonMenuButton,
   IonPage,
   IonTitle,
@@ -79,22 +79,22 @@ const LessonSummaryPage: React.FC<LessonSummaryProps> = ({ subject, lesson, user
           <IonCard className='lesson-card'>
             <IonCardHeader>
               <IonCardSubtitle>Lesson completed</IonCardSubtitle>
-              <IonCardTitle>{lesson.name}</IonCardTitle>
+              <IonCardTitle><h2>{lesson.name}</h2></IonCardTitle>
             </IonCardHeader>
             <IonCardContent className='lesson-text'>
               <p>You have successfully completed this module and correctly answered {userLesson.score}% of the questions.</p>
-              <IonToolbar>
-                <IonButtons slot={'start'}>
-                  <IonButton expand='block' routerLink={prevUrl} routerDirection='back'>{t('buttons.previous')}</IonButton>
-                </IonButtons>
-                <IonButtons slot={'end'}>
-                  <IonButton expand='block' routerLink={nextUrl} routerDirection='root'>{t('buttons.done')}</IonButton>
-                </IonButtons>
-              </IonToolbar>
             </IonCardContent>
           </IonCard>
         </IonContent>
         }
+      <IonFooter>
+        <IonToolbar>
+          <IonButtons slot={'start'}>
+            <IonButton fill="solid" color="primary" routerLink={prevUrl} routerDirection='back'>{t('buttons.previous')}</IonButton>
+            <IonButton fill="solid" color="primary"  routerLink={nextUrl} routerDirection='root'>{t('buttons.done')}</IonButton>
+          </IonButtons>
+        </IonToolbar>
+      </IonFooter>
     </IonPage>);
 };
 
