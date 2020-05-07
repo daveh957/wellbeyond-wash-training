@@ -7,6 +7,7 @@ import LessonIntroPage from './LessonIntroPage';
 import LessonSummaryPage from './LessonSummaryPage';
 import LessonPage from './LessonPage';
 import QuestionPage from './QuestionPage';
+import QuestionPreviewPage from './QuestionPreviewPage';
 
 interface MainTabsProps { }
 
@@ -21,10 +22,12 @@ const MainTabs: React.FC<MainTabsProps> = () => {
         */}
         <Route path="/tabs/training" render={() => <TrainingPage />} exact={true} />
         <Route path="/tabs/subjects/:subjectId" component={SubjectPage} exact={true} />
+        <Redirect exact path="/tabs/subjects/:subjectId/lessons/:lessonId" to="/tabs/subjects/:subjectId/lessons/:lessonId/intro" />
         <Route path="/tabs/subjects/:subjectId/lessons/:lessonId/intro" component={LessonIntroPage} exact={true} />
         <Route path="/tabs/subjects/:subjectId/lessons/:lessonId/summary" component={LessonSummaryPage} exact={true} />
         <Route path="/tabs/subjects/:subjectId/lessons/:lessonId/page/:pageId" component={LessonPage} exact={true} />
-        <Route path="/tabs/subjects/:subjectId/lessons/:lessonId/question/:questionId/:preview" component={QuestionPage} exact={true} />
+        <Route path="/tabs/subjects/:subjectId/lessons/:lessonId/question/:questionId" component={QuestionPage} exact={true} />
+        <Route path="/tabs/subjects/:subjectId/lessons/:lessonId/preview/:questionId" component={QuestionPreviewPage} exact={true} />
       </IonRouterOutlet>
   );
 };

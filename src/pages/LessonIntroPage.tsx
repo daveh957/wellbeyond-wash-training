@@ -13,7 +13,7 @@ import {
   IonSlides,
   IonTitle,
   IonToolbar,
-  IonFooter
+  IonFooter, IonCardHeader, IonCardSubtitle, IonCardTitle
 } from '@ionic/react'
 import {useTranslation} from "react-i18next";
 import i18n from '../i18n';
@@ -73,7 +73,7 @@ const LessonIntroPage: React.FC<LessonIntroProps> = ({ subject,lesson, userLesso
       }
       const firstPage = ('/tabs/subjects/' + subject.id + '/lessons/' + lesson.id) + (lesson.pages && lesson.pages.length ?  '/page/1' : '/summary');
       const firstQuestion = lesson.questions && lesson.questions.length ?
-        ('/tabs/subjects/' + subject.id + '/lessons/' + lesson.id + '/question/1' + ( (lesson.pages && lesson.pages.length ?  '/preview' : '/final'))) :
+        ('/tabs/subjects/' + subject.id + '/lessons/' + lesson.id + '/preview/1' ) :
         firstPage;
       if (userLesson.completed && !trainerMode) {
         setNextUrl(firstPage);
@@ -101,6 +101,10 @@ const LessonIntroPage: React.FC<LessonIntroProps> = ({ subject,lesson, userLesso
         {lesson &&
           <IonContent fullscreen={true}>
             <IonCard className='lesson-card'>
+              <IonCardHeader>
+                <IonCardSubtitle>Introduction</IonCardSubtitle>
+                <IonCardTitle>{lesson.name}</IonCardTitle>
+              </IonCardHeader>
               <IonCardContent className='lesson-text'>
                 <img src={lessonIcon} crossOrigin='anonymous' alt="">
                 </img>

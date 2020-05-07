@@ -82,7 +82,7 @@ const LessonPagePage: React.FC<LessonPageProps> = ({ subject, lesson, page, idx,
       }
       if (next > lesson.pages.length - 1) {
         if (lesson.questions && lesson.questions.length) {
-          setNextUrl(path + '/question/1/final');
+          setNextUrl(path + '/question/1');
         }
         else {
           setNextUrl(path + '/summary');
@@ -134,6 +134,7 @@ const LessonPagePage: React.FC<LessonPageProps> = ({ subject, lesson, page, idx,
         <IonContent fullscreen={true}>
           <IonCard>
             <IonCardHeader>
+              <IonCardSubtitle>Page {idx+1} of {lesson.pages.length}</IonCardSubtitle>
               <h2>{page.title}</h2>
             </IonCardHeader>
             <IonCardContent class='lesson-text'>

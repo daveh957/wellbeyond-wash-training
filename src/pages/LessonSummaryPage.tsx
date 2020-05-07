@@ -54,7 +54,7 @@ const LessonSummaryPage: React.FC<LessonSummaryProps> = ({ subject, lesson, user
   useEffect(() => {
     if (isLoggedIn && lesson && userLesson) {
       const lastPage = ('/tabs/subjects/' + subject.id + '/lessons/' + lesson.id) + (lesson.pages && lesson.pages.length ?  + ('/page/' + lesson.pages.length) : '/intro');
-      const lastQuestion = lesson.questions && lesson.questions.length ? ('/tabs/subjects/' + subject.id + '/lessons/' + lesson.id + '/question/1/final') : lastPage;
+      const lastQuestion = lesson.questions && lesson.questions.length ? ('/tabs/subjects/' + subject.id + '/lessons/' + lesson.id + '/question') : lastPage;
       setPrevUrl(lastQuestion);
       setNextUrl('/tabs/subjects/' + subject.id);
     }

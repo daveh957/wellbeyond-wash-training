@@ -108,16 +108,3 @@ export const getSubjectLessons = createSelector(
     return subjectLessons;
   }
 );
-
-export const getPriorAnswer = createSelector(
-  getUserLesson, getQuestion, isPreview,
-  (userLesson, question, preview) => {
-    if (userLesson && question) {
-      const ans = userLesson.answers.find(element => element.question === question.questionText);
-      if (ans) {
-        return ans[preview ? 'answerBefore' : 'answerAfter'];
-      }
-    }
-  }
-);
-

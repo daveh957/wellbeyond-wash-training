@@ -4,7 +4,6 @@ import {RouteComponentProps} from 'react-router';
 import './LessonPage.scss';
 
 import {
-  IonBackButton,
   IonButton,
   IonButtons,
   IonCard,
@@ -33,9 +32,7 @@ interface OwnProps extends RouteComponentProps {
   subject: Subject;
   lesson: Lesson;
   question: Question;
-  priorAnswer?: string|number;
   idx: number;
-  isPreview: boolean;
 }
 
 interface StateProps {
@@ -51,16 +48,56 @@ interface DispatchProps {
 
 interface QuestionPageProps extends OwnProps, StateProps, DispatchProps {}
 
-const QuestionPage: React.FC<QuestionPageProps> = ({ subject, lesson, question, priorAnswer, idx, isPreview, userLesson, isLoggedIn, trainerMode, updateLesson, setUserLesson }) => {
+const QuestionPage: React.FC<QuestionPageProps> = ({ subject, lesson, question, idx, userLesson, isLoggedIn, trainerMode, updateLesson, setUserLesson }) => {
 
   const {navigate} = useContext(NavContext);
   const { t } = useTranslation(['translation'], {i18n} );
+
   const [nextUrl, setNextUrl] = useState();
   const [prevUrl, setPrevUrl] = useState();
-  const [answer, setAnswer] = useState<string|number|undefined>(priorAnswer);
-  const [showNext, setShowNext] = useState<boolean>(!!trainerMode || !!priorAnswer);
+  const [answer, setAnswer] = useState<string|number|undefined>();
+  const [showNext, setShowNext] = useState<boolean>();
   const [lockAnswer, setLockAnswer] = useState<boolean>();
-  const handleAnswer = (value:(string|number)) => {
+
+  useEffect(() => {
+    let priorAnswer;
+    if (question && userLesson) {
+      const a = userLesson.answers.find(element => element.question === question.questionText);
+      if (a) {
+        priorAnswer = a.answerAfter;
+      }
+    }
+    setAnswer(priorAnswer);
+    setShowNext(!!priorAnswer);
+    setLockAnswer(!!priorAnswer);
+  },[userLesson, question]);
+
+  useEffect(() => {
+    if (isLoggedIn && lesson) {
+      const path = '/tabs/subjects/' + subject.id + '/lessons/' + lesson.id;
+      const prev = idx - 1;
+      const next = idx + 1;
+      if (prev < 0) {
+        if (!lesson.pages || !lesson.pages.length) {
+          setPrevUrl(path + '/intro');
+        }
+        else {
+          setPrevUrl(path + '/page/' + lesson.pages.length);
+        }
+      }
+      else {
+        setPrevUrl(path + '/question/' + (prev+1));
+      }
+      if (next > lesson.questions.length - 1) {
+        setNextUrl(path + '/summary');
+      }
+      else {
+        setNextUrl(path + '/question/' + (next+1));
+      }
+    }
+  },[isLoggedIn, subject, lesson, idx])
+
+  const handleAnswer = (value:(string|number|undefined)) => {
     setAnswer(value);
     if (value) {
       userLesson.answers = userLesson.answers || new Array<Answer>();
@@ -72,13 +109,29 @@ const QuestionPage: React.FC<QuestionPageProps> = ({ subject, lesson, question, 
         };
         userLesson.answers.push(ans);
       }
-      ans[isPreview ? 'answerBefore' : 'answerAfter'] = value;
+      ans.answerAfter = value;
       setUserLesson(userLesson);
       setShowNext(true);
+      setLockAnswer(true);
     }
   }
 
   const handleNext = () => {
+    if (lesson && lesson.questions && (lesson.questions.length === (idx+1))) {
+      if (userLesson && userLesson.answers && userLesson.answers.length >= lesson.questions.length) {
+        userLesson.answers = userLesson.answers.filter((a) => {
+          return lesson.questions.find((q) => {
+            return q.questionText === a.question;
+          });
+        });
+        const allAnswered = userLesson.answers.every((a) => {
+          return a.answerAfter;
+        });
+        if (allAnswered) {
+          handleLessonComplete();
+        }
+      }
+    }
     if (answer) {
       if (trainerMode) { // Only update the DB if not in trainer mode
         // TODO: Update training session
@@ -90,35 +143,17 @@ const QuestionPage: React.FC<QuestionPageProps> = ({ subject, lesson, question, 
     navigate(nextUrl, 'forward');
   }
 
-  useEffect(() => {
-    if (isLoggedIn && lesson) {
-      const path = '/tabs/subjects/' + subject.id + '/lessons/' + lesson.id;
-      const prev = idx - 1;
-      const next = idx + 1;
-      if (prev < 0) {
-        if (isPreview || !lesson.pages || !lesson.pages.length) {
-          setPrevUrl(path + '/intro');
-        }
-        else {
-          setPrevUrl(path + '/page/' + lesson.pages.length);
-        }
-      }
-      else {
-        setPrevUrl(path + '/question/' + (prev+1) + (isPreview ? '/preview' : '/final'));
-      }
-      if (next > lesson.questions.length - 1) {
-        if (isPreview && lesson.pages && lesson.pages.length) {
-          setNextUrl(path + '/page/1');
-        }
-        else {
-          setNextUrl(path + '/summary');
-        }
-      }
-      else {
-        setNextUrl(path + '/question/' + (next+1) + (isPreview ? '/preview' : '/final'));
-      }
-    }
-  },[isLoggedIn, lesson, isPreview, idx])
+  const handleLessonComplete = () => {
+    userLesson.completed = userLesson.completed || new Date();
+    let correct = 0, preCorrect = 0;
+    // eslint-disable-next-line array-callback-return
+    userLesson.answers.map(a => {
+      if (a.answerAfter === a.correctAnswer) correct++;
+      if (a.answerBefore === a.correctAnswer) preCorrect++;
+    });
+    userLesson.preScore = userLesson.answers.length ? Math.round((100*preCorrect) / lesson.questions.length) : 0;
+    userLesson.score = userLesson.answers.length ? Math.round((100*correct) / lesson.questions.length) : 0;
+  }
 
   if (isLoggedIn === false) {
     return <Redirect to="/login" />
@@ -162,8 +197,8 @@ const QuestionPage: React.FC<QuestionPageProps> = ({ subject, lesson, question, 
                 (question && question.questionType === 'choose-one' && question.choices &&
                   <IonList>
                     <IonRadioGroup value={answer} onIonChange={e => handleAnswer(e.detail.value)}>
-                      {question.choices.map((choice, idx) =>  {
-                        return <IonItem key={`choice-${idx}`}>
+                      {question.choices.map((choice, cidx) =>  {
+                        return <IonItem key={`l-${lesson.id}-q${idx}-choice-${cidx}`}>
                           <IonLabel>{choice.value}</IonLabel>
                           <IonRadio disabled={lockAnswer} slot="start" value={choice.value} />
                         </IonItem>
@@ -181,15 +216,14 @@ const QuestionPage: React.FC<QuestionPageProps> = ({ subject, lesson, question, 
                   </IonList>
                 )
               }
-              {question && answer && !isPreview ?
+              {question && answer &&
                 <div className='question-explanation'>
                   {answer === question.correctAnswer ?
                     <div>Great job, you got it right.</div>
                     :
                     <div>Sorry, you got it wrong. The correct answer is <strong>{question.correctAnswer}</strong>.</div>}
                   <div dangerouslySetInnerHTML={{__html: question.explanation || ''}}></div>
-                </div>
-                : undefined }
+                </div>}
             </IonCardContent>
           </IonCard>
         </IonContent>
@@ -205,7 +239,6 @@ const QuestionPage: React.FC<QuestionPageProps> = ({ subject, lesson, question, 
     </IonPage>);
 };
 
-
 export default connect({
   mapDispatchToProps: {
     updateLesson,
@@ -215,7 +248,6 @@ export default connect({
     subject: selectors.getSubject(state, ownProps),
     lesson: selectors.getLesson(state, ownProps),
     question: selectors.getQuestion(state, ownProps),
-    priorAnswer: selectors.getPriorAnswer(state, ownProps),
     idx: selectors.getQuestionIdx(state, ownProps),
     isPreview: selectors.isPreview(state, ownProps),
     userLesson: selectors.getUserLesson(state, ownProps),
