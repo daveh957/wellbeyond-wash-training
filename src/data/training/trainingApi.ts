@@ -1,10 +1,14 @@
 import * as firebase from 'firebase';
 import {Subject, Lesson} from '../../models/Training';
 import {getLessonIconUrl} from "../../util/cloudinary";
+import {checkIsAdmin} from "../user/userApi";
 
 export const loadData = async (collectionPath:string) : Promise<any> => {
+  const isAdmin:boolean = await checkIsAdmin();
   let results = Array();
-  return firebase.firestore().collection(collectionPath)
+  let query:firebase.firestore.Query<firebase.firestore.DocumentData> = firebase.firestore().collection(collectionPath);
+  query = isAdmin ? query : query.where('isPublished', '==', true);
+  return query
     .get()
     .then(querySnapshot => {
       querySnapshot.forEach(doc => {
@@ -19,7 +23,7 @@ export const loadData = async (collectionPath:string) : Promise<any> => {
     .catch(error => {
       console.log("Error getting documents: ", error);
       return error;
-    })
+    });
 };
 
 export const cacheImagesAndVideos = async (lessons:Lesson[], subjects:Subject[]) => {

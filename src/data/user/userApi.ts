@@ -109,6 +109,30 @@ export const getUserProfile = async () => {
     });
 };
 
+export const checkIsAdmin = async () => {
+  let user = firebase.auth().currentUser;
+  if (!user || !user.uid) {
+    return false;
+  }
+
+  return firebase
+    .firestore()
+    .collection("admins")
+    .doc(user.uid)
+    .get()
+    .then(doc => {
+      if (doc.exists) {
+        return (doc.data() || {}).isAdmin;
+      } else {
+        return false;
+      }
+    })
+    .catch(error => {
+      return false;
+    });
+};
+
+
 export const getUserLessons = async () => {
   const lessons:UserLessons = {};
   let user = firebase.auth().currentUser;
