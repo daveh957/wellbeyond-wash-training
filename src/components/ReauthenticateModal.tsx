@@ -12,51 +12,45 @@ import {
 } from '@ionic/react';
 import {useTranslation} from "react-i18next";
 import i18n from "../i18n";
+import {reauthenticate} from "../data/user/user.actions";
 import {connect} from "../data/connect";
-import {updateProfile} from "../data/user/userApi";
-import {ToastProps} from "../pages/Account";
 
 interface OwnProps {
-  photo?: string,
   showModal: boolean,
-  closeModal(): void,
-  showToast(props:ToastProps): void
+  closeModal(): void
 }
 
 interface StateProps {
+  loginError?: any;
 }
 
 interface DispatchProps {
+  reauthenticate: typeof reauthenticate;
 }
 
-interface ChangePhotoProps extends OwnProps, StateProps, DispatchProps { }
+interface ChangePasswordProps extends OwnProps, StateProps, DispatchProps { }
 
-const ChangePhotoModal: React.FC<ChangePhotoProps> = ({showModal, closeModal, photo, showToast}) => {
+const ChangePasswordModal: React.FC<ChangePasswordProps> = ({showModal, closeModal, loginError, reauthenticate}) => {
 
   const { t } = useTranslation(['translation'], {i18n} );
 
   const [formValues, setFormValues] = useState<any>({
-    photo: '',
-    photoRepeat: '',
+    password: ''
   });
   const [formErrors, setFormErrors] = useState<any>({});
   const [formSubmitted, setFormSubmitted] = useState(false);
-  const [serverError, setServerError] = useState<Error>();
 
 
   const handleChange = (field:string, value:string) => {
-    let errors = {...formErrors};
-    let values = {...formValues};
-    errors[field] = null;
-    values[field] = value;
-    setFormErrors(errors);
-    setFormValues(values);
+    formErrors[field] = null;
+    setFormErrors(formErrors);
+    formValues[field] = value;
+    setFormValues(formValues);
   }
   const validate = ():boolean => {
-    let errors = {...formErrors};
-    errors.photo = formValues.photo ? null : 'registration.errors.photoRequired';
-    setFormErrors(errors);
-    const valid = !Object.values(errors).some(x => (x !== null && x !== ''));
+    formErrors.password = formValues.password ? (formValues.password.length >= 8 ? null :  'registration.errors.passwordLength') : 'registration.errors.passwordRequired';
+    setFormErrors(formErrors);
+    const valid = !Object.values(formErrors).some(x => (x !== null && x !== ''));
     return valid;
   }
 
@@ -64,13 +58,7 @@ const ChangePhotoModal: React.FC<ChangePhotoProps> = ({showModal, closeModal, ph
     e.preventDefault();
     setFormSubmitted(true);
     if(validate()) {
-      updateProfile({photoURL: formValues.photo}).then((result) => {
-        showToast({message: t('registration.messages.photoChanged')});
-        closeModal();
-      })
-        .catch((error) => {
-          setServerError(error);
-        });
+      reauthenticate(formValues.password);
     }
   };
 
@@ -83,7 +71,7 @@ const ChangePhotoModal: React.FC<ChangePhotoProps> = ({showModal, closeModal, ph
               {t('buttons.close')}
             </IonButton>
           </IonButtons>
-          <IonTitle>{t('registration.modals.changePhoto')}</IonTitle>
+          <IonTitle>{t('registration.modals.reauthenticate')}</IonTitle>
         </IonToolbar>
       </IonHeader>
       <IonContent>
@@ -91,29 +79,29 @@ const ChangePhotoModal: React.FC<ChangePhotoProps> = ({showModal, closeModal, ph
           <IonList>
 
             <IonItem>
-              <IonLabel position="stacked" color="primary">{t('registration.labels.newPhoto')}</IonLabel>
-              <IonInput name="photo" type="text" value={formValues.photo} minlength={8} required={true} onIonChange={e => {
-                handleChange('photo', e.detail.value!);
+              <IonLabel position="stacked" color="primary">{t('registration.labels.password')}</IonLabel>
+              <IonInput name="password" type="password" value={formValues.password} minlength={8} required={true} onIonChange={e => {
+                handleChange('password', e.detail.value!);
               }}>
               </IonInput>
             </IonItem>
 
-            {formSubmitted && formErrors.photo && <IonText color="danger">
+            {formSubmitted && formErrors.password && <IonText color="danger">
               <p className="ion-padding-start">
-                {t(formErrors.photo)}
+                {t(formErrors.password)}
               </p>
             </IonText>}
           </IonList>
 
-          {formSubmitted && serverError && <IonText color="danger">
+          {formSubmitted && loginError && <IonText color="danger">
             <p className="ion-padding-start">
-              {serverError.message}
+              {loginError.message}
             </p>
           </IonText>}
 
           <IonRow>
             <IonCol>
-              <IonButton type="submit" expand="block">{t('registration.buttons.changePhoto')}</IonButton>
+              <IonButton type="submit" expand="block">{t('registration.buttons.reauthenticate')}</IonButton>
             </IonCol>
           </IonRow>
         </form>
@@ -124,7 +112,11 @@ const ChangePhotoModal: React.FC<ChangePhotoProps> = ({showModal, closeModal, ph
 };
 
 export default connect<OwnProps, {}, DispatchProps>({
+  mapDispatchToProps: {
+    reauthenticate,
+  },
   mapStateToProps: (state) => ({
+    loginError: state.user.loginError
   }),
-  component: ChangePhotoModal
+  component: ChangePasswordModal
 })

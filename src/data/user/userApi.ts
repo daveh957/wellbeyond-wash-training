@@ -52,22 +52,7 @@ export const registerWithEmail = async (email: string, password: string) => {
   console.log("in registerWithEmail");
   return firebase
     .auth()
-    .createUserWithEmailAndPassword(email, password)
-    .then(newUser => {
-      return firebase
-        .firestore()
-        .collection("users")
-        // @ts-ignore
-        .doc(newUser.user.uid)
-        .set({
-          // @ts-ignore
-          email: newUser.user.email
-
-        })
-        .then(() => {
-          return { ...newUser };
-        });
-    });
+    .createUserWithEmailAndPassword(email, password);
 };
 
 /**
@@ -201,7 +186,7 @@ export const updateEmail = async (email: string) => {
         .set({
           // @ts-ignore
           email: email
-        })
+        }, {merge: true})
         .then(() => {
           return user;
         });
@@ -225,22 +210,35 @@ export const updateProfile = async (profile: {name?: string, organization?: stri
         // @ts-ignore
         .doc(user.uid)
         .set({
-          // @ts-ignore
+          email: (user && user.email),
+          name: profile.name || (user && user.displayName),
           organization: profile.organization
-        })
+        }, {merge: true})
         .then(() => {
           return user;
         });
     });
 };
 
-export const updatePassword = async (password: string) => {
+export const reauthenticateWithPassword = async (password: string) => {
   let user = firebase.auth().currentUser;
-  if (!user || !user.uid) {
+  if (!user || !user.email) {
     return null;
   }
-  return user
-    .updatePassword(password)
+  const cred = firebase.auth.EmailAuthProvider.credential(
+    user.email,
+    password
+  );
+  return user.reauthenticateWithCredential(cred);
+}
+
+export const updatePassword = async (password: string) => {
+  let user = firebase.auth().currentUser;
+  if (!user || !user.email) {
+    return null;
+  }
+  // @ts-ignore
+  user.updatePassword(password)
     .then(() => {
       return user;
     });

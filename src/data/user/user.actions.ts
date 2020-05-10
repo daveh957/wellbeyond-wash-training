@@ -1,4 +1,15 @@
-import { loginWithEmail, logout, getUserProfile, getUserLessons, registerWithEmail, updateProfile, updateEmail, updatePassword, createOrUpdateUserLesson } from './userApi';
+import {
+  loginWithEmail,
+  logout,
+  getUserProfile,
+  getUserLessons,
+  registerWithEmail,
+  updateProfile,
+  updateEmail,
+  updatePassword,
+  createOrUpdateUserLesson,
+  reauthenticateWithPassword
+} from './userApi';
 import { ActionType } from '../../util/types';
 import { UserState, UserLessons } from './user.state';
 import { Registration, UserLesson, Answer } from '../../models/User';
@@ -69,7 +80,7 @@ export const registerUser = ({name, email, password, organization}:Registration)
     })
     .catch(error => {
       dispatch(setLoginError(error));
-      console.log("Error logging in:", error);
+      console.log("Error registering user:", error);
     });
 };
 
@@ -77,6 +88,38 @@ export const logoutUser = () => async (dispatch: React.Dispatch<any>) => {
   await logout();
   dispatch(loadUserData());
 };
+
+export const reauthenticate = (password: string) => async (dispatch: React.Dispatch<any>) => {
+  setLoginError(null);
+  reauthenticateWithPassword(password)
+    .catch(error => {
+      dispatch(setLoginError(error));
+      console.log("Error reauthenticating:", error);
+    });
+};
+
+export const changeEmail = (email: string) => async (dispatch: React.Dispatch<any>) => {
+  dispatch(setData({changeEmail: {status: 'started'}}));
+  updateEmail(email).then((result) => {
+    dispatch(setData({changeEmail: {status: 'succeeded', result: result}}));
+    })
+    .catch(error => {
+      dispatch(setData({changeEmail: {status: 'failed', error: error}}));
+      console.log("Error updating password:", error);
+    });
+};
+
+export const changePassword = (password: string) => async (dispatch: React.Dispatch<any>) => {
+  dispatch(setData({changePassword: {status: 'started'}}));
+  updatePassword(password).then((result) => {
+    dispatch(setData({changePassword: {status: 'succeeded', result: result}}));
+  })
+    .catch(error => {
+      dispatch(setData({changePassword: {status: 'failed', error: error}}));
+      console.log("Error updating password:", error);
+    });
+};
+
 
 export const setDarkMode = (darkMode: boolean) => ({
   type: 'set-dark-mode',

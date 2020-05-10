@@ -23,10 +23,19 @@ export default {
       zoomOut: '-'
     },
     registration: {
+      modals: {
+        changeEmail: 'Change Email Address',
+        changePassword: 'Change Password',
+        changePhoto: 'Change Profile Photo',
+        reauthenticate: 'Reenter your password'
+      },
       labels: {
         name: 'First and Last Name',
         email: 'Email Address',
+        oldEmail: 'Current Email Address',
+        newEmail: 'New Email Address',
         password: 'Password (8 characters minimum)',
+        newPassword: 'New Password (8 characters minimum)',
         passwordRepeat: 'Repeat Password',
         organization: 'Organization Name (optional)'
       },
@@ -38,7 +47,15 @@ export default {
         passwordMismatch: 'Passwords don\'t match',
       },
       buttons: {
-
+        changePassword: 'Change Password',
+        changeEmail: 'Change Email',
+        changePhoto: 'Change Photo',
+        createAccount: 'Create Account',
+        reauthenticate: 'Verify Password',
+      },
+      messages: {
+        passwordChanged: 'Password updated',
+        emailChanged: 'Email updated'
       }
     },
     resources: {

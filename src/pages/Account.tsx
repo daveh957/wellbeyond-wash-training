@@ -7,7 +7,7 @@ import {
   IonList,
   IonMenuButton,
   IonPage,
-  IonTitle,
+  IonTitle, IonToast,
   IonToolbar
 } from '@ionic/react';
 import './Account.scss';
@@ -17,6 +17,16 @@ import {connect} from '../data/connect';
 import {RouteComponentProps} from 'react-router';
 import {Redirect} from "react-router-dom";
 import {getGravatarUrl} from "../util/gravatar";
+import ImageZoomModal from "../components/ImageZoomModal";
+import ChangePhotoModal from "../components/ChangePhotoModal";
+import ChangeEmailModal from "../components/ChangeEmailModal";
+import ChangePasswordModal from "../components/ChangePasswordModal";
+
+export interface ToastProps {
+  color?:string;
+  header?:string;
+  message:string;
+}
 
 interface OwnProps extends RouteComponentProps { }
 
@@ -38,10 +48,38 @@ const Account: React.FC<AccountProps> = ({ name, email, photoURL, organization, 
   const [showAlert, setShowAlert] = useState(false);
   const { t } = useTranslation(['translation'], {i18n} );
 
-  const clicked = (text: string) => {
-    console.log(`Clicked ${text}`);
-  }
+  const [showPasswordModal, setShowPasswordModal] = useState<boolean>(false);
+  const [showEmailModal, setShowEmailModal] = useState<boolean>(false);
+  const [showPhotoModal, setShowPhotoModal] = useState<boolean>(false);
+  const [openToast, setOpenToast] = useState<boolean>(false);
+  const [toastColor, setToastColor] = useState<string|undefined>();
+  const [toastHeader, setToastHeader] = useState<string|undefined>();
+  const [toastMessage, setToastMessage] = useState<string>();
 
+  const openPasswordModal = () => {
+    setShowPasswordModal(true);
+  }
+  const openEmailModal = () => {
+    setShowEmailModal(true);
+  }
+  const openPhotoModal = () => {
+    setShowPhotoModal(true);
+  }
+  const closePasswordModal = () => {
+    setShowPasswordModal(false);
+  }
+  const closeEmailModal = () => {
+    setShowEmailModal(false);
+  }
+  const closePhotoModal = () => {
+    setShowPhotoModal(false);
+  }
+  const showToast = ({color, header, message}:ToastProps) =>{
+    setToastColor(color);
+    setToastHeader(header);
+    setToastMessage(message);
+    setOpenToast(true);
+  }
   if (isLoggedIn === false) {
     return <Redirect to="/login" />
   }
@@ -62,11 +100,15 @@ const Account: React.FC<AccountProps> = ({ name, email, photoURL, organization, 
             <h2>{ name }</h2>
             <h2>{ email }</h2>
             <IonList inset>
-              <IonItem onClick={() => clicked('Update Picture')}>Change Photo</IonItem>
-              <IonItem onClick={() => setShowAlert(true)}>Change Email</IonItem>
-              <IonItem onClick={() => clicked('Change Password')}>Change Password</IonItem>
+              <IonItem onClick={openPhotoModal}>Change Photo</IonItem>
+              <IonItem onClick={openEmailModal}>Change Email</IonItem>
+              <IonItem onClick={openPasswordModal}>Change Password</IonItem>
             </IonList>
           </div>
+        <ChangePasswordModal showModal={showPasswordModal} closeModal={closePasswordModal} showToast={showToast}/>
+        <ChangePhotoModal showModal={showPhotoModal} closeModal={closePhotoModal} photo={photoURL} showToast={showToast}/>
+        <ChangeEmailModal showModal={showEmailModal} closeModal={closeEmailModal} email={email}  showToast={showToast}/>
+        <IonToast isOpen={openToast} header={toastHeader} message={toastMessage} color={toastColor||'success'} duration={2000} onDidDismiss={() => setOpenToast(false)} />
       </IonContent>
     </IonPage>
   );

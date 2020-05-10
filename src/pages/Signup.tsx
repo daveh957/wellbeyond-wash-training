@@ -53,18 +53,21 @@ const Signup: React.FC<SignupProps> = ({registerUser, isLoggedIn, loginError}) =
   const [formSubmitted, setFormSubmitted] = useState(false);
 
   const handleChange = (field:string, value:string) => {
-    formErrors[field] = null;
-    setFormErrors(formErrors);
-    formValues[field] = value;
-    setFormValues(formValues);
+    let errors = {...formErrors};
+    let values = {...formValues};
+    errors[field] = null;
+    values[field] = value;
+    setFormErrors(errors);
+    setFormValues(values);
   }
   const validate = ():boolean => {
-    formErrors.name = formValues.name ? null : 'registration.errors.nameRequired';
-    formErrors.email = formValues.email ? null : 'registration.errors.emailRequired';
-    formErrors.password = formValues.password ? (formValues.password.length >= 8 ? null :  'registration.errors.passwordLength') : 'registration.errors.passwordRequired';
-    formErrors.passwordRepeat = (formValues.password === formValues.passwordRepeat ? null :  'registration.errors.passwordMismatch');
-    setFormErrors(formErrors);
-    const valid = !Object.values(formErrors).some(x => (x !== null && x !== ''));
+    let errors = {...formErrors};
+    errors.name = formValues.name ? null : 'registration.errors.nameRequired';
+    errors.email = formValues.email ? null : 'registration.errors.emailRequired';
+    errors.password = formValues.password ? (formValues.password.length >= 8 ? null :  'registration.errors.passwordLength') : 'registration.errors.passwordRequired';
+    errors.passwordRepeat = (formValues.password === formValues.passwordRepeat ? null :  'registration.errors.passwordMismatch');
+    setFormErrors(errors);
+    const valid = !Object.values(errors).some(x => (x !== null && x !== ''));
     return valid;
   }
   const sanitizeFormValues = ({ passwordRepeat, ...registration }:any):Registration => registration as Registration;
@@ -170,7 +173,7 @@ const Signup: React.FC<SignupProps> = ({registerUser, isLoggedIn, loginError}) =
 
           <IonRow>
             <IonCol>
-              <IonButton type="submit" expand="block">Create</IonButton>
+              <IonButton type="submit" expand="block">{t('registration.labels.createAccount')}</IonButton>
             </IonCol>
           </IonRow>
         </form>

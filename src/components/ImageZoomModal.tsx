@@ -1,9 +1,8 @@
 import React from 'react';
-import {IonButton, IonButtons, IonContent, IonHeader, IonModal, IonTitle, IonToolbar,} from '@ionic/react';
+import {IonButton, IonButtons, IonContent, IonHeader, IonModal, IonTitle, IonToolbar, IonIcon,} from '@ionic/react';
 import {TransformComponent, TransformWrapper} from "react-zoom-pan-pinch";
 import {useTranslation} from "react-i18next";
 import i18n from "../i18n";
-
 
 interface ImageZoomProps {
   image: string,
@@ -35,9 +34,12 @@ const ImageZoomModal: React.FC<ImageZoomProps> = ({ showModal, closeModal, image
             {({ zoomIn, zoomOut, resetTransform }:any) => (
               <React.Fragment>
                 <div className="tools">
-                  <IonButton onClick={zoomIn} color='medium'>+</IonButton>
-                  <IonButton onClick={zoomOut} color='medium'>-</IonButton>
-                  <IonButton onClick={resetTransform} color='medium'>x</IonButton>
+                  <IonButton onClick={zoomIn} color='medium'>
+                    <IonIcon src={'/assets/img/zoom-in.svg'} />
+                  </IonButton>
+                  <IonButton onClick={zoomOut} color='medium'>
+                    <IonIcon src={'/assets/img/zoom-out.svg'} />
+                  </IonButton>
                 </div>
                 <TransformComponent>
                   <div style={{padding: '100px 0 300px 0'}}>
