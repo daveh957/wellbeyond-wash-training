@@ -13,13 +13,13 @@ import {
 import {useTranslation} from "react-i18next";
 import i18n from "../i18n";
 import {setData} from "../data/user/user.actions";
-import {changeEmail} from "../data/user/user.actions";
 import {connect} from "../data/connect";
-import {updateEmail} from "../data/user/userApi";
+import {updateProfile} from "../data/user/userApi";
 import {ToastProps} from "../pages/Account";
 
 interface OwnProps {
-  email?: string,
+  name?: string,
+  organization?: string,
   showModal: boolean,
   closeModal(): void,
   showToast(props:ToastProps): void
@@ -32,23 +32,23 @@ interface DispatchProps {
   setData: typeof setData;
 }
 
-interface ChangeEmailProps extends OwnProps, StateProps, DispatchProps { }
+interface ChangeProfileProps extends OwnProps, StateProps, DispatchProps { }
 
-const ChangeEmailModal: React.FC<ChangeEmailProps> = ({showModal, closeModal, email, showToast, setData}) => {
+const ChangeProfileModal: React.FC<ChangeProfileProps> = ({showModal, closeModal, name, organization, showToast, setData}) => {
 
   const { t } = useTranslation(['translation'], {i18n} );
 
   const [formValues, setFormValues] = useState<any>({
-    email: '',
-    emailRepeat: '',
+    profile: '',
+    profileRepeat: '',
   });
   const [formErrors, setFormErrors] = useState<any>({});
   const [formSubmitted, setFormSubmitted] = useState(false);
   const [serverError, setServerError] = useState<Error>();
 
   useEffect(() =>{
-    setFormValues({email: email});
-    setFormErrors({email: null});
+    setFormValues({name: name, organization: organization});
+    setFormErrors({name: null, organization: null});
     setServerError(undefined);
   }, [showModal]);
 
@@ -62,7 +62,7 @@ const ChangeEmailModal: React.FC<ChangeEmailProps> = ({showModal, closeModal, em
   }
   const validate = ():boolean => {
     let errors = {...formErrors};
-    errors.email = formValues.email ? null : 'registration.errors.emailRequired';
+    errors.name = formValues.name ? null : 'registration.errors.nameRequired';
     setFormErrors(errors);
     const valid = !Object.values(errors).some(x => (x !== null && x !== ''));
     return valid;
@@ -72,9 +72,9 @@ const ChangeEmailModal: React.FC<ChangeEmailProps> = ({showModal, closeModal, em
     e.preventDefault();
     setFormSubmitted(true);
     if(validate()) {
-      updateEmail(formValues.email).then((result) => {
-        setData({email: formValues.email});
-        showToast({message: t('registration.messages.emailChanged')});
+      updateProfile({name: formValues.name, organization: formValues.organization}).then((result) => {
+        setData({name: formValues.name, organization: formValues.organization});
+        showToast({message: t('registration.messages.profileChanged')});
         closeModal();
       })
         .catch((error) => {
@@ -92,7 +92,7 @@ const ChangeEmailModal: React.FC<ChangeEmailProps> = ({showModal, closeModal, em
               {t('buttons.close')}
             </IonButton>
           </IonButtons>
-          <IonTitle>{t('registration.modals.changeEmail')}</IonTitle>
+          <IonTitle>{t('registration.modals.changeProfile')}</IonTitle>
         </IonToolbar>
       </IonHeader>
       <IonContent>
@@ -100,22 +100,24 @@ const ChangeEmailModal: React.FC<ChangeEmailProps> = ({showModal, closeModal, em
           <IonList>
 
             <IonItem>
-              <IonLabel position="stacked" color="primary">{t('registration.labels.oldEmail')}</IonLabel>
-              <IonInput name="email" type="email" value={email} disabled={true}>
-              </IonInput>
-            </IonItem>
-
-            <IonItem>
-              <IonLabel position="stacked" color="primary">{t('registration.labels.newEmail')}</IonLabel>
-              <IonInput name="email" type="email" value={formValues.email} required={true} onIonChange={e => {
-                handleChange('email', e.detail.value!);
+              <IonLabel position="stacked" color="primary">{t('registration.labels.name')}</IonLabel>
+              <IonInput name="name" type="text" value={formValues.name} spellCheck={false} autocapitalize="on" autocomplete="on" required={true} onIonChange={e => {
+                handleChange('name', e.detail.value!);
               }}>
               </IonInput>
             </IonItem>
 
-            {formSubmitted && formErrors.email && <IonText color="danger">
+            <IonItem>
+              <IonLabel position="stacked" color="primary">{t('registration.labels.organization')}</IonLabel>
+              <IonInput name="organization" type="text" value={formValues.organization} spellCheck={false} onIonChange={e => {
+                handleChange('organization', e.detail.value!);
+              }}>
+              </IonInput>
+            </IonItem>
+
+            {formSubmitted && formErrors.profile && <IonText color="danger">
               <p className="ion-padding-start">
-                {t(formErrors.email)}
+                {t(formErrors.profile)}
               </p>
             </IonText>}
           </IonList>
@@ -128,7 +130,7 @@ const ChangeEmailModal: React.FC<ChangeEmailProps> = ({showModal, closeModal, em
 
           <IonRow>
             <IonCol>
-              <IonButton type="submit" expand="block">{t('registration.buttons.changeEmail')}</IonButton>
+              <IonButton type="submit" expand="block">{t('registration.buttons.changeProfile')}</IonButton>
             </IonCol>
           </IonRow>
         </form>
@@ -144,5 +146,5 @@ export default connect<OwnProps, {}, DispatchProps>({
   },
   mapStateToProps: (state) => ({
   }),
-  component: ChangeEmailModal
+  component: ChangeProfileModal
 })

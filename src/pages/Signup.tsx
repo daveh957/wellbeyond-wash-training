@@ -178,7 +178,7 @@ const Signup: React.FC<SignupProps> = ({registerUser, isLoggedIn, acceptedTerms,
 
           <IonRow>
             <IonCol>
-              <IonButton type="submit" expand="block">{t('registration.labels.createAccount')}</IonButton>
+              <IonButton type="submit" expand="block">{t('registration.buttons.createAccount')}</IonButton>
             </IonCol>
           </IonRow>
         </form>

@@ -27,6 +27,7 @@ export default {
         changeEmail: 'Change Email Address',
         changePassword: 'Change Password',
         changePhoto: 'Change Profile Photo',
+        changeProfile: 'Change Profile Information',
         reauthenticate: 'Reenter your password'
       },
       labels: {
@@ -50,16 +51,18 @@ export default {
         termsNotChecked: 'Please check the box to continue',
       },
       buttons: {
-        changePassword: 'Change Password',
-        changeEmail: 'Change Email',
-        changePhoto: 'Change Photo',
+        changePassword: 'Update Password',
+        changeProfile: 'Update Profile',
+        changeEmail: 'Update Email',
+        changePhoto: 'Update Photo',
         createAccount: 'Create Account',
         reauthenticate: 'Verify Password',
         acceptTerms: 'Get Started',
       },
       messages: {
         passwordChanged: 'Password updated',
-        emailChanged: 'Email updated'
+        emailChanged: 'Email updated',
+        profileChanged: 'Profile updated',
       },
       pages: {
         signup: 'Signup',

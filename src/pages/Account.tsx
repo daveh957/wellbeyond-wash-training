@@ -1,5 +1,6 @@
 import React, {useState} from 'react';
 import {
+  IonButton,
   IonButtons,
   IonContent,
   IonHeader,
@@ -21,6 +22,7 @@ import ImageZoomModal from "../components/ImageZoomModal";
 import ChangePhotoModal from "../components/ChangePhotoModal";
 import ChangeEmailModal from "../components/ChangeEmailModal";
 import ChangePasswordModal from "../components/ChangePasswordModal";
+import ChangeProfileModal from "../components/ChangeProfileModal";
 
 export interface ToastProps {
   color?:string;
@@ -51,6 +53,7 @@ const Account: React.FC<AccountProps> = ({ name, email, photoURL, organization, 
   const [showPasswordModal, setShowPasswordModal] = useState<boolean>(false);
   const [showEmailModal, setShowEmailModal] = useState<boolean>(false);
   const [showPhotoModal, setShowPhotoModal] = useState<boolean>(false);
+  const [showProfileModal, setShowProfileModal] = useState<boolean>(false);
   const [openToast, setOpenToast] = useState<boolean>(false);
   const [toastColor, setToastColor] = useState<string|undefined>();
   const [toastHeader, setToastHeader] = useState<string|undefined>();
@@ -65,6 +68,9 @@ const Account: React.FC<AccountProps> = ({ name, email, photoURL, organization, 
   const openPhotoModal = () => {
     setShowPhotoModal(true);
   }
+  const openProfileModal = () => {
+    setShowProfileModal(true);
+  }
   const closePasswordModal = () => {
     setShowPasswordModal(false);
   }
@@ -73,6 +79,9 @@ const Account: React.FC<AccountProps> = ({ name, email, photoURL, organization, 
   }
   const closePhotoModal = () => {
     setShowPhotoModal(false);
+  }
+  const closeProfileModal = () => {
+    setShowProfileModal(false);
   }
   const showToast = ({color, header, message}:ToastProps) =>{
     setToastColor(color);
@@ -98,13 +107,22 @@ const Account: React.FC<AccountProps> = ({ name, email, photoURL, organization, 
           <div className="ion-padding-top ion-text-center">
             <img src={getGravatarUrl(email)} alt="avatar" />
             <h2>{ name }</h2>
-            <h2>{ email }</h2>
+            <h3>{ email }</h3>
+            <h3>{ organization }</h3>
             <IonList inset>
-              <IonItem onClick={openPhotoModal}>Change Photo</IonItem>
-              <IonItem onClick={openEmailModal}>Change Email</IonItem>
-              <IonItem onClick={openPasswordModal}>Change Password</IonItem>
+              <IonItem>
+                <IonButton expand="full" fill="clear" color="secondary" onClick={openProfileModal}>{t('registration.modals.changeProfile')}</IonButton>
+              </IonItem>
+              <IonItem>
+                <IonButton expand="full" fill="clear" color="secondary" onClick={openEmailModal}>{t('registration.modals.changeEmail')}</IonButton>
+              </IonItem>
+              <IonItem>
+                <IonButton expand="full" fill="clear" color="secondary" onClick={openPasswordModal}>{t('registration.modals.changePassword')}</IonButton>
+              </IonItem>
             </IonList>
           </div>
+        {/* eslint-disable-next-line react/jsx-no-undef */}
+        <ChangeProfileModal showModal={showProfileModal} name={name} organization={organization} closeModal={closeProfileModal} showToast={showToast}/>
         <ChangePasswordModal showModal={showPasswordModal} closeModal={closePasswordModal} showToast={showToast}/>
         <ChangePhotoModal showModal={showPhotoModal} closeModal={closePhotoModal} photo={photoURL} showToast={showToast}/>
         <ChangeEmailModal showModal={showEmailModal} closeModal={closeEmailModal} email={email}  showToast={showToast}/>
