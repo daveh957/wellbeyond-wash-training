@@ -40,7 +40,6 @@ interface OwnProps extends RouteComponentProps {
 }
 
 interface StateProps {
-  isLoggedIn?: boolean,
   trainerMode?: boolean,
   userLesson: UserLesson
 }
@@ -52,7 +51,7 @@ interface DispatchProps {
 
 interface LessonPageProps extends OwnProps, StateProps, DispatchProps {}
 
-const LessonPagePage: React.FC<LessonPageProps> = ({ subject, lesson, page, idx, userLesson, isLoggedIn, trainerMode, updateLesson, setUserLesson }) => {
+const LessonPagePage: React.FC<LessonPageProps> = ({ subject, lesson, page, idx, userLesson, trainerMode, updateLesson, setUserLesson }) => {
 
   const {navigate} = useContext(NavContext);
   const { t } = useTranslation(['translation'], {i18n} );
@@ -84,7 +83,7 @@ const LessonPagePage: React.FC<LessonPageProps> = ({ subject, lesson, page, idx,
   },[lesson, page, userLesson, idx]);
 
   useEffect(() => {
-    if (isLoggedIn && lesson) {
+    if (lesson) {
       const path = '/tabs/subjects/' + subject.id + '/lessons/' + lesson.id;
       const prev = idx - 1;
       const next = idx + 1;
@@ -111,7 +110,7 @@ const LessonPagePage: React.FC<LessonPageProps> = ({ subject, lesson, page, idx,
         setNextUrl(path + '/page/' + (next+1));
       }
     }
-  },[isLoggedIn, lesson, idx]);
+  },[lesson, idx]);
 
   useEffect(() => {
     if (videoState) {
@@ -156,10 +155,6 @@ const LessonPagePage: React.FC<LessonPageProps> = ({ subject, lesson, page, idx,
     e.preventDefault();
     savePageView();
     navigate(prevUrl, 'back');
-  }
-
-  if (isLoggedIn === false) {
-    return <Redirect to="/login" />
   }
 
   return (
@@ -260,7 +255,6 @@ export default connect({
     page: selectors.getLessonPage(state, ownProps),
     idx: selectors.getPageIdx(state, ownProps),
     userLesson: selectors.getUserLesson(state, ownProps),
-    isLoggedIn: state.user.isLoggedIn,
     trainerMode: state.user.trainerMode
   }),
   component: LessonPagePage

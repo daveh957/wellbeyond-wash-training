@@ -1,5 +1,6 @@
 import { UserActions } from './user.actions';
 import { UserState } from './user.state';
+import {initialState} from "../state";
 
 export function userReducer(state: UserState, action: UserActions): UserState {
   switch (action.type) {
@@ -7,6 +8,8 @@ export function userReducer(state: UserState, action: UserActions): UserState {
       return { ...state, loading: action.isLoading };
     case 'set-user-data':
       return { ...state, ...action.data };
+    case 'reset-user-data':
+      return initialState.user;
     case 'set-dark-mode':
       return { ...state, darkMode: action.darkMode };
     case 'set-trainer-mode':

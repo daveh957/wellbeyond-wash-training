@@ -37,7 +37,9 @@ export default {
         password: 'Password (8 characters minimum)',
         newPassword: 'New Password (8 characters minimum)',
         passwordRepeat: 'Repeat Password',
-        organization: 'Organization Name (optional)'
+        organization: 'Organization Name (optional)',
+        pleaseAcceptTerms: 'Please check the box indicating that you have read and agree to these terms of use.',
+        userAcceptsTerms: 'I agree to the terms and conditions above',
       },
       errors: {
         nameRequired: 'Name is required',
@@ -45,6 +47,7 @@ export default {
         passwordRequired: 'Password is required',
         passwordLength: 'Password must be at least 8 characters',
         passwordMismatch: 'Passwords don\'t match',
+        termsNotChecked: 'Please check the box to continue',
       },
       buttons: {
         changePassword: 'Change Password',
@@ -52,10 +55,17 @@ export default {
         changePhoto: 'Change Photo',
         createAccount: 'Create Account',
         reauthenticate: 'Verify Password',
+        acceptTerms: 'Get Started',
       },
       messages: {
         passwordChanged: 'Password updated',
         emailChanged: 'Email updated'
+      },
+      pages: {
+        signup: 'Signup',
+        login: 'Login',
+        terms: 'Terms of Use',
+        account: 'Account',
       }
     },
     resources: {

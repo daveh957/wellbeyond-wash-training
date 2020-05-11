@@ -29,6 +29,7 @@ interface OwnProps extends RouteComponentProps {}
 
 interface StateProps {
   isLoggedIn?: boolean;
+  acceptedTerms?: boolean;
   loginError?: any;
 }
 
@@ -38,7 +39,7 @@ interface DispatchProps {
 
 interface SignupProps extends OwnProps, StateProps, DispatchProps { }
 
-const Signup: React.FC<SignupProps> = ({registerUser, isLoggedIn, loginError}) => {
+const Signup: React.FC<SignupProps> = ({registerUser, isLoggedIn, acceptedTerms, loginError}) => {
 
   const [formValues, setFormValues] = useState<any>({
     name: '',
@@ -82,14 +83,18 @@ const Signup: React.FC<SignupProps> = ({registerUser, isLoggedIn, loginError}) =
     }
   };
 
-  return isLoggedIn ? <Redirect to="/tabs" /> : (
+  if (isLoggedIn) {
+    return <Redirect to={acceptedTerms ? '/tabs' : '/terms'} />
+  }
+
+  return (
     <IonPage id="signup-page">
       <IonHeader>
         <IonToolbar>
           <IonButtons slot="start">
             <IonMenuButton></IonMenuButton>
           </IonButtons>
-          <IonTitle>Signup</IonTitle>
+          <IonTitle>{t('registration.pages.signup')}</IonTitle>
         </IonToolbar>
       </IonHeader>
       <IonContent>
@@ -190,6 +195,7 @@ export default connect<OwnProps, {}, DispatchProps>({
   },
   mapStateToProps: (state) => ({
     isLoggedIn: state.user.isLoggedIn,
+    acceptedTerms: state.user.acceptedTerms,
     loginError: state.user.loginError
   }),
   component: Signup

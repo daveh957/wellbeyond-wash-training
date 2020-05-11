@@ -193,7 +193,7 @@ export const updateEmail = async (email: string) => {
     });
 };
 
-export const updateProfile = async (profile: {name?: string, organization?: string, photoURL?: string}) => {
+export const updateProfile = async (profile: {name?: string, organization?: string, photoURL?: string, acceptedTerms?: boolean}) => {
   let user = firebase.auth().currentUser;
   if (!user || !user.uid) {
     return null;
@@ -201,19 +201,27 @@ export const updateProfile = async (profile: {name?: string, organization?: stri
   return user
     .updateProfile({displayName: profile.name, photoURL: profile.photoURL})
     .then(() => {
-      if (!profile.organization) {
+      if (!profile.organization && ! profile.acceptedTerms) {
         return user;
+      }
+      let update = {
+        email: (user && user.email),
+        name: profile.name || (user && user.displayName)
+      }
+      if (profile.organization) {
+        // @ts-ignore
+        update.organization = profile.organization;
+      }
+      if (profile.acceptedTerms) {
+        // @ts-ignore
+        update.acceptedTerms = profile.acceptedTerms;
       }
       return firebase
         .firestore()
         .collection("users")
         // @ts-ignore
         .doc(user.uid)
-        .set({
-          email: (user && user.email),
-          name: profile.name || (user && user.displayName),
-          organization: profile.organization
-        }, {merge: true})
+        .set(update, {merge: true})
         .then(() => {
           return user;
         });

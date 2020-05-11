@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   IonButton,
   IonButtons,
@@ -28,6 +28,7 @@ interface OwnProps extends RouteComponentProps {}
 
 interface StateProps {
   isLoggedIn?: boolean;
+  acceptedTerms?: boolean;
   loginError?: any;
 }
 
@@ -37,13 +38,21 @@ interface DispatchProps {
 
 interface LoginProps extends OwnProps, StateProps,  DispatchProps { }
 
-const Login: React.FC<LoginProps> = ({loginUser, isLoggedIn, loginError}) => {
+const Login: React.FC<LoginProps> = ({loginUser, isLoggedIn, acceptedTerms, loginError}) => {
 
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
+  const [username, setUsername] = useState();
+  const [password, setPassword] = useState();
   const [formSubmitted, setFormSubmitted] = useState(false);
   const [usernameError, setUsernameError] = useState(false);
   const [passwordError, setPasswordError] = useState(false);
+
+  useEffect(() => {
+    setUsername('');
+    setPassword('');
+    setFormSubmitted(false);
+    setUsernameError(false);
+    setPasswordError(false);
+  }, [isLoggedIn])
 
   const { t } = useTranslation(['translation'], {i18n} );
 
@@ -62,14 +71,18 @@ const Login: React.FC<LoginProps> = ({loginUser, isLoggedIn, loginError}) => {
     }
   };
 
-  return isLoggedIn ? <Redirect to="/tabs" /> : (
+  if (isLoggedIn) {
+    return <Redirect to={acceptedTerms ? '/tabs' : '/terms'} />
+  }
+
+  return (
     <IonPage id="login-page">
       <IonHeader>
         <IonToolbar>
           <IonButtons slot="start">
             <IonMenuButton></IonMenuButton>
           </IonButtons>
-          <IonTitle>Login</IonTitle>
+          <IonTitle>{t('registration.pages.login')}</IonTitle>
         </IonToolbar>
       </IonHeader>
       <IonContent>
@@ -134,6 +147,7 @@ export default connect<OwnProps, {}, DispatchProps>({
   },
   mapStateToProps: (state) => ({
     isLoggedIn: state.user.isLoggedIn,
+    acceptedTerms: state.user.acceptedTerms,
     loginError: state.user.loginError
   }),
   component: Login

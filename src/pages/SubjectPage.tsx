@@ -28,7 +28,6 @@ interface OwnProps extends RouteComponentProps {
 }
 
 interface StateProps {
-  isLoggedIn?: boolean;
   trainerMode: boolean;
   userLessons?: UserLessons;
 }
@@ -42,7 +41,7 @@ interface DispatchProps { }
 
 interface SubjectProps extends OwnProps, StateProps, DispatchProps { }
 
-const SubjectPage: React.FC<SubjectProps> = ({ subject, lessons, userLessons, isLoggedIn, trainerMode}) => {
+const SubjectPage: React.FC<SubjectProps> = ({ subject, lessons, userLessons, trainerMode}) => {
 
   const { t } = useTranslation(['translation'], {i18n} );
   const [lessonFlags, setLessonFlags] = useState<LessonFlags[]>();
@@ -58,10 +57,6 @@ const SubjectPage: React.FC<SubjectProps> = ({ subject, lessons, userLessons, is
       setLessonFlags(flags);
     }
   }, [lessons, userLessons, trainerMode]);
-
-  if (isLoggedIn === false) {
-    return <Redirect to="/login" />
-  }
 
   return (
     <IonPage id="lesson-list">
@@ -103,7 +98,6 @@ export default connect<OwnProps, StateProps, DispatchProps>({
     subject: selectors.getSubject(state, ownProps),
     lessons: selectors.getSubjectLessons(state, ownProps),
     userLessons: state.user.lessons,
-    isLoggedIn: state.user.isLoggedIn,
     trainerMode: state.user.trainerMode
   }),
   component: SubjectPage

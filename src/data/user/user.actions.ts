@@ -24,11 +24,21 @@ const setLoginError = (error: any) => {
 export const loadUserData = () => async (dispatch: React.Dispatch<any>) => {
   dispatch(setLoading(true));
   const data = await getUserProfile();
-  // @ts-ignore
-  dispatch(setData(data));
-  const lessons = await getUserLessons();
-  dispatch(setUserLessons(lessons|| {}));
+  if (data) {
+    // @ts-ignore
+    dispatch(setData(data));
+    const lessons = await getUserLessons();
+    dispatch(setUserLessons(lessons || {}));
+  }
+  else {
+    dispatch(resetData());
+  }
   dispatch(setLoading(false));
+}
+
+export const acceptTerms = () => async (dispatch: React.Dispatch<any>) => {
+  dispatch(setAcceptedTerms(true));
+  updateProfile({acceptedTerms: true}); // Don't wait for it to complete since we have offline support
 }
 
 export const updateLesson = (lesson: UserLesson) => async (dispatch: React.Dispatch<any>) => {
@@ -44,6 +54,10 @@ export const setLoading = (isLoading: boolean) => ({
 export const setData = (data: Partial<UserState>) => ({
   type: 'set-user-data',
   data
+} as const);
+
+export const resetData = () => ({
+  type: 'reset-user-data'
 } as const);
 
 export const setIsLoggedIn = (loggedIn: boolean) => {
@@ -85,8 +99,10 @@ export const registerUser = ({name, email, password, organization}:Registration)
 };
 
 export const logoutUser = () => async (dispatch: React.Dispatch<any>) => {
-  await logout();
-  dispatch(loadUserData());
+  logout();
+  dispatch(setIsLoggedIn(false));
+  dispatch(setAcceptedTerms(false));
+  dispatch(resetData());
 };
 
 export const reauthenticate = (password: string) => async (dispatch: React.Dispatch<any>) => {
@@ -149,6 +165,7 @@ export const setUserLesson = (lesson: UserLesson) => ({
 export type UserActions =
   | ActionType<typeof setLoading>
   | ActionType<typeof setData>
+  | ActionType<typeof resetData>
   | ActionType<typeof setIsLoggedIn>
   | ActionType<typeof setLoginError>
   | ActionType<typeof setDarkMode>

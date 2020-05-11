@@ -37,7 +37,6 @@ interface OwnProps extends RouteComponentProps {
 }
 
 interface StateProps {
-  isLoggedIn?: boolean,
   trainerMode?: boolean,
   userLesson: UserLesson
 }
@@ -49,7 +48,7 @@ interface DispatchProps {
 
 interface LessonIntroProps extends OwnProps, StateProps, DispatchProps {}
 
-const LessonIntroPage: React.FC<LessonIntroProps> = ({ subject,lesson, userLesson, isLoggedIn, trainerMode, updateLesson }) => {
+const LessonIntroPage: React.FC<LessonIntroProps> = ({ subject,lesson, userLesson, trainerMode, updateLesson }) => {
 
   const { t } = useTranslation(['translation'], {i18n} );
   const [lessonIcon, setLessonIcon] = useState();
@@ -61,7 +60,7 @@ const LessonIntroPage: React.FC<LessonIntroProps> = ({ subject,lesson, userLesso
   },[lesson]);
 
   useEffect(() => {
-    if (isLoggedIn && lesson && userLesson) {
+    if (lesson && userLesson) {
       if (!userLesson.started) {
         userLesson.started = new Date();
         if (trainerMode) { // Only update the DB if not in trainer mode
@@ -82,11 +81,7 @@ const LessonIntroPage: React.FC<LessonIntroProps> = ({ subject,lesson, userLesso
         setNextUrl(firstQuestion);
       }
     }
-  },[isLoggedIn, lesson, userLesson, trainerMode])
-
-  if (isLoggedIn === false) {
-    return <Redirect to="/login" />
-  }
+  },[lesson, userLesson, trainerMode])
 
   return (
     <IonPage id="lesson-intro">
@@ -138,7 +133,6 @@ export default connect({
     subject: selectors.getSubject(state, ownProps),
     lesson: selectors.getLesson(state, ownProps),
     userLesson: selectors.getUserLesson(state, ownProps),
-    isLoggedIn: state.user.isLoggedIn,
     trainerMode: state.user.trainerMode
   }),
   component: LessonIntroPage

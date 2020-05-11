@@ -35,7 +35,6 @@ interface OwnProps extends RouteComponentProps {
 }
 
 interface StateProps {
-  isLoggedIn?: boolean,
   trainerMode?: boolean,
   userLesson: UserLesson
 }
@@ -45,7 +44,7 @@ interface DispatchProps {
 
 interface LessonSummaryProps extends OwnProps, StateProps, DispatchProps {}
 
-const LessonSummaryPage: React.FC<LessonSummaryProps> = ({ subject, lesson, userLesson, isLoggedIn, trainerMode }) => {
+const LessonSummaryPage: React.FC<LessonSummaryProps> = ({ subject, lesson, userLesson, trainerMode }) => {
 
   const { t } = useTranslation(['translation'], {i18n} );
   const [lessonIcon, setLessonIcon] = useState();
@@ -53,17 +52,13 @@ const LessonSummaryPage: React.FC<LessonSummaryProps> = ({ subject, lesson, user
   const [prevUrl, setPrevUrl] = useState();
 
   useEffect(() => {
-    if (isLoggedIn && lesson && userLesson) {
+    if (lesson && userLesson) {
       const lastPage = ('/tabs/subjects/' + subject.id + '/lessons/' + lesson.id) + (lesson.pages && lesson.pages.length ?  + ('/page/' + lesson.pages.length) : '/intro');
       const lastQuestion = lesson.questions && lesson.questions.length ? ('/tabs/subjects/' + subject.id + '/lessons/' + lesson.id + '/question') : lastPage;
       setPrevUrl(lastQuestion);
       setNextUrl('/tabs/subjects/' + subject.id);
     }
-  },[isLoggedIn, lesson, userLesson, trainerMode])
-
-  if (isLoggedIn === false) {
-    return <Redirect to="/login" />
-  }
+  },[lesson, userLesson, trainerMode])
 
   return (
     <IonPage id="lesson-summary">
@@ -105,7 +100,6 @@ export default connect({
     subject: selectors.getSubject(state, ownProps),
     lesson: selectors.getLesson(state, ownProps),
     userLesson: selectors.getUserLesson(state, ownProps),
-    isLoggedIn: state.user.isLoggedIn,
     trainerMode: state.user.trainerMode
   }),
   component: LessonSummaryPage

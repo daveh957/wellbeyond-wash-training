@@ -35,6 +35,7 @@ import { AppContextProvider } from './data/AppContext';
 import { loadUserData, logoutUser, setIsLoggedIn } from './data/user/user.actions';
 import { loadLessonData } from './data/training/training.actions';
 import { authCheck } from './data/user/userApi';
+import AcceptTerms from './pages/AcceptTerms';
 import Account from './pages/Account';
 import Login from './pages/Login';
 import Signup from './pages/Signup';
@@ -55,6 +56,7 @@ const App: React.FC = () => {
 interface StateProps {
   darkMode: boolean;
   isLoggedIn?: boolean;
+  acceptedTerms: boolean;
   loading: boolean;
 }
 
@@ -86,7 +88,7 @@ if (!firebase.apps.length) {
     });
 }
 
-const IonicApp: React.FC<IonicAppProps> = ({ darkMode, isLoggedIn, loading, loadLessonData, loadUserData, logoutUser, setIsLoggedIn}) => {
+const IonicApp: React.FC<IonicAppProps> = ({ darkMode, isLoggedIn, acceptedTerms, loading, loadLessonData, loadUserData, logoutUser, setIsLoggedIn}) => {
 
   const { t } = useTranslation(['translation'], {i18n} );
   const [intercomUser, setIntercomUser] = useState()
@@ -96,8 +98,8 @@ const IonicApp: React.FC<IonicAppProps> = ({ darkMode, isLoggedIn, loading, load
     firebase.auth().onAuthStateChanged(async user => {
       if (user != null) {
         console.log("We are authenticated now!");
-        loadLessonData();
         setIsLoggedIn(true);
+        loadUserData();
         getUserIdHash().then(function(result) {
           setIntercomUser({
             user_id: user.uid,
@@ -110,10 +112,11 @@ const IonicApp: React.FC<IonicAppProps> = ({ darkMode, isLoggedIn, loading, load
       } else {
         console.log("We did not authenticate.");
         setIsLoggedIn(false);
+        loadUserData();
         setIntercomUser(undefined);
       }
-      loadUserData();
     });
+    loadLessonData();
   }, []);
 
   // @ts-ignore
@@ -125,6 +128,7 @@ const IonicApp: React.FC<IonicAppProps> = ({ darkMode, isLoggedIn, loading, load
             <IonRouterOutlet id="main">
               <Route path="/tabs" component={MainTabs} />
               <Route path="/account" component={Account} />
+              <Route path="/terms" component={AcceptTerms} />
               <Route path="/login" component={Login} />
               <Route path="/signup" component={Signup} />
               <Route path="/support" component={Support} />
@@ -154,6 +158,7 @@ const IonicAppConnected = connect<{}, StateProps, DispatchProps>({
   mapStateToProps: (state) => ({
     darkMode: state.user.darkMode,
     isLoggedIn: state.user.isLoggedIn,
+    acceptedTerms: state.user.acceptedTerms,
     loading: state.user.loading
   }),
   // @ts-ignore

@@ -45,7 +45,6 @@ interface OwnProps extends RouteComponentProps {
 }
 
 interface StateProps {
-  isLoggedIn?: boolean,
   trainerMode?: boolean,
   userLesson: UserLesson
 }
@@ -57,7 +56,7 @@ interface DispatchProps {
 
 interface QuestionPageProps extends OwnProps, StateProps, DispatchProps {}
 
-const QuestionPreviewPage: React.FC<QuestionPageProps> = ({ subject, lesson, question, idx, userLesson, isLoggedIn, trainerMode, updateLesson, setUserLesson }) => {
+const QuestionPreviewPage: React.FC<QuestionPageProps> = ({ subject, lesson, question, idx, userLesson, trainerMode, updateLesson, setUserLesson }) => {
 
   const {navigate} = useContext(NavContext);
   const { t } = useTranslation(['translation'], {i18n} );
@@ -81,7 +80,7 @@ const QuestionPreviewPage: React.FC<QuestionPageProps> = ({ subject, lesson, que
   },[userLesson, question]);
 
   useEffect(() => {
-    if (isLoggedIn && lesson) {
+    if (lesson) {
       const path = '/tabs/subjects/' + subject.id + '/lessons/' + lesson.id;
       const prev = idx - 1;
       const next = idx + 1;
@@ -103,7 +102,7 @@ const QuestionPreviewPage: React.FC<QuestionPageProps> = ({ subject, lesson, que
         setNextUrl(path + '/preview/' + (next+1));
       }
     }
-  },[isLoggedIn, subject, lesson, idx])
+  },[subject, lesson, idx])
 
   const handleAnswer = (value:(string|number|undefined)) => {
     setAnswer(value);
@@ -133,10 +132,6 @@ const QuestionPreviewPage: React.FC<QuestionPageProps> = ({ subject, lesson, que
       }
     }
     navigate(nextUrl, 'forward');
-  }
-
-  if (isLoggedIn === false) {
-    return <Redirect to="/login" />
   }
 
   return (
@@ -223,7 +218,6 @@ export default connect({
     question: selectors.getQuestion(state, ownProps),
     idx: selectors.getQuestionIdx(state, ownProps),
     userLesson: selectors.getUserLesson(state, ownProps),
-    isLoggedIn: state.user.isLoggedIn,
     trainerMode: state.user.trainerMode
   }),
   component: QuestionPreviewPage

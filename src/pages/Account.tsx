@@ -91,7 +91,7 @@ const Account: React.FC<AccountProps> = ({ name, email, photoURL, organization, 
           <IonButtons slot="start">
             <IonMenuButton></IonMenuButton>
           </IonButtons>
-          <IonTitle>Account</IonTitle>
+          <IonTitle>{t('registration.pages.account')}</IonTitle>
         </IonToolbar>
       </IonHeader>
       <IonContent>

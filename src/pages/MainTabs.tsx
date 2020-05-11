@@ -1,6 +1,6 @@
 import React from 'react';
 import {IonRouterOutlet} from '@ionic/react';
-import {Redirect, Route} from 'react-router';
+import {Redirect, Route, RouteComponentProps} from 'react-router';
 import TrainingPage from './TrainingPage';
 import SubjectPage from './SubjectPage';
 import LessonIntroPage from './LessonIntroPage';
@@ -8,10 +8,29 @@ import LessonSummaryPage from './LessonSummaryPage';
 import LessonPage from './LessonPage';
 import QuestionPage from './QuestionPage';
 import QuestionPreviewPage from './QuestionPreviewPage';
+import {connect} from "../data/connect";
+import * as selectors from "../data/selectors";
+import {Lesson, Subject} from "../models/Training";
+import {UserLessons} from "../data/user/user.state";
 
-interface MainTabsProps { }
+interface OwnProps {}
 
-const MainTabs: React.FC<MainTabsProps> = () => {
+interface StateProps {
+  isLoggedIn?: boolean;
+  acceptedTerms?: boolean;
+}
+
+interface DispatchProps { }
+
+interface MainTabsProps extends OwnProps, StateProps, DispatchProps { }
+
+const MainTabs: React.FC<MainTabsProps> = ({isLoggedIn, acceptedTerms}) => {
+
+  if (!isLoggedIn || !acceptedTerms) {
+    return (
+        <Redirect path="/tabs" to={isLoggedIn ? '/terms' :'/login'} />
+    )
+  }
 
   return (
       <IonRouterOutlet>
@@ -32,4 +51,11 @@ const MainTabs: React.FC<MainTabsProps> = () => {
   );
 };
 
-export default MainTabs;
+export default connect<OwnProps, StateProps, DispatchProps>({
+  mapStateToProps: (state, ownProps) => ({
+    isLoggedIn: state.user.isLoggedIn,
+    acceptedTerms: state.user.acceptedTerms,
+  }),
+  component: MainTabs
+});
+
