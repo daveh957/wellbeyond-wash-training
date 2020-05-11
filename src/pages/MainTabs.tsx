@@ -1,5 +1,5 @@
 import React from 'react';
-import {IonRouterOutlet} from '@ionic/react';
+import {IonContent, IonLoading, IonRouterOutlet} from '@ionic/react';
 import {Redirect, Route, RouteComponentProps} from 'react-router';
 import TrainingPage from './TrainingPage';
 import SubjectPage from './SubjectPage';
@@ -12,6 +12,8 @@ import {connect} from "../data/connect";
 import * as selectors from "../data/selectors";
 import {Lesson, Subject} from "../models/Training";
 import {UserLessons} from "../data/user/user.state";
+import {useTranslation} from "react-i18next";
+import i18n from "../i18n";
 
 interface OwnProps {}
 
@@ -26,10 +28,23 @@ interface MainTabsProps extends OwnProps, StateProps, DispatchProps { }
 
 const MainTabs: React.FC<MainTabsProps> = ({isLoggedIn, acceptedTerms}) => {
 
-  if (!isLoggedIn || !acceptedTerms) {
+  const { t } = useTranslation(['translation'], {i18n} );
+
+  if (typeof isLoggedIn === 'undefined' || typeof acceptedTerms === 'undefined') {
     return (
-        <Redirect path="/tabs" to={isLoggedIn ? '/terms' :'/login'} />
-    )
+      <IonContent>
+        <IonLoading
+          isOpen={true}
+          message={t('menu.pleaseWait')}
+        />
+      </IonContent>
+    );
+  }
+  if (!isLoggedIn) {
+    return <Redirect to="/login" />;
+  }
+  if (!acceptedTerms) {
+    return <Redirect to="/terms" />;
   }
 
   return (

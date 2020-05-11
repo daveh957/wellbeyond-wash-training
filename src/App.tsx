@@ -1,19 +1,16 @@
-import React, {useContext, useEffect, useState} from 'react';
-import { Redirect, Route, useHistory } from 'react-router-dom';
-import { IonApp, IonRouterOutlet, IonSplitPane, IonLoading} from '@ionic/react';
-import { IonReactRouter } from '@ionic/react-router';
+import React, {useEffect, useState} from 'react';
+import {Redirect, Route} from 'react-router-dom';
+import {IonApp, IonLoading, IonRouterOutlet, IonSplitPane} from '@ionic/react';
+import {IonReactRouter} from '@ionic/react-router';
 import Intercom from 'react-intercom';
 
 import Menu from './components/Menu';
-
 /* Core CSS required for Ionic components to work properly */
 import '@ionic/react/css/core.css';
-
 /* Basic CSS for apps built with Ionic */
 import '@ionic/react/css/normalize.css';
 import '@ionic/react/css/structure.css';
 import '@ionic/react/css/typography.css';
-
 /* Optional CSS utils that can be commented out */
 import '@ionic/react/css/padding.css';
 import '@ionic/react/css/float-elements.css';
@@ -21,27 +18,22 @@ import '@ionic/react/css/text-alignment.css';
 import '@ionic/react/css/text-transformation.css';
 import '@ionic/react/css/flex-utils.css';
 import '@ionic/react/css/display.css';
-
 /* Theme variables */
 import './theme/variables.css';
-
 /* Firebase */
 import * as firebase from 'firebase';
-import { firebaseConfig } from './FIREBASE_CONFIG';
+import {firebaseConfig} from './FIREBASE_CONFIG';
 
 import MainTabs from './pages/MainTabs';
-import { connect } from './data/connect';
-import { AppContextProvider } from './data/AppContext';
-import {loadUserData, logoutUser, setAcceptedTerms, setIsLoggedIn} from './data/user/user.actions';
-import { loadLessonData } from './data/training/training.actions';
-import { authCheck } from './data/user/userApi';
+import {connect} from './data/connect';
+import {AppContextProvider} from './data/AppContext';
+import {loadUserData, logoutUser, setIsLoggedIn} from './data/user/user.actions';
+import {loadLessonData} from './data/training/training.actions';
 import AcceptTerms from './pages/AcceptTerms';
 import Account from './pages/Account';
 import Login from './pages/Login';
 import Signup from './pages/Signup';
 import Support from './pages/Support';
-import HomeOrLogin from "./pages/HomeOrLogin";
-import { Lesson, Subject } from './models/Training';
 import {useTranslation} from "react-i18next";
 import i18n from "./i18n";
 
@@ -63,7 +55,6 @@ interface DispatchProps {
   loadUserData: typeof loadUserData;
   logoutUser: typeof logoutUser;
   setIsLoggedIn: typeof setIsLoggedIn;
-  setAcceptedTerms: typeof setAcceptedTerms;
 }
 
 interface IonicAppProps extends StateProps, DispatchProps { }
@@ -87,7 +78,7 @@ if (!firebase.apps.length) {
     });
 }
 
-const IonicApp: React.FC<IonicAppProps> = ({ darkMode, loading, loadLessonData, loadUserData, logoutUser, setIsLoggedIn, setAcceptedTerms}) => {
+const IonicApp: React.FC<IonicAppProps> = ({ darkMode, loading, loadLessonData, loadUserData, logoutUser, setIsLoggedIn}) => {
 
   const { t } = useTranslation(['translation'], {i18n} );
   const [intercomUser, setIntercomUser] = useState()
@@ -98,7 +89,6 @@ const IonicApp: React.FC<IonicAppProps> = ({ darkMode, loading, loadLessonData, 
       if (user != null) {
         console.log("We are authenticated now!");
         setIsLoggedIn(true);
-        setAcceptedTerms(undefined);
         loadUserData();
         getUserIdHash().then(function(result) {
           setIntercomUser({
@@ -112,7 +102,6 @@ const IonicApp: React.FC<IonicAppProps> = ({ darkMode, loading, loadLessonData, 
       } else {
         console.log("We did not authenticate.");
         setIsLoggedIn(false);
-        setAcceptedTerms(false);
         loadUserData();
         setIntercomUser(undefined);
       }
@@ -127,6 +116,7 @@ const IonicApp: React.FC<IonicAppProps> = ({ darkMode, loading, loadLessonData, 
           <IonSplitPane contentId="main">
             <Menu />
             <IonRouterOutlet id="main">
+              <Redirect exact path="/" to="/tabs" />
               <Route path="/tabs" component={MainTabs} />
               <Route path="/account" component={Account} />
               <Route path="/terms" component={AcceptTerms} />
@@ -137,7 +127,6 @@ const IonicApp: React.FC<IonicAppProps> = ({ darkMode, loading, loadLessonData, 
                 logoutUser();
                 return <Redirect to="/login" />
               }} />
-              <Route path="/" component={HomeOrLogin} exact />
             </IonRouterOutlet>
           </IonSplitPane>
         </IonReactRouter>
@@ -161,6 +150,6 @@ const IonicAppConnected = connect<{}, StateProps, DispatchProps>({
     loading: state.user.loading
   }),
   // @ts-ignore
-  mapDispatchToProps: { loadLessonData, loadUserData, logoutUser, setIsLoggedIn, setAcceptedTerms },
+  mapDispatchToProps: { loadLessonData, loadUserData, logoutUser, setIsLoggedIn },
   component: IonicApp
 });

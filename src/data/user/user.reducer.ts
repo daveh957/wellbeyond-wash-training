@@ -9,7 +9,7 @@ export function userReducer(state: UserState, action: UserActions): UserState {
     case 'set-user-data':
       return { ...state, ...action.data };
     case 'reset-user-data':
-      return initialState.user;
+      return {...initialState.user, isLoggedIn: false, acceptedTerms: false};
     case 'set-dark-mode':
       return { ...state, darkMode: action.darkMode };
     case 'set-trainer-mode':

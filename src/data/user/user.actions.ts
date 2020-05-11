@@ -29,6 +29,8 @@ export const loadUserData = () => async (dispatch: React.Dispatch<any>) => {
     dispatch(setData(data));
     const lessons = await getUserLessons();
     dispatch(setUserLessons(lessons || {}));
+    // @ts-ignore
+    dispatch(setAcceptedTerms(!!data.acceptedTerms));
   }
   else {
     dispatch(resetData());
