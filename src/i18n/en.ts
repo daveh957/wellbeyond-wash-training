@@ -13,6 +13,7 @@ export default {
       support: 'Support',
       darkMode: 'Dark Mode',
       trainerMode: 'Trainer Mode',
+      pleaseWait: 'Please wait...'
     },
     buttons: {
       previous: 'Prev',

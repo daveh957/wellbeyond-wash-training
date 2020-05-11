@@ -68,19 +68,22 @@ export const setIsLoggedIn = (loggedIn: boolean) => {
 };
 
 export const loginUser = (email: string, password: string) => async (dispatch: React.Dispatch<any>) => {
-  setLoginError(null);
+  dispatch(setLoginError(null));
+  dispatch(setLoading(true));
   loginWithEmail(email, password)
     .then(() => {
       dispatch(loadUserData());
     })
     .catch(error => {
+      dispatch(setLoading(false));
       dispatch(setLoginError(error));
       console.log("Error logging in:", error);
     });
 };
 
 export const registerUser = ({name, email, password, organization}:Registration) => async (dispatch: React.Dispatch<any>) => {
-  setLoginError(null);
+  dispatch(setLoginError(null));
+  dispatch(setLoading(true));
   registerWithEmail(email, password)
     .then(() => {
       updateProfile({name: name, organization: organization})
@@ -88,11 +91,13 @@ export const registerUser = ({name, email, password, organization}:Registration)
           dispatch(loadUserData());
         })
         .catch(error => {
+          dispatch(setLoading(false));
           dispatch(setLoginError(error));
           console.log("Error logging in:", error);
         });
     })
     .catch(error => {
+      dispatch(setLoading(false));
       dispatch(setLoginError(error));
       console.log("Error registering user:", error);
     });
@@ -101,7 +106,7 @@ export const registerUser = ({name, email, password, organization}:Registration)
 export const logoutUser = () => async (dispatch: React.Dispatch<any>) => {
   logout();
   dispatch(setIsLoggedIn(false));
-  dispatch(setAcceptedTerms(false));
+  dispatch(setAcceptedTerms(undefined));
   dispatch(resetData());
 };
 
@@ -147,7 +152,7 @@ export const setTrainerMode = (trainerMode: boolean) => ({
   trainerMode
 } as const);
 
-export const setAcceptedTerms = (acceptedTerms: boolean) => ({
+export const setAcceptedTerms = (acceptedTerms?: boolean) => ({
   type: 'set-accepted-terms',
   acceptedTerms
 } as const);

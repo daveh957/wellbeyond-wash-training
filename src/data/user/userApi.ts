@@ -81,7 +81,7 @@ export const getUserProfile = async () => {
           id: user ? user.uid : undefined,
           email: user ? user.email : undefined,
           name: user ? user.displayName : undefined,
-          photoURL: user ? user.photoURL : undefined,
+          photoURL: user ? user.photoURL : undefined
         };
       } else {
         // doc.data() will be undefined in this case

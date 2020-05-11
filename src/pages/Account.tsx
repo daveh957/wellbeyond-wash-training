@@ -105,7 +105,7 @@ const Account: React.FC<AccountProps> = ({ name, email, photoURL, organization, 
       </IonHeader>
       <IonContent>
           <div className="ion-padding-top ion-text-center">
-            <img src={getGravatarUrl(email)} alt="avatar" />
+            <img src={photoURL || getGravatarUrl(email)} alt="avatar" />
             <h2>{ name }</h2>
             <h3>{ email }</h3>
             <h3>{ organization }</h3>

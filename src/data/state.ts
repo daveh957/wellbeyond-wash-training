@@ -13,8 +13,8 @@ export const initialState: AppState = {
     darkMode: false,
     trainerMode: false,
     isLoggedIn: undefined,
+    acceptedTerms: undefined,
     loading: false,
-    acceptedTerms: false,
     lessons: {}
   }
 };

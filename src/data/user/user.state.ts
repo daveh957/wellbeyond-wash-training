@@ -21,7 +21,7 @@ export interface UserState {
   darkMode: boolean;
   trainerMode: boolean;
   loading: boolean;
-  acceptedTerms: boolean;
+  acceptedTerms?: boolean;
   lessons?: UserLessons;
   changePassword?: UserAction;
   changeEmail?: UserAction;
