@@ -27,7 +27,7 @@ import {firebaseConfig} from './FIREBASE_CONFIG';
 import MainTabs from './pages/MainTabs';
 import {connect} from './data/connect';
 import {AppContextProvider} from './data/AppContext';
-import {loadUserData, logoutUser, setIsLoggedIn} from './data/user/user.actions';
+import {loadUserData, logoutUser, setAcceptedTerms, setIsLoggedIn} from './data/user/user.actions';
 import {loadLessonData} from './data/training/training.actions';
 import AcceptTerms from './pages/AcceptTerms';
 import Account from './pages/Account';
@@ -57,6 +57,7 @@ interface DispatchProps {
   loadUserData: typeof loadUserData;
   logoutUser: typeof logoutUser;
   setIsLoggedIn: typeof setIsLoggedIn;
+  setAcceptedTerms: typeof setAcceptedTerms;
 }
 
 interface IonicAppProps extends StateProps, DispatchProps { }
@@ -80,7 +81,7 @@ if (!firebase.apps.length) {
     });
 }
 
-const IonicApp: React.FC<IonicAppProps> = ({ darkMode, loading, loadLessonData, loadUserData, logoutUser, setIsLoggedIn}) => {
+const IonicApp: React.FC<IonicAppProps> = ({ darkMode, loading, loadLessonData, loadUserData, logoutUser, setIsLoggedIn, setAcceptedTerms}) => {
 
   const { t } = useTranslation(['translation'], {i18n} );
   const [intercomUser, setIntercomUser] = useState()
@@ -90,21 +91,22 @@ const IonicApp: React.FC<IonicAppProps> = ({ darkMode, loading, loadLessonData, 
     firebase.auth().onAuthStateChanged(async user => {
       if (user != null) {
         console.log("We are authenticated now!");
-        setIsLoggedIn(true);
         loadUserData();
-        getUserIdHash().then(function(result) {
-          setIntercomUser({
-            user_id: user.uid,
-            phone: user.phoneNumber || undefined,
-            email: user.email || undefined,
-            name: user.displayName || undefined,
-            user_hash: result.data.hash
+        if (process.env.NODE_ENV === 'production') {
+          getUserIdHash().then(function (result) {
+            setIntercomUser({
+              user_id: user.uid,
+              phone: user.phoneNumber || undefined,
+              email: user.email || undefined,
+              name: user.displayName || undefined,
+              user_hash: result.data.hash
+            });
           });
-        });
+        }
       } else {
         console.log("We did not authenticate.");
         setIsLoggedIn(false);
-        loadUserData();
+        setAcceptedTerms(false);
         setIntercomUser(undefined);
       }
     });
@@ -154,6 +156,6 @@ const IonicAppConnected = connect<{}, StateProps, DispatchProps>({
     loading: state.user.loading
   }),
   // @ts-ignore
-  mapDispatchToProps: { loadLessonData, loadUserData, logoutUser, setIsLoggedIn },
+  mapDispatchToProps: { loadLessonData, loadUserData, logoutUser, setIsLoggedIn, setAcceptedTerms },
   component: IonicApp
 });

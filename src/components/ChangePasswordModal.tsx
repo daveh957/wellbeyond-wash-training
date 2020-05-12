@@ -12,7 +12,6 @@ import {
 } from '@ionic/react';
 import {useTranslation} from "react-i18next";
 import i18n from "../i18n";
-import {changePassword, registerUser} from "../data/user/user.actions";
 import {updatePassword} from "../data/user/userApi";
 import {connect} from "../data/connect";
 import {ToastProps} from "../pages/Account";

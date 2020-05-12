@@ -9,7 +9,10 @@ export function userReducer(state: UserState, action: UserActions): UserState {
     case 'set-user-data':
       return { ...state, ...action.data };
     case 'reset-user-data':
-      return {...initialState.user, isLoggedIn: false, acceptedTerms: false};
+      let newState = {...initialState.user};
+      newState.isLoggedIn = false;
+      newState.acceptedTerms = false;
+      return newState;
     case 'set-dark-mode':
       return { ...state, darkMode: action.darkMode };
     case 'set-trainer-mode':

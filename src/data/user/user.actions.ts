@@ -3,7 +3,6 @@ import {
   logout,
   getUserProfile,
   getUserLessons,
-  registerWithEmail,
   updateProfile,
   updateEmail,
   updatePassword,
@@ -25,15 +24,14 @@ export const loadUserData = () => async (dispatch: React.Dispatch<any>) => {
   dispatch(setLoading(true));
   const data = await getUserProfile();
   if (data) {
+    dispatch(setIsLoggedIn(true));
+    // @ts-ignore
+    data.acceptedTerms = !!data.acceptedTerms;
     // @ts-ignore
     dispatch(setData(data));
     const lessons = await getUserLessons();
     dispatch(setUserLessons(lessons || {}));
     // @ts-ignore
-    dispatch(setAcceptedTerms(!!data.acceptedTerms));
-  }
-  else {
-    dispatch(resetData());
   }
   dispatch(setLoading(false));
 }
@@ -69,46 +67,8 @@ export const setIsLoggedIn = (loggedIn: boolean) => {
   } as const)
 };
 
-export const loginUser = (email: string, password: string) => async (dispatch: React.Dispatch<any>) => {
-  dispatch(setLoginError(null));
-  dispatch(setLoading(true));
-  loginWithEmail(email, password)
-    .then(() => {
-      dispatch(loadUserData());
-    })
-    .catch(error => {
-      dispatch(setLoading(false));
-      dispatch(setLoginError(error));
-      console.log("Error logging in:", error);
-    });
-};
-
-export const registerUser = ({name, email, password, organization}:Registration) => async (dispatch: React.Dispatch<any>) => {
-  dispatch(setLoginError(null));
-  dispatch(setLoading(true));
-  registerWithEmail(email, password)
-    .then(() => {
-      updateProfile({name: name, organization: organization})
-        .then(() => {
-          dispatch(loadUserData());
-        })
-        .catch(error => {
-          dispatch(setLoading(false));
-          dispatch(setLoginError(error));
-          console.log("Error logging in:", error);
-        });
-    })
-    .catch(error => {
-      dispatch(setLoading(false));
-      dispatch(setLoginError(error));
-      console.log("Error registering user:", error);
-    });
-};
-
 export const logoutUser = () => async (dispatch: React.Dispatch<any>) => {
   logout();
-  dispatch(setIsLoggedIn(false));
-  dispatch(setAcceptedTerms(undefined));
   dispatch(resetData());
 };
 
@@ -120,29 +80,6 @@ export const reauthenticate = (password: string) => async (dispatch: React.Dispa
       console.log("Error reauthenticating:", error);
     });
 };
-
-export const changeEmail = (email: string) => async (dispatch: React.Dispatch<any>) => {
-  dispatch(setData({changeEmail: {status: 'started'}}));
-  updateEmail(email).then((result) => {
-    dispatch(setData({changeEmail: {status: 'succeeded', result: result}}));
-    })
-    .catch(error => {
-      dispatch(setData({changeEmail: {status: 'failed', error: error}}));
-      console.log("Error updating password:", error);
-    });
-};
-
-export const changePassword = (password: string) => async (dispatch: React.Dispatch<any>) => {
-  dispatch(setData({changePassword: {status: 'started'}}));
-  updatePassword(password).then((result) => {
-    dispatch(setData({changePassword: {status: 'succeeded', result: result}}));
-  })
-    .catch(error => {
-      dispatch(setData({changePassword: {status: 'failed', error: error}}));
-      console.log("Error updating password:", error);
-    });
-};
-
 
 export const setDarkMode = (darkMode: boolean) => ({
   type: 'set-dark-mode',

@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useContext, useState} from 'react';
 import {
   IonButton,
   IonButtons,
@@ -14,32 +14,36 @@ import {
   IonRow,
   IonText,
   IonTitle,
-  IonToolbar
+  IonToolbar, NavContext
 } from '@ionic/react';
 import './Login.scss';
 import {useTranslation} from "react-i18next";
 import i18n from '../i18n';
 import {connect} from '../data/connect';
 import {RouteComponentProps} from 'react-router';
-import {registerUser} from "../data/user/user.actions";
 import {Registration} from "../models/User";
 import {Redirect} from "react-router-dom";
+import {registerWithEmail, updateProfile} from "../data/user/userApi";
+import {setIsLoggedIn, setLoading, loadUserData} from "../data/user/user.actions";
 
 interface OwnProps extends RouteComponentProps {}
 
 interface StateProps {
   isLoggedIn?: boolean;
-  acceptedTerms?: boolean;
-  loginError?: any;
 }
 
 interface DispatchProps {
-  registerUser: typeof registerUser;
+  setLoading: typeof setLoading;
+  setIsLoggedIn: typeof setIsLoggedIn;
+  loadUserData: typeof loadUserData;
 }
 
 interface SignupProps extends OwnProps, StateProps, DispatchProps { }
 
-const Signup: React.FC<SignupProps> = ({registerUser, isLoggedIn, acceptedTerms, loginError}) => {
+const Signup: React.FC<SignupProps> = ({isLoggedIn,  setLoading, setIsLoggedIn}) => {
+
+  const { t } = useTranslation(['translation'], {i18n} );
+  const {navigate} = useContext(NavContext);
 
   const [formValues, setFormValues] = useState<any>({
     name: '',
@@ -48,10 +52,9 @@ const Signup: React.FC<SignupProps> = ({registerUser, isLoggedIn, acceptedTerms,
     passwordRepeat: '',
     organization: ''
   });
-
   const [formErrors, setFormErrors] = useState<any>({});
-
   const [formSubmitted, setFormSubmitted] = useState(false);
+  const [serverError, setServerError] = useState<Error>();
 
   const handleChange = (field:string, value:string) => {
     let errors = {...formErrors};
@@ -73,18 +76,34 @@ const Signup: React.FC<SignupProps> = ({registerUser, isLoggedIn, acceptedTerms,
   }
   const sanitizeFormValues = ({ passwordRepeat, ...registration }:any):Registration => registration as Registration;
 
-  const { t } = useTranslation(['translation'], {i18n} );
-
   const signup = async (e: React.FormEvent) => {
     e.preventDefault();
     setFormSubmitted(true);
     if(validate()) {
-      registerUser(sanitizeFormValues(formValues));
+      setLoading(true);
+      registerWithEmail(formValues.email, formValues.password)
+        .then(() => {
+          updateProfile({name: formValues.name, organization: formValues.organization})
+            .then(() => {
+              setLoading(false);
+              setIsLoggedIn(true);
+              navigate('/terms', 'forward');
+              loadUserData();
+            })
+            .catch(error => {
+              setLoading(false);
+              setServerError(error);
+            });
+        })
+        .catch(error => {
+          setLoading(false);
+          setServerError(error);
+        });
     }
   };
 
   if (isLoggedIn) {
-    return <Redirect to={acceptedTerms ? '/tabs' : '/terms'} />
+    return <Redirect to={'/terms'} />
   }
 
   return (
@@ -170,9 +189,9 @@ const Signup: React.FC<SignupProps> = ({registerUser, isLoggedIn, acceptedTerms,
             </IonItem>
           </IonList>
 
-          {formSubmitted && loginError && <IonText color="danger">
+          {formSubmitted && serverError && <IonText color="danger">
             <p className="ion-padding-start">
-              {loginError.message}
+              {serverError.message}
             </p>
           </IonText>}
 
@@ -191,12 +210,13 @@ const Signup: React.FC<SignupProps> = ({registerUser, isLoggedIn, acceptedTerms,
 
 export default connect<OwnProps, {}, DispatchProps>({
   mapDispatchToProps: {
-    registerUser,
+    setLoading,
+    setIsLoggedIn,
+    loadUserData
   },
   mapStateToProps: (state) => ({
     isLoggedIn: state.user.isLoggedIn,
     acceptedTerms: state.user.acceptedTerms,
-    loginError: state.user.loginError
   }),
   component: Signup
 })

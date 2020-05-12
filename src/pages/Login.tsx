@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useContext} from 'react';
 import {
   IonButton,
   IonButtons,
@@ -14,37 +14,43 @@ import {
   IonRow,
   IonText,
   IonTitle,
-  IonToolbar
+  IonToolbar, NavContext
 } from '@ionic/react';
 import './Login.scss';
-import {loginUser} from '../data/user/user.actions';
+import {setAcceptedTerms, setData, setIsLoggedIn, setLoading} from '../data/user/user.actions';
 import {connect} from '../data/connect';
 import {RouteComponentProps} from 'react-router';
 import {useTranslation} from "react-i18next";
 import i18n from "../i18n";
 import {Redirect} from "react-router-dom";
+import {getUserProfile, loginWithEmail} from "../data/user/userApi";
 
 interface OwnProps extends RouteComponentProps {}
 
 interface StateProps {
   isLoggedIn?: boolean;
   acceptedTerms?: boolean;
-  loginError?: any;
 }
 
 interface DispatchProps {
-  loginUser: typeof loginUser;
+  setLoading: typeof setLoading;
+  setIsLoggedIn: typeof setIsLoggedIn;
+  setAcceptedTerms: typeof setAcceptedTerms;
 }
 
 interface LoginProps extends OwnProps, StateProps,  DispatchProps { }
 
-const Login: React.FC<LoginProps> = ({loginUser, isLoggedIn, acceptedTerms, loginError}) => {
+const Login: React.FC<LoginProps> = ({isLoggedIn, acceptedTerms, setLoading, setIsLoggedIn, setAcceptedTerms}) => {
+
+  const { t } = useTranslation(['translation'], {i18n} );
+  const {navigate} = useContext(NavContext);
 
   const [username, setUsername] = useState();
   const [password, setPassword] = useState();
   const [formSubmitted, setFormSubmitted] = useState(false);
   const [usernameError, setUsernameError] = useState(false);
   const [passwordError, setPasswordError] = useState(false);
+  const [serverError, setServerError] = useState<Error>();
 
   useEffect(() => {
     setUsername('');
@@ -54,7 +60,6 @@ const Login: React.FC<LoginProps> = ({loginUser, isLoggedIn, acceptedTerms, logi
     setPasswordError(false);
   }, [isLoggedIn])
 
-  const { t } = useTranslation(['translation'], {i18n} );
 
   const login = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -65,9 +70,23 @@ const Login: React.FC<LoginProps> = ({loginUser, isLoggedIn, acceptedTerms, logi
     if(!password) {
       setPasswordError(true);
     }
-
     if(username && password) {
-      loginUser(username, password);
+      setLoading(true);
+      loginWithEmail(username, password)
+        .then(() => {
+          getUserProfile().then((data) => {
+            setLoading(false);
+            setIsLoggedIn(true);
+            // @ts-ignore
+            const acceptedTerms = !!(data && data.acceptedTerms);
+            setAcceptedTerms(acceptedTerms);
+            navigate(acceptedTerms ? '/tabs' : '/terms');
+          });
+        })
+        .catch(error => {
+          setLoading(false);
+          setServerError(error);
+        });
     }
   };
 
@@ -119,9 +138,9 @@ const Login: React.FC<LoginProps> = ({loginUser, isLoggedIn, acceptedTerms, logi
             </IonText>}
           </IonList>
 
-          {formSubmitted && loginError && <IonText color="danger">
+          {formSubmitted && serverError && <IonText color="danger">
             <p className="ion-padding-start">
-              {loginError.message}
+              {serverError.message}
             </p>
           </IonText>}
 
@@ -143,12 +162,13 @@ const Login: React.FC<LoginProps> = ({loginUser, isLoggedIn, acceptedTerms, logi
 
 export default connect<OwnProps, {}, DispatchProps>({
   mapDispatchToProps: {
-    loginUser
+    setLoading,
+    setIsLoggedIn,
+    setAcceptedTerms,
   },
   mapStateToProps: (state) => ({
     isLoggedIn: state.user.isLoggedIn,
     acceptedTerms: state.user.acceptedTerms,
-    loginError: state.user.loginError
   }),
   component: Login
 })

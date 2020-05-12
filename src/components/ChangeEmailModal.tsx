@@ -13,7 +13,6 @@ import {
 import {useTranslation} from "react-i18next";
 import i18n from "../i18n";
 import {setData} from "../data/user/user.actions";
-import {changeEmail} from "../data/user/user.actions";
 import {connect} from "../data/connect";
 import {updateEmail} from "../data/user/userApi";
 import {ToastProps} from "../pages/Account";
