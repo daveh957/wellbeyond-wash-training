@@ -1,14 +1,16 @@
 import React, {useEffect, useState} from 'react';
 import {
   IonButton,
-  IonButtons, IonCard, IonCardContent, IonCheckbox,
+  IonButtons,
+  IonCard,
+  IonCardContent,
+  IonCheckbox,
   IonCol,
   IonContent,
   IonHeader,
-  IonInput,
   IonItem,
   IonLabel,
-  IonList, IonListHeader,
+  IonList,
   IonMenuButton,
   IonPage,
   IonRow,
@@ -24,6 +26,7 @@ import {RouteComponentProps} from 'react-router';
 import {acceptTerms} from "../data/user/user.actions";
 import {Redirect} from "react-router-dom";
 import TermsOfService from "../components/TermsOfService";
+
 interface OwnProps extends RouteComponentProps {}
 
 interface StateProps {

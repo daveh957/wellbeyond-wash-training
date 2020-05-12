@@ -25,26 +25,28 @@ import i18n from '../i18n';
 import {connect} from '../data/connect';
 import * as selectors from '../data/selectors';
 
-import {Lesson, Subject} from '../models/Training';
-import {UserLesson} from '../models/User';
-import {Redirect} from "react-router-dom";
+import {Lesson, LessonProgress, Subject, TrainingSession} from '../models/Training';
+import {updateUserLesson} from "../data/user/user.actions";
+import {updateTrainingLesson} from "../data/training/training.actions";
 
 interface OwnProps extends RouteComponentProps {
   subject: Subject;
   lesson: Lesson;
+  lessonProgress: LessonProgress;
 }
 
 interface StateProps {
-  trainerMode?: boolean,
-  userLesson: UserLesson
+  activeSession?: TrainingSession;
 }
 
 interface DispatchProps {
+  updateUserLesson: typeof updateUserLesson;
+  updateTrainingLesson: typeof updateTrainingLesson;
 }
 
 interface LessonSummaryProps extends OwnProps, StateProps, DispatchProps {}
 
-const LessonSummaryPage: React.FC<LessonSummaryProps> = ({ subject, lesson, userLesson, trainerMode }) => {
+const LessonSummaryPage: React.FC<LessonSummaryProps> = ({ subject, lesson, lessonProgress,  activeSession, updateUserLesson, updateTrainingLesson }) => {
 
   const { t } = useTranslation(['translation'], {i18n} );
   const [lessonIcon, setLessonIcon] = useState();
@@ -52,13 +54,13 @@ const LessonSummaryPage: React.FC<LessonSummaryProps> = ({ subject, lesson, user
   const [prevUrl, setPrevUrl] = useState();
 
   useEffect(() => {
-    if (lesson && userLesson) {
+    if (lesson && lessonProgress) {
       const lastPage = ('/tabs/subjects/' + subject.id + '/lessons/' + lesson.id) + (lesson.pages && lesson.pages.length ?  + ('/page/' + lesson.pages.length) : '/intro');
       const lastQuestion = lesson.questions && lesson.questions.length ? ('/tabs/subjects/' + subject.id + '/lessons/' + lesson.id + '/question') : lastPage;
       setPrevUrl(lastQuestion);
       setNextUrl('/tabs/subjects/' + subject.id);
     }
-  },[lesson, userLesson, trainerMode])
+  },[lesson, lessonProgress])
 
   return (
     <IonPage id="lesson-summary">
@@ -70,7 +72,7 @@ const LessonSummaryPage: React.FC<LessonSummaryProps> = ({ subject, lesson, user
             <IonTitle>{lesson && lesson.name}</IonTitle>
           </IonToolbar>
         </IonHeader>
-        {lesson && userLesson &&
+        {lesson && lessonProgress &&
         <IonContent fullscreen={true}>
           <IonCard className='lesson-card'>
             <IonCardHeader>
@@ -78,7 +80,7 @@ const LessonSummaryPage: React.FC<LessonSummaryProps> = ({ subject, lesson, user
               <IonCardTitle><h2>{lesson.name}</h2></IonCardTitle>
             </IonCardHeader>
             <IonCardContent className='lesson-text'>
-              <p>You have successfully completed this module and correctly answered {userLesson.score}% of the questions.</p>
+              <p>You have successfully completed this module and correctly answered {lessonProgress.score}% of the questions.</p>
             </IonCardContent>
           </IonCard>
         </IonContent>
@@ -94,13 +96,16 @@ const LessonSummaryPage: React.FC<LessonSummaryProps> = ({ subject, lesson, user
     </IonPage>);
 };
 
-
 export default connect({
+  mapDispatchToProps: {
+    updateUserLesson: updateUserLesson,
+    updateTrainingLesson: updateTrainingLesson
+  },
   mapStateToProps: (state, ownProps) => ({
     subject: selectors.getSubject(state, ownProps),
     lesson: selectors.getLesson(state, ownProps),
-    userLesson: selectors.getUserLesson(state, ownProps),
-    trainerMode: state.user.trainerMode
+    lessonProgress: selectors.getLessonProgress(state, ownProps),
+    activeSession: selectors.getActiveSession(state)
   }),
   component: LessonSummaryPage
 });

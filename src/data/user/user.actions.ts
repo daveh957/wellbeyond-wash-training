@@ -6,12 +6,13 @@ import {
   updateProfile,
   updateEmail,
   updatePassword,
-  createOrUpdateUserLesson,
-  reauthenticateWithPassword
+  reauthenticateWithPassword,
+  getUserLessons, createOrUpdateLessonProgress
 } from './userApi';
-import { ActionType } from '../../util/types';
-import { UserState, UserLessons } from './user.state';
-import { Registration, UserLesson, Answer } from '../../models/User';
+import { ActionType } from '../../util/types'
+import {UserLessons, UserState} from './user.state';
+import { Registration, Answer } from '../../models/User';
+import {LessonProgress} from "../../models/Training";
 
 const setLoginError = (error: any) => {
   return ({
@@ -39,11 +40,6 @@ export const loadUserData = () => async (dispatch: React.Dispatch<any>) => {
 export const acceptTerms = () => async (dispatch: React.Dispatch<any>) => {
   dispatch(setAcceptedTerms(true));
   updateProfile({acceptedTerms: true}); // Don't wait for it to complete since we have offline support
-}
-
-export const updateLesson = (lesson: UserLesson) => async (dispatch: React.Dispatch<any>) => {
-  dispatch(setUserLesson(lesson));
-  createOrUpdateUserLesson(lesson); // Don't wait for it to complete since we have offline support
 }
 
 export const setLoading = (isLoading: boolean) => ({
@@ -81,6 +77,11 @@ export const reauthenticate = (password: string) => async (dispatch: React.Dispa
     });
 };
 
+export const updateUserLesson = (lesson: LessonProgress) => async (dispatch: React.Dispatch<any>) => {
+  dispatch(setUserLesson(lesson));
+  createOrUpdateLessonProgress(lesson); // Don't wait for it to complete since we have offline support
+}
+
 export const setDarkMode = (darkMode: boolean) => ({
   type: 'set-dark-mode',
   darkMode
@@ -101,7 +102,7 @@ export const setUserLessons = (lessons: UserLessons) => ({
   lessons
 } as const);
 
-export const setUserLesson = (lesson: UserLesson) => ({
+export const setUserLesson = (lesson: LessonProgress) => ({
   type: 'set-user-lesson',
   lesson
 } as const);

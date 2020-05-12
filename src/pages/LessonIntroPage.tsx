@@ -25,30 +25,29 @@ import i18n from '../i18n';
 import {connect} from '../data/connect';
 import * as selectors from '../data/selectors';
 
-import {Lesson, Subject} from '../models/Training';
-import {UserLesson} from '../models/User';
-import {Redirect} from "react-router-dom";
-import {setUserLesson, updateLesson} from "../data/user/user.actions";
+import {Lesson, LessonProgress, Subject, TrainingSession} from '../models/Training';
 import {getLessonIconUrl} from "../util/cloudinary";
+import {updateUserLesson} from "../data/user/user.actions";
+import {updateTrainingLesson} from "../data/training/training.actions";
 
 interface OwnProps extends RouteComponentProps {
   subject: Subject;
   lesson: Lesson;
+  lessonProgress: LessonProgress
 }
 
 interface StateProps {
-  trainerMode?: boolean,
-  userLesson: UserLesson
+  activeSession?: TrainingSession;
 }
 
 interface DispatchProps {
-  updateLesson: typeof updateLesson;
-  setUserLesson: typeof setUserLesson;
+  updateUserLesson: typeof updateUserLesson;
+  updateTrainingLesson: typeof updateTrainingLesson;
 }
 
 interface LessonIntroProps extends OwnProps, StateProps, DispatchProps {}
 
-const LessonIntroPage: React.FC<LessonIntroProps> = ({ subject,lesson, userLesson, trainerMode, updateLesson }) => {
+const LessonIntroPage: React.FC<LessonIntroProps> = ({ subject,lesson, lessonProgress, activeSession, updateUserLesson, updateTrainingLesson }) => {
 
   const { t } = useTranslation(['translation'], {i18n} );
   const [lessonIcon, setLessonIcon] = useState();
@@ -60,28 +59,28 @@ const LessonIntroPage: React.FC<LessonIntroProps> = ({ subject,lesson, userLesso
   },[lesson]);
 
   useEffect(() => {
-    if (lesson && userLesson) {
-      if (!userLesson.started) {
-        userLesson.started = new Date();
-        if (trainerMode) { // Only update the DB if not in trainer mode
-          setUserLesson(userLesson);
+    if (lesson && lessonProgress) {
+      if (!lessonProgress.started) {
+        lessonProgress.started = new Date();
+        if (activeSession) {
+          updateTrainingLesson(activeSession, lessonProgress);
         }
         else {
-          updateLesson(userLesson);
+          updateUserLesson(lessonProgress);
         }
       }
       const firstPage = ('/tabs/subjects/' + subject.id + '/lessons/' + lesson.id) + (lesson.pages && lesson.pages.length ?  '/page/1' : '/summary');
       const firstQuestion = lesson.questions && lesson.questions.length ?
         ('/tabs/subjects/' + subject.id + '/lessons/' + lesson.id + '/preview/1' ) :
         firstPage;
-      if (userLesson.completed && !trainerMode) {
+      if (lessonProgress.completed) {
         setNextUrl(firstPage);
       }
       else {
         setNextUrl(firstQuestion);
       }
     }
-  },[lesson, userLesson, trainerMode])
+  },[lesson, lessonProgress])
 
   return (
     <IonPage id="lesson-intro">
@@ -104,7 +103,7 @@ const LessonIntroPage: React.FC<LessonIntroProps> = ({ subject,lesson, userLesso
                 <img src={lessonIcon} crossOrigin='anonymous' alt="">
                 </img>
                 <div dangerouslySetInnerHTML={{__html: lesson.description}}></div>
-                {userLesson && userLesson.completed ?
+                {lessonProgress && lessonProgress.completed ?
                   <p>{t('resources.lessons.intro.completed')}</p>
                   :
                   <p>{t('resources.lessons.intro.firsttime')} </p>
@@ -126,14 +125,14 @@ const LessonIntroPage: React.FC<LessonIntroProps> = ({ subject,lesson, userLesso
 
 export default connect({
   mapDispatchToProps: {
-    updateLesson,
-    setUserLesson
+    updateUserLesson: updateUserLesson,
+    updateTrainingLesson: updateTrainingLesson
   },
   mapStateToProps: (state, ownProps) => ({
     subject: selectors.getSubject(state, ownProps),
     lesson: selectors.getLesson(state, ownProps),
-    userLesson: selectors.getUserLesson(state, ownProps),
-    trainerMode: state.user.trainerMode
+    lessonProgress: selectors.getLessonProgress(state, ownProps),
+    activeSession: selectors.getActiveSession(state)
   }),
   component: LessonIntroPage
 });

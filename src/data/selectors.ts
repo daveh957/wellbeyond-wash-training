@@ -2,6 +2,12 @@ import { createSelector } from 'reselect';
 import { AppState } from './state';
 import { Lesson } from '../models/Training';
 
+export const getTrainingSessions = (state: AppState) => {
+  return state.data.sessions;
+}
+export const getActiveSession = (state: AppState) => {
+  return state.data.activeSession;
+}
 export const getUserLessons = (state: AppState) => {
   return state.user.lessons;
 }
@@ -14,33 +20,22 @@ export const getLessons = (state: AppState) => {
 export const getUserId = (state: AppState) => {
   return state.user.id;
 }
+export const getTrainerMode = (state: AppState) => {
+  return !!state.data.activeSession;
+}
 
 const getSubjectIdParam = (_state: AppState, props: any) => {
   return props.match.params['subjectId'];
 }
-
 const getLessonIdParam = (_state: AppState, props: any) => {
   return props.match.params['lessonId'];
 }
-
 const getPageIdParam = (_state: AppState, props: any) => {
   return props.match.params['pageId'];
 }
-
 const getQuestionIdParam = (_state: AppState, props: any) => {
   return props.match.params['questionId'];
 }
-
-const getPreviewParam = (_state: AppState, props: any) => {
-  return props.match.params['preview'];
-}
-
-export const isPreview = createSelector(
-  getPreviewParam,
-  (preview) => {
-    return preview === 'preview';
-  }
-);
 
 export const getSubject = createSelector(
   getSubjects, getSubjectIdParam,
@@ -48,14 +43,12 @@ export const getSubject = createSelector(
     return subjects.find(s => s.id === id);
   }
 );
-
 export const getLesson = createSelector(
   getLessons, getLessonIdParam,
   (lessons, id) => {
     return lessons.find(l => l.id === id);
   }
 );
-
 export const getLessonPage = createSelector(
   getLesson, getPageIdParam,
   (lesson, id) => {
@@ -63,7 +56,6 @@ export const getLessonPage = createSelector(
     return lesson && lesson.pages && lesson.pages.length > idx ? lesson.pages[idx] : undefined;
   }
 );
-
 export const getQuestion = createSelector(
   getLesson, getQuestionIdParam,
   (lesson, id) => {
@@ -88,11 +80,14 @@ export const getQuestionIdx = createSelector(
   }
 );
 
-export const getUserLesson = createSelector(
-  getUserLessons, getLessonIdParam, getUserId,
-  (lessons, id, userId) => {
-    if (lessons && id && userId) {
-      return lessons[id] || {id:userId + ':' + id, lessonId: id, answers: []}
+export const getLessonProgress = createSelector(
+  getActiveSession, getUserLessons, getLessonIdParam, getUserId,
+  (activeSession, userLessons, id, userId) => {
+    if (activeSession && id) {
+      return (activeSession && activeSession.lessons &&  activeSession.lessons[id]) || {id: id, lessonId: id, answers: []}
+    }
+    if (userLessons && id && userId) {
+      return userLessons[id] || {id:userId + ':' + id, lessonId: id, answers: []}
     }
   }
 );

@@ -1,4 +1,4 @@
-import React, {ChangeEvent, useContext, useEffect, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import {RouteComponentProps} from 'react-router';
 
 import './LessonPage.scss';
@@ -9,12 +9,21 @@ import {
   IonCard,
   IonCardContent,
   IonCardHeader,
-  IonCardSubtitle, IonCheckbox, IonCol,
+  IonCardSubtitle,
+  IonCheckbox,
+  IonCol,
   IonContent,
-  IonFooter, IonGrid,
-  IonHeader, IonItem, IonLabel, IonList, IonListHeader,
+  IonFooter,
+  IonGrid,
+  IonHeader,
+  IonItem,
+  IonLabel,
+  IonList,
+  IonListHeader,
   IonMenuButton,
-  IonPage, IonRow, IonText,
+  IonPage,
+  IonRow,
+  IonText,
   IonTitle,
   IonToolbar,
   NavContext
@@ -25,33 +34,33 @@ import i18n from '../i18n';
 import {connect} from '../data/connect';
 import * as selectors from '../data/selectors';
 
-import {Lesson, LessonPage, Subject} from '../models/Training';
-import {UserLesson, PageView} from '../models/User';
-import {Redirect} from "react-router-dom";
-import {setUserLesson, updateLesson} from "../data/user/user.actions";
+import {Lesson, LessonPage, LessonProgress, Subject, TrainingSession} from '../models/Training';
+import {PageView} from '../models/User';
 import VideoPlayer from "../components/VideoPlayer";
 import ImageZoomModal from "../components/ImageZoomModal";
+import {updateTrainingLesson} from "../data/training/training.actions";
+import {updateUserLesson} from "../data/user/user.actions";
 
 interface OwnProps extends RouteComponentProps {
   subject: Subject;
   lesson: Lesson;
   page: LessonPage;
   idx: number;
+  lessonProgress: LessonProgress;
 }
 
 interface StateProps {
-  trainerMode?: boolean,
-  userLesson: UserLesson
+  activeSession?: TrainingSession;
 }
 
 interface DispatchProps {
-  updateLesson: typeof updateLesson;
-  setUserLesson: typeof setUserLesson;
+  updateUserLesson: typeof updateUserLesson;
+  updateTrainingLesson: typeof updateTrainingLesson;
 }
 
 interface LessonPageProps extends OwnProps, StateProps, DispatchProps {}
 
-const LessonPagePage: React.FC<LessonPageProps> = ({ subject, lesson, page, idx, userLesson, trainerMode, updateLesson, setUserLesson }) => {
+const LessonPagePage: React.FC<LessonPageProps> = ({ subject, lesson, page, idx, lessonProgress, activeSession, updateUserLesson, updateTrainingLesson }) => {
 
   const {navigate} = useContext(NavContext);
   const { t } = useTranslation(['translation'], {i18n} );
@@ -67,20 +76,25 @@ const LessonPagePage: React.FC<LessonPageProps> = ({ subject, lesson, page, idx,
 
   useEffect(() => {
     let pageView:PageView = {};
-    if (lesson && page && userLesson) {
-      userLesson.pageViews = userLesson.pageViews || [];
-      if (userLesson.pageViews.length !== lesson.pages.length) {
-        userLesson.pageViews.length = 0;
-        lesson.pages.map((p) => {userLesson.pageViews.push({})});
-        setUserLesson(userLesson);
+    if (lesson && page && lessonProgress) {
+      lessonProgress.pageViews = lessonProgress.pageViews || [];
+      if (lessonProgress.pageViews.length !== lesson.pages.length) {
+        lessonProgress.pageViews.length = 0;
+        lesson.pages.map((p) => {lessonProgress.pageViews.push({})});
+        if (activeSession) {
+          updateTrainingLesson(activeSession, lessonProgress);
+        }
+        else {
+          updateUserLesson(lessonProgress);
+        }
       }
-      const pageView = userLesson.pageViews[idx];
+      const pageView = lessonProgress.pageViews[idx];
       setPageView(pageView);
       if (pageView.attestationChecked || !page.attestation) {
         setShowNext(true);
       }
     }
-  },[lesson, page, userLesson, idx]);
+  },[lesson, page, lessonProgress, idx]);
 
   useEffect(() => {
     if (lesson) {
@@ -88,7 +102,7 @@ const LessonPagePage: React.FC<LessonPageProps> = ({ subject, lesson, page, idx,
       const prev = idx - 1;
       const next = idx + 1;
       if (prev < 0) {
-        if (lesson.questions && lesson.questions.length && (!userLesson.completed || trainerMode)) {
+        if (lesson.questions && lesson.questions.length && !lessonProgress.completed) {
           setPrevUrl(path + '/question/' + lesson.questions.length + '/preview');
         }
         else {
@@ -136,13 +150,12 @@ const LessonPagePage: React.FC<LessonPageProps> = ({ subject, lesson, page, idx,
       if (page.attestation) {
         pageView.attestationChecked = !!pageView.attestationChecked;
       }
-      userLesson.pageViews[idx] = pageView;
-      if (trainerMode) { // Only update the DB if not in trainer mode
-        setUserLesson(userLesson);
-        // TODO: Update training session
+      lessonProgress.pageViews[idx] = pageView;
+      if (activeSession) {
+        updateTrainingLesson(activeSession, lessonProgress);
       }
       else {
-        updateLesson(userLesson);
+        updateUserLesson(lessonProgress);
       }
     }
   }
@@ -167,7 +180,7 @@ const LessonPagePage: React.FC<LessonPageProps> = ({ subject, lesson, page, idx,
             <IonTitle>{lesson && lesson.name}</IonTitle>
           </IonToolbar>
         </IonHeader>
-        {lesson && userLesson && page &&
+        {lesson && lessonProgress && page &&
         <IonContent fullscreen={true}>
           <IonCard>
             <IonCardHeader>
@@ -246,16 +259,16 @@ const LessonPagePage: React.FC<LessonPageProps> = ({ subject, lesson, page, idx,
 
 export default connect({
   mapDispatchToProps: {
-    updateLesson,
-    setUserLesson
+    updateUserLesson: updateUserLesson,
+    updateTrainingLesson: updateTrainingLesson
   },
   mapStateToProps: (state, ownProps) => ({
     subject: selectors.getSubject(state, ownProps),
     lesson: selectors.getLesson(state, ownProps),
     page: selectors.getLessonPage(state, ownProps),
     idx: selectors.getPageIdx(state, ownProps),
-    userLesson: selectors.getUserLesson(state, ownProps),
-    trainerMode: state.user.trainerMode
+    lessonProgress: selectors.getLessonProgress(state, ownProps),
+    activeSession: selectors.getActiveSession(state),
   }),
   component: LessonPagePage
 });

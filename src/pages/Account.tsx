@@ -8,7 +8,8 @@ import {
   IonList,
   IonMenuButton,
   IonPage,
-  IonTitle, IonToast,
+  IonTitle,
+  IonToast,
   IonToolbar
 } from '@ionic/react';
 import './Account.scss';
@@ -18,7 +19,6 @@ import {connect} from '../data/connect';
 import {RouteComponentProps} from 'react-router';
 import {Redirect} from "react-router-dom";
 import {getGravatarUrl} from "../util/gravatar";
-import ImageZoomModal from "../components/ImageZoomModal";
 import ChangePhotoModal from "../components/ChangePhotoModal";
 import ChangeEmailModal from "../components/ChangeEmailModal";
 import ChangePasswordModal from "../components/ChangePasswordModal";

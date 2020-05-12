@@ -1,6 +1,6 @@
 import React from 'react';
 import {IonContent, IonLoading, IonRouterOutlet} from '@ionic/react';
-import {Redirect, Route, RouteComponentProps} from 'react-router';
+import {Redirect, Route} from 'react-router';
 import TrainingPage from './TrainingPage';
 import SubjectPage from './SubjectPage';
 import LessonIntroPage from './LessonIntroPage';
@@ -9,9 +9,6 @@ import LessonPage from './LessonPage';
 import QuestionPage from './QuestionPage';
 import QuestionPreviewPage from './QuestionPreviewPage';
 import {connect} from "../data/connect";
-import * as selectors from "../data/selectors";
-import {Lesson, Subject} from "../models/Training";
-import {UserLessons} from "../data/user/user.state";
 import {useTranslation} from "react-i18next";
 import i18n from "../i18n";
 
