@@ -1,7 +1,7 @@
-import { UserLesson} from "../../models/User";
+import {LessonProgress} from "../../models/Training";
 
 export interface UserLessons {
-  [lessonId:string] : UserLesson
+  [lessonId:string] : LessonProgress
 }
 
 export interface UserAction {

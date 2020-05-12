@@ -1,6 +1,6 @@
 import * as firebase from 'firebase';
-import {UserLesson} from "../../models/User";
 import {UserLessons} from "./user.state";
+import {LessonProgress, TrainingSession} from "../../models/Training";
 
 /**
  * so this function is called when the authentication state changes
@@ -117,7 +117,6 @@ export const checkIsAdmin = async () => {
     });
 };
 
-
 export const getUserLessons = async () => {
   const lessons:UserLessons = {};
   let user = firebase.auth().currentUser;
@@ -134,7 +133,7 @@ export const getUserLessons = async () => {
     .then(querySnapshot => {
       querySnapshot.forEach(function(doc) {
         if (doc.exists) {
-          const data = doc.data() as UserLesson;
+          const data = doc.data() as LessonProgress;
           lessons[data.lessonId] = data;
         }
       });
@@ -143,30 +142,6 @@ export const getUserLessons = async () => {
     .catch(error => {
       console.log("Error getting document:", error);
       return lessons;
-    });
-};
-
-export const createOrUpdateUserLesson = async (lesson:UserLesson) => {
-  console.log(lesson);
-  let user = firebase.auth().currentUser;
-  if (!user || !user.uid) {
-    return null;
-  }
-  if (!lesson.id) {
-    lesson.id = user.uid + ':' + lesson.lessonId;
-  }
-  return firebase
-    .firestore()
-    .collection("users")
-    .doc(user.uid)
-    .collection('lessons')
-    .doc(lesson.id)
-    .set(lesson, { merge: true })
-    .then(() => {
-      return lesson;
-    })
-    .catch(error => {
-      console.log("Error writing document:", error);
     });
 };
 
@@ -249,5 +224,29 @@ export const updatePassword = async (password: string) => {
   user.updatePassword(password)
     .then(() => {
       return user;
+    });
+};
+
+export const createOrUpdateLessonProgress = async (lesson: LessonProgress) => {
+  console.log(lesson);
+  let user = firebase.auth().currentUser;
+  if (!user || !user.uid) {
+    return null;
+  }
+  if (!lesson.id) {
+    lesson.id = (user && user.uid) + ':' + lesson.lessonId;
+  }
+  return firebase
+    .firestore()
+    .collection('users')
+    .doc(user.uid)
+    .collection('lessons')
+    .doc(lesson.id)
+    .set(lesson, {merge: true})
+    .then(() => {
+      return lesson;
+    })
+    .catch(error => {
+      console.log("Error writing document:", error);
     });
 };

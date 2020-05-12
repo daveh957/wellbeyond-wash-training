@@ -1,8 +1,7 @@
-import { ActionType } from '../../util/types';
-import { loadData, cacheImagesAndVideos } from './trainingApi'
-import { TrainingState } from './training.state';
-import {Subject, Lesson, Question} from '../../models/Training';
-import {getLessonIconUrl} from "../../util/cloudinary";
+import {ActionType} from '../../util/types';
+import {cacheImagesAndVideos, createOrUpdateTrainingSession, loadData, loadSessionData} from './trainingApi'
+import {TrainingState, TrainingSessions} from './training.state';
+import {Lesson, LessonProgress, Question, Subject, TrainingSession} from '../../models/Training';
 
 export const loadLessonData = () => (async (dispatch: React.Dispatch<any>) => {
   dispatch(setLoading(true));
@@ -35,7 +34,60 @@ export const setMenuEnabled = (menuEnabled: boolean) => ({
   menuEnabled
 } as const);
 
+export const loadTrainingSessions = () => async (dispatch: React.Dispatch<any>) => {
+  let sessions = await loadSessionData();
+  dispatch(setTrainingSessions(sessions));
+}
+
+export const startTrainingSession = (session: TrainingSession) => async (dispatch: React.Dispatch<any>) => {
+  createOrUpdateTrainingSession(session);
+  setActiveSession(session);
+}
+
+export const updateTrainingSession = (session: TrainingSession) => async (dispatch: React.Dispatch<any>) => {
+  createOrUpdateTrainingSession(session);
+  setActiveSession(session);
+}
+
+export const updateTrainingLesson = (session: TrainingSession, lesson: LessonProgress) => async (dispatch: React.Dispatch<any>) => {
+  let found = session.lessons && session.lessons.find((l) => {
+    return l.lessonId === lesson.lessonId;
+  });
+  if (found) {
+    Object.assign(found, lesson);
+  }
+  else {
+    session.lessons = session.lessons || [];
+    session.lessons.push(lesson);
+  }
+  dispatch(createOrUpdateTrainingSession(session));
+}
+
+export const archiveTrainingSession = (session: TrainingSession) => async (dispatch: React.Dispatch<any>) => {
+  session.archived = true;
+  createOrUpdateTrainingSession(session);
+  setSessionArchived(session);
+}
+
+export const setTrainingSessions = (sessions: TrainingSessions) => ({
+  type: 'set-training-sessions',
+  sessions
+} as const);
+
+export const setActiveSession = (session: TrainingSession) => ({
+  type: 'set-active-session',
+  session
+} as const);
+
+export const setSessionArchived = (session: TrainingSession) => ({
+  type: 'set-session-archived',
+  session
+} as const);
+
 export type TrainingActions =
   | ActionType<typeof setData>
   | ActionType<typeof setLoading>
   | ActionType<typeof setMenuEnabled>
+  | ActionType<typeof setTrainingSessions>
+  | ActionType<typeof setActiveSession>
+  | ActionType<typeof setSessionArchived>

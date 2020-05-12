@@ -32,31 +32,31 @@ import i18n from '../i18n';
 import {connect} from '../data/connect';
 import * as selectors from '../data/selectors';
 
-import {Lesson, Question, Subject} from '../models/Training';
-import {Answer, UserLesson} from '../models/User';
-import {Redirect} from "react-router-dom";
-import {setUserLesson, updateLesson} from "../data/user/user.actions";
+import {Lesson, LessonProgress, Question, Subject, TrainingSession} from '../models/Training';
+import {Answer} from '../models/User';
+import {updateUserLesson} from "../data/user/user.actions";
+import {updateTrainingLesson} from "../data/training/training.actions";
 
 interface OwnProps extends RouteComponentProps {
   subject: Subject;
   lesson: Lesson;
   question: Question;
   idx: number;
+  lessonProgress: LessonProgress;
 }
 
 interface StateProps {
-  trainerMode?: boolean,
-  userLesson: UserLesson
+  activeSession?: TrainingSession;
 }
 
 interface DispatchProps {
-  updateLesson: typeof updateLesson;
-  setUserLesson: typeof setUserLesson;
+  updateUserLesson: typeof updateUserLesson;
+  updateTrainingLesson: typeof updateTrainingLesson;
 }
 
 interface QuestionPageProps extends OwnProps, StateProps, DispatchProps {}
 
-const QuestionPage: React.FC<QuestionPageProps> = ({ subject, lesson, question, idx, userLesson, trainerMode, updateLesson, setUserLesson }) => {
+const QuestionPage: React.FC<QuestionPageProps> = ({ subject, lesson, question, idx, lessonProgress, activeSession, updateUserLesson, updateTrainingLesson }) => {
 
   const {navigate} = useContext(NavContext);
   const { t } = useTranslation(['translation'], {i18n} );
@@ -69,8 +69,8 @@ const QuestionPage: React.FC<QuestionPageProps> = ({ subject, lesson, question, 
 
   useEffect(() => {
     let priorAnswer;
-    if (question && userLesson) {
-      const a = userLesson.answers.find(element => element.question === question.questionText);
+    if (question && lessonProgress) {
+      const a = lessonProgress.answers.find(element => element.question === question.questionText);
       if (a) {
         priorAnswer = a.answerAfter;
       }
@@ -78,7 +78,7 @@ const QuestionPage: React.FC<QuestionPageProps> = ({ subject, lesson, question, 
     setAnswer(priorAnswer);
     setShowNext(!!priorAnswer);
     setLockAnswer(!!priorAnswer);
-  },[userLesson, question]);
+  },[lessonProgress, question]);
 
   useEffect(() => {
     if (lesson) {
@@ -108,17 +108,16 @@ const QuestionPage: React.FC<QuestionPageProps> = ({ subject, lesson, question, 
   const handleAnswer = (value:(string|number|undefined)) => {
     setAnswer(value);
     if (value) {
-      userLesson.answers = userLesson.answers || new Array<Answer>();
-      let ans = userLesson.answers.find(element => element.question === question.questionText);
+      lessonProgress.answers = lessonProgress.answers || new Array<Answer>();
+      let ans = lessonProgress.answers.find(element => element.question === question.questionText);
       if (!ans) {
         ans = {
           question: question.questionText,
           correctAnswer: question.correctAnswer
         };
-        userLesson.answers.push(ans);
+        lessonProgress.answers.push(ans);
       }
       ans.answerAfter = value;
-      setUserLesson(userLesson);
       setShowNext(true);
       setLockAnswer(true);
     }
@@ -126,13 +125,13 @@ const QuestionPage: React.FC<QuestionPageProps> = ({ subject, lesson, question, 
 
   const handleNext = () => {
     if (lesson && lesson.questions && (lesson.questions.length === (idx+1))) {
-      if (userLesson && userLesson.answers && userLesson.answers.length >= lesson.questions.length) {
-        userLesson.answers = userLesson.answers.filter((a) => {
+      if (lessonProgress && lessonProgress.answers && lessonProgress.answers.length >= lesson.questions.length) {
+        lessonProgress.answers = lessonProgress.answers.filter((a) => {
           return lesson.questions.find((q) => {
             return q.questionText === a.question;
           });
         });
-        const allAnswered = userLesson.answers.every((a) => {
+        const allAnswered = lessonProgress.answers.every((a) => {
           return a.answerAfter;
         });
         if (allAnswered) {
@@ -141,26 +140,26 @@ const QuestionPage: React.FC<QuestionPageProps> = ({ subject, lesson, question, 
       }
     }
     if (answer) {
-      if (trainerMode) { // Only update the DB if not in trainer mode
-        // TODO: Update training session
+      if (activeSession) {
+        updateTrainingLesson(activeSession, lessonProgress);
       }
       else {
-        updateLesson(userLesson);
+        updateUserLesson(lessonProgress);
       }
     }
     navigate(nextUrl, 'forward');
   }
 
   const handleLessonComplete = () => {
-    userLesson.completed = userLesson.completed || new Date();
+    lessonProgress.completed = lessonProgress.completed || new Date();
     let correct = 0, preCorrect = 0;
     // eslint-disable-next-line array-callback-return
-    userLesson.answers.map(a => {
+    lessonProgress.answers.map(a => {
       if (a.answerAfter === a.correctAnswer) correct++;
       if (a.answerBefore === a.correctAnswer) preCorrect++;
     });
-    userLesson.preScore = userLesson.answers.length ? Math.round((100*preCorrect) / lesson.questions.length) : 0;
-    userLesson.score = userLesson.answers.length ? Math.round((100*correct) / lesson.questions.length) : 0;
+    lessonProgress.preScore = lessonProgress.answers.length ? Math.round((100*preCorrect) / lesson.questions.length) : 0;
+    lessonProgress.score = lessonProgress.answers.length ? Math.round((100*correct) / lesson.questions.length) : 0;
   }
 
   return (
@@ -173,7 +172,7 @@ const QuestionPage: React.FC<QuestionPageProps> = ({ subject, lesson, question, 
             <IonTitle>{lesson && lesson.name}</IonTitle>
           </IonToolbar>
         </IonHeader>
-        {lesson && userLesson && question &&
+        {lesson && lessonProgress && question &&
         <IonContent fullscreen={true}>
           <IonCard className='lesson-card'>
             <IonCardHeader>
@@ -245,16 +244,16 @@ const QuestionPage: React.FC<QuestionPageProps> = ({ subject, lesson, question, 
 
 export default connect({
   mapDispatchToProps: {
-    updateLesson,
-    setUserLesson
+    updateUserLesson: updateUserLesson,
+    updateTrainingLesson: updateTrainingLesson
   },
   mapStateToProps: (state, ownProps) => ({
     subject: selectors.getSubject(state, ownProps),
     lesson: selectors.getLesson(state, ownProps),
     question: selectors.getQuestion(state, ownProps),
     idx: selectors.getQuestionIdx(state, ownProps),
-    userLesson: selectors.getUserLesson(state, ownProps),
-    trainerMode: state.user.trainerMode
+    lessonProgress: selectors.getLessonProgress(state, ownProps),
+    activeSession: selectors.getActiveSession(state)
   }),
   component: QuestionPage
 });

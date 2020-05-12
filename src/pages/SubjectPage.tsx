@@ -20,7 +20,6 @@ import './SubjectPage.scss';
 import {RouteComponentProps} from "react-router";
 import {useTranslation} from "react-i18next";
 import i18n from '../i18n';
-import {Redirect} from "react-router-dom";
 
 interface OwnProps extends RouteComponentProps {
   subject: Subject;

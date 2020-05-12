@@ -1,6 +1,16 @@
 import React, {useRef} from 'react';
 
-import {IonButtons, IonCard, IonContent, IonHeader, IonMenuButton, IonPage, IonTitle, IonToolbar, IonCardContent} from '@ionic/react';
+import {
+  IonButtons,
+  IonCard,
+  IonCardContent,
+  IonContent,
+  IonHeader,
+  IonMenuButton,
+  IonPage,
+  IonTitle,
+  IonToolbar
+} from '@ionic/react';
 
 import './TrainingPage.scss'
 

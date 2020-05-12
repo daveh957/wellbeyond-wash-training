@@ -17,14 +17,4 @@ export interface PageView {
   videoWatched?: boolean;
 }
 
-export interface UserLesson {
-  id?: string;
-  lessonId: string;
-  started?: Date;
-  completed?: Date;
-  preScore: number;
-  score: number;
-  answers: Array<Answer>;
-  pageViews: Array<PageView>;
-}
 

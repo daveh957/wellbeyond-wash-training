@@ -7,7 +7,8 @@ export const initialState: AppState = {
     subjects: [],
     lessons: [],
     loading: false,
-    menuEnabled: true
+    menuEnabled: true,
+    sessions: {}
   },
   user: {
     darkMode: false,

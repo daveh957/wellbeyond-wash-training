@@ -32,31 +32,31 @@ import i18n from '../i18n';
 import {connect} from '../data/connect';
 import * as selectors from '../data/selectors';
 
-import {Lesson, Question, Subject} from '../models/Training';
-import {Answer, UserLesson} from '../models/User';
-import {Redirect} from "react-router-dom";
-import {setUserLesson, updateLesson} from "../data/user/user.actions";
+import {Lesson, LessonProgress, Question, Subject, TrainingSession} from '../models/Training';
+import {Answer} from '../models/User';
+import {updateUserLesson} from "../data/user/user.actions";
+import {updateTrainingLesson} from "../data/training/training.actions";
 
 interface OwnProps extends RouteComponentProps {
   subject: Subject;
   lesson: Lesson;
   question: Question;
   idx: number;
+  lessonProgress: LessonProgress
 }
 
 interface StateProps {
-  trainerMode?: boolean,
-  userLesson: UserLesson
+  activeSession?: TrainingSession;
 }
 
 interface DispatchProps {
-  updateLesson: typeof updateLesson;
-  setUserLesson: typeof setUserLesson;
+  updateUserLesson: typeof updateUserLesson;
+  updateTrainingLesson: typeof updateTrainingLesson;
 }
 
 interface QuestionPageProps extends OwnProps, StateProps, DispatchProps {}
 
-const QuestionPreviewPage: React.FC<QuestionPageProps> = ({ subject, lesson, question, idx, userLesson, trainerMode, updateLesson, setUserLesson }) => {
+const QuestionPreviewPage: React.FC<QuestionPageProps> = ({ subject, lesson, question, idx, lessonProgress, activeSession, updateUserLesson, updateTrainingLesson }) => {
 
   const {navigate} = useContext(NavContext);
   const { t } = useTranslation(['translation'], {i18n} );
@@ -69,15 +69,15 @@ const QuestionPreviewPage: React.FC<QuestionPageProps> = ({ subject, lesson, que
 
   useEffect(() => {
     let priorAnswer;
-    if (question && userLesson) {
-      const a = userLesson.answers.find(element => element.question === question.questionText);
+    if (question && lessonProgress) {
+      const a = lessonProgress.answers.find(element => element.question === question.questionText);
       if (a) {
         priorAnswer = a.answerBefore;
       }
     }
     setAnswer(priorAnswer);
-    setShowNext(false);
-  },[userLesson, question]);
+    setShowNext(!!priorAnswer);
+  },[lessonProgress, question]);
 
   useEffect(() => {
     if (lesson) {
@@ -107,28 +107,27 @@ const QuestionPreviewPage: React.FC<QuestionPageProps> = ({ subject, lesson, que
   const handleAnswer = (value:(string|number|undefined)) => {
     setAnswer(value);
     if (value) {
-      userLesson.answers = userLesson.answers || new Array<Answer>();
-      let ans = userLesson.answers.find(element => element.question === question.questionText);
+      lessonProgress.answers = lessonProgress.answers || new Array<Answer>();
+      let ans = lessonProgress.answers.find(element => element.question === question.questionText);
       if (!ans) {
         ans = {
           question: question.questionText,
           correctAnswer: question.correctAnswer
         };
-        userLesson.answers.push(ans);
+        lessonProgress.answers.push(ans);
       }
       ans.answerBefore = value;
-      setUserLesson(userLesson);
       setShowNext(true);
     }
   }
 
   const handleNext = () => {
     if (answer) {
-      if (trainerMode) { // Only update the DB if not in trainer mode
-        // TODO: Update training session
+      if (activeSession) {
+        updateTrainingLesson(activeSession, lessonProgress);
       }
       else {
-        updateLesson(userLesson);
+        updateUserLesson(lessonProgress);
       }
     }
     navigate(nextUrl, 'forward');
@@ -144,7 +143,7 @@ const QuestionPreviewPage: React.FC<QuestionPageProps> = ({ subject, lesson, que
           <IonTitle>{lesson && lesson.name}</IonTitle>
         </IonToolbar>
       </IonHeader>
-      {lesson && userLesson && question &&
+      {lesson && lessonProgress && question &&
       <IonContent fullscreen={true}>
         <IonCard className='lesson-card'>
           <IonCardHeader>
@@ -209,16 +208,16 @@ const QuestionPreviewPage: React.FC<QuestionPageProps> = ({ subject, lesson, que
 
 export default connect({
   mapDispatchToProps: {
-    updateLesson,
-    setUserLesson
+    updateUserLesson: updateUserLesson,
+    updateTrainingLesson: updateTrainingLesson
   },
   mapStateToProps: (state, ownProps) => ({
     subject: selectors.getSubject(state, ownProps),
     lesson: selectors.getLesson(state, ownProps),
     question: selectors.getQuestion(state, ownProps),
     idx: selectors.getQuestionIdx(state, ownProps),
-    userLesson: selectors.getUserLesson(state, ownProps),
-    trainerMode: state.user.trainerMode
+    lessonProgress: selectors.getLessonProgress(state, ownProps),
+    activeSession: selectors.getActiveSession(state)
   }),
   component: QuestionPreviewPage
 });
