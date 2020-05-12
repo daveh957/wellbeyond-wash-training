@@ -2,12 +2,12 @@ import {
   loginWithEmail,
   logout,
   getUserProfile,
-  getUserLessons,
   updateProfile,
   updateEmail,
   updatePassword,
   reauthenticateWithPassword,
-  getUserLessons, createOrUpdateLessonProgress
+  getUserLessons,
+  createOrUpdateLessonProgress
 } from './userApi';
 import { ActionType } from '../../util/types'
 import {UserLessons, UserState} from './user.state';
