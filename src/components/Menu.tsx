@@ -12,7 +12,7 @@ import {
   IonMenuToggle,
   IonToggle
 } from '@ionic/react';
-import {logIn, logOut, moonOutline, person, personAdd, trainOutline} from 'ionicons/icons';
+import {logIn, logOut, moonOutline, person, personAdd, trainOutline, globe, fingerPrint} from 'ionicons/icons';
 import {useTranslation} from "react-i18next";
 import i18n from '../i18n';
 
@@ -31,6 +31,10 @@ const routes = {
   loggedOutPages: [
     { title: 'menu.login', path: '/login', icon: logIn },
     { title: 'menu.signup', path: '/signup', icon: personAdd }
+  ],
+  aboutPages: [
+    { title: 'menu.terms', path: '/termsOfUse', icon: globe },
+    { title: 'menu.privacy', path: '/privacyPolicy', icon: fingerPrint }
   ]
 };
 
@@ -106,6 +110,11 @@ const Menu: React.FC<MenuProps> = ({ darkMode, trainerMode, isLoggedIn, setDarkM
             <IonLabel>{t('menu.trainerMode')}</IonLabel>
             <IonToggle checked={trainerMode} onClick={() => setTrainerMode(!trainerMode)} />
           </IonItem>}
+        </IonList>
+
+        <IonList lines="none">
+        <IonListHeader>{t('menu.about')}</IonListHeader>
+        {renderlistItems(routes.aboutPages)}
         </IonList>
       </IonContent>
     </IonMenu>

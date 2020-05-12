@@ -4,13 +4,19 @@
     min-height: 200px;
     text-align: center;
   }
-  
+
   .login-logo img {
     max-width: 150px;
   }
-  
+
   .list {
     margin-bottom: 0;
   }
-  
+  .terms-card {
+    height: calc( 100vh - 280px );
+    overflow-y: auto;
+  }
+  .terms-card-content {
+    overflow-y: auto;
+  }
 }

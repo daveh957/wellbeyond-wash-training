@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import {
   IonButton,
-  IonButtons, IonCheckbox,
+  IonButtons, IonCard, IonCardContent, IonCheckbox,
   IonCol,
   IonContent,
   IonHeader,
@@ -23,6 +23,7 @@ import {connect} from '../data/connect';
 import {RouteComponentProps} from 'react-router';
 import {acceptTerms} from "../data/user/user.actions";
 import {Redirect} from "react-router-dom";
+import TermsOfService from "../components/TermsOfService";
 interface OwnProps extends RouteComponentProps {}
 
 interface StateProps {
@@ -74,16 +75,13 @@ const AcceptTerms: React.FC<AcceptTermsProps> = ({acceptTerms, acceptedTerms, is
         </IonToolbar>
       </IonHeader>
       <IonContent>
-
-        <div className="login-logo">
-          <img src="assets/img/appicon.png" alt="WellBeyond logo" />
-        </div>
-
+        <IonCard className="terms-card">
+          <IonCardContent className="terms-card-content">
+            <TermsOfService />
+          </IonCardContent>
+        </IonCard>
         <form noValidate onSubmit={save}>
           <IonList>
-            <IonListHeader>
-              {t('registration.labels.pleaseAcceptTerms')}
-            </IonListHeader>
             <IonItem>
               <IonLabel>
                 {t('registration.labels.userAcceptsTerms')}

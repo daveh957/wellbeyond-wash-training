@@ -5,6 +5,9 @@ export default {
       logo: 'WellBeyond Log',
     },
     menu: {
+      about: 'About WellBeyond',
+      privacy: 'Privacy Policy',
+      terms: 'Terms Of Service',
       training: 'Training',
       account: 'Account',
       login: 'Login',
@@ -68,7 +71,7 @@ export default {
       pages: {
         signup: 'Signup',
         login: 'Login',
-        terms: 'Terms of Use',
+        terms: 'Accept Terms',
         account: 'Account',
       }
     },

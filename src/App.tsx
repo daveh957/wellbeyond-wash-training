@@ -36,6 +36,8 @@ import Signup from './pages/Signup';
 import Support from './pages/Support';
 import {useTranslation} from "react-i18next";
 import i18n from "./i18n";
+import Terms from "./pages/Terms";
+import Privacy from "./pages/Privacy";
 
 const App: React.FC = () => {
   return (
@@ -123,6 +125,8 @@ const IonicApp: React.FC<IonicAppProps> = ({ darkMode, loading, loadLessonData, 
               <Route path="/login" component={Login} />
               <Route path="/signup" component={Signup} />
               <Route path="/support" component={Support} />
+              <Route path="/termsOfUse" component={Terms} />
+              <Route path="/privacyPolicy" component={Privacy} />
               <Route path="/logout" render={() => {
                 logoutUser();
                 return <Redirect to="/login" />
