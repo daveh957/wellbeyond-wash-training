@@ -4,11 +4,11 @@ import {
   IonButton,
   IonCard,
   IonCardContent,
-  IonCardHeader, IonCardTitle,
+  IonCardHeader, IonCardTitle, IonCol,
   IonItem,
   IonLabel,
   IonList,
-  IonListHeader
+  IonListHeader, IonRow
 } from '@ionic/react';
 import {UserLessons} from "../data/user/user.state";
 import {useTranslation} from "react-i18next";
@@ -72,12 +72,14 @@ const SelfTraining: React.FC<SelfTrainingProps> = ({ finishedTraining, subject,l
               {t('training.messages.partiallyComplete',{completed: lessonsCompleted, count: lessons.length, subject: subject.name })}
             </IonItem>
           )}
-          <IonItem>
+        </IonList>
+        <IonRow>
+          <IonCol>
             <IonButton expand="block" fill="solid" color="primary" routerLink={resumeLink}>
               {t('training.buttons.'+ (finishedTraining ? 'reviewTraining' : (lessonsStarted ? 'resumeTraining' : 'startTraining')))}
             </IonButton>
-          </IonItem>
-        </IonList>
+          </IonCol>
+        </IonRow>
       </IonCardContent>
     </IonCard>
   );

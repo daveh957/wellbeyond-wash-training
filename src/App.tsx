@@ -28,7 +28,7 @@ import MainTabs from './pages/MainTabs';
 import {connect} from './data/connect';
 import {AppContextProvider} from './data/AppContext';
 import {loadUserData, logoutUser, setAcceptedTerms, setIsLoggedIn} from './data/user/user.actions';
-import {loadLessonData} from './data/training/training.actions';
+import {loadLessonData, loadTrainingSessions} from './data/training/training.actions';
 import AcceptTerms from './pages/AcceptTerms';
 import Account from './pages/Account';
 import Login from './pages/Login';
@@ -55,6 +55,7 @@ interface StateProps {
 interface DispatchProps {
   loadLessonData: typeof loadLessonData;
   loadUserData: typeof loadUserData;
+  loadTrainingSessions: typeof loadTrainingSessions;
   logoutUser: typeof logoutUser;
   setIsLoggedIn: typeof setIsLoggedIn;
   setAcceptedTerms: typeof setAcceptedTerms;
@@ -81,7 +82,7 @@ if (!firebase.apps.length) {
     });
 }
 
-const IonicApp: React.FC<IonicAppProps> = ({ darkMode, loading, loadLessonData, loadUserData, logoutUser, setIsLoggedIn, setAcceptedTerms}) => {
+const IonicApp: React.FC<IonicAppProps> = ({ darkMode, loading, loadLessonData, loadUserData, loadTrainingSessions, logoutUser, setIsLoggedIn, setAcceptedTerms}) => {
 
   const { t } = useTranslation(['translation'], {i18n} );
   const [intercomUser, setIntercomUser] = useState()
@@ -92,6 +93,7 @@ const IonicApp: React.FC<IonicAppProps> = ({ darkMode, loading, loadLessonData, 
       if (user != null) {
         console.log("We are authenticated now!");
         loadUserData();
+        loadTrainingSessions();
         if (process.env.NODE_ENV === 'production') {
           getUserIdHash().then(function (result) {
             setIntercomUser({
@@ -156,6 +158,6 @@ const IonicAppConnected = connect<{}, StateProps, DispatchProps>({
     loading: state.user.loading
   }),
   // @ts-ignore
-  mapDispatchToProps: { loadLessonData, loadUserData, logoutUser, setIsLoggedIn, setAcceptedTerms },
+  mapDispatchToProps: { loadLessonData, loadUserData, loadTrainingSessions, logoutUser, setIsLoggedIn, setAcceptedTerms },
   component: IonicApp
 });

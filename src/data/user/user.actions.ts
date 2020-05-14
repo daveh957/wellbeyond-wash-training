@@ -9,7 +9,7 @@ import {
 import {ActionType} from '../../util/types'
 import {UserLessons, UserState} from './user.state';
 import {LessonProgress} from "../../models/Training";
-import {loadTrainingSessionData} from "../training/trainingApi";
+import {loadTrainingSessions} from "../training/training.actions";
 
 const setLoginError = (error: any) => {
   return ({
@@ -29,8 +29,6 @@ export const loadUserData = () => async (dispatch: React.Dispatch<any>) => {
     dispatch(setData(data));
     const lessons = await getUserLessons();
     dispatch(setUserLessons(lessons || {}));
-    // @ts-ignore
-    dispatch(loadTrainingSessionData());
   }
   dispatch(setLoading(false));
 }

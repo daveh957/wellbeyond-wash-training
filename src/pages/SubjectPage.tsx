@@ -23,6 +23,7 @@ import {TrainingSessions} from "../data/training/training.state";
 import {startTrainingSession} from "../data/training/training.actions";
 import SelfTraining from "../components/SelfTraining";
 import SubjectItem from "../components/SubjectItem";
+import TrainingSessionItem from "../components/TrainingSessionItem";
 
 interface OwnProps extends RouteComponentProps {
   subject: Subject;
@@ -66,9 +67,12 @@ const SubjectPage: React.FC<SubjectProps> = ({ subject, lessons, userId, userLes
       const values = Object.values(trainingSessions);
       if (values.length) {
         // @ts-ignore
-        setActiveSessions(values.filter((s) => !s.completed).sort((a,b) => (a && b && a.started < b.started) ? 1 : -1));
+        const activeSessions = values.filter((s) => !s.completed);
+        const completedSessions = values.filter((s) => !!s.completed);
         // @ts-ignore
-        setCompletedSessions(values.filter((s) => s.completed).sort((a,b) => (a && b && a.started < b.started) ? 1 : -1));
+        setActiveSessions(activeSessions.length ? activeSessions.sort((a,b) => (a && b && a.started < b.started) ? 1 : -1) : undefined);
+        // @ts-ignore
+        setCompletedSessions(completedSessions.length ? completedSessions.sort((a,b) => (a && b && a.started < b.started) ? 1 : -1) : undefined);
       }
       else {
         setActiveSessions(undefined);
@@ -108,9 +112,7 @@ const SubjectPage: React.FC<SubjectProps> = ({ subject, lessons, userId, userLes
                       {
                         activeSessions.map((ts: TrainingSession) => {
                           return (
-                            <IonItem>
-
-                            </IonItem>
+                            <TrainingSessionItem subject={subject} lessons={lessons} session={ts} />
                           )
                         })
                       }
@@ -122,18 +124,18 @@ const SubjectPage: React.FC<SubjectProps> = ({ subject, lessons, userId, userLes
                       {
                         completedSessions.map((ts: TrainingSession) => {
                           return (
-                            <IonItem>
-
-                            </IonItem>
+                            <TrainingSessionItem subject={subject} lessons={lessons} session={ts} />
                           )
                         })
                       }
                     </Fragment>
                   }
-                  <IonItem>
-                    <IonButton expand="block" fill="solid" color="primary" routerLink={`/tabs/subjects/${subject.id}/start`}>{t('training.buttons.startNewSession')}</IonButton>
-                  </IonItem>
                 </IonList>
+                <IonRow>
+                  <IonCol>
+                    <IonButton expand="block" fill="solid" color="primary" routerLink={`/tabs/subjects/${subject.id}/start`}>{t('training.buttons.startNewSession')}</IonButton>
+                  </IonCol>
+                </IonRow>
               </IonCardContent>
             </IonCard>
           }

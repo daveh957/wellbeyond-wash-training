@@ -41,12 +41,12 @@ export const loadTrainingSessions = () => async (dispatch: React.Dispatch<any>) 
 
 export const startTrainingSession = (session: TrainingSession) => async (dispatch: React.Dispatch<any>) => {
   createOrUpdateTrainingSession(session);
-  setTrainingSession(session);
+  dispatch(setTrainingSession(session));
 }
 
 export const updateTrainingSession = (session: TrainingSession) => async (dispatch: React.Dispatch<any>) => {
   createOrUpdateTrainingSession(session);
-  setTrainingSession(session);
+  dispatch(setTrainingSession(session));
 }
 
 export const updateTrainingLesson = (session: TrainingSession, lesson: LessonProgress) => async (dispatch: React.Dispatch<any>) => {
