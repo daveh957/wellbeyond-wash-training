@@ -58,7 +58,7 @@ export const updateTrainingLesson = (session: TrainingSession, lesson: LessonPro
 export const archiveTrainingSession = (session: TrainingSession) => async (dispatch: React.Dispatch<any>) => {
   session.archived = true;
   createOrUpdateTrainingSession(session);
-  setSessionArchived(session);
+  dispatch(setSessionArchived(session));
 }
 
 export const setTrainingSessions = (sessions: TrainingSessions) => ({

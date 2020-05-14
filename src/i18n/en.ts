@@ -113,7 +113,11 @@ export default {
       },
       messages: {
         partiallyComplete: 'You have completed {{completed}} of the {{count}} modules for {{subject}}.',
-        fullyComplete: 'You have completed the training for {{subject}}.'
+        fullyComplete: 'You have completed the training for {{subject}}.',
+        sessionDescription: 'Training for {{type}} group of {{size}} people at {{location}}',
+        sessionStartedAt: 'Started {{date, dateAndTime}}',
+        sessionCompletedAt: 'Completed {{date, dateAndTime}}',
+        swipeInstructions: 'Swipe left to resume session or right to discard it'
       },
       errors: {
         locationRequired: 'Please provide a location for the training',
@@ -130,8 +134,8 @@ export default {
         reviewTraining: 'Review Your Training',
         resumeTraining: 'Resume Your Training',
         startNewSession: 'Start a New Session',
-        resumeSession: 'Resume this Session',
-        archiveSession: 'Archive this Session',
+        resumeSession: 'Resume',
+        archiveSession: 'Discard',
         beginTraining: 'Begin the Training',
         ok: 'OK',
         cancel: 'CANCEL'

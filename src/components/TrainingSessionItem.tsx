@@ -4,24 +4,31 @@ import {
   IonButton,
   IonCard,
   IonCardContent,
-  IonCardHeader, IonCardTitle, IonCol,
+  IonCardHeader, IonCardTitle, IonCol, IonIcon,
   IonItem,
   IonItemOption,
   IonItemOptions,
   IonItemSliding,
-  IonLabel, IonList, IonRow, IonText
+  IonLabel, IonNote, IonText
 } from '@ionic/react';
 import {useTranslation} from "react-i18next";
 import i18n from "../i18n";
+import {connect} from "../data/connect";
+import {updateUserLesson} from "../data/user/user.actions";
+import {archiveTrainingSession, updateTrainingLesson} from "../data/training/training.actions";
+import * as selectors from "../data/selectors";
 
+interface DispatchProps {
+  archiveTrainingSession: typeof archiveTrainingSession
+}
 
-interface LessonItemProps {
+interface LessonItemProps extends DispatchProps {
   subject: Subject;
   lessons: Lesson[];
   session: TrainingSession;
 }
 
-const TrainingSessionItem: React.FC<LessonItemProps> = ({ subject, lessons, session}) => {
+const TrainingSessionItem: React.FC<LessonItemProps> = ({ subject, lessons, session, archiveTrainingSession}) => {
 
   const { t } = useTranslation(['translation'], {i18n} );
   const [resumeLink, setResumeLink] = useState();
@@ -54,33 +61,43 @@ const TrainingSessionItem: React.FC<LessonItemProps> = ({ subject, lessons, sess
     }
   }, [subject, lessons, session]);
 
-  return subject && lessons && session && (
-        <IonCard>
-          <IonCardContent>
-              {sessionCompleted ? (
-                <IonText>
-                  {t('training.messages.fullyComplete',{subject: subject.name })}
-                </IonText>
-              ) : (
-                <IonText>
-                  {t('training.messages.partiallyComplete',{completed: lessonsCompleted, count: lessons.length, subject: subject.name })}
-                </IonText>
-              )}
-            <IonRow>
-              <IonCol>
-                <IonText>
+  const archiveSession = () => {
+    archiveTrainingSession(session);
+  }
 
-                </IonText>
-              </IonCol>
-              <IonCol>
-                <IonButton expand="block" fill="solid" color="primary" routerLink={resumeLink}>
-                  {t('training.buttons.'+ (sessionCompleted ? 'reviewTraining' : (lessonsStarted ? 'resumeTraining' : 'startTraining')))}
-                </IonButton>
-              </IonCol>
-            </IonRow>
-          </IonCardContent>
-        </IonCard>
+  return subject && lessons && session && (
+    <IonItemSliding>
+      <IonItemOptions side="start">
+        <IonItemOption color="danger" onClick={archiveSession}>{t('training.buttons.archiveSession')}</IonItemOption>
+      </IonItemOptions>
+      <IonItem>
+        <IonLabel className="ion-text-wrap">
+          {sessionCompleted ?
+            <h2>{t('training.messages.sessionCompletedAt',{date: session.completed })}</h2>
+              :
+            <h2>{t('training.messages.sessionStartedAt',{date: session.started })}</h2>
+          }
+          <p> {t('training.messages.sessionDescription',{location: session.location, type: session.groupType, size: session.groupSize })}</p>
+        </IonLabel>
+        <IonNote slot={'end'}>
+          {session.completed ?
+            <IonIcon></IonIcon> :
+            <IonText>{'' + lessonsCompleted + ' / ' + lessons.length}</IonText>
+          }
+        </IonNote>
+      </IonItem>
+      {!sessionCompleted &&
+        <IonItemOptions side="end">
+          <IonItemOption color="primary" routerLink={resumeLink}>{t('training.buttons.resumeSession')}</IonItemOption>
+        </IonItemOptions>
+      }
+    </IonItemSliding>
   );
 };
 
-export default TrainingSessionItem;
+export default connect({
+  mapDispatchToProps: {
+    archiveTrainingSession
+  },
+  component: TrainingSessionItem
+});

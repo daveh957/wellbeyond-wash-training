@@ -4,12 +4,24 @@ import {
   IonCol,
   IonContent,
   IonGrid,
-  IonHeader, IonItemDivider, IonItemGroup, IonList,
+  IonHeader,
+  IonItemDivider,
+  IonItemGroup,
+  IonList,
   IonMenuButton,
   IonPage,
   IonRow,
   IonTitle,
-  IonToolbar, NavContext, IonButton, IonItem, IonListHeader, IonCard, IonCardHeader, IonCardTitle, IonCardContent
+  IonToolbar,
+  NavContext,
+  IonButton,
+  IonItem,
+  IonListHeader,
+  IonCard,
+  IonCardHeader,
+  IonCardTitle,
+  IonCardContent,
+  IonText, IonCardSubtitle
 } from '@ionic/react';
 import {Lesson, Subject, TrainingSession} from '../models/Training';
 import {UserLessons} from '../data/user/user.state';
@@ -103,32 +115,27 @@ const SubjectPage: React.FC<SubjectProps> = ({ subject, lessons, userId, userLes
                 <IonCardTitle>
                   <h2>{t('training.headers.trainOthers')}</h2>
                 </IonCardTitle>
+                {(activeSessions || completedSessions) &&
+                  <IonCardSubtitle>
+                    <em>{t('training.messages.swipeInstructions')}</em>
+                  </IonCardSubtitle>
+                }
               </IonCardHeader>
               <IonCardContent>
                 <IonList>
-                  {activeSessions &&
-                    <Fragment>
-                      <IonListHeader><h3>Active Training Sessions</h3></IonListHeader>
-                      {
-                        activeSessions.map((ts: TrainingSession) => {
-                          return (
-                            <TrainingSessionItem subject={subject} lessons={lessons} session={ts} />
-                          )
-                        })
-                      }
-                    </Fragment>
+                  {
+                    activeSessions && activeSessions.map((ts: TrainingSession) => {
+                      return (
+                        <TrainingSessionItem subject={subject} lessons={lessons} session={ts} key={ts.id}/>
+                      )
+                    })
                   }
-                  {completedSessions &&
-                    <Fragment>
-                      <IonListHeader><h3>Completed Training Sessions</h3></IonListHeader>
-                      {
-                        completedSessions.map((ts: TrainingSession) => {
-                          return (
-                            <TrainingSessionItem subject={subject} lessons={lessons} session={ts} />
-                          )
-                        })
-                      }
-                    </Fragment>
+                  {
+                    completedSessions && completedSessions.map((ts: TrainingSession) => {
+                      return (
+                        <TrainingSessionItem subject={subject} lessons={lessons} session={ts} key={ts.id}/>
+                      )
+                    })
                   }
                 </IonList>
                 <IonRow>
