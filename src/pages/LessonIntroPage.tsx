@@ -29,15 +29,16 @@ import {Lesson, LessonProgress, Subject, TrainingSession} from '../models/Traini
 import {getLessonIconUrl} from "../util/cloudinary";
 import {updateUserLesson} from "../data/user/user.actions";
 import {updateTrainingLesson} from "../data/training/training.actions";
+import BackToLessonsLink from "../components/BackToLessons";
 
 interface OwnProps extends RouteComponentProps {
   subject: Subject;
   lesson: Lesson;
-  lessonProgress: LessonProgress
+  lessonProgress: LessonProgress;
+  activeSession?: TrainingSession;
 }
 
 interface StateProps {
-  activeSession?: TrainingSession;
 }
 
 interface DispatchProps {
@@ -74,20 +75,20 @@ const LessonIntroPage: React.FC<LessonIntroProps> = ({ subject,lesson, lessonPro
         ('/tabs/subjects/' + subject.id + '/lessons/' + lesson.id + '/preview/1' ) :
         firstPage;
       if (lessonProgress.completed) {
-        setNextUrl(firstPage);
+        setNextUrl(firstPage  + (activeSession && activeSession.id ? ('?tsId=' + activeSession.id) : ''));
       }
       else {
-        setNextUrl(firstQuestion);
+        setNextUrl(firstQuestion + (activeSession && activeSession.id ? ('?tsId=' + activeSession.id) : ''));
       }
     }
-  },[lesson, lessonProgress])
+  },[lesson, lessonProgress, activeSession])
 
   return (
     <IonPage id="lesson-intro">
         <IonHeader translucent={true}>
           <IonToolbar>
             <IonButtons slot="start">
-              <IonMenuButton />
+              <BackToLessonsLink subject={subject} session={activeSession}/>
             </IonButtons>
             <IonTitle>{lesson && lesson.name}</IonTitle>
           </IonToolbar>
@@ -96,7 +97,7 @@ const LessonIntroPage: React.FC<LessonIntroProps> = ({ subject,lesson, lessonPro
           <IonContent fullscreen={true}>
             <IonCard className='lesson-card'>
               <IonCardHeader>
-                <IonCardSubtitle>Introduction</IonCardSubtitle>
+                <IonCardSubtitle>{t('resources.lessons.intro.title')}</IonCardSubtitle>
                 <IonCardTitle>{lesson.name}</IonCardTitle>
               </IonCardHeader>
               <IonCardContent className='lesson-text'>
@@ -132,7 +133,7 @@ export default connect({
     subject: selectors.getSubject(state, ownProps),
     lesson: selectors.getLesson(state, ownProps),
     lessonProgress: selectors.getLessonProgress(state, ownProps),
-    activeSession: selectors.getActiveSession(state)
+    activeSession: selectors.getTrainingSession(state, ownProps)
   }),
   component: LessonIntroPage
 });

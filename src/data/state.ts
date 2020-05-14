@@ -1,6 +1,6 @@
-import { combineReducers } from './combineReducers';
-import { trainingReducer } from './training/training.reducer';
-import { userReducer } from './user/user.reducer';
+import {combineReducers} from './combineReducers';
+import {trainingReducer} from './training/training.reducer';
+import {userReducer} from './user/user.reducer';
 
 export const initialState: AppState = {
   data: {

@@ -1,4 +1,4 @@
-import {Answer, PageView} from "./User";
+import {Answer} from "./User";
 
 export interface LessonPage {
   title: string,
@@ -35,15 +35,24 @@ export interface Subject {
   lessons: Array<{lessonId: string}>; // Ordered list of lesson ids
 }
 
+export interface PageView {
+    attestationChecked?: boolean;
+    videoWatched?: boolean;
+}
+
 export interface LessonProgress {
   id?: string;
   lessonId: string;
   started?: Date;
   completed?: Date;
-  preScore: number;
-  score: number;
+  preScore?: number;
+  score?: number;
   answers: Array<Answer>;
   pageViews: Array<PageView>;
+}
+
+export interface LessonProgressHash {
+  [lessonId:string] : LessonProgress
 }
 
 export interface TrainingSession {
@@ -56,7 +65,5 @@ export interface TrainingSession {
   groupSize?: string;
   started?: Date;
   completed?: Date;
-  lessonCount: number;
-  completedCount: number;
-  lessons?: LessonProgress[];
+  lessons?: LessonProgressHash;
 }

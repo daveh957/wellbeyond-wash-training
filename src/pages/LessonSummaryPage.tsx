@@ -28,6 +28,7 @@ import * as selectors from '../data/selectors';
 import {Lesson, LessonProgress, Subject, TrainingSession} from '../models/Training';
 import {updateUserLesson} from "../data/user/user.actions";
 import {updateTrainingLesson} from "../data/training/training.actions";
+import BackToLessonsLink from "../components/BackToLessons";
 
 interface OwnProps extends RouteComponentProps {
   subject: Subject;
@@ -58,7 +59,7 @@ const LessonSummaryPage: React.FC<LessonSummaryProps> = ({ subject, lesson, less
       const lastPage = ('/tabs/subjects/' + subject.id + '/lessons/' + lesson.id) + (lesson.pages && lesson.pages.length ?  + ('/page/' + lesson.pages.length) : '/intro');
       const lastQuestion = lesson.questions && lesson.questions.length ? ('/tabs/subjects/' + subject.id + '/lessons/' + lesson.id + '/question') : lastPage;
       setPrevUrl(lastQuestion);
-      setNextUrl('/tabs/subjects/' + subject.id);
+      setNextUrl('/tabs/subjects/' + subject.id + '/progress');
     }
   },[lesson, lessonProgress])
 
@@ -67,7 +68,7 @@ const LessonSummaryPage: React.FC<LessonSummaryProps> = ({ subject, lesson, less
         <IonHeader translucent={true}>
           <IonToolbar>
             <IonButtons slot="start">
-              <IonMenuButton />
+              <BackToLessonsLink subject={subject} session={activeSession}/>
             </IonButtons>
             <IonTitle>{lesson && lesson.name}</IonTitle>
           </IonToolbar>
@@ -76,11 +77,11 @@ const LessonSummaryPage: React.FC<LessonSummaryProps> = ({ subject, lesson, less
         <IonContent fullscreen={true}>
           <IonCard className='lesson-card'>
             <IonCardHeader>
-              <IonCardSubtitle>Lesson completed</IonCardSubtitle>
+              <IonCardSubtitle>{t('resources.lessons.summary.title')}</IonCardSubtitle>
               <IonCardTitle><h2>{lesson.name}</h2></IonCardTitle>
             </IonCardHeader>
             <IonCardContent className='lesson-text'>
-              <p>You have successfully completed this module and correctly answered {lessonProgress.score}% of the questions.</p>
+              <p>{t('resources.lessons.summary.completed', {score: lessonProgress.score})}</p>
             </IonCardContent>
           </IonCard>
         </IonContent>
@@ -105,7 +106,7 @@ export default connect({
     subject: selectors.getSubject(state, ownProps),
     lesson: selectors.getLesson(state, ownProps),
     lessonProgress: selectors.getLessonProgress(state, ownProps),
-    activeSession: selectors.getActiveSession(state)
+    activeSession: selectors.getTrainingSession(state, ownProps)
   }),
   component: LessonSummaryPage
 });

@@ -68,7 +68,7 @@ const AcceptTerms: React.FC<AcceptTermsProps> = ({acceptTerms, acceptedTerms, is
   }
 
   return (
-    <IonPage id="signup-page">
+    <IonPage id="accept-terms-page">
       <IonHeader>
         <IonToolbar>
           <IonButtons slot="start">
@@ -106,9 +106,7 @@ const AcceptTerms: React.FC<AcceptTermsProps> = ({acceptTerms, acceptedTerms, is
             </IonCol>
           </IonRow>
         </form>
-
       </IonContent>
-
     </IonPage>
   );
 };

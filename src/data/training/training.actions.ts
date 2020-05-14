@@ -1,12 +1,12 @@
 import {ActionType} from '../../util/types';
-import {cacheImagesAndVideos, createOrUpdateTrainingSession, loadData, loadSessionData} from './trainingApi'
-import {TrainingState, TrainingSessions} from './training.state';
+import {cacheImagesAndVideos, createOrUpdateTrainingSession, loadTrainingData, loadTrainingSessionData} from './trainingApi'
+import {TrainingSessions, TrainingState} from './training.state';
 import {Lesson, LessonProgress, Question, Subject, TrainingSession} from '../../models/Training';
 
 export const loadLessonData = () => (async (dispatch: React.Dispatch<any>) => {
   dispatch(setLoading(true));
-  let subjects:Subject[] = await loadData('subjects');
-  let lessons:Lesson[] = await loadData('lessons');
+  let subjects:Subject[] = await loadTrainingData('subjects');
+  let lessons:Lesson[] = await loadTrainingData('lessons');
   if (lessons && lessons.length) {
     lessons.map(lesson => {
       if (lesson.questions) {
@@ -35,31 +35,23 @@ export const setMenuEnabled = (menuEnabled: boolean) => ({
 } as const);
 
 export const loadTrainingSessions = () => async (dispatch: React.Dispatch<any>) => {
-  let sessions = await loadSessionData();
+  let sessions = await loadTrainingSessionData();
   dispatch(setTrainingSessions(sessions));
 }
 
 export const startTrainingSession = (session: TrainingSession) => async (dispatch: React.Dispatch<any>) => {
   createOrUpdateTrainingSession(session);
-  setActiveSession(session);
+  setTrainingSession(session);
 }
 
 export const updateTrainingSession = (session: TrainingSession) => async (dispatch: React.Dispatch<any>) => {
   createOrUpdateTrainingSession(session);
-  setActiveSession(session);
+  setTrainingSession(session);
 }
 
 export const updateTrainingLesson = (session: TrainingSession, lesson: LessonProgress) => async (dispatch: React.Dispatch<any>) => {
-  let found = session.lessons && session.lessons.find((l) => {
-    return l.lessonId === lesson.lessonId;
-  });
-  if (found) {
-    Object.assign(found, lesson);
-  }
-  else {
-    session.lessons = session.lessons || [];
-    session.lessons.push(lesson);
-  }
+  session.lessons = session.lessons || {};
+  session.lessons[lesson.lessonId] = lesson;
   dispatch(createOrUpdateTrainingSession(session));
 }
 
@@ -74,8 +66,8 @@ export const setTrainingSessions = (sessions: TrainingSessions) => ({
   sessions
 } as const);
 
-export const setActiveSession = (session: TrainingSession) => ({
-  type: 'set-active-session',
+export const setTrainingSession = (session: TrainingSession) => ({
+  type: 'set-training-session',
   session
 } as const);
 
@@ -89,5 +81,5 @@ export type TrainingActions =
   | ActionType<typeof setLoading>
   | ActionType<typeof setMenuEnabled>
   | ActionType<typeof setTrainingSessions>
-  | ActionType<typeof setActiveSession>
+  | ActionType<typeof setTrainingSession>
   | ActionType<typeof setSessionArchived>

@@ -1,6 +1,6 @@
 import * as firebase from 'firebase';
 import {UserLessons} from "./user.state";
-import {LessonProgress, TrainingSession} from "../../models/Training";
+import {LessonProgress} from "../../models/Training";
 
 /**
  * so this function is called when the authentication state changes

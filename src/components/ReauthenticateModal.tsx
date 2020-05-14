@@ -1,12 +1,17 @@
 import React, {useState} from 'react';
 import {
   IonButton,
-  IonButtons, IonCol,
+  IonButtons,
+  IonCol,
   IonContent,
-  IonHeader, IonInput,
-  IonItem, IonLabel,
+  IonHeader,
+  IonInput,
+  IonItem,
+  IonLabel,
   IonList,
-  IonModal, IonRow, IonText,
+  IonModal,
+  IonRow,
+  IonText,
   IonTitle,
   IonToolbar,
 } from '@ionic/react';
@@ -28,9 +33,9 @@ interface DispatchProps {
   reauthenticate: typeof reauthenticate;
 }
 
-interface ChangePasswordProps extends OwnProps, StateProps, DispatchProps { }
+interface ReauthenticateProps extends OwnProps, StateProps, DispatchProps { }
 
-const ChangePasswordModal: React.FC<ChangePasswordProps> = ({showModal, closeModal, loginError, reauthenticate}) => {
+const ReauthenticateModal: React.FC<ReauthenticateProps> = ({showModal, closeModal, loginError, reauthenticate}) => {
 
   const { t } = useTranslation(['translation'], {i18n} );
 
@@ -118,5 +123,5 @@ export default connect<OwnProps, {}, DispatchProps>({
   mapStateToProps: (state) => ({
     loginError: state.user.loginError
   }),
-  component: ChangePasswordModal
+  component: ReauthenticateModal
 })

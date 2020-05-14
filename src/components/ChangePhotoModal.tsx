@@ -1,12 +1,17 @@
 import React, {useState} from 'react';
 import {
   IonButton,
-  IonButtons, IonCol,
+  IonButtons,
+  IonCol,
   IonContent,
-  IonHeader, IonInput,
-  IonItem, IonLabel,
+  IonHeader,
+  IonInput,
+  IonItem,
+  IonLabel,
   IonList,
-  IonModal, IonRow, IonText,
+  IonModal,
+  IonRow,
+  IonText,
   IonTitle,
   IonToolbar,
 } from '@ionic/react';

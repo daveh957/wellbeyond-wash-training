@@ -36,17 +36,18 @@ import {Lesson, LessonProgress, Question, Subject, TrainingSession} from '../mod
 import {Answer} from '../models/User';
 import {updateUserLesson} from "../data/user/user.actions";
 import {updateTrainingLesson} from "../data/training/training.actions";
+import BackToLessonsLink from "../components/BackToLessons";
 
 interface OwnProps extends RouteComponentProps {
   subject: Subject;
   lesson: Lesson;
   question: Question;
   idx: number;
-  lessonProgress: LessonProgress
+  lessonProgress: LessonProgress;
+  activeSession?: TrainingSession;
 }
 
 interface StateProps {
-  activeSession?: TrainingSession;
 }
 
 interface DispatchProps {
@@ -85,24 +86,24 @@ const QuestionPreviewPage: React.FC<QuestionPageProps> = ({ subject, lesson, que
       const prev = idx - 1;
       const next = idx + 1;
       if (prev < 0) {
-          setPrevUrl(path + '/intro');
+          setPrevUrl(path + '/intro' + (activeSession && activeSession.id ? ('?tsId=' + activeSession.id) : ''));
       }
       else {
-        setPrevUrl(path + '/preview/' + (prev+1));
+        setPrevUrl(path + '/preview/' + (prev+1) + (activeSession && activeSession.id ? ('?tsId=' + activeSession.id) : ''));
       }
       if (next > lesson.questions.length - 1) {
         if (lesson.pages && lesson.pages.length) {
-          setNextUrl(path + '/page/1');
+          setNextUrl(path + '/page/1' + (activeSession && activeSession.id ? ('?tsId=' + activeSession.id) : ''));
         }
         else {
-          setNextUrl(path + '/summary');
+          setNextUrl(path + '/summary' + (activeSession && activeSession.id ? ('?tsId=' + activeSession.id) : ''));
         }
       }
       else {
-        setNextUrl(path + '/preview/' + (next+1));
+        setNextUrl(path + '/preview/' + (next+1) + (activeSession && activeSession.id ? ('?tsId=' + activeSession.id) : ''));
       }
     }
-  },[subject, lesson, idx])
+  },[subject, lesson, idx, activeSession])
 
   const handleAnswer = (value:(string|number|undefined)) => {
     setAnswer(value);
@@ -138,7 +139,7 @@ const QuestionPreviewPage: React.FC<QuestionPageProps> = ({ subject, lesson, que
       <IonHeader translucent={true}>
         <IonToolbar>
           <IonButtons slot="start">
-            <IonMenuButton />
+            <BackToLessonsLink subject={subject} session={activeSession}/>
           </IonButtons>
           <IonTitle>{lesson && lesson.name}</IonTitle>
         </IonToolbar>
@@ -147,7 +148,7 @@ const QuestionPreviewPage: React.FC<QuestionPageProps> = ({ subject, lesson, que
       <IonContent fullscreen={true}>
         <IonCard className='lesson-card'>
           <IonCardHeader>
-            <IonCardSubtitle>Question {idx+1} of {lesson.questions.length}</IonCardSubtitle>
+            <IonCardSubtitle>{t('resources.lessons.questions.title', {num: idx+1, count:lesson.questions.length})}</IonCardSubtitle>
             <IonCardTitle><h2>{question.questionText}</h2></IonCardTitle>
           </IonCardHeader>
           <IonCardContent className='question-answer'>
@@ -217,7 +218,7 @@ export default connect({
     question: selectors.getQuestion(state, ownProps),
     idx: selectors.getQuestionIdx(state, ownProps),
     lessonProgress: selectors.getLessonProgress(state, ownProps),
-    activeSession: selectors.getActiveSession(state)
+    activeSession: selectors.getTrainingSession(state, ownProps)
   }),
   component: QuestionPreviewPage
 });

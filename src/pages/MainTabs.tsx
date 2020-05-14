@@ -3,6 +3,7 @@ import {IonContent, IonLoading, IonRouterOutlet} from '@ionic/react';
 import {Redirect, Route} from 'react-router';
 import TrainingPage from './TrainingPage';
 import SubjectPage from './SubjectPage';
+import SubjectProgressPage from './SubjectProgressPage';
 import LessonIntroPage from './LessonIntroPage';
 import LessonSummaryPage from './LessonSummaryPage';
 import LessonPage from './LessonPage';
@@ -11,6 +12,7 @@ import QuestionPreviewPage from './QuestionPreviewPage';
 import {connect} from "../data/connect";
 import {useTranslation} from "react-i18next";
 import i18n from "../i18n";
+import StartSessionPage from "./StartSessionPage";
 
 interface OwnProps {}
 
@@ -53,6 +55,8 @@ const MainTabs: React.FC<MainTabsProps> = ({isLoggedIn, acceptedTerms}) => {
         */}
         <Route path="/tabs/training" render={() => <TrainingPage />} exact={true} />
         <Route path="/tabs/subjects/:subjectId" component={SubjectPage} exact={true} />
+        <Route path="/tabs/subjects/:subjectId/progress" component={SubjectProgressPage} exact={true} />
+        <Route path="/tabs/subjects/:subjectId/start" component={StartSessionPage} exact={true} />
         <Redirect exact path="/tabs/subjects/:subjectId/lessons/:lessonId" to="/tabs/subjects/:subjectId/lessons/:lessonId/intro" />
         <Route path="/tabs/subjects/:subjectId/lessons/:lessonId/intro" component={LessonIntroPage} exact={true} />
         <Route path="/tabs/subjects/:subjectId/lessons/:lessonId/summary" component={LessonSummaryPage} exact={true} />

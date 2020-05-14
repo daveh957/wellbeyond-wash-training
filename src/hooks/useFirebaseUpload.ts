@@ -1,6 +1,5 @@
-import { useState, useEffect } from "react";
+import {useEffect, useState} from "react";
 import firebase from "firebase";
-import { firebaseConfig } from '../FIREBASE_CONFIG';
 
 // defining types...
 type UploadDataResponse =

@@ -1,18 +1,15 @@
 import {
-  loginWithEmail,
-  logout,
-  getUserProfile,
-  updateProfile,
-  updateEmail,
-  updatePassword,
-  reauthenticateWithPassword,
+  createOrUpdateLessonProgress,
   getUserLessons,
-  createOrUpdateLessonProgress
+  getUserProfile,
+  logout,
+  reauthenticateWithPassword,
+  updateProfile
 } from './userApi';
-import { ActionType } from '../../util/types'
+import {ActionType} from '../../util/types'
 import {UserLessons, UserState} from './user.state';
-import { Registration, Answer } from '../../models/User';
 import {LessonProgress} from "../../models/Training";
+import {loadTrainingSessionData} from "../training/trainingApi";
 
 const setLoginError = (error: any) => {
   return ({
@@ -33,6 +30,7 @@ export const loadUserData = () => async (dispatch: React.Dispatch<any>) => {
     const lessons = await getUserLessons();
     dispatch(setUserLessons(lessons || {}));
     // @ts-ignore
+    dispatch(loadTrainingSessionData());
   }
   dispatch(setLoading(false));
 }

@@ -1,3 +1,6 @@
+import {IonItem} from "@ionic/react";
+import React from "react";
+
 export default {
   translation: {
     app: {
@@ -39,12 +42,15 @@ export default {
         email: 'Email Address',
         oldEmail: 'Current Email Address',
         newEmail: 'New Email Address',
+        loginUsername: 'Email Address',
+        loginPassword: 'Password',
         password: 'Password (8 characters minimum)',
         newPassword: 'New Password (8 characters minimum)',
         passwordRepeat: 'Repeat Password',
         organization: 'Organization Name (optional)',
         pleaseAcceptTerms: 'Please check the box indicating that you have read and agree to these terms of use.',
         userAcceptsTerms: 'I agree to the terms and conditions above',
+        avatar: 'Avatar'
       },
       errors: {
         nameRequired: 'Name is required',
@@ -53,8 +59,12 @@ export default {
         passwordLength: 'Password must be at least 8 characters',
         passwordMismatch: 'Passwords don\'t match',
         termsNotChecked: 'Please check the box to continue',
+        loginUsernameRequired: 'Email is required',
+        loginPasswordRequired: 'Password is required',
       },
       buttons: {
+        login: 'Login',
+        signup: 'Signup',
         changePassword: 'Update Password',
         changeProfile: 'Update Profile',
         changeEmail: 'Update Email',
@@ -75,6 +85,58 @@ export default {
         account: 'Account',
       }
     },
+    training: {
+      pages: {
+        start: 'New Training Session'
+      },
+      labels: {
+        location: 'Where are you holding the training?',
+        groupType: 'What type of group is it for?',
+        groupSize: 'How large is the group?',
+      },
+      groupTypes: {
+        committee: 'Water Committee',
+        household: 'Household',
+        school: 'School',
+        clinic: 'Medical Clinic',
+        other: 'Other',
+        selectOne: 'Select a group type',
+      },
+      groupSizes: {
+        xs: '1-5',
+        sm: '6-10',
+        md: '11-20',
+        lg: '21-50',
+        xl: '50-100',
+        xxl: 'More than 100',
+        selectOne: 'Select a group size',
+      },
+      messages: {
+        partiallyComplete: 'You have completed {{completed}} of the {{count}} modules for {{subject}}.',
+        fullyComplete: 'You have completed the training for {{subject}}.'
+      },
+      errors: {
+        locationRequired: 'Please provide a location for the training',
+        groupTypeRequired: 'Please select a group type for the training',
+        groupSizeRequired: 'Please select a group size for the training',
+      },
+      headers: {
+        yourTraining: '1. Complete the Training',
+        trainOthers: '2. Share the Training',
+        previousTraining: 'Previous Training Sessions'
+      },
+      buttons: {
+        startTraining: 'Begin Your Training',
+        reviewTraining: 'Review Your Training',
+        resumeTraining: 'Resume Your Training',
+        startNewSession: 'Start a New Session',
+        resumeSession: 'Resume this Session',
+        archiveSession: 'Archive this Session',
+        beginTraining: 'Begin the Training',
+        ok: 'OK',
+        cancel: 'CANCEL'
+      }
+    },
     resources: {
       subjects: {
         name: 'Subject',
@@ -88,10 +150,22 @@ export default {
         imageZoomHelp: 'Use pinching gestures the controls below zoom in and out',
         imageZoomToolbar: 'Zoom +/-',
         intro: {
+          title: 'Introduction',
           completed: 'You have already completed this module, but you can come back here any time to review.',
           firsttime: 'Before you start the module, we\'re going to ask you a few questions to see how much you already know.  We\'ll ask you these questions again after you have completed the module.'
         },
-        attestationHeader: 'Please confirm that you undertand this information by checking the box below.'
+        summary: {
+          title: 'Lesson Complete',
+          completed: 'You have successfully completed this module and correctly answered {{score}}% of the questions.',
+         },
+        questions: {
+          title: 'Question {{num}} of {{count}}',
+          right: 'Great job, you got it right.',
+          wrong: 'Sorry, you got it wrong. The correct answer is ',
+        },
+        attestationHeader: 'Please confirm that you undertand this information by checking the box below.',
+        completed: 'Completed',
+        introduction: 'Introduction',
       }
     }
   }

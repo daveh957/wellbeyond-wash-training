@@ -1,17 +1,18 @@
 import React, {useEffect, useState} from 'react';
-import {Lesson, Subject} from '../models/Training';
+import {Lesson, Subject, TrainingSession} from '../models/Training';
 import {IonCard, IonCardContent, IonCardHeader, IonItem, IonLabel} from '@ionic/react';
 import {getLessonIconUrl} from "../util/cloudinary";
 
 
 interface LessonItemProps {
-  subject: Subject,
+  subject: Subject;
   lesson: Lesson;
+  activeSession?: TrainingSession;
   completed: boolean;
   clickable: boolean;
 }
 
-const LessonItem: React.FC<LessonItemProps> = ({ subject,lesson, completed, clickable}) => {
+const LessonItem: React.FC<LessonItemProps> = ({ subject,lesson, activeSession, completed, clickable}) => {
 
   const [lessonIcon, setLessonIcon] = useState();
   useEffect(() => {
@@ -20,10 +21,14 @@ const LessonItem: React.FC<LessonItemProps> = ({ subject,lesson, completed, clic
     }
   },[lesson, completed]);
 
+  const makeLink = () => {
+    return '/tabs/subjects/' + subject.id + '/lessons/' + lesson.id + '/intro' + (activeSession && activeSession.id ? ('?tsId=' + activeSession.id) : '');
+  }
+
   return (
       <IonCard className="lesson-card">
           <IonCardHeader>
-            <IonItem button detail={false} lines="none" className="lesson-item" disabled={!clickable} routerLink={`/tabs/subjects/${subject.id}/lessons/${lesson.id}/intro`}>
+            <IonItem button detail={false} lines="none" className="lesson-item" disabled={!clickable} routerLink={makeLink()}>
               <IonLabel>
                 <h2>{lesson.name}</h2>
               </IonLabel>
@@ -31,7 +36,7 @@ const LessonItem: React.FC<LessonItemProps> = ({ subject,lesson, completed, clic
           </IonCardHeader>
 
           <IonCardContent>
-            <IonItem button detail={false} lines="none" className="lesson-item" disabled={!clickable} routerLink={`/tabs/subjects/${subject.id}/lessons/${lesson.id}/intro`}>
+            <IonItem button detail={false} lines="none" className="lesson-item" disabled={!clickable} routerLink={makeLink()}>
               <img src={lessonIcon} crossOrigin='anonymous' />
             </IonItem>
           </IonCardContent>

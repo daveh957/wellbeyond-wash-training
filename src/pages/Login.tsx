@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useContext} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import {
   IonButton,
   IonButtons,
@@ -14,10 +14,11 @@ import {
   IonRow,
   IonText,
   IonTitle,
-  IonToolbar, NavContext
+  IonToolbar,
+  NavContext
 } from '@ionic/react';
 import './Login.scss';
-import {setAcceptedTerms, setData, setIsLoggedIn, setLoading} from '../data/user/user.actions';
+import {setAcceptedTerms, setIsLoggedIn, setLoading} from '../data/user/user.actions';
 import {connect} from '../data/connect';
 import {RouteComponentProps} from 'react-router';
 import {useTranslation} from "react-i18next";
@@ -47,17 +48,17 @@ const Login: React.FC<LoginProps> = ({isLoggedIn, acceptedTerms, setLoading, set
 
   const [username, setUsername] = useState();
   const [password, setPassword] = useState();
-  const [formSubmitted, setFormSubmitted] = useState(false);
-  const [usernameError, setUsernameError] = useState(false);
-  const [passwordError, setPasswordError] = useState(false);
+  const [formSubmitted, setFormSubmitted] = useState();
+  const [usernameError, setUsernameError] = useState();
+  const [passwordError, setPasswordError] = useState();
   const [serverError, setServerError] = useState<Error>();
 
   useEffect(() => {
     setUsername('');
     setPassword('');
-    setFormSubmitted(false);
-    setUsernameError(false);
-    setPasswordError(false);
+    setFormSubmitted(null);
+    setUsernameError(null);
+    setPasswordError(null);
   }, [isLoggedIn])
 
 
@@ -65,10 +66,10 @@ const Login: React.FC<LoginProps> = ({isLoggedIn, acceptedTerms, setLoading, set
     e.preventDefault();
     setFormSubmitted(true);
     if(!username) {
-      setUsernameError(true);
+      setUsernameError('registration.errors.loginUsernameRequired');
     }
     if(!password) {
-      setPasswordError(true);
+      setPasswordError('registration.errors.loginPasswordRequired');
     }
     if(username && password) {
       setLoading(true);
@@ -113,7 +114,7 @@ const Login: React.FC<LoginProps> = ({isLoggedIn, acceptedTerms, setLoading, set
         <form noValidate onSubmit={login}>
           <IonList>
             <IonItem>
-              <IonLabel position="stacked" color="primary">Username</IonLabel>
+              <IonLabel position="stacked" color="primary">{t('registration.labels.loginUsername')}</IonLabel>
               <IonInput name="username" type="text" value={username} spellCheck={false} autocapitalize="off" onIonChange={e => setUsername(e.detail.value!)}
                 required>
               </IonInput>
@@ -121,19 +122,19 @@ const Login: React.FC<LoginProps> = ({isLoggedIn, acceptedTerms, setLoading, set
 
             {formSubmitted && usernameError && <IonText color="danger">
               <p className="ion-padding-start">
-                Username is required
+                {t(usernameError)}
               </p>
             </IonText>}
 
             <IonItem>
-              <IonLabel position="stacked" color="primary">Password</IonLabel>
+              <IonLabel position="stacked" color="primary">{t('registration.labels.loginPassword')}</IonLabel>
               <IonInput name="password" type="password" value={password} onIonChange={e => setPassword(e.detail.value!)}>
               </IonInput>
             </IonItem>
 
             {formSubmitted && passwordError && <IonText color="danger">
               <p className="ion-padding-start">
-                Password is required
+                {t(passwordError)}
               </p>
             </IonText>}
           </IonList>
@@ -146,10 +147,10 @@ const Login: React.FC<LoginProps> = ({isLoggedIn, acceptedTerms, setLoading, set
 
           <IonRow>
             <IonCol>
-              <IonButton type="submit" expand="block">Login</IonButton>
+              <IonButton type="submit" expand="block">{t('registration.buttons.login')}</IonButton>
             </IonCol>
             <IonCol>
-              <IonButton routerLink="/signup" color="light" expand="block">Signup</IonButton>
+              <IonButton routerLink="/signup" color="light" expand="block">{t('registration.buttons.signup')}</IonButton>
             </IonCol>
           </IonRow>
         </form>

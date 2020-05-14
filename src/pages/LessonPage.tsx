@@ -34,12 +34,12 @@ import i18n from '../i18n';
 import {connect} from '../data/connect';
 import * as selectors from '../data/selectors';
 
-import {Lesson, LessonPage, LessonProgress, Subject, TrainingSession} from '../models/Training';
-import {PageView} from '../models/User';
+import {Lesson, LessonPage, LessonProgress, PageView, Subject, TrainingSession} from '../models/Training';
 import VideoPlayer from "../components/VideoPlayer";
 import ImageZoomModal from "../components/ImageZoomModal";
 import {updateTrainingLesson} from "../data/training/training.actions";
 import {updateUserLesson} from "../data/user/user.actions";
+import BackToLessonsLink from "../components/BackToLessons";
 
 interface OwnProps extends RouteComponentProps {
   subject: Subject;
@@ -47,10 +47,10 @@ interface OwnProps extends RouteComponentProps {
   page: LessonPage;
   idx: number;
   lessonProgress: LessonProgress;
+  activeSession?: TrainingSession;
 }
 
 interface StateProps {
-  activeSession?: TrainingSession;
 }
 
 interface DispatchProps {
@@ -103,28 +103,28 @@ const LessonPagePage: React.FC<LessonPageProps> = ({ subject, lesson, page, idx,
       const next = idx + 1;
       if (prev < 0) {
         if (lesson.questions && lesson.questions.length && !lessonProgress.completed) {
-          setPrevUrl(path + '/question/' + lesson.questions.length + '/preview');
+          setPrevUrl(path + '/question/' + lesson.questions.length + '/preview' + (activeSession && activeSession.id ? ('?tsId=' + activeSession.id) : ''));
         }
         else {
-          setPrevUrl(path + '/intro');
+          setPrevUrl(path + '/intro' + (activeSession && activeSession.id ? ('?tsId=' + activeSession.id) : ''));
         }
       }
       else {
-        setPrevUrl(path + '/page/' + (prev+1));
+        setPrevUrl(path + '/page/' + (prev+1) + (activeSession && activeSession.id ? ('?tsId=' + activeSession.id) : ''));
       }
       if (next > lesson.pages.length - 1) {
         if (lesson.questions && lesson.questions.length) {
-          setNextUrl(path + '/question/1');
+          setNextUrl(path + '/question/1' + (activeSession && activeSession.id ? ('?tsId=' + activeSession.id) : ''));
         }
         else {
-          setNextUrl(path + '/summary');
+          setNextUrl(path + '/summary' + (activeSession && activeSession.id ? ('?tsId=' + activeSession.id) : ''));
         }
       }
       else {
-        setNextUrl(path + '/page/' + (next+1));
+        setNextUrl(path + '/page/' + (next+1) + (activeSession && activeSession.id ? ('?tsId=' + activeSession.id) : ''));
       }
     }
-  },[lesson, idx]);
+  },[lesson, idx, activeSession]);
 
   useEffect(() => {
     if (videoState) {
@@ -175,7 +175,7 @@ const LessonPagePage: React.FC<LessonPageProps> = ({ subject, lesson, page, idx,
         <IonHeader translucent={true}>
           <IonToolbar>
             <IonButtons slot="start">
-              <IonMenuButton />
+              <BackToLessonsLink subject={subject} session={activeSession}/>
             </IonButtons>
             <IonTitle>{lesson && lesson.name}</IonTitle>
           </IonToolbar>
@@ -193,7 +193,7 @@ const LessonPagePage: React.FC<LessonPageProps> = ({ subject, lesson, page, idx,
                 <IonGrid>
                   <IonRow>
                     <IonCol>
-                      <img src={page.photo} crossOrigin='anonymous' onClick={openModal} alt={page.title + ' photo'}/>
+                      <img src={page.photo} crossOrigin='anonymous' onClick={openModal} alt={page.title}/>
                     </IonCol>
                   </IonRow>
                   {page.photoCaption &&
@@ -268,7 +268,7 @@ export default connect({
     page: selectors.getLessonPage(state, ownProps),
     idx: selectors.getPageIdx(state, ownProps),
     lessonProgress: selectors.getLessonProgress(state, ownProps),
-    activeSession: selectors.getActiveSession(state),
+    activeSession: selectors.getTrainingSession(state, ownProps),
   }),
   component: LessonPagePage
 });

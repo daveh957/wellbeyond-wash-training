@@ -1,4 +1,4 @@
-import { cloudinaryConfig } from "../CLOUDINARY_CONFIG";
+import {cloudinaryConfig} from "../CLOUDINARY_CONFIG";
 import {Cloudinary} from 'cloudinary-core';
 
 const cl = Cloudinary.new({cloud_name: cloudinaryConfig.cloudName});

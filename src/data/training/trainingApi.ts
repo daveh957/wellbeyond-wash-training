@@ -1,9 +1,10 @@
 import * as firebase from 'firebase';
-import {Lesson, Subject, TrainingSession} from '../../models/Training';
+import {Lesson, LessonProgress, Subject, TrainingSession} from '../../models/Training';
 import {getLessonIconUrl} from "../../util/cloudinary";
 import {checkIsAdmin} from "../user/userApi";
+import {TrainingSessions} from "./training.state";
 
-export const loadData = async (collectionPath:string) : Promise<any> => {
+export const loadTrainingData = async (collectionPath:string) : Promise<any> => {
   const isAdmin:boolean = await checkIsAdmin();
   let results = Array();
   let query:firebase.firestore.Query<firebase.firestore.DocumentData> = firebase.firestore().collection(collectionPath);
@@ -26,8 +27,8 @@ export const loadData = async (collectionPath:string) : Promise<any> => {
     });
 };
 
-export const loadSessionData = async () : Promise<any> => {
-  let results = Array();
+export const loadTrainingSessionData = async () : Promise<any> => {
+  let results = {} as TrainingSessions;
   let user = firebase.auth().currentUser;
   if (!user || !user.uid) {
     return results;
@@ -38,8 +39,10 @@ export const loadSessionData = async () : Promise<any> => {
     .then(querySnapshot => {
       querySnapshot.forEach(doc => {
         // doc.data() is never undefined for query doc snapshots
-        if (!doc.data().archived) {
-          results.push(doc.data());
+        const data = doc.data() as TrainingSession;
+        if (!data.archived) {
+          // @ts-ignore id is always defined
+          results[data.id] = data;
         }
       });
       return results;

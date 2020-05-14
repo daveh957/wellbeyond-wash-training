@@ -14,7 +14,8 @@ import {
   IonRow,
   IonText,
   IonTitle,
-  IonToolbar, NavContext
+  IonToolbar,
+  NavContext
 } from '@ionic/react';
 import './Login.scss';
 import {useTranslation} from "react-i18next";
@@ -24,7 +25,7 @@ import {RouteComponentProps} from 'react-router';
 import {Registration} from "../models/User";
 import {Redirect} from "react-router-dom";
 import {registerWithEmail, updateProfile} from "../data/user/userApi";
-import {setIsLoggedIn, setLoading, loadUserData} from "../data/user/user.actions";
+import {loadUserData, setIsLoggedIn, setLoading} from "../data/user/user.actions";
 
 interface OwnProps extends RouteComponentProps {}
 
@@ -208,7 +209,7 @@ const Signup: React.FC<SignupProps> = ({isLoggedIn,  setLoading, setIsLoggedIn})
   );
 };
 
-export default connect<OwnProps, {}, DispatchProps>({
+export default connect<OwnProps, StateProps, DispatchProps>({
   mapDispatchToProps: {
     setLoading,
     setIsLoggedIn,
@@ -216,7 +217,6 @@ export default connect<OwnProps, {}, DispatchProps>({
   },
   mapStateToProps: (state) => ({
     isLoggedIn: state.user.isLoggedIn,
-    acceptedTerms: state.user.acceptedTerms,
   }),
   component: Signup
 })

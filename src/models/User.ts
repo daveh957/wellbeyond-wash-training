@@ -12,9 +12,18 @@ export interface Answer {
   correctAnswer?: string | number;
 }
 
-export interface PageView {
-  attestationChecked?: boolean;
-  videoWatched?: boolean;
+export interface User {
+  id: string;
+  name: string;
+  email?: string;
+  organization?: string;
+  acceptedTerms?: boolean;
+  canTeach?: boolean;
+}
+
+export interface Admin {
+  id: string;
+  isAdmin?: boolean;
 }
 
 

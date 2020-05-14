@@ -1,12 +1,10 @@
-import { createSelector } from 'reselect';
-import { AppState } from './state';
-import { Lesson } from '../models/Training';
+import {createSelector} from 'reselect';
+import {AppState} from './state';
+import {Lesson} from '../models/Training';
+import queryString from 'query-string';
 
 export const getTrainingSessions = (state: AppState) => {
   return state.data.sessions;
-}
-export const getActiveSession = (state: AppState) => {
-  return state.data.activeSession;
 }
 export const getUserLessons = (state: AppState) => {
   return state.user.lessons;
@@ -19,9 +17,6 @@ export const getLessons = (state: AppState) => {
 }
 export const getUserId = (state: AppState) => {
   return state.user.id;
-}
-export const getTrainerMode = (state: AppState) => {
-  return !!state.data.activeSession;
 }
 
 const getSubjectIdParam = (_state: AppState, props: any) => {
@@ -36,7 +31,18 @@ const getPageIdParam = (_state: AppState, props: any) => {
 const getQuestionIdParam = (_state: AppState, props: any) => {
   return props.match.params['questionId'];
 }
-
+const getTrainingSessionIdParam  = (_state: AppState, props: any) => {
+  const values = queryString.parse(props.location.search);
+  return values['tsId'];
+}
+export const getTrainingSession = createSelector(
+  getTrainingSessions, getTrainingSessionIdParam,
+  (sessions, id) => {
+    if (sessions && id && typeof id === 'string') {
+      return sessions[id];
+    }
+  }
+);
 export const getSubject = createSelector(
   getSubjects, getSubjectIdParam,
   (subjects, id) => {
@@ -81,7 +87,7 @@ export const getQuestionIdx = createSelector(
 );
 
 export const getLessonProgress = createSelector(
-  getActiveSession, getUserLessons, getLessonIdParam, getUserId,
+  getTrainingSession, getUserLessons, getLessonIdParam, getUserId,
   (activeSession, userLessons, id, userId) => {
     if (activeSession && id) {
       return (activeSession && activeSession.lessons &&  activeSession.lessons[id]) || {id: id, lessonId: id, answers: []}
