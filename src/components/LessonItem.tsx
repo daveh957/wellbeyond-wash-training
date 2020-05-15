@@ -3,7 +3,6 @@ import {Lesson, Subject, TrainingSession} from '../models/Training';
 import {IonCard, IonCardContent, IonCardHeader, IonItem, IonLabel} from '@ionic/react';
 import {getLessonIconUrl} from "../util/cloudinary";
 
-
 interface LessonItemProps {
   subject: Subject;
   lesson: Lesson;
