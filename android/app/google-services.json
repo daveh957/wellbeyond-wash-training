@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "654062401402",
+    "firebase_url": "https://wellbeyond-wash-training.firebaseio.com",
+    "project_id": "wellbeyond-wash-training",
+    "storage_bucket": "wellbeyond-wash-training.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:654062401402:android:ed4198b4000c72efe9c8c3",
+        "android_client_info": {
+          "package_name": "com.wellbeyond.training"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "654062401402-vktg37bv37k5oci3tg90g6s2ks0p5up2.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDhb6ERWl7JxU1ZmxadYUBFQp7uw3dlICM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "654062401402-vktg37bv37k5oci3tg90g6s2ks0p5up2.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

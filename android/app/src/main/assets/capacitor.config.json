@@ -1,0 +1,8 @@
+{
+  "appId": "com.wellbeyond.training",
+  "appName": "wellbeyond-wash-training",
+  "bundledWebRuntime": false,
+  "npmClient": "npm",
+  "webDir": "build",
+  "cordova": {}
+}
