@@ -83,6 +83,7 @@ if (!firebase.apps.length) {
 }
 
 const IonicApp: React.FC<IonicAppProps> = ({ darkMode, loading, loadLessonData, loadUserData, loadTrainingSessions, logoutUser, setIsLoggedIn, setAcceptedTerms}) => {
+  
   const { t } = useTranslation(['translation'], {i18n} );
   const [intercomUser, setIntercomUser] = useState()
 
