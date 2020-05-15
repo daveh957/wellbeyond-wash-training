@@ -34,10 +34,11 @@ interface OwnProps extends RouteComponentProps {
   subject: Subject;
   lesson: Lesson;
   lessonProgress: LessonProgress;
+  activeSession?: TrainingSession;
 }
 
 interface StateProps {
-  activeSession?: TrainingSession;
+  lessons: Lesson[];
 }
 
 interface DispatchProps {
@@ -47,19 +48,27 @@ interface DispatchProps {
 
 interface LessonSummaryProps extends OwnProps, StateProps, DispatchProps {}
 
-const LessonSummaryPage: React.FC<LessonSummaryProps> = ({ subject, lesson, lessonProgress,  activeSession, updateUserLesson, updateTrainingLesson }) => {
+const LessonSummaryPage: React.FC<LessonSummaryProps> = ({ subject, lesson, lessons, lessonProgress,  activeSession, updateUserLesson, updateTrainingLesson }) => {
 
   const { t } = useTranslation(['translation'], {i18n} );
   const [lessonIcon, setLessonIcon] = useState();
   const [nextUrl, setNextUrl] = useState();
   const [prevUrl, setPrevUrl] = useState();
+  const [nextLesson, setNextLesson] = useState();
 
   useEffect(() => {
-    if (lesson && lessonProgress) {
+    if (lesson && lessons && lessonProgress) {
       const lastPage = ('/tabs/subjects/' + subject.id + '/lessons/' + lesson.id) + (lesson.pages && lesson.pages.length ?  + ('/page/' + lesson.pages.length) : '/intro');
       const lastQuestion = lesson.questions && lesson.questions.length ? ('/tabs/subjects/' + subject.id + '/lessons/' + lesson.id + '/question') : lastPage;
-      setPrevUrl(lastQuestion);
-      setNextUrl('/tabs/subjects/' + subject.id + '/progress');
+      let i, nextLesson;
+      for(i=0;i<lessons.length;i++) {
+        if (lessons[i] && lessons[i].id === lesson.id && i < (lessons.length - 1)) {
+          nextLesson = lessons[i+1];
+        }
+      }
+      setNextLesson(nextLesson);
+      setPrevUrl(lastQuestion + (activeSession && activeSession.id ? ('?tsId=' + activeSession.id) : ''));
+      setNextUrl('/tabs/subjects/' + subject.id + (nextLesson ? ('/lessons/' + nextLesson.id + '/intro') : '/progress')  + (activeSession && activeSession.id ? ('?tsId=' + activeSession.id) : ''));
     }
   },[lesson, lessonProgress])
 
@@ -82,6 +91,11 @@ const LessonSummaryPage: React.FC<LessonSummaryProps> = ({ subject, lesson, less
             </IonCardHeader>
             <IonCardContent className='lesson-text'>
               <p>{t('resources.lessons.summary.completed', {score: lessonProgress.score})}</p>
+              {nextLesson ?
+                <p>{t('resources.lessons.summary.nextLesson', {lesson: nextLesson.name})}</p>
+                :
+                <p>{t('resources.lessons.summary.allDone', {subject: subject.name})}</p>
+              }
             </IonCardContent>
           </IonCard>
         </IonContent>
@@ -90,7 +104,7 @@ const LessonSummaryPage: React.FC<LessonSummaryProps> = ({ subject, lesson, less
         <IonToolbar>
           <IonButtons slot={'start'}>
             <IonButton fill="solid" color="primary" routerLink={prevUrl} routerDirection='back'>{t('buttons.previous')}</IonButton>
-            <IonButton fill="solid" color="primary"  routerLink={nextUrl} routerDirection='root'>{t('buttons.done')}</IonButton>
+            <IonButton fill="solid" color="primary"  routerLink={nextUrl} routerDirection='root'>{t(nextLesson ? 'buttons.next' : 'buttons.done')}</IonButton>
           </IonButtons>
         </IonToolbar>
       </IonFooter>
@@ -106,7 +120,8 @@ export default connect({
     subject: selectors.getSubject(state, ownProps),
     lesson: selectors.getLesson(state, ownProps),
     lessonProgress: selectors.getLessonProgress(state, ownProps),
-    activeSession: selectors.getTrainingSession(state, ownProps)
+    activeSession: selectors.getTrainingSession(state, ownProps),
+    lessons: selectors.getLessons(state),
   }),
   component: LessonSummaryPage
 });

@@ -161,6 +161,8 @@ export default {
         summary: {
           title: 'Lesson Complete',
           completed: 'You have successfully completed this module and correctly answered {{score}}% of the questions.',
+          nextLesson: 'The next module is {{lesson}}. Click next when you are ready to begin.',
+          allDone: 'You have completed all the modules for {{subject}}.',
          },
         questions: {
           title: 'Question {{num}} of {{count}}',

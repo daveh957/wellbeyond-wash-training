@@ -86,6 +86,7 @@ const SubjectProgressPage: React.FC<SubjectProps> = ({ subject, lessons, userLes
                     key={lesson.id}
                     subject={subject}
                     lesson={lesson}
+                    activeSession={activeSession}
                     completed={lessonFlags && lessonFlags.length > idx ? !!lessonFlags[idx].completed : false}
                     clickable={lessonFlags && lessonFlags.length > idx ? !!lessonFlags[idx].clickable : false}
                   />
