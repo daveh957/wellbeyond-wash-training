@@ -62,7 +62,6 @@ const StartTrainingSession: React.FC<StartTrainingSessionProps> = ({subject, les
   }
   const validate = ():boolean => {
     let errors = {...formErrors};
-    errors.location = formValues.location ? null : 'training.errors.locationRequired';
     errors.groupType = formValues.groupType ? null : 'training.errors.groupTypeRequired';
     errors.groupSize = formValues.groupSize ? null : 'training.errors.groupSizeRequired';
     setFormErrors(errors);
@@ -79,7 +78,6 @@ const StartTrainingSession: React.FC<StartTrainingSessionProps> = ({subject, les
         userId: userId || '',
         started: new Date(),
         archived: false,
-        location: formValues.location,
         groupType: formValues.groupType,
         groupSize: formValues.groupSize,
         lessons: {}
@@ -113,19 +111,6 @@ const StartTrainingSession: React.FC<StartTrainingSessionProps> = ({subject, les
       <IonContent>
         <form noValidate onSubmit={startNewTrainingSession}>
           <IonList>
-            <IonItem>
-              <IonLabel position="stacked" color="primary">{t('training.labels.location')}</IonLabel>
-              <IonInput name="location" type="text" value={formValues.location} spellCheck={false} autocapitalize="on" required={true} onIonChange={e => {
-                handleChange('location', e.detail.value!);
-              }}>
-              </IonInput>
-            </IonItem>
-
-            {formSubmitted && formErrors.location && <IonText color="danger">
-              <p className="ion-padding-start">
-                {t(formErrors.location)}
-              </p>
-            </IonText>}
 
             <IonItem>
               <IonLabel position="stacked" color="primary">{t('training.labels.groupType')}</IonLabel>
@@ -142,7 +127,7 @@ const StartTrainingSession: React.FC<StartTrainingSessionProps> = ({subject, les
               </IonSelect>
             </IonItem>
 
-            {formSubmitted && formErrors.location && <IonText color="danger">
+            {formSubmitted && formErrors.groupType && <IonText color="danger">
               <p className="ion-padding-start">
                 {t(formErrors.groupType)}
               </p>
@@ -164,7 +149,7 @@ const StartTrainingSession: React.FC<StartTrainingSessionProps> = ({subject, les
               </IonSelect>
             </IonItem>
 
-            {formSubmitted && formErrors.location && <IonText color="danger">
+            {formSubmitted && formErrors.groupSize && <IonText color="danger">
               <p className="ion-padding-start">
                 {t(formErrors.groupSize)}
               </p>

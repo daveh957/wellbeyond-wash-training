@@ -36,6 +36,9 @@ export const loginWithEmail = (email:string, password:string) => {
 export const getCurrentUser = () => {
   return firebase.auth().currentUser;
 };
+export const sendPasswordResetEmail = (email:string) => {
+  return firebase.auth().sendPasswordResetEmail(email);
+};
 /**
  *
  */

@@ -60,7 +60,6 @@ export interface TrainingSession {
   archived: boolean;
   userId: string;
   subjectId: string;
-  location?: string;
   groupType?: string;
   groupSize?: string;
   started?: Date;

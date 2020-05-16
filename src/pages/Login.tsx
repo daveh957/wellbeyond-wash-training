@@ -1,7 +1,7 @@
 import React, {useContext, useEffect, useState} from 'react';
 import {
   IonButton,
-  IonButtons,
+  IonButtons, IonCard, IonCardContent,
   IonCol,
   IonContent,
   IonHeader,
@@ -13,7 +13,7 @@ import {
   IonPage,
   IonRow,
   IonText,
-  IonTitle,
+  IonTitle, IonToast,
   IonToolbar,
   NavContext
 } from '@ionic/react';
@@ -25,6 +25,13 @@ import {useTranslation} from "react-i18next";
 import i18n from "../i18n";
 import {Redirect} from "react-router-dom";
 import {getUserProfile, loginWithEmail} from "../data/user/userApi";
+import ForgotPasswordModal from "../components/ForgotPasswordModal";
+
+export interface ToastProps {
+  color?:string;
+  header?:string;
+  message:string;
+}
 
 interface OwnProps extends RouteComponentProps {}
 
@@ -52,6 +59,11 @@ const Login: React.FC<LoginProps> = ({isLoggedIn, acceptedTerms, setLoading, set
   const [usernameError, setUsernameError] = useState();
   const [passwordError, setPasswordError] = useState();
   const [serverError, setServerError] = useState<Error>();
+  const [showForgotPasswordModal, setShowForgotPasswordModal] = useState<boolean>(false);
+  const [openToast, setOpenToast] = useState<boolean>(false);
+  const [toastColor, setToastColor] = useState<string|undefined>();
+  const [toastHeader, setToastHeader] = useState<string|undefined>();
+  const [toastMessage, setToastMessage] = useState<string>();
 
   useEffect(() => {
     setUsername('');
@@ -61,6 +73,19 @@ const Login: React.FC<LoginProps> = ({isLoggedIn, acceptedTerms, setLoading, set
     setPasswordError(null);
   }, [isLoggedIn])
 
+
+  const openForgotPasswordModal = () => {
+    setShowForgotPasswordModal(true);
+  }
+  const closeForgotPasswordModal = () => {
+    setShowForgotPasswordModal(false);
+  }
+  const showToast = ({color, header, message}:ToastProps) =>{
+    setToastColor(color);
+    setToastHeader(header);
+    setToastMessage(message);
+    setOpenToast(true);
+  }
 
   const login = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -106,12 +131,13 @@ const Login: React.FC<LoginProps> = ({isLoggedIn, acceptedTerms, setLoading, set
         </IonToolbar>
       </IonHeader>
       <IonContent>
-
-        <div className="login-logo">
-          <img src="assets/img/appicon.png" alt="WellBeyond logo" />
-        </div>
-
         <form noValidate onSubmit={login}>
+        <IonCard>
+          <IonCardContent>
+            <div className="login-logo">
+              <img src="assets/img/appicon.png" alt="WellBeyond logo" />
+            </div>
+            <p>{t('registration.messages.loginInfo')}</p>
           <IonList>
             <IonItem>
               <IonLabel position="stacked" color="primary">{t('registration.labels.loginUsername')}</IonLabel>
@@ -144,16 +170,28 @@ const Login: React.FC<LoginProps> = ({isLoggedIn, acceptedTerms, setLoading, set
               {serverError.message}
             </p>
           </IonText>}
+          </IonCardContent>
+        </IonCard>
 
           <IonRow>
             <IonCol>
               <IonButton type="submit" expand="block">{t('registration.buttons.login')}</IonButton>
             </IonCol>
+          </IonRow>
+          <IonRow>
             <IonCol>
-              <IonButton routerLink="/signup" color="light" expand="block">{t('registration.buttons.signup')}</IonButton>
+              <IonButton routerLink="/signup" color="light" expand="block">{t('registration.buttons.newuser')}</IonButton>
             </IonCol>
           </IonRow>
-        </form>
+          <IonRow>
+            <IonCol>
+              <IonButton onClick={openForgotPasswordModal} color="light" expand="block">{t('registration.buttons.forgotPassword')}</IonButton>
+            </IonCol>
+          </IonRow>
+      </form>
+        {/* eslint-disable-next-line react/jsx-no-undef */}
+        <ForgotPasswordModal showModal={showForgotPasswordModal} closeModal={closeForgotPasswordModal} showToast={showToast}/>
+        <IonToast isOpen={openToast} header={toastHeader} message={toastMessage} color={toastColor||'success'} onDidDismiss={() => setOpenToast(false)} />
 
       </IonContent>
 

@@ -5,7 +5,7 @@ export default {
   translation: {
     app: {
       title: 'WellBeyond Mobile App',
-      logo: 'WellBeyond Log',
+      logo: 'WellBeyond Logo',
     },
     menu: {
       about: 'About WellBeyond',
@@ -18,7 +18,6 @@ export default {
       signup: 'Signup',
       support: 'Support',
       darkMode: 'Dark Mode',
-      trainerMode: 'Trainer Mode',
       pleaseWait: 'Please wait...'
     },
     buttons: {
@@ -26,8 +25,8 @@ export default {
       next: 'Next',
       done: 'Done',
       close: 'Close',
-      zoomIn: '+',
-      zoomOut: '-'
+      cancel: 'Cancel',
+      ok: 'OK',
     },
     registration: {
       modals: {
@@ -35,7 +34,8 @@ export default {
         changePassword: 'Change Password',
         changePhoto: 'Change Profile Photo',
         changeProfile: 'Change Profile Information',
-        reauthenticate: 'Reenter your password'
+        reauthenticate: 'Reenter your password',
+        forgotPassword: 'Send Password Reset'
       },
       labels: {
         name: 'First and Last Name',
@@ -43,11 +43,15 @@ export default {
         oldEmail: 'Current Email Address',
         newEmail: 'New Email Address',
         loginUsername: 'Email Address',
+        passwordResetEmail: 'Email Address',
         loginPassword: 'Password',
         password: 'Password (8 characters minimum)',
         newPassword: 'New Password (8 characters minimum)',
         passwordRepeat: 'Repeat Password',
         organization: 'Organization Name (optional)',
+        organizationWritein: 'Enter Organization Name',
+        community: 'Community (optional)',
+        communityWritein: 'Enter Community Name',
         pleaseAcceptTerms: 'Please check the box indicating that you have read and agree to these terms of use.',
         userAcceptsTerms: 'I agree to the terms and conditions above',
         avatar: 'Avatar'
@@ -65,6 +69,9 @@ export default {
       buttons: {
         login: 'Login',
         signup: 'Signup',
+        newuser: 'New User?',
+        existinguser: 'Already a User?',
+        forgotPassword: 'Forgot Password?',
         changePassword: 'Update Password',
         changeProfile: 'Update Profile',
         changeEmail: 'Update Email',
@@ -72,17 +79,43 @@ export default {
         createAccount: 'Create Account',
         reauthenticate: 'Verify Password',
         acceptTerms: 'Get Started',
+        sendPasswordReset: 'Send Email',
       },
       messages: {
+        loginInfo: 'Please login to get started using the WellBeyond Wash Training Application.',
+        signupInfo: 'Please register to get started using the WellBeyond Wash Training Application.',
         passwordChanged: 'Password updated',
         emailChanged: 'Email updated',
         profileChanged: 'Profile updated',
+        passwordResetInfo: 'It\'s okay, we all forget our passwords.  Just tell us the email that you registered with, and we\'ll send you a link that you can use to reset it.',
+        passwordResetSent: 'An email has been sent to {{email}} with a link to reset your password.  Be sure to check your SPAM folder then come back here to login after you have set a new password.',
       },
       pages: {
         signup: 'Signup',
         login: 'Login',
         terms: 'Accept Terms',
         account: 'Account',
+      },
+      communities: {
+        selectOne: 'Select a Community',
+        Olpejeta: 'Olpejeta',
+        Kithoka: 'Kithoka',
+        Sikizana: 'Sikizana',
+        Olmoran: 'Olmoran',
+        Meta: 'Meta',
+        Cheptori: 'Cheptori',
+        Kavuthu: 'Kavuthu',
+        Kaliini: 'Kaliini',
+        Muruku: 'Muruku',
+        Salaita: 'Salaita',
+        'Sauti Kuu': 'Sauti Kuu',
+        Mutaki: 'Mutaki',
+        Other: 'Other'
+      },
+      organizations: {
+        selectOne: 'Select an Organization',
+        'Well Aware': 'Well Aware',
+        Other: 'Other'
       }
     },
     training: {
@@ -114,7 +147,7 @@ export default {
       messages: {
         partiallyComplete: 'You have completed {{completed}} of the {{count}} modules for {{subject}}.',
         fullyComplete: 'You have completed the training for {{subject}}.',
-        sessionDescription: 'Training for {{type}} group of {{size}} people at {{location}}',
+        sessionDescription: 'Training for {{type}} group of {{size}} people',
         sessionStartedAt: 'Started {{date, dateAndTime}}',
         sessionCompletedAt: 'Completed {{date, dateAndTime}}',
         swipeInstructions: 'Swipe left to resume session or right to discard it'
@@ -151,8 +184,6 @@ export default {
         name: 'Lesson',
         name_plural: 'Lessons',
         imageZoom: 'Image Zoom',
-        imageZoomHelp: 'Use pinching gestures the controls below zoom in and out',
-        imageZoomToolbar: 'Zoom +/-',
         intro: {
           title: 'Introduction',
           completed: 'You have already completed this module, but you can come back here any time to review.',

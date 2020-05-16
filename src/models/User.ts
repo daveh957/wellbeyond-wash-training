@@ -3,6 +3,7 @@ export interface Registration {
   name: string;
   password: string;
   organization?: string;
+  community?: string;
 }
 
 export interface Answer {

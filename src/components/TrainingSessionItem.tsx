@@ -77,7 +77,7 @@ const TrainingSessionItem: React.FC<LessonItemProps> = ({ subject, lessons, sess
               :
             <h2>{t('training.messages.sessionStartedAt',{date: session.started })}</h2>
           }
-          <p> {t('training.messages.sessionDescription',{location: session.location, type: session.groupType, size: session.groupSize })}</p>
+          <p> {t('training.messages.sessionDescription',{type: session.groupType, size: session.groupSize })}</p>
         </IonLabel>
         <IonNote slot={'end'}>
           {session.completed ?

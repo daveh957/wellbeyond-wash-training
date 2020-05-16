@@ -25,6 +25,12 @@ i18n
         if(format === 'dateAndTime' && value.toDate) {
           return Intl.DateTimeFormat(lng, { month: "long", day: "numeric", year: "numeric", hour: "numeric", minute: "numeric", hour12: true }).format(value.toDate());
         }
+        if(format === 'date' && value instanceof Date) {
+          return Intl.DateTimeFormat(lng, { month: "long", day: "numeric", year: "numeric" }).format(value);
+        }
+        if(format === 'dateAndTime' && value instanceof Date) {
+          return Intl.DateTimeFormat(lng, { month: "long", day: "numeric", year: "numeric", hour: "numeric", minute: "numeric", hour12: true }).format(value);
+        }
         return value;
       }
     }
