@@ -57,7 +57,7 @@ interface DispatchProps {
 
 interface QuestionPageProps extends OwnProps, StateProps, DispatchProps {}
 
-const QuestionPage: React.FC<QuestionPageProps> = ({ subject, lesson, question, idx, lessonProgress, activeSession, updateUserLesson, updateTrainingLesson }) => {
+const QuestionPage: React.FC<QuestionPageProps> = ({ history, subject, lesson, question, idx, lessonProgress, activeSession, updateUserLesson, updateTrainingLesson }) => {
 
   const {navigate} = useContext(NavContext);
   const { t } = useTranslation(['translation'], {i18n} );
@@ -69,20 +69,20 @@ const QuestionPage: React.FC<QuestionPageProps> = ({ subject, lesson, question, 
   const [lockAnswer, setLockAnswer] = useState<boolean>();
 
   useEffect(() => {
-    let priorAnswer;
     if (question && lessonProgress) {
+      let priorAnswer;
       const a = lessonProgress.answers.find(element => element.question === question.questionText);
       if (a) {
         priorAnswer = a.answerAfter;
       }
+      setAnswer(priorAnswer);
+      setShowNext(!!priorAnswer);
+      setLockAnswer(!!priorAnswer);
     }
-    setAnswer(priorAnswer);
-    setShowNext(!!priorAnswer);
-    setLockAnswer(!!priorAnswer);
   },[lessonProgress, question]);
 
   useEffect(() => {
-    if (lesson) {
+    if (subject && lesson && idx > -1) {
       const path = '/tabs/subjects/' + subject.id + '/lessons/' + lesson.id;
       const prev = idx - 1;
       const next = idx + 1;
@@ -148,7 +148,7 @@ const QuestionPage: React.FC<QuestionPageProps> = ({ subject, lesson, question, 
         updateUserLesson(lessonProgress);
       }
     }
-    navigate(nextUrl, 'forward');
+    history.push(nextUrl);
   }
 
   const handleLessonComplete = () => {
@@ -166,14 +166,15 @@ const QuestionPage: React.FC<QuestionPageProps> = ({ subject, lesson, question, 
   return (
     <IonPage id="question-page">
         <IonHeader translucent={true}>
-          <IonToolbar>
-            <IonButtons slot="start">
-              <BackToLessonsLink subject={subject} session={activeSession}/>
-            </IonButtons>
-            <IonTitle>{lesson && lesson.name}</IonTitle>
+          {subject && lesson &&
+          <IonToolbar><IonButtons slot="start">
+            <BackToLessonsLink subject={subject} session={activeSession}/>
+          </IonButtons>
+            <IonTitle>{lesson.name}</IonTitle>
           </IonToolbar>
+          }
         </IonHeader>
-        {lesson && lessonProgress && question &&
+        {subject && lesson && lessonProgress && question &&
         <IonContent fullscreen={true}>
           <IonCard className='lesson-card'>
             <IonCardHeader>

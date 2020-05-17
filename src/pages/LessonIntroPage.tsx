@@ -86,12 +86,14 @@ const LessonIntroPage: React.FC<LessonIntroProps> = ({ subject,lesson, lessonPro
   return (
     <IonPage id="lesson-intro">
         <IonHeader translucent={true}>
+          {subject && lesson &&
           <IonToolbar>
             <IonButtons slot="start">
               <BackToLessonsLink subject={subject} session={activeSession}/>
             </IonButtons>
-            <IonTitle>{lesson && lesson.name}</IonTitle>
+            <IonTitle>{lesson.name}</IonTitle>
           </IonToolbar>
+          }
         </IonHeader>
         {lesson &&
           <IonContent fullscreen={true}>

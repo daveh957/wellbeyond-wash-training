@@ -60,7 +60,7 @@ interface DispatchProps {
 
 interface LessonPageProps extends OwnProps, StateProps, DispatchProps {}
 
-const LessonPagePage: React.FC<LessonPageProps> = ({ subject, lesson, page, idx, lessonProgress, activeSession, updateUserLesson, updateTrainingLesson }) => {
+const LessonPagePage: React.FC<LessonPageProps> = ({ history, subject, lesson, page, idx, lessonProgress, activeSession, updateUserLesson, updateTrainingLesson }) => {
 
   const {navigate} = useContext(NavContext);
   const { t } = useTranslation(['translation'], {i18n} );
@@ -73,7 +73,6 @@ const LessonPagePage: React.FC<LessonPageProps> = ({ subject, lesson, page, idx,
   const [pageView, setPageView] = useState();
 
   useEffect(() => {
-    let pageView:PageView = {};
     if (lesson && page && lessonProgress) {
       lessonProgress.pageViews = lessonProgress.pageViews || [];
       if (lessonProgress.pageViews.length !== lesson.pages.length) {
@@ -159,7 +158,7 @@ const LessonPagePage: React.FC<LessonPageProps> = ({ subject, lesson, page, idx,
   const handleNext = (e:any) => {
     e.preventDefault();
     savePageView();
-    navigate(nextUrl, 'forward');
+    history.push(nextUrl);
   }
   const handlePrev = (e:any) => {
     e.preventDefault();
@@ -170,14 +169,15 @@ const LessonPagePage: React.FC<LessonPageProps> = ({ subject, lesson, page, idx,
   return (
     <IonPage id="lesson-page">
         <IonHeader translucent={true}>
-          <IonToolbar>
-            <IonButtons slot="start">
-              <BackToLessonsLink subject={subject} session={activeSession}/>
-            </IonButtons>
-            <IonTitle>{lesson && lesson.name}</IonTitle>
+          {subject && lesson && page && pageView &&
+          <IonToolbar><IonButtons slot="start">
+            <BackToLessonsLink subject={subject} session={activeSession}/>
+          </IonButtons>
+            <IonTitle>{lesson.name}</IonTitle>
           </IonToolbar>
+          }
         </IonHeader>
-        {lesson && lessonProgress && page &&
+        {subject && lesson && lessonProgress && page && pageView &&
         <IonContent fullscreen={true}>
           <IonCard>
             <IonCardHeader>

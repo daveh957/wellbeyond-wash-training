@@ -75,14 +75,15 @@ const LessonSummaryPage: React.FC<LessonSummaryProps> = ({ subject, lesson, less
   return (
     <IonPage id="lesson-summary">
         <IonHeader translucent={true}>
-          <IonToolbar>
-            <IonButtons slot="start">
-              <BackToLessonsLink subject={subject} session={activeSession}/>
-            </IonButtons>
-            <IonTitle>{lesson && lesson.name}</IonTitle>
+          {subject && lesson &&
+          <IonToolbar><IonButtons slot="start">
+            <BackToLessonsLink subject={subject} session={activeSession}/>
+          </IonButtons>
+            <IonTitle>{lesson.name}</IonTitle>
           </IonToolbar>
+          }
         </IonHeader>
-        {lesson && lessonProgress &&
+        {subject && lesson && lessonProgress &&
         <IonContent fullscreen={true}>
           <IonCard className='lesson-card'>
             <IonCardHeader>
