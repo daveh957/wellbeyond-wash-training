@@ -47,7 +47,7 @@ const MainTabs: React.FC<MainTabsProps> = ({isLoggedIn, acceptedTerms}) => {
   }
 
   return (
-      <IonRouterOutlet>
+      <IonRouterOutlet id='tabs' animated={false}>
         <Redirect exact path="/tabs" to="/tabs/training" />
         {/*
           Using the render method prop cuts down the number of renders your components will have due to route changes.

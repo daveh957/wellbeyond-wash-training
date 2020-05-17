@@ -121,7 +121,7 @@ const IonicApp: React.FC<IonicAppProps> = ({ darkMode, loading, loadLessonData, 
         <IonReactRouter>
           <IonSplitPane contentId="main">
             <Menu />
-            <IonRouterOutlet id="main">
+            <IonRouterOutlet id="main" animated={false}>
               <Redirect exact path="/" to="/tabs" />
               <Route path="/tabs" component={MainTabs} />
               <Route path="/account" component={Account} />
