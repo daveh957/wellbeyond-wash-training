@@ -81,7 +81,7 @@ const QuestionPreviewPage: React.FC<QuestionPageProps> = ({ subject, lesson, que
   },[lessonProgress, question]);
 
   useEffect(() => {
-    if (lesson) {
+    if (subject && lesson) {
       const path = '/tabs/subjects/' + subject.id + '/lessons/' + lesson.id;
       const prev = idx - 1;
       const next = idx + 1;

@@ -67,10 +67,8 @@ const LessonPagePage: React.FC<LessonPageProps> = ({ subject, lesson, page, idx,
 
   const [nextUrl, setNextUrl] = useState();
   const [prevUrl, setPrevUrl] = useState();
-  const [videoViewed, setVideoViewed] = useState();
+  const [videoPlayed, setVideoPlayed] = useState();
   const [showNext, setShowNext] = useState();
-  const [videoState, setVideoState] = useState();
-  const [videoPlayer, setVideoPlayer] = useState();
   const [showModal, setShowModal] = useState();
   const [pageView, setPageView] = useState();
 
@@ -97,7 +95,7 @@ const LessonPagePage: React.FC<LessonPageProps> = ({ subject, lesson, page, idx,
   },[lesson, page, lessonProgress, idx]);
 
   useEffect(() => {
-    if (lesson) {
+    if (subject && lesson && idx > -1) {
       const path = '/tabs/subjects/' + subject.id + '/lessons/' + lesson.id;
       const prev = idx - 1;
       const next = idx + 1;
@@ -124,16 +122,14 @@ const LessonPagePage: React.FC<LessonPageProps> = ({ subject, lesson, page, idx,
         setNextUrl(path + '/page/' + (next+1) + (activeSession && activeSession.id ? ('?tsId=' + activeSession.id) : ''));
       }
     }
-  },[lesson, idx, activeSession]);
+  },[subject, lesson, idx, activeSession]);
 
   useEffect(() => {
-    if (videoState) {
-      if (videoState.ended || (videoState.currentTime > 0 && videoState.duration > 0 && (videoState.currentTime / videoState.duration) > 0.8)) {
+    if (videoPlayed) {
         pageView.videoWatched = true;
         setPageView(pageView);
       }
-    }
-  }, [videoState]);
+  }, [videoPlayed]);
 
   const openModal = () => {setShowModal(true)};
   const closeModal = () => {setShowModal(false)};
@@ -150,12 +146,13 @@ const LessonPagePage: React.FC<LessonPageProps> = ({ subject, lesson, page, idx,
       if (page.attestation) {
         pageView.attestationChecked = !!pageView.attestationChecked;
       }
-      lessonProgress.pageViews[idx] = pageView;
-      if (activeSession) {
-        updateTrainingLesson(activeSession, lessonProgress);
-      }
-      else {
-        updateUserLesson(lessonProgress);
+      if (page.video || page.attestation) {
+        lessonProgress.pageViews[idx] = pageView;
+        if (activeSession) {
+          updateTrainingLesson(activeSession, lessonProgress);
+        } else {
+          updateUserLesson(lessonProgress);
+        }
       }
     }
   }
@@ -211,7 +208,7 @@ const LessonPagePage: React.FC<LessonPageProps> = ({ subject, lesson, page, idx,
                 <IonGrid>
                   <IonRow>
                     <IonCol>
-                      <VideoPlayer id={`video-${lesson.id}-${idx}`} src={page.video} setVideoPlayer={setVideoPlayer} setVideoState={setVideoState} />
+                      <VideoPlayer id={`video-${lesson.id}-${idx}`} src={page.video} setVideoPlayed={setVideoPlayed} />
                     </IonCol>
                   </IonRow>
                   {page.videoCaption &&

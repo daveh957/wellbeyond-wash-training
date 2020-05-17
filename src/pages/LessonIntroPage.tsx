@@ -60,7 +60,7 @@ const LessonIntroPage: React.FC<LessonIntroProps> = ({ subject,lesson, lessonPro
   },[lesson]);
 
   useEffect(() => {
-    if (lesson && lessonProgress) {
+    if (subject && lesson && lessonProgress) {
       if (!lessonProgress.started) {
         lessonProgress.started = new Date();
         if (activeSession) {
@@ -81,7 +81,7 @@ const LessonIntroPage: React.FC<LessonIntroProps> = ({ subject,lesson, lessonPro
         setNextUrl(firstQuestion + (activeSession && activeSession.id ? ('?tsId=' + activeSession.id) : ''));
       }
     }
-  },[lesson, lessonProgress, activeSession])
+  },[subject, lesson, lessonProgress, activeSession])
 
   return (
     <IonPage id="lesson-intro">
