@@ -1,4 +1,6 @@
-import * as firebase from 'firebase';
+import * as firebase from 'firebase/app';
+import 'firebase/auth';
+import 'firebase/firestore';
 import {UserLessons} from "./user.state";
 import {LessonProgress} from "../../models/Training";
 
@@ -115,7 +117,7 @@ export const checkIsAdmin = async () => {
         return false;
       }
     })
-    .catch(error => {
+    .catch(() => {
       return false;
     });
 };

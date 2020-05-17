@@ -102,7 +102,7 @@ export const getSubjectLessons = createSelector(
   getSubject, getLessons,
   (subject, lessons) => {
     const subjectLessons = Array<Lesson>();
-    subject && subject.lessons.map(sl => {
+    subject && subject.lessons.forEach(sl => {
       const lesson = lessons.find(l => l.id === sl.lessonId);
       lesson && subjectLessons.push(lesson);
     });

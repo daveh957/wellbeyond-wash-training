@@ -1,7 +1,9 @@
 import React, {useEffect, useState} from 'react';
 import {
   IonButton,
-  IonButtons, IonCard, IonCardContent,
+  IonButtons,
+  IonCard,
+  IonCardContent,
   IonCol,
   IonContent,
   IonHeader,
@@ -53,7 +55,7 @@ const ForgotPasswordModal: React.FC<ForgotPasswordProps> = ({showModal, closeMod
     setFormValues({email: email});
     setFormErrors({email: null});
     setServerError(undefined);
-  }, [showModal]);
+  }, [showModal, email]);
 
   const handleChange = (field:string, value:string) => {
     let errors = {...formErrors};
@@ -67,15 +69,14 @@ const ForgotPasswordModal: React.FC<ForgotPasswordProps> = ({showModal, closeMod
     let errors = {...formErrors};
     errors.email = formValues.email ? null : 'registration.errors.emailRequired';
     setFormErrors(errors);
-    const valid = !Object.values(errors).some(x => (x !== null && x !== ''));
-    return valid;
+    return !Object.values(errors).some(x => (x !== null && x !== ''));
   }
 
   const save = async (e: React.FormEvent) => {
     e.preventDefault();
     setFormSubmitted(true);
     if(validate()) {
-      sendPasswordResetEmail(formValues.email).then((result) => {
+      sendPasswordResetEmail(formValues.email).then(() => {
         showToast({color: 'info', message: t('registration.messages.passwordResetSent', {email: formValues.email})});
         closeModal();
       })
@@ -141,7 +142,5 @@ export default connect<OwnProps, {}, DispatchProps>({
   mapDispatchToProps: {
     setData
   },
-  mapStateToProps: (state) => ({
-  }),
   component: ForgotPasswordModal
 })

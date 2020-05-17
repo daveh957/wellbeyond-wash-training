@@ -5,12 +5,13 @@ import {
   IonCol,
   IonContent,
   IonHeader,
-  IonInput,
   IonItem,
   IonLabel,
   IonList,
   IonPage,
-  IonRow, IonSelect, IonSelectOption,
+  IonRow,
+  IonSelect,
+  IonSelectOption,
   IonText,
   IonTitle,
   IonToolbar,
@@ -50,7 +51,6 @@ const StartTrainingSession: React.FC<StartTrainingSessionProps> = ({subject, les
   const [formValues, setFormValues] = useState<any>({});
   const [formErrors, setFormErrors] = useState<any>({});
   const [formSubmitted, setFormSubmitted] = useState(false);
-  const [serverError, setServerError] = useState<Error>();
 
   const handleChange = (field:string, value:string) => {
     let errors = {...formErrors};
@@ -65,8 +65,7 @@ const StartTrainingSession: React.FC<StartTrainingSessionProps> = ({subject, les
     errors.groupType = formValues.groupType ? null : 'training.errors.groupTypeRequired';
     errors.groupSize = formValues.groupSize ? null : 'training.errors.groupSizeRequired';
     setFormErrors(errors);
-    const valid = !Object.values(errors).some(x => (x !== null && x !== ''));
-    return valid;
+    return !Object.values(errors).some(x => (x !== null && x !== ''));
   }
 
   const startNewTrainingSession = (e: React.FormEvent) => {
@@ -83,7 +82,7 @@ const StartTrainingSession: React.FC<StartTrainingSessionProps> = ({subject, les
         lessons: {}
       };
       session.id = userId + ':' + session.subjectId + ':' + (session.started && session.started.getTime());
-      lessons.map((l) => {
+      lessons.forEach((l) => {
         if (session.lessons && l.id) {
           session.lessons[l.id] = {
             id: l.id,

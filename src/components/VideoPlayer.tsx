@@ -26,8 +26,8 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ id,src, setVideoPlayer, setVi
       if (setVideoPlayer) {
         setVideoPlayer(player);
       }
-    }
-  }, [player]);
+    } // eslint-disable-next-line
+  }, [player, setVideoPlayer]);
 
   return (
     <Player id={id} ref={(self:any) => { setPlayer(self) }} playsInline={true} fluid={true} crossOrigin='anonymous'>

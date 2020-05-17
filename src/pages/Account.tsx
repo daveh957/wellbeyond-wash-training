@@ -19,7 +19,6 @@ import {connect} from '../data/connect';
 import {RouteComponentProps} from 'react-router';
 import {Redirect} from "react-router-dom";
 import {getGravatarUrl} from "../util/gravatar";
-import ChangePhotoModal from "../components/ChangePhotoModal";
 import ChangeEmailModal from "../components/ChangeEmailModal";
 import ChangePasswordModal from "../components/ChangePasswordModal";
 import ChangeProfileModal from "../components/ChangeProfileModal";
@@ -45,14 +44,12 @@ interface DispatchProps {
 
 interface AccountProps extends OwnProps, StateProps, DispatchProps { }
 
-const Account: React.FC<AccountProps> = ({ name, email, photoURL, organization, isLoggedIn, history }) => {
+const Account: React.FC<AccountProps> = ({ name, email, photoURL, organization, isLoggedIn,  }) => {
 
-  const [showAlert, setShowAlert] = useState(false);
   const { t } = useTranslation(['translation'], {i18n} );
 
   const [showPasswordModal, setShowPasswordModal] = useState<boolean>(false);
   const [showEmailModal, setShowEmailModal] = useState<boolean>(false);
-  const [showPhotoModal, setShowPhotoModal] = useState<boolean>(false);
   const [showProfileModal, setShowProfileModal] = useState<boolean>(false);
   const [openToast, setOpenToast] = useState<boolean>(false);
   const [toastColor, setToastColor] = useState<string|undefined>();
@@ -65,9 +62,6 @@ const Account: React.FC<AccountProps> = ({ name, email, photoURL, organization, 
   const openEmailModal = () => {
     setShowEmailModal(true);
   }
-  const openPhotoModal = () => {
-    setShowPhotoModal(true);
-  }
   const openProfileModal = () => {
     setShowProfileModal(true);
   }
@@ -76,9 +70,6 @@ const Account: React.FC<AccountProps> = ({ name, email, photoURL, organization, 
   }
   const closeEmailModal = () => {
     setShowEmailModal(false);
-  }
-  const closePhotoModal = () => {
-    setShowPhotoModal(false);
   }
   const closeProfileModal = () => {
     setShowProfileModal(false);
@@ -98,7 +89,7 @@ const Account: React.FC<AccountProps> = ({ name, email, photoURL, organization, 
       <IonHeader>
         <IonToolbar>
           <IonButtons slot="start">
-            <IonMenuButton></IonMenuButton>
+            <IonMenuButton/>
           </IonButtons>
           <IonTitle>{t('registration.pages.account')}</IonTitle>
         </IonToolbar>
@@ -124,7 +115,6 @@ const Account: React.FC<AccountProps> = ({ name, email, photoURL, organization, 
         {/* eslint-disable-next-line react/jsx-no-undef */}
         <ChangeProfileModal showModal={showProfileModal} name={name} organization={organization} closeModal={closeProfileModal} showToast={showToast}/>
         <ChangePasswordModal showModal={showPasswordModal} closeModal={closePasswordModal} showToast={showToast}/>
-        <ChangePhotoModal showModal={showPhotoModal} closeModal={closePhotoModal} photo={photoURL} showToast={showToast}/>
         <ChangeEmailModal showModal={showEmailModal} closeModal={closeEmailModal} email={email}  showToast={showToast}/>
         <IonToast isOpen={openToast} header={toastHeader} message={toastMessage} color={toastColor||'success'} duration={2000} onDidDismiss={() => setOpenToast(false)} />
       </IonContent>

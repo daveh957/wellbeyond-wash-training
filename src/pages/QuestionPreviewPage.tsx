@@ -1,4 +1,4 @@
-import React, {useContext, useEffect, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {RouteComponentProps} from 'react-router';
 
 import './LessonPage.scss';
@@ -18,13 +18,11 @@ import {
   IonItem,
   IonLabel,
   IonList,
-  IonMenuButton,
   IonPage,
   IonRadio,
   IonRadioGroup,
   IonTitle,
   IonToolbar,
-  NavContext
 } from '@ionic/react'
 import {useTranslation} from "react-i18next";
 import i18n from '../i18n';
@@ -59,14 +57,12 @@ interface QuestionPageProps extends OwnProps, StateProps, DispatchProps {}
 
 const QuestionPreviewPage: React.FC<QuestionPageProps> = ({ history, subject, lesson, question, idx, lessonProgress, activeSession, updateUserLesson, updateTrainingLesson }) => {
 
-  const {navigate} = useContext(NavContext);
   const { t } = useTranslation(['translation'], {i18n} );
 
   const [nextUrl, setNextUrl] = useState();
   const [prevUrl, setPrevUrl] = useState();
   const [answer, setAnswer] = useState<string|number|undefined>();
   const [showNext, setShowNext] = useState<boolean>();
-  const [lockAnswer, setLockAnswer] = useState<boolean>();
 
   useEffect(() => {
     let priorAnswer;
@@ -159,11 +155,11 @@ const QuestionPreviewPage: React.FC<QuestionPageProps> = ({ history, subject, le
                   <IonRadioGroup value={answer} onIonChange={e => handleAnswer(e.detail.value)}>
                     <IonItem>
                       <IonLabel>Yes</IonLabel>
-                      <IonRadio disabled={lockAnswer} slot="start" value="yes" />
+                      <IonRadio slot="start" value="yes" />
                     </IonItem>
                     <IonItem>
                       <IonLabel>No</IonLabel>
-                      <IonRadio disabled={lockAnswer} slot="start" value="no" />
+                      <IonRadio slot="start" value="no" />
                     </IonItem>
                   </IonRadioGroup>
                 </IonList>
@@ -176,7 +172,7 @@ const QuestionPreviewPage: React.FC<QuestionPageProps> = ({ history, subject, le
                     {question.choices.map((choice, idx) =>  {
                       return <IonItem key={`choice-${idx}`}>
                         <IonLabel>{choice.value}</IonLabel>
-                        <IonRadio disabled={lockAnswer} slot="start" value={choice.value} />
+                        <IonRadio slot="start" value={choice.value} />
                       </IonItem>
                     })}
                   </IonRadioGroup>
@@ -187,7 +183,7 @@ const QuestionPreviewPage: React.FC<QuestionPageProps> = ({ history, subject, le
               (question && question.questionType === 'number' &&
                 <IonList>
                   <IonItem>
-                    <IonInput disabled={lockAnswer} type="number" value={answer} placeholder={t('questions.enterNumber')} onIonChange={e => handleAnswer(parseInt(e.detail.value!, 10))}/>
+                    <IonInput type="number" value={answer} placeholder={t('questions.enterNumber')} onIonChange={e => handleAnswer(parseInt(e.detail.value!, 10))}/>
                   </IonItem>
                 </IonList>
               )

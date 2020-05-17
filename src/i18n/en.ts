@@ -1,6 +1,3 @@
-import {IonItem} from "@ionic/react";
-import React from "react";
-
 export default {
   translation: {
     app: {

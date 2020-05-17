@@ -1,5 +1,5 @@
 import React, {useContext, useEffect, useState} from 'react';
-import {Subject, TrainingSession} from '../models/Training';
+import {Subject} from '../models/Training';
 import {IonButton, IonIcon, NavContext} from '@ionic/react';
 import {arrowBack} from 'ionicons/icons';
 
@@ -14,7 +14,7 @@ const BackToSubjectLink: React.FC<BackToLessonsProps> = ({ subject, }) => {
   const [backLink, setBackLink] = useState();
 
   useEffect(() => {
-    if (subject) {;
+    if (subject) {
       setBackLink('/tabs/subjects/' + subject.id );
     }
   }, [subject]);
@@ -22,7 +22,7 @@ const BackToSubjectLink: React.FC<BackToLessonsProps> = ({ subject, }) => {
 
   return (
     <IonButton onClick={()=>{navigate(backLink, 'back')}}>
-      <IonIcon icon={arrowBack}></IonIcon>
+      <IonIcon icon={arrowBack} />
     </IonButton>
   );
 };

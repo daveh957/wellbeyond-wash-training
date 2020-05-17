@@ -14,7 +14,6 @@ import {
   IonContent,
   IonFooter,
   IonHeader,
-  IonMenuButton,
   IonPage,
   IonTitle,
   IonToolbar
@@ -81,7 +80,7 @@ const LessonIntroPage: React.FC<LessonIntroProps> = ({ subject,lesson, lessonPro
         setNextUrl(firstQuestion + (activeSession && activeSession.id ? ('?tsId=' + activeSession.id) : ''));
       }
     }
-  },[subject, lesson, lessonProgress, activeSession])
+  },[subject, lesson, lessonProgress, activeSession, updateTrainingLesson, updateUserLesson])
 
   return (
     <IonPage id="lesson-intro">

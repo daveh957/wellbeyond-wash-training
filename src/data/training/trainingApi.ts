@@ -1,4 +1,7 @@
-import * as firebase from 'firebase';
+
+import * as firebase from 'firebase/app';
+import 'firebase/auth';
+import 'firebase/firestore';
 import {Lesson, LessonProgress, Subject, TrainingSession} from '../../models/Training';
 import {getLessonIconUrl} from "../../util/cloudinary";
 import {checkIsAdmin} from "../user/userApi";
@@ -6,7 +9,7 @@ import {TrainingSessions} from "./training.state";
 
 export const loadTrainingData = async (collectionPath:string) : Promise<any> => {
   const isAdmin:boolean = await checkIsAdmin();
-  let results = Array();
+  let results = Array<LessonProgress>();
   let query:firebase.firestore.Query<firebase.firestore.DocumentData> = firebase.firestore().collection(collectionPath);
   query = isAdmin ? query : query.where('isPublished', '==', true);
   return query
@@ -17,7 +20,7 @@ export const loadTrainingData = async (collectionPath:string) : Promise<any> => 
         results.push({
           id: doc.id,
           ...doc.data()
-        });
+        } as LessonProgress);
       });
       return results;
     })
@@ -57,13 +60,13 @@ export const cacheImagesAndVideos = async (lessons:Lesson[], subjects:Subject[])
   const images:string[] = [];
   const videos:string[] = [];
   if (lessons && lessons.length) {
-    lessons.map(lesson => {
+    lessons.forEach(lesson => {
       if (lesson.photo) {
         images.push(getLessonIconUrl(lesson.photo, false));
         images.push(getLessonIconUrl(lesson.photo, true));
       }
       if (lesson.pages && lesson.pages.length) {
-        lesson.pages.map(page => {
+        lesson.pages.forEach(page => {
           page.photo && images.push(page.photo);
           page.video && videos.push(page.video);
         });
@@ -71,7 +74,7 @@ export const cacheImagesAndVideos = async (lessons:Lesson[], subjects:Subject[])
     });
   }
   if (subjects && subjects.length) {
-    subjects.map(subject => {
+    subjects.forEach(subject => {
       subject.photo && images.push(subject.photo);
     });
   }

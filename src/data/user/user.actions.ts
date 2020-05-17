@@ -9,7 +9,6 @@ import {
 import {ActionType} from '../../util/types'
 import {UserLessons, UserState} from './user.state';
 import {LessonProgress} from "../../models/Training";
-import {loadTrainingSessions} from "../training/training.actions";
 
 const setLoginError = (error: any) => {
   return ({

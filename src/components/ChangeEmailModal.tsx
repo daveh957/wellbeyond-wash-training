@@ -54,7 +54,7 @@ const ChangeEmailModal: React.FC<ChangeEmailProps> = ({showModal, closeModal, em
     setFormValues({email: email});
     setFormErrors({email: null});
     setServerError(undefined);
-  }, [showModal]);
+  }, [showModal, email]);
 
   const handleChange = (field:string, value:string) => {
     let errors = {...formErrors};
@@ -68,15 +68,14 @@ const ChangeEmailModal: React.FC<ChangeEmailProps> = ({showModal, closeModal, em
     let errors = {...formErrors};
     errors.email = formValues.email ? null : 'registration.errors.emailRequired';
     setFormErrors(errors);
-    const valid = !Object.values(errors).some(x => (x !== null && x !== ''));
-    return valid;
+    return !Object.values(errors).some(x => (x !== null && x !== ''));
   }
 
   const save = async (e: React.FormEvent) => {
     e.preventDefault();
     setFormSubmitted(true);
     if(validate()) {
-      updateEmail(formValues.email).then((result) => {
+      updateEmail(formValues.email).then(() => {
         setData({email: formValues.email});
         showToast({message: t('registration.messages.emailChanged')});
         closeModal();
@@ -146,7 +145,5 @@ export default connect<OwnProps, {}, DispatchProps>({
   mapDispatchToProps: {
     setData
   },
-  mapStateToProps: (state) => ({
-  }),
   component: ChangeEmailModal
 })

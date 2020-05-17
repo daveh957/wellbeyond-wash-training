@@ -1,16 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {
-  IonButtons,
-  IonCol,
-  IonContent,
-  IonGrid,
-  IonHeader,
-  IonMenuButton,
-  IonPage,
-  IonRow,
-  IonTitle,
-  IonToolbar
-} from '@ionic/react';
+import {IonButtons, IonCol, IonContent, IonGrid, IonHeader, IonPage, IonRow, IonTitle, IonToolbar} from '@ionic/react';
 import LessonItem from '../components/LessonItem';
 import {Lesson, Subject, TrainingSession} from '../models/Training';
 import {UserLessons} from '../data/user/user.state';
@@ -48,7 +37,7 @@ const SubjectProgressPage: React.FC<SubjectProps> = ({ subject, lessons, userLes
   useEffect(() => {
     if (lessons && (userLessons || activeSession)) {
       const flags = new Array<LessonFlags>();
-      lessons.map((l, idx) => {
+      lessons.forEach((l, idx) => {
         const pl = idx>0 ? lessons[idx-1] : undefined;
         let currentLesson, previousLesson;
         if (activeSession) {
@@ -87,8 +76,8 @@ const SubjectProgressPage: React.FC<SubjectProps> = ({ subject, lessons, userLes
                     subject={subject}
                     lesson={lesson}
                     activeSession={activeSession}
-                    completed={lessonFlags && lessonFlags.length > idx ? !!lessonFlags[idx].completed : false}
-                    clickable={lessonFlags && lessonFlags.length > idx ? !!lessonFlags[idx].clickable : false}
+                    completed={lessonFlags && lessonFlags.length > idx ? lessonFlags[idx].completed : false}
+                    clickable={lessonFlags && lessonFlags.length > idx ? lessonFlags[idx].clickable : false}
                   />
                 </IonCol>
               ))}

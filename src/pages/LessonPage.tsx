@@ -20,7 +20,6 @@ import {
   IonLabel,
   IonList,
   IonListHeader,
-  IonMenuButton,
   IonPage,
   IonRow,
   IonText,
@@ -34,7 +33,7 @@ import i18n from '../i18n';
 import {connect} from '../data/connect';
 import * as selectors from '../data/selectors';
 
-import {Lesson, LessonPage, LessonProgress, PageView, Subject, TrainingSession} from '../models/Training';
+import {Lesson, LessonPage, LessonProgress, Subject, TrainingSession} from '../models/Training';
 import VideoPlayer from "../components/VideoPlayer";
 import ImageZoomModal from "../components/ImageZoomModal";
 import {updateTrainingLesson} from "../data/training/training.actions";
@@ -77,7 +76,7 @@ const LessonPagePage: React.FC<LessonPageProps> = ({ history, subject, lesson, p
       lessonProgress.pageViews = lessonProgress.pageViews || [];
       if (lessonProgress.pageViews.length !== lesson.pages.length) {
         lessonProgress.pageViews.length = 0;
-        lesson.pages.map((p) => {lessonProgress.pageViews.push({})});
+        lesson.pages.forEach(() => {lessonProgress.pageViews.push({})});
         if (activeSession) {
           updateTrainingLesson(activeSession, lessonProgress);
         }
@@ -91,7 +90,7 @@ const LessonPagePage: React.FC<LessonPageProps> = ({ history, subject, lesson, p
         setShowNext(true);
       }
     }
-  },[lesson, page, lessonProgress, idx]);
+  },[lesson, page, lessonProgress, idx, activeSession, updateTrainingLesson, updateUserLesson]);
 
   useEffect(() => {
     if (subject && lesson && idx > -1) {
@@ -121,14 +120,14 @@ const LessonPagePage: React.FC<LessonPageProps> = ({ history, subject, lesson, p
         setNextUrl(path + '/page/' + (next+1) + (activeSession && activeSession.id ? ('?tsId=' + activeSession.id) : ''));
       }
     }
-  },[subject, lesson, idx, activeSession]);
+  },[subject, lesson, lessonProgress, idx, activeSession]);
 
   useEffect(() => {
     if (videoPlayed) {
         pageView.videoWatched = true;
         setPageView(pageView);
       }
-  }, [videoPlayed]);
+  }, [videoPlayed, pageView]);
 
   const openModal = () => {setShowModal(true)};
   const closeModal = () => {setShowModal(false)};

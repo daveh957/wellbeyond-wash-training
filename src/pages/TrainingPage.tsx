@@ -20,7 +20,7 @@ import {useTranslation} from "react-i18next";
 import i18n from '../i18n';
 import * as selectors from '../data/selectors';
 import {connect} from '../data/connect';
-import {Lesson, Subject} from '../models/Training';
+import {Subject} from '../models/Training';
 import SubjectItem from "../components/SubjectItem";
 import {Redirect} from "react-router-dom";
 
@@ -29,8 +29,6 @@ interface OwnProps {
 
 interface StateProps {
   subjects: Subject[],
-  lessons: Lesson[],
-  trainerMode: boolean,
 }
 
 interface DispatchProps {
@@ -38,7 +36,7 @@ interface DispatchProps {
 
 type TrainingPageProps = OwnProps & StateProps & DispatchProps;
 
-const TrainingPage: React.FC<TrainingPageProps> = ({ subjects, lessons, trainerMode}) => {
+const TrainingPage: React.FC<TrainingPageProps> = ({ subjects, }) => {
 
   const pageRef = useRef<HTMLElement>(null);
   const { t } = useTranslation(['translation'], {i18n} );
@@ -54,7 +52,7 @@ const TrainingPage: React.FC<TrainingPageProps> = ({ subjects, lessons, trainerM
           <IonButtons slot="start">
             <IonMenuButton />
           </IonButtons>
-          <IonTitle>Subjects</IonTitle>
+          <IonTitle>{t('resources.subjects.name_plural')}</IonTitle>
         </IonToolbar>
       </IonHeader>
       <IonContent fullscreen={true}>
@@ -83,8 +81,6 @@ const TrainingPage: React.FC<TrainingPageProps> = ({ subjects, lessons, trainerM
 export default connect<OwnProps, StateProps, DispatchProps>({
   mapStateToProps: (state) => ({
     subjects: selectors.getSubjects(state),
-    lessons: selectors.getLessons(state),
-    trainerMode: state.user.trainerMode
   }),
   component: React.memo(TrainingPage)
 });

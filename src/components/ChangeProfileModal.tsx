@@ -55,7 +55,7 @@ const ChangeProfileModal: React.FC<ChangeProfileProps> = ({showModal, closeModal
     setFormValues({name: name, organization: organization});
     setFormErrors({name: null, organization: null});
     setServerError(undefined);
-  }, [showModal]);
+  }, [showModal, name, organization]);
 
   const handleChange = (field:string, value:string) => {
     let errors = {...formErrors};
@@ -69,15 +69,14 @@ const ChangeProfileModal: React.FC<ChangeProfileProps> = ({showModal, closeModal
     let errors = {...formErrors};
     errors.name = formValues.name ? null : 'registration.errors.nameRequired';
     setFormErrors(errors);
-    const valid = !Object.values(errors).some(x => (x !== null && x !== ''));
-    return valid;
+    return !Object.values(errors).some(x => (x !== null && x !== ''));
   }
 
   const save = async (e: React.FormEvent) => {
     e.preventDefault();
     setFormSubmitted(true);
     if(validate()) {
-      updateProfile({name: formValues.name, organization: formValues.organization}).then((result) => {
+      updateProfile({name: formValues.name, organization: formValues.organization}).then(() => {
         setData({name: formValues.name, organization: formValues.organization});
         showToast({message: t('registration.messages.profileChanged')});
         closeModal();
@@ -149,7 +148,5 @@ export default connect<OwnProps, {}, DispatchProps>({
   mapDispatchToProps: {
     setData
   },
-  mapStateToProps: (state) => ({
-  }),
   component: ChangeProfileModal
 })

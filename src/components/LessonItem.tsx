@@ -36,7 +36,7 @@ const LessonItem: React.FC<LessonItemProps> = ({ subject,lesson, activeSession, 
 
           <IonCardContent>
             <IonItem button detail={false} lines="none" className="lesson-item" disabled={!clickable} routerLink={makeLink()}>
-              <img src={lessonIcon} crossOrigin='anonymous' />
+              <img src={lessonIcon} crossOrigin='anonymous' alt={lesson.name} />
             </IonItem>
           </IonCardContent>
       </IonCard>

@@ -1,4 +1,5 @@
 import React, {Fragment} from 'react';
+import {IonRouterLink} from "@ionic/react";
 
 const TermsOfService: React.FC = () => {
   return (
@@ -8,7 +9,6 @@ const TermsOfService: React.FC = () => {
       </p>
       <p>
         <strong><em>Last Updated: [5.11.20]</em></strong>
-        <em></em>
       </p>
       <p>
         Welcome, and thank you for your interest in Well Beyond ("<strong>Well Beyond</strong>," "<strong>We</strong>," or "    <strong>Us</strong>"). These terms of service ("<strong>Terms</strong>")
@@ -27,9 +27,6 @@ const TermsOfService: React.FC = () => {
         ADVISED TO CONSULT THESE TERMS EACH TIME YOU ACCESS THE SERVICES IN ORDER
         TO VIEW ANY CHANGES TO THESE TERMS. THESE TERMS WERE LAST MODIFIED AS OF
         THE DATE INDICATED ABOVE.
-      </p>
-      <p>
-        <strong></strong>
       </p>
       <p>
         <strong>
@@ -85,7 +82,7 @@ const TermsOfService: React.FC = () => {
         d. Well Beyond's policy with respect to the collection and use of your
         personally identifiable information is set in our Privacy Statement. By
         accepting these Terms, you acknowledge that you consent to the data
-        handling and information security practices described in our    <a>Privacy Statement</a>
+        handling and information security practices described in our    <IonRouterLink href="/privacyPolicy">Privacy Statement</IonRouterLink>
         .
       </p>
       <ol start={2}>
@@ -343,7 +340,7 @@ const TermsOfService: React.FC = () => {
         facilitate the provision of software updates, product support, and other
         services to you (if any) related to the Services, and to track and report
         your activity inside of the Services, including for analytics purposes.
-        Please see the <a>Privacy Statement </a>
+        Please see the <IonRouterLink href="/privacyPolicy">Privacy Statement </IonRouterLink>
         for more details regarding the information Well Beyond collects, and how it
         uses and discloses that information.
       </p>
@@ -649,7 +646,7 @@ const TermsOfService: React.FC = () => {
         organizations, subsidiaries, affiliates, officers, directors, members,
         employees, attorneys and agents, harmless against any loss or damage of any
         kind (including, without limitation, attorneys' fees and lost revenues)
-        arising from: (i) any and all breaches by you of these Terms, Well Beyond's    <a>Privacy Statement</a>
+        arising from: (i) any and all breaches by you of these Terms, Well Beyond's    <IonRouterLink href="/privacyPolicy">Privacy Statement</IonRouterLink>
         , or any representation, warranty or covenant contained herein; (ii) any
         and all use of the Services not specifically authorized hereunder and on
         the Services; and (iii) any and all claims and actions against Well Beyond
@@ -725,17 +722,11 @@ const TermsOfService: React.FC = () => {
         these Terms is intended to impose further restrictions on your use of the
         Third-Party Software.
       </p>
-      <p>
-        <strong></strong>
-      </p>
       <ol start={17}>
         <li>
           <strong>Dispute Resolution</strong>
         </li>
       </ol>
-      <p>
-        <strong></strong>
-      </p>
       <p>
         a. <u>Generally</u>. In the interest of resolving disputes between you and
         Well Beyond in the most expedient and cost-effective manner, you and Well
@@ -745,7 +736,7 @@ const TermsOfService: React.FC = () => {
         subject to very limited review by courts. Arbitrators can award the same
         damages and relief that a court can award. This agreement to arbitrate
         disputes includes all claims arising out of or in any way related to these
-        Terms, Well Beyond's <a>Privacy Statement </a>
+        Terms, Well Beyond's <IonRouterLink href="/privacyPolicy">Privacy Statement </IonRouterLink>
         , or your use of the Services, whether based in contract, tort, statute,
         fraud, misrepresentation, or any other legal theory, and regardless of
         whether a claim arises during or after the termination of these Terms. YOU
@@ -762,7 +753,7 @@ const TermsOfService: React.FC = () => {
         explanation of the consequences of arbitration. You should take further
         steps to conduct research and to consult with others, including, but not
         limited to, an attorney, regarding the consequences of your decision, just
-        as you would when making any other important business or life decision.    <strong></strong>
+        as you would when making any other important business or life decision.
       </p>
       <p>
         b. <u>Exceptions</u>. Despite the provisions of the Section entitled
@@ -875,9 +866,6 @@ const TermsOfService: React.FC = () => {
         coverage under this Dispute Resolution provision.
       </p>
       <p>
-        <strong></strong>
-      </p>
-      <p>
         18. <strong>Protected Activity Not Prohibited.</strong> You should
         understand that, insofar as permitted by applicable law, nothing in these
         Terms will in any way limit or prohibit you from filing a charge or
@@ -893,9 +881,6 @@ const TermsOfService: React.FC = () => {
         parties other than the Government Agencies.
       </p>
       <p>
-        <strong></strong>
-      </p>
-      <p>
         19. <strong>Governing Law; Choice of Forum</strong>. The laws of the State
         of Texas, excluding its conflicts of law rules, govern these Terms and your
         use of the Services. Your use of the Services may also be subject to other
@@ -907,9 +892,6 @@ const TermsOfService: React.FC = () => {
         the state and federal courts located in Travis County and you hereby
         irrevocably submit to personal jurisdiction in such courts, and waive any
         defense of inconvenient forum.
-      </p>
-      <p>
-        <strong></strong>
       </p>
       <p>
         20. <strong>Feedback</strong>. If you provide any feedback to Well Beyond

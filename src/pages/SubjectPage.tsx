@@ -1,27 +1,21 @@
-import React, {useContext, useEffect, useState, Fragment} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
+  IonButton,
   IonButtons,
+  IonCard,
+  IonCardContent,
+  IonCardHeader,
+  IonCardSubtitle,
+  IonCardTitle,
   IonCol,
   IonContent,
-  IonGrid,
   IonHeader,
-  IonItemDivider,
-  IonItemGroup,
   IonList,
   IonMenuButton,
   IonPage,
   IonRow,
   IonTitle,
-  IonToolbar,
-  NavContext,
-  IonButton,
-  IonItem,
-  IonListHeader,
-  IonCard,
-  IonCardHeader,
-  IonCardTitle,
-  IonCardContent,
-  IonText, IonCardSubtitle
+  IonToolbar
 } from '@ionic/react';
 import {Lesson, Subject, TrainingSession} from '../models/Training';
 import {UserLessons} from '../data/user/user.state';
@@ -32,9 +26,7 @@ import {RouteComponentProps} from "react-router";
 import {useTranslation} from "react-i18next";
 import i18n from '../i18n';
 import {TrainingSessions} from "../data/training/training.state";
-import {startTrainingSession} from "../data/training/training.actions";
 import SelfTraining from "../components/SelfTraining";
-import SubjectItem from "../components/SubjectItem";
 import TrainingSessionItem from "../components/TrainingSessionItem";
 
 interface OwnProps extends RouteComponentProps {
@@ -43,7 +35,6 @@ interface OwnProps extends RouteComponentProps {
 }
 
 interface StateProps {
-  userId?: string;
   userLessons?: UserLessons;
   trainingSessions?: TrainingSessions;
 }
@@ -52,9 +43,8 @@ interface DispatchProps { }
 
 interface SubjectProps extends OwnProps, StateProps, DispatchProps { }
 
-const SubjectPage: React.FC<SubjectProps> = ({ subject, lessons, userId, userLessons, trainingSessions}) => {
+const SubjectPage: React.FC<SubjectProps> = ({ subject, lessons, userLessons, trainingSessions}) => {
 
-  const {navigate} = useContext(NavContext);
   const { t } = useTranslation(['translation'], {i18n} );
 
   const [finishedTraining, setFinishedTraining] = useState();
@@ -156,7 +146,6 @@ export default connect<OwnProps, StateProps, DispatchProps>({
   mapStateToProps: (state, ownProps) => ({
     subject: selectors.getSubject(state, ownProps),
     lessons: selectors.getSubjectLessons(state, ownProps),
-    userId: selectors.getUserId(state),
     userLessons: selectors.getUserLessons(state),
     trainingSessions: selectors.getTrainingSessions(state),
   }),

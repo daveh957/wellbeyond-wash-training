@@ -8,7 +8,7 @@ export const loadLessonData = () => (async (dispatch: React.Dispatch<any>) => {
   let subjects:Subject[] = await loadTrainingData('subjects');
   let lessons:Lesson[] = await loadTrainingData('lessons');
   if (lessons && lessons.length) {
-    lessons.map(lesson => {
+    lessons.forEach(lesson => {
       if (lesson.questions) {
         lesson.questions = lesson.questions.filter((q:Question) => q.questionType && q.questionText && q.correctAnswer);
       }

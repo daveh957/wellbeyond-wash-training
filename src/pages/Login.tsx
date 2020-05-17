@@ -1,7 +1,9 @@
 import React, {useContext, useEffect, useState} from 'react';
 import {
   IonButton,
-  IonButtons, IonCard, IonCardContent,
+  IonButtons,
+  IonCard,
+  IonCardContent,
   IonCol,
   IonContent,
   IonHeader,
@@ -13,7 +15,8 @@ import {
   IonPage,
   IonRow,
   IonText,
-  IonTitle, IonToast,
+  IonTitle,
+  IonToast,
   IonToolbar,
   NavContext
 } from '@ionic/react';

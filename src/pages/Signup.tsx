@@ -2,7 +2,9 @@ import React, {useContext, useState} from 'react';
 import {
   IonAlert,
   IonButton,
-  IonButtons, IonCard, IonCardContent,
+  IonButtons,
+  IonCard,
+  IonCardContent,
   IonCol,
   IonContent,
   IonHeader,
@@ -12,7 +14,9 @@ import {
   IonList,
   IonMenuButton,
   IonPage,
-  IonRow, IonSelect, IonSelectOption,
+  IonRow,
+  IonSelect,
+  IonSelectOption,
   IonText,
   IonTitle,
   IonToolbar,
@@ -23,7 +27,6 @@ import {useTranslation} from "react-i18next";
 import i18n from '../i18n';
 import {connect} from '../data/connect';
 import {RouteComponentProps} from 'react-router';
-import {Registration} from "../models/User";
 import {Redirect} from "react-router-dom";
 import {registerWithEmail, updateProfile} from "../data/user/userApi";
 import {loadUserData, setIsLoggedIn, setLoading} from "../data/user/user.actions";
@@ -101,7 +104,6 @@ const Signup: React.FC<SignupProps> = ({isLoggedIn,  setLoading, setIsLoggedIn})
     setFormValues(values);
   }
   const handleOrganizationTextChange = (ev:CustomEvent) => {
-    const target = ev.target;
     const detail = ev.detail;
     if (detail && detail.data && detail.data.values && detail.data.values.organization) {
       setFormValues({...formValues, organization: detail.data.values.organization});
@@ -112,7 +114,6 @@ const Signup: React.FC<SignupProps> = ({isLoggedIn,  setLoading, setIsLoggedIn})
     setShowOrganizationTextInput(false);
   }
   const handleCommunityTextChange = (ev:CustomEvent) => {
-    const target = ev.target;
     const detail = ev.detail;
     if (detail && detail.data && detail.data.values && detail.data.values.community) {
       setFormValues({...formValues, community: detail.data.values.community});
@@ -130,10 +131,8 @@ const Signup: React.FC<SignupProps> = ({isLoggedIn,  setLoading, setIsLoggedIn})
     errors.password = formValues.password ? (formValues.password.length >= 8 ? null :  'registration.errors.passwordLength') : 'registration.errors.passwordRequired';
     errors.passwordRepeat = (formValues.password === formValues.passwordRepeat ? null :  'registration.errors.passwordMismatch');
     setFormErrors(errors);
-    const valid = !Object.values(errors).some(x => (x !== null && x !== ''));
-    return valid;
+    return !Object.values(errors).some(x => (x !== null && x !== ''));
   }
-  const sanitizeFormValues = ({ passwordRepeat, ...registration }:any):Registration => registration as Registration;
 
   const signup = async (e: React.FormEvent) => {
     e.preventDefault();

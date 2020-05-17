@@ -14,7 +14,6 @@ import {
   IonContent,
   IonFooter,
   IonHeader,
-  IonMenuButton,
   IonPage,
   IonTitle,
   IonToolbar
@@ -26,8 +25,6 @@ import {connect} from '../data/connect';
 import * as selectors from '../data/selectors';
 
 import {Lesson, LessonProgress, Subject, TrainingSession} from '../models/Training';
-import {updateUserLesson} from "../data/user/user.actions";
-import {updateTrainingLesson} from "../data/training/training.actions";
 import BackToLessonsLink from "../components/BackToLessons";
 
 interface OwnProps extends RouteComponentProps {
@@ -42,16 +39,13 @@ interface StateProps {
 }
 
 interface DispatchProps {
-  updateUserLesson: typeof updateUserLesson;
-  updateTrainingLesson: typeof updateTrainingLesson;
 }
 
 interface LessonSummaryProps extends OwnProps, StateProps, DispatchProps {}
 
-const LessonSummaryPage: React.FC<LessonSummaryProps> = ({ subject, lesson, lessons, lessonProgress,  activeSession, updateUserLesson, updateTrainingLesson }) => {
+const LessonSummaryPage: React.FC<LessonSummaryProps> = ({ subject, lesson, lessons, lessonProgress,  activeSession }) => {
 
   const { t } = useTranslation(['translation'], {i18n} );
-  const [lessonIcon, setLessonIcon] = useState();
   const [nextUrl, setNextUrl] = useState();
   const [prevUrl, setPrevUrl] = useState();
   const [nextLesson, setNextLesson] = useState();
@@ -70,7 +64,7 @@ const LessonSummaryPage: React.FC<LessonSummaryProps> = ({ subject, lesson, less
       setPrevUrl(lastQuestion + (activeSession && activeSession.id ? ('?tsId=' + activeSession.id) : ''));
       setNextUrl('/tabs/subjects/' + subject.id + (nextLesson ? ('/lessons/' + nextLesson.id + '/intro') : '/progress')  + (activeSession && activeSession.id ? ('?tsId=' + activeSession.id) : ''));
     }
-  },[lesson, lessonProgress])
+  },[subject, lesson, lessons, lessonProgress, activeSession])
 
   return (
     <IonPage id="lesson-summary">
@@ -114,8 +108,6 @@ const LessonSummaryPage: React.FC<LessonSummaryProps> = ({ subject, lesson, less
 
 export default connect({
   mapDispatchToProps: {
-    updateUserLesson: updateUserLesson,
-    updateTrainingLesson: updateTrainingLesson
   },
   mapStateToProps: (state, ownProps) => ({
     subject: selectors.getSubject(state, ownProps),

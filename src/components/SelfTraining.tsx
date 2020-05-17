@@ -4,11 +4,12 @@ import {
   IonButton,
   IonCard,
   IonCardContent,
-  IonCardHeader, IonCardTitle, IonCol,
+  IonCardHeader,
+  IonCardTitle,
+  IonCol,
   IonItem,
-  IonLabel,
   IonList,
-  IonListHeader, IonRow
+  IonRow
 } from '@ionic/react';
 import {UserLessons} from "../data/user/user.state";
 import {useTranslation} from "react-i18next";
@@ -28,7 +29,6 @@ const SelfTraining: React.FC<SelfTrainingProps> = ({ finishedTraining, subject,l
   const [resumeLink, setResumeLink] = useState();
   const [lessonsStarted, setLessonsStarted] = useState();
   const [lessonsCompleted, setLessonsCompleted] = useState();
-  const [nextLesson, setNextLesson] = useState();
 
   useEffect(() => {
     if (subject && lessons && userLessons) {
@@ -46,7 +46,6 @@ const SelfTraining: React.FC<SelfTrainingProps> = ({ finishedTraining, subject,l
         const lessonsCompleted = lessons.reduce((count, l) => {
           return count + ((userLessons[l.id] && userLessons[l.id].completed) ? 1 : 0);
         }, 0);
-        setNextLesson(nextLesson);
         setResumeLink(nextLesson ? ('/tabs/subjects/' + subject.id + '/lessons/' + nextLesson.id + '/intro') : ('/tabs/subjects/' + subject.id + '/progress'));
         setLessonsStarted(lessonsStarted);
         setLessonsCompleted(lessonsCompleted);

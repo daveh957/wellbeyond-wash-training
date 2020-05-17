@@ -1,4 +1,4 @@
-import React, {useContext, useEffect, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {RouteComponentProps} from 'react-router';
 
 import './LessonPage.scss';
@@ -18,13 +18,11 @@ import {
   IonItem,
   IonLabel,
   IonList,
-  IonMenuButton,
   IonPage,
   IonRadio,
   IonRadioGroup,
   IonTitle,
   IonToolbar,
-  NavContext
 } from '@ionic/react'
 import {useTranslation} from "react-i18next";
 import i18n from '../i18n';
@@ -59,7 +57,6 @@ interface QuestionPageProps extends OwnProps, StateProps, DispatchProps {}
 
 const QuestionPage: React.FC<QuestionPageProps> = ({ history, subject, lesson, question, idx, lessonProgress, activeSession, updateUserLesson, updateTrainingLesson }) => {
 
-  const {navigate} = useContext(NavContext);
   const { t } = useTranslation(['translation'], {i18n} );
 
   const [nextUrl, setNextUrl] = useState();

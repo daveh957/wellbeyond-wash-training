@@ -1,22 +1,20 @@
 import React, {useEffect, useState} from 'react';
 import {Lesson, Subject, TrainingSession} from '../models/Training';
 import {
-  IonButton,
-  IonCard,
-  IonCardContent,
-  IonCardHeader, IonCardTitle, IonCol, IonIcon,
+  IonIcon,
   IonItem,
   IonItemOption,
   IonItemOptions,
   IonItemSliding,
-  IonLabel, IonNote, IonText
+  IonLabel,
+  IonNote,
+  IonText
 } from '@ionic/react';
+import {checkmark} from 'ionicons/icons';
 import {useTranslation} from "react-i18next";
 import i18n from "../i18n";
 import {connect} from "../data/connect";
-import {updateUserLesson} from "../data/user/user.actions";
-import {archiveTrainingSession, updateTrainingLesson} from "../data/training/training.actions";
-import * as selectors from "../data/selectors";
+import {archiveTrainingSession} from "../data/training/training.actions";
 
 interface DispatchProps {
   archiveTrainingSession: typeof archiveTrainingSession
@@ -32,29 +30,21 @@ const TrainingSessionItem: React.FC<LessonItemProps> = ({ subject, lessons, sess
 
   const { t } = useTranslation(['translation'], {i18n} );
   const [resumeLink, setResumeLink] = useState();
-  const [lessonsStarted, setLessonsStarted] = useState();
   const [lessonsCompleted, setLessonsCompleted] = useState();
   const [sessionCompleted, setSessionCompleted] = useState();
-  const [nextLesson, setNextLesson] = useState();
 
   useEffect(() => {
     if (subject && lessons && session) {
       const nextLesson = lessons.find((l) => (session.lessons && session.lessons[l.id] && !session.lessons[l.id].completed));
-      const lessonsStarted = lessons.reduce((count, l) => {
-        return count + ((session.lessons && session.lessons[l.id] && session.lessons[l.id].started) ? 1 : 0);
-      }, 0);
       const lessonsCompleted = lessons.reduce((count, l) => {
         return count + ((session.lessons && session.lessons[l.id] && session.lessons[l.id].completed) ? 1 : 0);
       }, 0);
-      setLessonsStarted(lessonsStarted);
       setLessonsCompleted(lessonsCompleted);
       if (lessonsCompleted === lessons.length) {
-        setNextLesson(undefined);
         setResumeLink(undefined);
         setSessionCompleted(true);
       }
       else {
-        setNextLesson(nextLesson);
         setResumeLink((nextLesson ? ('/tabs/subjects/' + subject.id + '/lessons/' + nextLesson.id + '/intro') : ('/tabs/subjects/' + subject.id + '/progress')) + '?tsId=' + session.id);
         setSessionCompleted(false);
       }
@@ -81,7 +71,7 @@ const TrainingSessionItem: React.FC<LessonItemProps> = ({ subject, lessons, sess
         </IonLabel>
         <IonNote slot={'end'}>
           {session.completed ?
-            <IonIcon></IonIcon> :
+            <IonIcon icon={checkmark}/> :
             <IonText>{'' + lessonsCompleted + ' / ' + lessons.length}</IonText>
           }
         </IonNote>
