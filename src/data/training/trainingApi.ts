@@ -75,8 +75,12 @@ export const cacheImagesAndVideos = async (lessons:Lesson[], subjects:Subject[])
       subject.photo && images.push(subject.photo);
     });
   }
-  addVideosToCache(videos).then(() => {
-    addImagesToCache(images);
+  addImagesToCache(images).then(() => {
+    addVideosToCache(videos).catch(error =>  {
+      console.log(error);
+    });
+  }).catch(error =>  {
+    console.log(error);
   });
 };
 

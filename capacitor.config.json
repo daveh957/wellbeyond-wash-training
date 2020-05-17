@@ -1,6 +1,6 @@
 {
   "appId": "com.wellbeyond.training",
-  "appName": "wellbeyond-wash-training",
+  "appName": "WellBeyond Wash Training",
   "bundledWebRuntime": false,
   "npmClient": "npm",
   "webDir": "build",

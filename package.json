@@ -43,7 +43,8 @@
     "build": "ionic build && npm run build-sw && npm run clean-cra-sw",
     "deploy": "firebase deploy --only hosting:wellbeyond-wash-training",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "resources": "cordova-res ios && cordova-res android && node tools/resources.js"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -60,6 +61,7 @@
     "@testing-library/react": "^9.5.0",
     "@types/googlemaps": "^3.39.5",
     "async": "^3.2.0",
+    "cordova-res": "^0.14.0",
     "intercom-client": "^2.11.0",
     "typescript": "3.6.3"
   }
