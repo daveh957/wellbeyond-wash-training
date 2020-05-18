@@ -26,7 +26,6 @@ import * as selectors from '../data/selectors';
 
 import {Lesson, LessonProgress, Subject, TrainingSession} from '../models/Training';
 import {getLessonIconUrl} from "../util/cloudinary";
-import {updateUserLesson} from "../data/user/user.actions";
 import {updateTrainingLesson} from "../data/training/training.actions";
 import BackToLessonsLink from "../components/BackToLessons";
 
@@ -41,13 +40,12 @@ interface StateProps {
 }
 
 interface DispatchProps {
-  updateUserLesson: typeof updateUserLesson;
   updateTrainingLesson: typeof updateTrainingLesson;
 }
 
 interface LessonIntroProps extends OwnProps, StateProps, DispatchProps {}
 
-const LessonIntroPage: React.FC<LessonIntroProps> = ({ subject,lesson, lessonProgress, activeSession, updateUserLesson, updateTrainingLesson }) => {
+const LessonIntroPage: React.FC<LessonIntroProps> = ({ subject,lesson, lessonProgress, activeSession, updateTrainingLesson }) => {
 
   const { t } = useTranslation(['translation'], {i18n} );
   const [lessonIcon, setLessonIcon] = useState();
@@ -62,12 +60,7 @@ const LessonIntroPage: React.FC<LessonIntroProps> = ({ subject,lesson, lessonPro
     if (subject && lesson && lessonProgress) {
       if (!lessonProgress.started) {
         lessonProgress.started = new Date();
-        if (activeSession) {
-          updateTrainingLesson(activeSession, lessonProgress);
-        }
-        else {
-          updateUserLesson(lessonProgress);
-        }
+        updateTrainingLesson(activeSession, lessonProgress);
       }
       const firstPage = ('/tabs/subjects/' + subject.id + '/lessons/' + lesson.id) + (lesson.pages && lesson.pages.length ?  '/page/1' : '/summary');
       const firstQuestion = lesson.questions && lesson.questions.length ?
@@ -80,7 +73,7 @@ const LessonIntroPage: React.FC<LessonIntroProps> = ({ subject,lesson, lessonPro
         setNextUrl(firstQuestion + (activeSession && activeSession.id ? ('?tsId=' + activeSession.id) : ''));
       }
     }
-  },[subject, lesson, lessonProgress, activeSession, updateTrainingLesson, updateUserLesson])
+  },[subject, lesson, lessonProgress, activeSession, updateTrainingLesson])
 
   return (
     <IonPage id="lesson-intro">
@@ -127,7 +120,6 @@ const LessonIntroPage: React.FC<LessonIntroProps> = ({ subject,lesson, lessonPro
 
 export default connect({
   mapDispatchToProps: {
-    updateUserLesson: updateUserLesson,
     updateTrainingLesson: updateTrainingLesson
   },
   mapStateToProps: (state, ownProps) => ({

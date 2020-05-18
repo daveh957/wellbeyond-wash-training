@@ -32,7 +32,6 @@ import * as selectors from '../data/selectors';
 
 import {Lesson, LessonProgress, Question, Subject, TrainingSession} from '../models/Training';
 import {Answer} from '../models/User';
-import {updateUserLesson} from "../data/user/user.actions";
 import {updateTrainingLesson} from "../data/training/training.actions";
 import BackToLessonsLink from "../components/BackToLessons";
 
@@ -49,13 +48,12 @@ interface StateProps {
 }
 
 interface DispatchProps {
-  updateUserLesson: typeof updateUserLesson;
   updateTrainingLesson: typeof updateTrainingLesson;
 }
 
 interface QuestionPageProps extends OwnProps, StateProps, DispatchProps {}
 
-const QuestionPage: React.FC<QuestionPageProps> = ({ history, subject, lesson, question, idx, lessonProgress, activeSession, updateUserLesson, updateTrainingLesson }) => {
+const QuestionPage: React.FC<QuestionPageProps> = ({ history, subject, lesson, question, idx, lessonProgress, activeSession, updateTrainingLesson }) => {
 
   const { t } = useTranslation(['translation'], {i18n} );
 
@@ -138,12 +136,7 @@ const QuestionPage: React.FC<QuestionPageProps> = ({ history, subject, lesson, q
       }
     }
     if (answer) {
-      if (activeSession) {
-        updateTrainingLesson(activeSession, lessonProgress);
-      }
-      else {
-        updateUserLesson(lessonProgress);
-      }
+      updateTrainingLesson(activeSession, lessonProgress);
     }
     history.push(nextUrl);
   }
@@ -243,7 +236,6 @@ const QuestionPage: React.FC<QuestionPageProps> = ({ history, subject, lesson, q
 
 export default connect({
   mapDispatchToProps: {
-    updateUserLesson: updateUserLesson,
     updateTrainingLesson: updateTrainingLesson
   },
   mapStateToProps: (state, ownProps) => ({
