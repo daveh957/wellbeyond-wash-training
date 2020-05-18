@@ -61,7 +61,7 @@
     "@testing-library/react": "^9.5.0",
     "@types/googlemaps": "^3.39.5",
     "async": "^3.2.0",
-    "cordova-res": "^0.14.0",
+    "firebase-admin": "^8.11.0",
     "intercom-client": "^2.11.0",
     "typescript": "3.6.3"
   }
