@@ -30,6 +30,25 @@ export const loadTrainingData = async (collectionPath:string) : Promise<any> => 
     });
 };
 
+export const listenForTrainingData = async (collectionPath:string, callback:any) : Promise<any> => {
+  const isAdmin:boolean = await checkIsAdmin();
+  let query:firebase.firestore.Query<firebase.firestore.DocumentData> = firebase.firestore().collection(collectionPath);
+  query = isAdmin ? query : query.where('isPublished', '==', true);
+  return query
+    .onSnapshot(querySnapshot => {
+      let results:any[] = [];
+      querySnapshot.forEach(doc => {
+        // doc.data() is never undefined for query doc snapshots
+        results.push({
+          id: doc.id,
+          ...doc.data()
+        });
+      });
+      callback(results);
+    });
+};
+
+
 export const loadTrainingSessionData = async () : Promise<any> => {
   let results = {} as TrainingSessions;
   let user = firebase.auth().currentUser;
@@ -53,6 +72,28 @@ export const loadTrainingSessionData = async () : Promise<any> => {
     .catch(error => {
       console.log("Error getting documents: ", error);
       return error;
+    });
+};
+
+
+export const listenForTrainingSessionData = async (callback:any) : Promise<any> => {
+  let user = firebase.auth().currentUser;
+  if (!user || !user.uid) {
+    return Promise.reject();
+  }
+  let query:firebase.firestore.Query<firebase.firestore.DocumentData> = firebase.firestore().collection('sessions').where('userId', '==', user.uid);
+  return query
+    .onSnapshot(querySnapshot => {
+      let results = {} as TrainingSessions;
+      querySnapshot.forEach(doc => {
+        // doc.data() is never undefined for query doc snapshots
+        const data = doc.data() as TrainingSession;
+        if (!data.archived) {
+          // @ts-ignore id is always defined
+          results[data.id] = data;
+        }
+      });
+      callback(results);
     });
 };
 

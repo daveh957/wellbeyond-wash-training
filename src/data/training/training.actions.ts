@@ -1,23 +1,31 @@
 import {ActionType} from '../../util/types';
-import {cacheImagesAndVideos, createOrUpdateTrainingSession, loadTrainingData, loadTrainingSessionData} from './trainingApi'
+import {
+  cacheImagesAndVideos,
+  createOrUpdateTrainingSession,
+  listenForTrainingData, listenForTrainingSessionData,
+  loadTrainingData,
+  loadTrainingSessionData
+} from './trainingApi'
 import {TrainingSessions, TrainingState} from './training.state';
 import {Lesson, LessonProgress, Question, Subject, TrainingSession} from '../../models/Training';
 import {updateUserLesson} from "../user/user.actions";
 
 export const loadLessonData = () => (async (dispatch: React.Dispatch<any>) => {
   dispatch(setLoading(true));
-  let subjects:Subject[] = await loadTrainingData('subjects');
-  let lessons:Lesson[] = await loadTrainingData('lessons');
-  if (lessons && lessons.length) {
-    lessons.forEach(lesson => {
-      if (lesson.questions) {
-        lesson.questions = lesson.questions.filter((q:Question) => q.questionType && q.questionText && q.correctAnswer);
+  listenForTrainingData('subjects', (subjects:Subject[]) => {
+    listenForTrainingData('lessons', (lessons:Lesson[]) => {
+      if (lessons && lessons.length) {
+        lessons.forEach(lesson => {
+          if (lesson.questions) {
+            lesson.questions = lesson.questions.filter((q:Question) => q.questionType && q.questionText && q.correctAnswer);
+          }
+        });
       }
+      cacheImagesAndVideos(lessons, subjects);
+      dispatch(setData({lessons, subjects}));
+      dispatch(setLoading(false));
     });
-  }
-  await cacheImagesAndVideos(lessons, subjects);
-  dispatch(setData({lessons, subjects}));
-  dispatch(setLoading(false));
+  });
 });
 
 export const setData = (data: Partial<TrainingState>) => ({
@@ -36,8 +44,9 @@ export const setMenuEnabled = (menuEnabled: boolean) => ({
 } as const);
 
 export const loadTrainingSessions = () => async (dispatch: React.Dispatch<any>) => {
-  let sessions = await loadTrainingSessionData();
-  dispatch(setTrainingSessions(sessions));
+  listenForTrainingSessionData((sessions:TrainingSessions) => {
+    dispatch(setTrainingSessions(sessions));
+  });
 }
 
 export const startTrainingSession = (session: TrainingSession) => async (dispatch: React.Dispatch<any>) => {
