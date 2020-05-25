@@ -3,8 +3,6 @@ import {
   cacheImagesAndVideos,
   createOrUpdateTrainingSession,
   listenForTrainingData, listenForTrainingSessionData,
-  loadTrainingData,
-  loadTrainingSessionData
 } from './trainingApi'
 import {TrainingSessions, TrainingState} from './training.state';
 import {Lesson, LessonProgress, Question, Subject, TrainingSession} from '../../models/Training';

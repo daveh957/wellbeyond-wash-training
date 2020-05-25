@@ -173,7 +173,7 @@ export const updateEmail = async (email: string) => {
     });
 };
 
-export const updateProfile = async (profile: {name?: string, organization?: string, photoURL?: string, acceptedTerms?: boolean}) => {
+export const updateProfile = async (profile: {name?: string, organization?: string, community?: string, photoURL?: string, acceptedTerms?: boolean}) => {
   let user = firebase.auth().currentUser;
   if (!user || !user.uid) {
     return null;
@@ -181,9 +181,6 @@ export const updateProfile = async (profile: {name?: string, organization?: stri
   return user
     .updateProfile({displayName: profile.name, photoURL: profile.photoURL})
     .then(() => {
-      if (!profile.organization && ! profile.acceptedTerms) {
-        return user;
-      }
       let update = {
         email: (user && user.email),
         name: profile.name || (user && user.displayName)
@@ -191,6 +188,10 @@ export const updateProfile = async (profile: {name?: string, organization?: stri
       if (profile.organization) {
         // @ts-ignore
         update.organization = profile.organization;
+      }
+      if (profile.community) {
+        // @ts-ignore
+        update.community = profile.community;
       }
       if (profile.acceptedTerms) {
         // @ts-ignore
