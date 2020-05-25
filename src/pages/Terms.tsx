@@ -12,8 +12,6 @@ import {
   IonToolbar
 } from '@ionic/react';
 
-import './TrainingPage.scss'
-
 import {useTranslation} from "react-i18next";
 import i18n from '../i18n';
 import {connect} from '../data/connect';
