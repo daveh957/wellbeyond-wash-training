@@ -75,8 +75,9 @@ const ChangeEmailModal: React.FC<ChangeEmailProps> = ({showModal, closeModal, em
     e.preventDefault();
     setFormSubmitted(true);
     if(validate()) {
-      updateEmail(formValues.email).then(() => {
-        setData({email: formValues.email});
+      let email = formValues.email.trim().toLowerCase();
+      updateEmail(email).then(() => {
+        setData({email: email});
         showToast({message: t('registration.messages.emailChanged')});
         closeModal();
       })

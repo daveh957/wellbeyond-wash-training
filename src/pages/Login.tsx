@@ -101,7 +101,7 @@ const Login: React.FC<LoginProps> = ({isLoggedIn, acceptedTerms, setLoading, set
     }
     if(username && password) {
       setLoading(true);
-      loginWithEmail(username, password)
+      loginWithEmail(username.trim().toLowerCase(), password)
         .then(() => {
           getUserProfile().then((data) => {
             setLoading(false);

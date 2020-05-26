@@ -139,7 +139,7 @@ const Signup: React.FC<SignupProps> = ({isLoggedIn,  setLoading, setIsLoggedIn})
     setFormSubmitted(true);
     if(validate()) {
       setLoading(true);
-      registerWithEmail(formValues.email, formValues.password)
+      registerWithEmail(formValues.email.trim().toLowerCase(), formValues.password)
         .then(() => {
           updateProfile({name: formValues.name, organization: formValues.organization, community: formValues.community})
             .then(() => {
