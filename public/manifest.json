@@ -1,6 +1,7 @@
 {
-  "short_name": "WellBeyond",
-  "name": "WellBeyond Application",
+  "short_name": "WellBeyond WASH",
+  "name": "WellBeyond WASH Training",
+  "description": "WASH (Water and Sanitation and Hygiene) training for communities in developing countries to help protect them from the spread of Corona virus.",
   "icons": [
     {
       "src": "favicon.ico",
@@ -19,6 +20,7 @@
     }
   ],
   "start_url": ".",
+  "scope": ".",
   "display": "standalone",
   "theme_color": "#000000",
   "background_color": "#ffffff"

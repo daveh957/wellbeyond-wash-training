@@ -49,6 +49,11 @@ const COMMUNITIES = [
   'Salaita',
   'Sauti Kuu',
   'Mutaki',
+  'Nthaani',
+  'Ingrid School Nairobi',
+  'Dago',
+  'MYOT School Nairobi',
+  'Tania Childrens Home',
   'Other',
 ];
 
@@ -86,8 +91,28 @@ const Signup: React.FC<SignupProps> = ({isLoggedIn,  setLoading, setIsLoggedIn})
   const [showOrganizationTextInput, setShowOrganizationTextInput] = useState(false);
   const [showCommunityTextInput, setShowCommunityTextInput] = useState(false);
   const [serverError, setServerError] = useState<Error>();
-  const [organizationList, setOrganizationList] = useState(ORGANIZATIONS);
-  const [communityList, setCommunityList] = useState(COMMUNITIES);
+  const [organizationList, setOrganizationList] = useState(ORGANIZATIONS.sort((a:string,b:string) => {
+    if (a === 'Other') {
+      return +1;
+    }
+    else if (b === 'Other') {
+      return -1;
+    }
+    else {
+      return a < b ? -1 : +1;
+    }
+  }));
+  const [communityList, setCommunityList] = useState(COMMUNITIES.sort((a:string,b:string) => {
+    if (a === 'Other') {
+      return +1;
+    }
+    else if (b === 'Other') {
+      return -1;
+    }
+    else {
+      return a < b ? -1 : +1;
+    }
+  }));
 
   const handleChange = (field:string, value:string) => {
     let errors = {...formErrors};
@@ -248,7 +273,7 @@ const Signup: React.FC<SignupProps> = ({isLoggedIn,  setLoading, setIsLoggedIn})
                              cancelText={t('buttons.cancel')}
                              okText={t('buttons.ok')}
                              onIonChange={e => {handleChange('organization', e.detail.value!)}}>
-                    {organizationList.map((o, idx) => <IonSelectOption value={o} key={o}>{idx<ORGANIZATIONS.length ? t('registration.organizations.' + o) : o}</IonSelectOption>)}
+                    {organizationList.map((o, idx) => <IonSelectOption value={o} key={o}>{o}</IonSelectOption>)}
                   </IonSelect>
                   <IonAlert
                     isOpen={showOrganizationTextInput}
@@ -273,7 +298,7 @@ const Signup: React.FC<SignupProps> = ({isLoggedIn,  setLoading, setIsLoggedIn})
                              cancelText={t('buttons.cancel')}
                              okText={t('buttons.ok')}
                              onIonChange={e => {handleChange('community', e.detail.value!);}}>
-                    {communityList.map((c, idx) => <IonSelectOption value={c} key={c}>{idx<COMMUNITIES.length ? t('registration.communities.' + c) : c}</IonSelectOption>)}
+                    {communityList.map((c, idx) => <IonSelectOption value={c} key={c}>{c}</IonSelectOption>)}
                   </IonSelect>
                   <IonAlert
                     isOpen={showCommunityTextInput}
