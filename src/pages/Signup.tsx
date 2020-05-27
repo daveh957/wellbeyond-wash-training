@@ -54,6 +54,7 @@ const COMMUNITIES = [
   'Dago',
   'MYOT School Nairobi',
   'Tania Childrens Home',
+  'New Canaan',
   'Other',
 ];
 
