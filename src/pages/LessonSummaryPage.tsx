@@ -54,10 +54,11 @@ const LessonSummaryPage: React.FC<LessonSummaryProps> = ({ subject, lesson, less
     if (lesson && lessons && lessonProgress) {
       const lastPage = ('/tabs/subjects/' + subject.id + '/lessons/' + lesson.id) + (lesson.pages && lesson.pages.length ?  + ('/page/' + lesson.pages.length) : '/intro');
       const lastQuestion = lesson.questions && lesson.questions.length ? ('/tabs/subjects/' + subject.id + '/lessons/' + lesson.id + '/question/' + lesson.questions.length) : lastPage;
-      let i, nextLesson;
-      for(i=0;i<lessons.length;i++) {
-        if (lessons[i] && lessons[i].id === lesson.id && i < (lessons.length - 1)) {
-          nextLesson = lessons[i+1];
+      let i:number, nextLesson:Lesson|undefined, nextLessonId:string;
+      for(i=0;i<subject.lessons.length;i++) {
+        if (subject.lessons[i] && subject.lessons[i].lessonId === lesson.id && i < (subject.lessons.length - 1)) {
+          nextLessonId = subject.lessons[i+1].lessonId;
+          nextLesson = nextLessonId ? lessons.find(l => l.id === nextLessonId) : undefined;
         }
       }
       setNextLesson(nextLesson);
