@@ -1,4 +1,4 @@
-import React, {useContext, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import {
   IonAlert,
   IonButton,
@@ -30,6 +30,7 @@ import {RouteComponentProps} from 'react-router';
 import {Redirect} from "react-router-dom";
 import {registerWithEmail, updateProfile} from "../data/user/userApi";
 import {loadUserData, setIsLoggedIn, setLoading} from "../data/user/user.actions";
+import {Organization} from "../models/User";
 
 const ORGANIZATIONS = [
   'Well Aware',
@@ -62,6 +63,7 @@ interface OwnProps extends RouteComponentProps {}
 
 interface StateProps {
   isLoggedIn?: boolean;
+  organizations?: Organization[];
 }
 
 interface DispatchProps {
@@ -72,7 +74,7 @@ interface DispatchProps {
 
 interface SignupProps extends OwnProps, StateProps, DispatchProps { }
 
-const Signup: React.FC<SignupProps> = ({isLoggedIn,  setLoading, setIsLoggedIn}) => {
+const Signup: React.FC<SignupProps> = ({isLoggedIn,organizations,  setLoading, setIsLoggedIn}) => {
 
   const { t } = useTranslation(['translation'], {i18n} );
   const {navigate} = useContext(NavContext);
@@ -82,45 +84,47 @@ const Signup: React.FC<SignupProps> = ({isLoggedIn,  setLoading, setIsLoggedIn})
     email: '',
     password: '',
     passwordRepeat: '',
-    organization: '',
+    organization: undefined,
     community: '',
-    organizationWritein: '',
-    communityWritein: ''
   });
   const [formErrors, setFormErrors] = useState<any>({});
   const [formSubmitted, setFormSubmitted] = useState(false);
   const [showOrganizationTextInput, setShowOrganizationTextInput] = useState(false);
   const [showCommunityTextInput, setShowCommunityTextInput] = useState(false);
   const [serverError, setServerError] = useState<Error>();
-  const [organizationList, setOrganizationList] = useState(ORGANIZATIONS.sort((a:string,b:string) => {
-    if (a === 'Other') {
-      return +1;
-    }
-    else if (b === 'Other') {
-      return -1;
-    }
-    else {
-      return a < b ? -1 : +1;
-    }
-  }));
-  const [communityList, setCommunityList] = useState(COMMUNITIES.sort((a:string,b:string) => {
-    if (a === 'Other') {
-      return +1;
-    }
-    else if (b === 'Other') {
-      return -1;
-    }
-    else {
-      return a < b ? -1 : +1;
-    }
-  }));
+  const [organizationList, setOrganizationList] = useState();
+  const [communityList, setCommunityList] = useState();
 
-  const handleChange = (field:string, value:string) => {
+  useEffect(() => {
+    if (organizations) {
+      let list = organizations.sort((a: Organization, b: Organization) => {
+          return a.name < b.name ? -1 : +1;
+      });
+      list.push({id: '_other', name: 'Other', communities: []});
+      setOrganizationList(list);
+    }
+  }, [organizations]);
+
+  useEffect(() => {
+    if (formValues.organization && formValues.organization.communities && formValues.organization.communities.length) {
+      let list = formValues.organization.communities.map((c:any) => c.name).sort((a: string, b: string) => {
+        return a < b ? -1 : +1;
+      });
+      list.push('Other');
+      setCommunityList(list);
+    }
+    else {
+      setCommunityList(undefined);
+    }
+  }, [formValues.organization]);
+
+  const handleChange = (field:string, value:any) => {
     let errors = {...formErrors};
     let values = {...formValues};
     errors[field] = null;
     values[field] = value;
-    if (field === 'organization' && value === 'Other') {
+    if (field === 'organization') {
+      if (value && value.id === '_other')
         setShowOrganizationTextInput(true);
     }
     if (field === 'community' && value === 'Other') {
@@ -132,10 +136,12 @@ const Signup: React.FC<SignupProps> = ({isLoggedIn,  setLoading, setIsLoggedIn})
   const handleOrganizationTextChange = (ev:CustomEvent) => {
     const detail = ev.detail;
     if (detail && detail.data && detail.data.values && detail.data.values.organization) {
-      setFormValues({...formValues, organization: detail.data.values.organization});
-      let orgs = [...organizationList];
-      orgs.push(detail.data.values.organization);
-      setOrganizationList(orgs)
+      const customOrg = {id: '_custom', name: detail.data.values.organization, communities: []};
+      setFormValues({...formValues, organization: customOrg});
+      let list = organizationList.filter((o:Organization) => o.id !== '_custom' && o.id !== '_other');
+      list.push(customOrg);
+      list.push({id: '_other', name: 'Other', communities: []});
+      setOrganizationList(list);
     }
     setShowOrganizationTextInput(false);
   }
@@ -143,9 +149,12 @@ const Signup: React.FC<SignupProps> = ({isLoggedIn,  setLoading, setIsLoggedIn})
     const detail = ev.detail;
     if (detail && detail.data && detail.data.values && detail.data.values.community) {
       setFormValues({...formValues, community: detail.data.values.community});
-      let comms = [...communityList];
-      comms.push(detail.data.values.community);
-      setCommunityList(comms)
+      let list = formValues.organization.communities.map((c:any) => c.name).sort((a: string, b: string) => {
+        return a < b ? -1 : +1;
+      });
+      list.push(detail.data.values.community);
+      list.push('Other');
+      setCommunityList(list);
     }
     setShowCommunityTextInput(false);
   }
@@ -164,10 +173,24 @@ const Signup: React.FC<SignupProps> = ({isLoggedIn,  setLoading, setIsLoggedIn})
     e.preventDefault();
     setFormSubmitted(true);
     if(validate()) {
+      let profile:any = {
+        name: formValues.name
+      }
+      if (formValues.organization) {
+        if (formValues.organization.id && formValues.organization.id !== '_other' && formValues.organization.id !== '_custom') {
+          profile.organizationId = formValues.organization.id;
+        }
+        else {
+          profile.organization = formValues.organization.name;
+        }
+        if (formValues.community) {
+          profile.community = formValues.community;
+        }
+      }
       setLoading(true);
       registerWithEmail(formValues.email.trim().toLowerCase(), formValues.password)
         .then(() => {
-          updateProfile({name: formValues.name, organization: formValues.organization, community: formValues.community})
+          updateProfile(profile)
             .then(() => {
               setLoading(false);
               setIsLoggedIn(true);
@@ -267,6 +290,7 @@ const Signup: React.FC<SignupProps> = ({isLoggedIn,  setLoading, setIsLoggedIn})
                   </p>
                 </IonText>}
 
+                {organizationList && organizationList.length &&
                 <IonItem>
                   <IonLabel position="stacked" color="primary">{t('registration.labels.organization')}</IonLabel>
                   <IonSelect value={formValues.organization}
@@ -274,7 +298,7 @@ const Signup: React.FC<SignupProps> = ({isLoggedIn,  setLoading, setIsLoggedIn})
                              cancelText={t('buttons.cancel')}
                              okText={t('buttons.ok')}
                              onIonChange={e => {handleChange('organization', e.detail.value!)}}>
-                    {organizationList.map((o, idx) => <IonSelectOption value={o} key={o}>{o}</IonSelectOption>)}
+                    {organizationList.map((o:Organization) => <IonSelectOption value={o} key={o.id}>{o.name}</IonSelectOption>)}
                   </IonSelect>
                   <IonAlert
                     isOpen={showOrganizationTextInput}
@@ -290,8 +314,9 @@ const Signup: React.FC<SignupProps> = ({isLoggedIn,  setLoading, setIsLoggedIn})
                     }
                     buttons={ [{ text: t('buttons.cancel'), role: 'cancel'}, { text: t('buttons.ok') }] }
                   />
-                </IonItem>
+                </IonItem>}
 
+                {communityList && communityList.length &&
                 <IonItem>
                   <IonLabel position="stacked" color="primary">{t('registration.labels.community')}</IonLabel>
                   <IonSelect value={formValues.community}
@@ -299,7 +324,7 @@ const Signup: React.FC<SignupProps> = ({isLoggedIn,  setLoading, setIsLoggedIn})
                              cancelText={t('buttons.cancel')}
                              okText={t('buttons.ok')}
                              onIonChange={e => {handleChange('community', e.detail.value!);}}>
-                    {communityList.map((c, idx) => <IonSelectOption value={c} key={c}>{c}</IonSelectOption>)}
+                    {communityList.map((c:string) => <IonSelectOption value={c} key={c}>{c}</IonSelectOption>)}
                   </IonSelect>
                   <IonAlert
                     isOpen={showCommunityTextInput}
@@ -315,7 +340,7 @@ const Signup: React.FC<SignupProps> = ({isLoggedIn,  setLoading, setIsLoggedIn})
                     }
                     buttons={ [{ text: t('buttons.cancel'), role: 'cancel'}, { text: t('buttons.ok') }] }
                   />
-                </IonItem>
+                </IonItem>}
 
               </IonList>
 
@@ -353,6 +378,7 @@ export default connect<OwnProps, StateProps, DispatchProps>({
   },
   mapStateToProps: (state) => ({
     isLoggedIn: state.user.isLoggedIn,
+    organizations: state.user.organizations
   }),
   component: Signup
 })

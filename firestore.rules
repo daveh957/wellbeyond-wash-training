@@ -26,6 +26,12 @@ service cloud.firestore {
       allow write: if get(/databases/$(database)/documents/admins/$(request.auth.uid)).data.isAdmin == true;
     }
 
+    // Match any document in the 'organizations' collection
+    match /organizations/{organizations} {
+      allow read: if true;
+      allow write: if get(/databases/$(database)/documents/admins/$(request.auth.uid)).data.isAdmin == true;
+    }
+
     // Make sure the uid of the requesting user matches name of the user
     // document. The wildcard expression {userId} makes the userId variable
     // available in rules.

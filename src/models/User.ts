@@ -27,4 +27,10 @@ export interface Admin {
   isAdmin?: boolean;
 }
 
+export interface Organization {
+  id: string;
+  name: string;
+  communities: string[];
+}
+
 

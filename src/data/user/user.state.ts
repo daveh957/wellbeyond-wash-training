@@ -1,4 +1,5 @@
 import {LessonProgress} from "../../models/Training";
+import {Organization} from "../../models/User";
 
 export interface UserLessons {
   [lessonId:string] : LessonProgress
@@ -26,4 +27,5 @@ export interface UserState {
   changePassword?: UserAction;
   changeEmail?: UserAction;
   reauthenticate?: UserAction;
+  organizations?: Organization[];
 }

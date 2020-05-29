@@ -29,5 +29,7 @@ export function userReducer(state: UserState, action: UserActions): UserState {
       let lessons = Object.assign({}, state.lessons);
       lessons[action.lesson.lessonId] = action.lesson;
       return { ...state, lessons: lessons };
+    case 'set-organizations':
+      return { ...state, organizations: action.organizations };
   }
 }

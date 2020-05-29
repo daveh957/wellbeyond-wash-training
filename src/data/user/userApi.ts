@@ -57,7 +57,17 @@ export const registerWithEmail = async (email: string, password: string) => {
   console.log("in registerWithEmail");
   return firebase
     .auth()
-    .createUserWithEmailAndPassword(email, password);
+    .createUserWithEmailAndPassword(email, password).catch(err => {
+    console.log(err);
+    if (err.code === 'auth/email-already-in-use') {
+      loginWithEmail(email, password).catch(err2 => { // Try to login using the provided password instead
+        throw(err); // Throw the original error if it failed
+      })
+    }
+    else {
+      throw(err);
+    }
+  });
 };
 
 /**
@@ -173,7 +183,7 @@ export const updateEmail = async (email: string) => {
     });
 };
 
-export const updateProfile = async (profile: {name?: string, organization?: string, community?: string, photoURL?: string, acceptedTerms?: boolean}) => {
+export const updateProfile = async (profile: {name?: string, organizationId?: string, organization?: string, community?: string, photoURL?: string, acceptedTerms?: boolean}) => {
   let user = firebase.auth().currentUser;
   if (!user || !user.uid) {
     return null;
@@ -184,6 +194,10 @@ export const updateProfile = async (profile: {name?: string, organization?: stri
       let update = {
         email: (user && user.email),
         name: profile.name || (user && user.displayName)
+      }
+      if (profile.organizationId) {
+        // @ts-ignore
+        update.organizationId = profile.organizationId;
       }
       if (profile.organization) {
         // @ts-ignore
@@ -254,5 +268,21 @@ export const createOrUpdateLessonProgress = async (lesson: LessonProgress) => {
     })
     .catch(error => {
       console.log("Error writing document:", error);
+    });
+};
+
+export const listenForOrganizationData = async (callback:any) : Promise<any> => {
+  let query:firebase.firestore.Query<firebase.firestore.DocumentData> = firebase.firestore().collection('organizations');
+  return query
+    .onSnapshot(querySnapshot => {
+      let results:any[] = [];
+      querySnapshot.forEach(doc => {
+        // doc.data() is never undefined for query doc snapshots
+        results.push({
+          id: doc.id,
+          ...doc.data()
+        });
+      });
+      callback(results);
     });
 };

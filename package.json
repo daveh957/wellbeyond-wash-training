@@ -42,6 +42,7 @@
     "clean-cra-sw": "rm -f build/precache-manifest.*.js && rm -f build/service-worker.js",
     "build": "ionic build && npm run build-sw && npm run clean-cra-sw",
     "deploy": "firebase deploy --only hosting:wellbeyond-wash-training",
+    "deploy-rules": "firebase deploy --only firestore:rules",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "resources": "cordova-res ios && cordova-res android && node tools/resources.js"

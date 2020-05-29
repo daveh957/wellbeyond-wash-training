@@ -1,7 +1,7 @@
 import {
   createOrUpdateLessonProgress,
   getUserLessons,
-  getUserProfile,
+  getUserProfile, listenForOrganizationData,
   logout,
   reauthenticateWithPassword,
   updateProfile
@@ -9,6 +9,7 @@ import {
 import {ActionType} from '../../util/types'
 import {UserLessons, UserState} from './user.state';
 import {LessonProgress} from "../../models/Training";
+import {Organization} from "../../models/User";
 
 const setLoginError = (error: any) => {
   return ({
@@ -17,6 +18,11 @@ const setLoginError = (error: any) => {
   } as const)
 };
 
+export const loadOrganizations = () => async (dispatch: React.Dispatch<any>) => {
+  listenForOrganizationData(function(organizations:Organization[]) {
+    dispatch(setOrganizations(organizations));
+  });
+}
 export const loadUserData = () => async (dispatch: React.Dispatch<any>) => {
   dispatch(setLoading(true));
   const data = await getUserProfile();
@@ -102,6 +108,11 @@ export const setUserLesson = (lesson: LessonProgress) => ({
   lesson
 } as const);
 
+export const setOrganizations = (organizations: Organization[]) => ({
+  type: 'set-organizations',
+  organizations
+} as const);
+
 export type UserActions =
   | ActionType<typeof setLoading>
   | ActionType<typeof setData>
@@ -113,3 +124,4 @@ export type UserActions =
   | ActionType<typeof setAcceptedTerms>
   | ActionType<typeof setUserLessons>
   | ActionType<typeof setUserLesson>
+  | ActionType<typeof setOrganizations>
