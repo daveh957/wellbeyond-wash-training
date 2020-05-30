@@ -250,7 +250,7 @@ const Signup: React.FC<SignupProps> = ({isLoggedIn,organizations,  setLoading, s
 
                 <IonItem>
                   <IonLabel position="stacked" color="primary">{t('registration.labels.email')}</IonLabel>
-                  <IonInput name="email" type="text" value={formValues.email} spellCheck={false} required={true} autocapitalize="off" autocomplete="on" onIonChange={e => {
+                  <IonInput name="email" type="email" value={formValues.email} spellCheck={false} required={true} autocapitalize="off" autocomplete="on" inputmode="email" onIonChange={e => {
                     handleChange('email', e.detail.value!);
                   }}>
                   </IonInput>

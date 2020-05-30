@@ -144,7 +144,7 @@ const Login: React.FC<LoginProps> = ({isLoggedIn, acceptedTerms, setLoading, set
           <IonList>
             <IonItem>
               <IonLabel position="stacked" color="primary">{t('registration.labels.loginUsername')}</IonLabel>
-              <IonInput name="username" type="text" value={username} spellCheck={false} autocapitalize="off" onIonChange={e => setUsername(e.detail.value!)}
+              <IonInput name="username" type="email" value={username} spellCheck={false} autocapitalize="off" inputmode="email" onIonChange={e => setUsername(e.detail.value!)}
                 required>
               </IonInput>
             </IonItem>
