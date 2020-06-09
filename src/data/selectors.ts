@@ -2,6 +2,7 @@ import {createSelector} from 'reselect';
 import {AppState} from './state';
 import {Lesson} from '../models/Training';
 import queryString from 'query-string';
+import i18n from '../i18n';
 
 export const getTrainingSessions = (state: AppState) => {
   return state.data.sessions;
@@ -17,6 +18,9 @@ export const getLessons = (state: AppState) => {
 }
 export const getUserId = (state: AppState) => {
   return state.user.id;
+}
+export const getUserOrganizationId = (state: AppState) => {
+  return state.user.organizationId;
 }
 
 const getSubjectIdParam = (_state: AppState, props: any) => {
@@ -35,6 +39,20 @@ const getTrainingSessionIdParam  = (_state: AppState, props: any) => {
   const values = queryString.parse(props.location.search);
   return values['tsId'];
 }
+export const getSubjectsForOrganization = createSelector(
+  getSubjects, getUserId, getUserOrganizationId,
+  (subjects, userId, organizationId) => {
+    if (subjects) {
+      if (organizationId) {
+        return subjects.filter((s) => s.organizationId === organizationId)
+      }
+      else if (userId) {
+        return subjects;
+      }
+    }
+    return [];
+  }
+);
 export const getTrainingSession = createSelector(
   getTrainingSessions, getTrainingSessionIdParam,
   (sessions, id) => {
@@ -46,7 +64,11 @@ export const getTrainingSession = createSelector(
 export const getSubject = createSelector(
   getSubjects, getSubjectIdParam,
   (subjects, id) => {
-    return subjects.find(s => s.id === id);
+    const subject = subjects.find(s => s.id === id);
+    if (subject) {
+      i18n.changeLanguage(subject.locale || 'en');
+    }
+    return subject;
   }
 );
 export const getLesson = createSelector(

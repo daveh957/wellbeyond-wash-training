@@ -79,7 +79,6 @@ const Menu: React.FC<MenuProps> = ({ darkMode, trainerMode, isLoggedIn, setDarkM
 
   function renderSubjects() {
     return subjects
-      .filter(subject => subject.name && !subject.name.match(/test/i))
       .map(subject => (
         <IonMenuToggle key={subject.id} auto-hide="false">
           <IonItem detail={false} routerLink={'/tabs/subjects/'+subject.id} routerDirection="none" className={location.pathname.endsWith(subject.id) ? 'selected' : undefined}>
@@ -125,7 +124,7 @@ export default connect<{}, StateProps, {}>({
     trainerMode: state.user.trainerMode,
     isLoggedIn: state.user.isLoggedIn,
     menuEnabled: state.data.menuEnabled,
-    subjects: selectors.getSubjects(state)
+    subjects: selectors.getSubjectsForOrganization(state)
   }),
   mapDispatchToProps: ({
     setDarkMode,

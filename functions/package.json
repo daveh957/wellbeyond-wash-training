@@ -15,7 +15,8 @@
     "crypto": "^1.0.1",
     "firebase-admin": "^8.6.0",
     "firebase-functions": "^3.6.2",
-    "intercom-client": "^2.11.0"
+    "intercom-client": "^2.11.0",
+    "json-autotranslate": "^1.6.0"
   },
   "devDependencies": {
     "firebase-functions-test": "^0.1.6"

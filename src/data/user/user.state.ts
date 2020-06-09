@@ -17,6 +17,7 @@ export interface UserState {
   name?: string;
   photoURL?: string;
   organization?: string;
+  organizationId?: string;
   loginError?: any;
   isLoggedIn?: boolean;
   darkMode: boolean;
