@@ -6,7 +6,7 @@ export function userReducer(state: UserState, action: UserActions): UserState {
   switch (action.type) {
     case 'set-user-loading':
       return { ...state, loading: action.isLoading };
-    case 'set-user-data':
+    case 'set-user-profile':
       return { ...state, ...action.data };
     case 'reset-user-data':
       let newState = {...initialState.user};
@@ -15,14 +15,12 @@ export function userReducer(state: UserState, action: UserActions): UserState {
       return newState;
     case 'set-dark-mode':
       return { ...state, darkMode: action.darkMode };
-    case 'set-trainer-mode':
-      return { ...state, trainerMode: action.trainerMode };
     case 'set-accepted-terms':
       return { ...state, acceptedTerms: action.acceptedTerms };
     case 'set-is-loggedin':
       return { ...state, isLoggedIn: action.loggedIn };
-    case 'set-login-error':
-      return { ...state, loginError: action.loginError };
+    case 'set-is-registered':
+      return { ...state, isRegistered: action.registered };
     case 'set-user-lessons':
       return { ...state, lessons: action.lessons };
     case 'set-user-lesson':

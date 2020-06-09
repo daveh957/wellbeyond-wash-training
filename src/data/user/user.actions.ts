@@ -3,20 +3,12 @@ import {
   getUserLessons,
   getUserProfile, listenForOrganizationData,
   logout,
-  reauthenticateWithPassword,
   updateProfile
 } from './userApi';
 import {ActionType} from '../../util/types'
 import {UserLessons, UserState} from './user.state';
 import {LessonProgress} from "../../models/Training";
-import {Organization} from "../../models/User";
-
-const setLoginError = (error: any) => {
-  return ({
-    type: 'set-login-error',
-    loginError: error
-  } as const)
-};
+import {Organization, UserProfile} from "../../models/User";
 
 export const loadOrganizations = () => async (dispatch: React.Dispatch<any>) => {
   listenForOrganizationData(function(organizations:Organization[]) {
@@ -25,13 +17,11 @@ export const loadOrganizations = () => async (dispatch: React.Dispatch<any>) => 
 }
 export const loadUserData = () => async (dispatch: React.Dispatch<any>) => {
   dispatch(setLoading(true));
-  const data = await getUserProfile();
-  if (data) {
-    dispatch(setIsLoggedIn(true));
-    // @ts-ignore
-    data.acceptedTerms = !!data.acceptedTerms;
-    // @ts-ignore
-    dispatch(setData(data));
+  const profile:(UserProfile|void) = await getUserProfile();
+  if (profile) {
+    dispatch(setIsRegistered(true));
+    dispatch(setAcceptedTerms(!!profile.acceptedTerms));
+    dispatch(setData({profile: profile}));
     const lessons = await getUserLessons();
     dispatch(setUserLessons(lessons || {}));
   }
@@ -64,18 +54,16 @@ export const setIsLoggedIn = (loggedIn: boolean) => {
   } as const)
 };
 
+export const setIsRegistered = (registered: boolean) => {
+  return ({
+    type: 'set-is-registered',
+    registered
+  } as const)
+};
+
 export const logoutUser = () => async (dispatch: React.Dispatch<any>) => {
   logout();
   dispatch(resetData());
-};
-
-export const reauthenticate = (password: string) => async (dispatch: React.Dispatch<any>) => {
-  setLoginError(null);
-  reauthenticateWithPassword(password)
-    .catch(error => {
-      dispatch(setLoginError(error));
-      console.log("Error reauthenticating:", error);
-    });
 };
 
 export const updateUserLesson = (lesson: LessonProgress) => async (dispatch: React.Dispatch<any>) => {
@@ -86,11 +74,6 @@ export const updateUserLesson = (lesson: LessonProgress) => async (dispatch: Rea
 export const setDarkMode = (darkMode: boolean) => ({
   type: 'set-dark-mode',
   darkMode
-} as const);
-
-export const setTrainerMode = (trainerMode: boolean) => ({
-  type: 'set-trainer-mode',
-  trainerMode
 } as const);
 
 export const setAcceptedTerms = (acceptedTerms?: boolean) => ({
@@ -118,9 +101,8 @@ export type UserActions =
   | ActionType<typeof setData>
   | ActionType<typeof resetData>
   | ActionType<typeof setIsLoggedIn>
-  | ActionType<typeof setLoginError>
+  | ActionType<typeof setIsRegistered>
   | ActionType<typeof setDarkMode>
-  | ActionType<typeof setTrainerMode>
   | ActionType<typeof setAcceptedTerms>
   | ActionType<typeof setUserLessons>
   | ActionType<typeof setUserLesson>

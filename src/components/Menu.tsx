@@ -12,12 +12,12 @@ import {
   IonMenuToggle,
   IonToggle
 } from '@ionic/react';
-import {fingerPrint, globe, logIn, logOut, moonOutline, person, personAdd} from 'ionicons/icons';
+import {fingerPrint, globe, logIn, logOut, moonOutline, person,} from 'ionicons/icons';
 import {useTranslation} from "react-i18next";
 import i18n from '../i18n';
 
 import {connect} from '../data/connect';
-import {setDarkMode, setTrainerMode} from '../data/user/user.actions';
+import {setDarkMode} from '../data/user/user.actions';
 
 import './Menu.css'
 import {Subject} from "../models/Training";
@@ -30,7 +30,7 @@ const routes = {
   ],
   loggedOutPages: [
     { title: 'menu.login', path: '/login', icon: logIn },
-    { title: 'menu.signup', path: '/signup', icon: personAdd }
+    // { title: 'menu.signup', path: '/signup', icon: personAdd }
   ],
   aboutPages: [
     { title: 'menu.terms', path: '/termsOfUse', icon: globe },
@@ -47,7 +47,6 @@ interface Pages {
 }
 interface StateProps {
   darkMode: boolean;
-  trainerMode: boolean;
   isLoggedIn?: boolean;
   menuEnabled: boolean;
   subjects: Subject[]
@@ -55,12 +54,11 @@ interface StateProps {
 
 interface DispatchProps {
   setDarkMode: typeof setDarkMode
-  setTrainerMode: typeof setTrainerMode
 }
 
 interface MenuProps extends RouteComponentProps, StateProps, DispatchProps { }
 
-const Menu: React.FC<MenuProps> = ({ darkMode, trainerMode, isLoggedIn, setDarkMode, setTrainerMode, menuEnabled, subjects }) => {
+const Menu: React.FC<MenuProps> = ({ darkMode, isLoggedIn, setDarkMode, menuEnabled, subjects }) => {
   const location = useLocation();
   const { t } = useTranslation(['translation'], {i18n} );
 
@@ -122,14 +120,12 @@ const Menu: React.FC<MenuProps> = ({ darkMode, trainerMode, isLoggedIn, setDarkM
 export default connect<{}, StateProps, {}>({
   mapStateToProps: (state) => ({
     darkMode: state.user.darkMode,
-    trainerMode: state.user.trainerMode,
     isLoggedIn: state.user.isLoggedIn,
     menuEnabled: state.data.menuEnabled,
     subjects: selectors.getSubjects(state)
   }),
   mapDispatchToProps: ({
     setDarkMode,
-    setTrainerMode
   }),
   component: withRouter(Menu)
 })

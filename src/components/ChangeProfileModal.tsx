@@ -24,7 +24,6 @@ import {ToastProps} from "../pages/Account";
 
 interface OwnProps {
   name?: string,
-  organization?: string,
   showModal: boolean,
   closeModal(): void,
   showToast(props:ToastProps): void

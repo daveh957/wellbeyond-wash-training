@@ -32,33 +32,6 @@ import {registerWithEmail, updateProfile} from "../data/user/userApi";
 import {loadUserData, setIsLoggedIn, setLoading} from "../data/user/user.actions";
 import {Organization} from "../models/User";
 
-const ORGANIZATIONS = [
-  'Well Aware',
-  'Other',
-];
-
-const COMMUNITIES = [
-  'Olpejeta',
-  'Kithoka',
-  'Sikizana',
-  'Olmoran',
-  'Meta',
-  'Cheptori',
-  'Kavuthu',
-  'Kaliini',
-  'Muruku',
-  'Salaita',
-  'Sauti Kuu',
-  'Mutaki',
-  'Nthaani',
-  'Ingrid School Nairobi',
-  'Dago',
-  'MYOT School Nairobi',
-  'Tania Childrens Home',
-  'New Canaan',
-  'Other',
-];
-
 interface OwnProps extends RouteComponentProps {}
 
 interface StateProps {

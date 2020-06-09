@@ -31,6 +31,7 @@ interface OwnProps extends RouteComponentProps {}
 
 interface StateProps {
   isLoggedIn?: boolean;
+  isRegistered?: boolean;
   acceptedTerms?: boolean;
 }
 
@@ -40,7 +41,7 @@ interface DispatchProps {
 
 interface AcceptTermsProps extends OwnProps, StateProps, DispatchProps { }
 
-const AcceptTerms: React.FC<AcceptTermsProps> = ({acceptTerms, acceptedTerms, isLoggedIn}) => {
+const AcceptTerms: React.FC<AcceptTermsProps> = ({acceptTerms, acceptedTerms, isLoggedIn, isRegistered}) => {
 
   const [formSubmitted, setFormSubmitted] = useState();
   const [checked, setChecked] = useState();
@@ -62,6 +63,9 @@ const AcceptTerms: React.FC<AcceptTermsProps> = ({acceptTerms, acceptedTerms, is
 
   if (isLoggedIn === false) {
     return <Redirect to="/login" />
+  }
+  if (isLoggedIn && isRegistered === false) {
+    return <Redirect to="/register" />
   }
   if (isLoggedIn && acceptedTerms) {
     return <Redirect to="/tabs" />
@@ -117,6 +121,7 @@ export default connect<OwnProps, {}, DispatchProps>({
   },
   mapStateToProps: (state) => ({
     isLoggedIn: state.user.isLoggedIn,
+    isRegistered: state.user.isRegistered,
     acceptedTerms: state.user.acceptedTerms
   }),
   component: AcceptTerms

@@ -12,9 +12,6 @@ export const initialState: AppState = {
   },
   user: {
     darkMode: false,
-    trainerMode: false,
-    isLoggedIn: undefined,
-    acceptedTerms: undefined,
     loading: false,
     lessons: {}
   }

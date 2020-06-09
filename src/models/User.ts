@@ -13,11 +13,15 @@ export interface Answer {
   correctAnswer?: string | number;
 }
 
-export interface User {
+export interface UserProfile {
   id: string;
   name: string;
   email?: string;
-  organization?: string;
+  phoneNumber?: string;
+  photoURL?: string;
+  organizationId?: string;
+  organization?: string; // If not from the predefined list
+  community?: string;
   acceptedTerms?: boolean;
   canTeach?: boolean;
 }

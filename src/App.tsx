@@ -35,7 +35,7 @@ import {loadLessonData, loadTrainingSessions} from './data/training/training.act
 import AcceptTerms from './pages/AcceptTerms';
 import Account from './pages/Account';
 import Login from './pages/Login';
-import Signup from './pages/Signup';
+import Register from './pages/Register';
 import {useTranslation} from "react-i18next";
 import i18n from "./i18n";
 import Terms from "./pages/Terms";
@@ -92,9 +92,11 @@ const IonicApp: React.FC<IonicAppProps> = ({ darkMode, loading, loadLessonData, 
 
   useEffect(() => {
     const getUserIdHash = firebase.functions().httpsCallable('getUserIdHash');
+    firebase.auth().useDeviceLanguage();
     firebase.auth().onAuthStateChanged(async user => {
       if (user != null) {
         console.log("We are authenticated now!");
+        setIsLoggedIn(true);
         loadUserData();
         loadTrainingSessions();
         if (process.env.NODE_ENV === 'production') {
@@ -130,8 +132,8 @@ const IonicApp: React.FC<IonicAppProps> = ({ darkMode, loading, loadLessonData, 
               <Route path="/tabs" component={MainTabs} />
               <Route path="/account" component={Account} />
               <Route path="/terms" component={AcceptTerms} />
+              <Route path="/register" component={Register} />
               <Route path="/login" component={Login} />
-              <Route path="/signup" component={Signup} />
               <Route path="/termsOfUse" component={Terms} />
               <Route path="/privacyPolicy" component={Privacy} />
               <Route path="/logout" render={() => {
