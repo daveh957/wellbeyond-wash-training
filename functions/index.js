@@ -24,3 +24,19 @@ exports.getUserIdHash = functions.https.onCall((data, context) => {
     .digest('hex');
   return {hash: hash};
 });
+exports.updateIntercom = functions.database.ref('/users/{userId}').onWrite((change, context) => {
+  if (!change.after.exists()) {
+    return null; // Don't propagate deletes
+  }
+  const before = change.before.exists() ? change.before.val() : {};
+  const after = change.after.val();
+
+  if (!after.organization || after.organization === before.organization) {
+    if (!after.organizationId || after.organizationId === before.organizationId) {
+      if (!after.community || after.community === before.community) {
+        return null; // No change to the fields we want to sync
+      }
+    }
+  }
+
+});

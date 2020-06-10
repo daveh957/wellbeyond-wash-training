@@ -57,15 +57,10 @@ export const updateTrainingSession = (session: TrainingSession) => async (dispat
   dispatch(setTrainingSession(session));
 }
 
-export const updateTrainingLesson = (session: TrainingSession|undefined, lesson: LessonProgress) => async (dispatch: React.Dispatch<any>) => {
-  if (session) {
-    session.lessons = session.lessons || {};
-    session.lessons[lesson.lessonId] = lesson;
-    dispatch(createOrUpdateTrainingSession(session));
-  }
-  else {
-    dispatch(updateUserLesson(lesson));
-  }
+export const updateTrainingLesson = (session: TrainingSession, lesson: LessonProgress) => async (dispatch: React.Dispatch<any>) => {
+  session.lessons = session.lessons || {};
+  session.lessons[lesson.lessonId] = lesson;
+  dispatch(createOrUpdateTrainingSession(session));
 }
 
 export const archiveTrainingSession = (session: TrainingSession) => async (dispatch: React.Dispatch<any>) => {

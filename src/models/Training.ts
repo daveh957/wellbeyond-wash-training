@@ -20,6 +20,8 @@ export interface Question {
 
 export interface Lesson {
   id: string;
+  organizationId?: string;
+  locale?: string;
   name: string;
   description: string;
   photo: string;
@@ -29,6 +31,8 @@ export interface Lesson {
 
 export interface Subject {
   id: string;
+  organizationId?: string;
+  locale?: string;
   name: string;
   description: string;
   photo: string;

@@ -80,7 +80,7 @@ const TrainingPage: React.FC<TrainingPageProps> = ({ subjects, }) => {
 
 export default connect<OwnProps, StateProps, DispatchProps>({
   mapStateToProps: (state) => ({
-    subjects: selectors.getSubjects(state),
+    subjects: selectors.getSubjectsForOrganization(state),
   }),
   component: React.memo(TrainingPage)
 });

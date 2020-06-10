@@ -35,7 +35,7 @@ const SubjectProgressPage: React.FC<SubjectProps> = ({ subject, lessons, userLes
   const { t } = useTranslation(['translation'], {i18n} );
   const [lessonFlags, setLessonFlags] = useState<LessonFlags[]>();
   useEffect(() => {
-    if (lessons && (userLessons || activeSession)) {
+    if (subject && lessons && (userLessons || activeSession)) {
       const flags = new Array<LessonFlags>();
       lessons.forEach((l, idx) => {
         const pl = idx>0 ? lessons[idx-1] : undefined;
@@ -52,7 +52,7 @@ const SubjectProgressPage: React.FC<SubjectProps> = ({ subject, lessons, userLes
       });
       setLessonFlags(flags);
     }
-  }, [lessons, userLessons, activeSession]);
+  }, [subject, lessons, userLessons, activeSession]);
 
   return (
     <IonPage id="lesson-list">
