@@ -32,8 +32,7 @@ import * as selectors from '../data/selectors';
 
 import {Lesson, LessonProgress, Question, Subject, TrainingSession} from '../models/Training';
 import {Answer} from '../models/User';
-import {updateTrainingLesson} from "../data/training/training.actions";
-import {updateUserLesson} from "../data/user/user.actions";
+import {updateTrainingLesson} from "../data/user/user.actions";
 import BackToLessonsLink from "../components/BackToLessons";
 
 interface OwnProps extends RouteComponentProps {
@@ -50,12 +49,11 @@ interface StateProps {
 
 interface DispatchProps {
   updateTrainingLesson: typeof updateTrainingLesson;
-  updateUserLesson: typeof updateUserLesson;
 }
 
 interface QuestionPageProps extends OwnProps, StateProps, DispatchProps {}
 
-const QuestionPreviewPage: React.FC<QuestionPageProps> = ({ history, subject, lesson, question, idx, lessonProgress, activeSession, updateTrainingLesson, updateUserLesson }) => {
+const QuestionPreviewPage: React.FC<QuestionPageProps> = ({ history, subject, lesson, question, idx, lessonProgress, activeSession, updateTrainingLesson }) => {
 
   const { t } = useTranslation(['translation'], {i18n} );
 
@@ -130,12 +128,7 @@ const QuestionPreviewPage: React.FC<QuestionPageProps> = ({ history, subject, le
         });
         lessonProgress.preScore = lessonProgress.answers.length ? Math.round((100*preCorrect) / lesson.questions.length) : 0;
       }
-      if (activeSession) {
-        updateTrainingLesson(activeSession, lessonProgress);
-      }
-      else {
-        updateUserLesson(lessonProgress);
-      }
+      updateTrainingLesson(activeSession, lessonProgress);
     }
     history.push(nextUrl);
   }
@@ -164,11 +157,11 @@ const QuestionPreviewPage: React.FC<QuestionPageProps> = ({ history, subject, le
                 <IonList>
                   <IonRadioGroup value={answer} onIonChange={e => handleAnswer(e.detail.value)}>
                     <IonItem>
-                      <IonLabel>{t('training.labels.yes')}</IonLabel>
+                      <IonLabel>Yes</IonLabel>
                       <IonRadio slot="start" value="yes" />
                     </IonItem>
                     <IonItem>
-                      <IonLabel>{t('training.labels.no')}</IonLabel>
+                      <IonLabel>No</IonLabel>
                       <IonRadio slot="start" value="no" />
                     </IonItem>
                   </IonRadioGroup>
@@ -216,8 +209,7 @@ const QuestionPreviewPage: React.FC<QuestionPageProps> = ({ history, subject, le
 
 export default connect({
   mapDispatchToProps: {
-    updateTrainingLesson: updateTrainingLesson,
-    updateUserLesson: updateUserLesson
+    updateTrainingLesson: updateTrainingLesson
   },
   mapStateToProps: (state, ownProps) => ({
     subject: selectors.getSubject(state, ownProps),

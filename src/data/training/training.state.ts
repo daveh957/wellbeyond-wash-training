@@ -1,13 +1,8 @@
-import {Lesson, Subject, TrainingSession} from '../../models/Training';
-
-export interface TrainingSessions {
-  [id:string] : TrainingSession
-}
+import {Lesson, Subject} from '../../models/Training';
 
 export interface TrainingState {
   subjects: Subject[];
   lessons: Lesson[];
-  sessions?: TrainingSessions;
   loading?: boolean;
   menuEnabled: boolean;
 }

@@ -1,13 +1,19 @@
 import {
+  authCheck,
   createOrUpdateLessonProgress,
+  createOrUpdateTrainingSession,
   getUserLessons,
-  getUserProfile, listenForOrganizationData,
+  getUserProfile,
+  listenForOrganizationData,
+  listenForUserProfile,
+  listenForUserLessons,
+  listenForTrainingSessions,
   logout,
   updateProfile
 } from './userApi';
 import {ActionType} from '../../util/types'
-import {UserLessons, UserState} from './user.state';
-import {LessonProgress} from "../../models/Training";
+import {TrainingSessions, UserLessons, UserState} from './user.state';
+import {LessonProgress, TrainingSession} from "../../models/Training";
 import {IntercomUser, Organization, UserProfile} from "../../models/User";
 
 export const loadOrganizations = () => async (dispatch: React.Dispatch<any>) => {
@@ -15,6 +21,12 @@ export const loadOrganizations = () => async (dispatch: React.Dispatch<any>) => 
     dispatch(setOrganizations(organizations));
   });
 }
+
+export const watchAuthState = () => async (dispatch: React.Dispatch<any>) => {
+
+}
+
+
 export const loadUserData = () => async (dispatch: React.Dispatch<any>) => {
   dispatch(setLoading(true));
   const profile:(UserProfile|void) = await getUserProfile();
@@ -32,6 +44,44 @@ export const acceptTerms = () => async (dispatch: React.Dispatch<any>) => {
   dispatch(setAcceptedTerms(true));
   updateProfile({acceptedTerms: true}); // Don't wait for it to complete since we have offline support
 }
+export const logoutUser = () => async (dispatch: React.Dispatch<any>) => {
+  logout();
+  dispatch(resetData());
+};
+export const loadTrainingSessions = () => async (dispatch: React.Dispatch<any>) => {
+  listenForTrainingSessions((sessions:TrainingSessions) => {
+    dispatch(setTrainingSessions(sessions));
+  });
+}
+
+export const startTrainingSession = (session: TrainingSession) => async (dispatch: React.Dispatch<any>) => {
+  createOrUpdateTrainingSession(session);
+  dispatch(setTrainingSession(session));
+}
+
+export const updateTrainingSession = (session: TrainingSession) => async (dispatch: React.Dispatch<any>) => {
+  createOrUpdateTrainingSession(session);
+  dispatch(setTrainingSession(session));
+}
+
+export const updateTrainingLesson = (session: TrainingSession|undefined, lesson: LessonProgress) => async (dispatch: React.Dispatch<any>) => {
+  if (session) {
+    session.lessons = session.lessons || {};
+    session.lessons[lesson.lessonId] = lesson;
+    createOrUpdateTrainingSession(session);
+  }
+  else {
+    dispatch(setUserLesson(lesson));
+    createOrUpdateLessonProgress(lesson); // Don't wait for it to complete since we have offline support
+  }
+}
+
+export const archiveTrainingSession = (session: TrainingSession) => async (dispatch: React.Dispatch<any>) => {
+  session.archived = true;
+  createOrUpdateTrainingSession(session);
+  dispatch(setSessionArchived(session));
+}
+
 
 export const setLoading = (isLoading: boolean) => ({
   type: 'set-user-loading',
@@ -51,7 +101,7 @@ export const setIsLoggedIn = (loggedIn: boolean) => {
   return ({
     type: 'set-is-loggedin',
     loggedIn
-  } as const)
+  } as const);
 };
 
 export const setIsRegistered = (registered: boolean) => {
@@ -60,16 +110,6 @@ export const setIsRegistered = (registered: boolean) => {
     registered
   } as const)
 };
-
-export const logoutUser = () => async (dispatch: React.Dispatch<any>) => {
-  logout();
-  dispatch(resetData());
-};
-
-export const updateUserLesson = (lesson: LessonProgress) => async (dispatch: React.Dispatch<any>) => {
-  dispatch(setUserLesson(lesson));
-  createOrUpdateLessonProgress(lesson); // Don't wait for it to complete since we have offline support
-}
 
 export const setDarkMode = (darkMode: boolean) => ({
   type: 'set-dark-mode',
@@ -106,6 +146,21 @@ export const setOrganizations = (organizations: Organization[]) => ({
   organizations
 } as const);
 
+export const setTrainingSessions = (sessions: TrainingSessions) => ({
+  type: 'set-training-sessions',
+  sessions
+} as const);
+
+export const setTrainingSession = (session: TrainingSession) => ({
+  type: 'set-training-session',
+  session
+} as const);
+
+export const setSessionArchived = (session: TrainingSession) => ({
+  type: 'set-session-archived',
+  session
+} as const);
+
 export type UserActions =
   | ActionType<typeof setLoading>
   | ActionType<typeof setData>
@@ -119,3 +174,6 @@ export type UserActions =
   | ActionType<typeof setUserProfile>
   | ActionType<typeof setIntercomUser>
   | ActionType<typeof setOrganizations>
+  | ActionType<typeof setTrainingSessions>
+  | ActionType<typeof setTrainingSession>
+  | ActionType<typeof setSessionArchived>

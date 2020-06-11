@@ -18,14 +18,13 @@ import {
   IonToolbar
 } from '@ionic/react';
 import {Lesson, Subject, TrainingSession} from '../models/Training';
-import {UserLessons} from '../data/user/user.state';
+import {TrainingSessions, UserLessons} from '../data/user/user.state';
 import {connect} from '../data/connect';
 import * as selectors from '../data/selectors';
 import './SubjectPage.scss';
 import {RouteComponentProps} from "react-router";
 import {useTranslation} from "react-i18next";
 import i18n from '../i18n';
-import {TrainingSessions} from "../data/training/training.state";
 import SelfTraining from "../components/SelfTraining";
 import TrainingSessionItem from "../components/TrainingSessionItem";
 

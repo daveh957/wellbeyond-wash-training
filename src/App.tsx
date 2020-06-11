@@ -31,7 +31,7 @@ import MainTabs from './pages/MainTabs';
 import {connect} from './data/connect';
 import {AppContextProvider} from './data/AppContext';
 import {loadOrganizations, loadUserData, logoutUser, setAcceptedTerms, setIsLoggedIn} from './data/user/user.actions';
-import {loadLessonData, loadTrainingSessions} from './data/training/training.actions';
+import {loadTrainingData, loadTrainingSessions} from './data/training/training.actions';
 import AcceptTerms from './pages/AcceptTerms';
 import Account from './pages/Account';
 import Login from './pages/Login';
@@ -55,7 +55,7 @@ interface StateProps {
 }
 
 interface DispatchProps {
-  loadLessonData: typeof loadLessonData;
+  loadLessonData: typeof loadTrainingData;
   loadUserData: typeof loadUserData;
   loadTrainingSessions: typeof loadTrainingSessions;
   loadOrganizations: typeof loadOrganizations;
@@ -163,6 +163,6 @@ const IonicAppConnected = connect<{}, StateProps, DispatchProps>({
     loading: state.user.loading
   }),
   // @ts-ignore
-  mapDispatchToProps: { loadLessonData, loadUserData, loadTrainingSessions, loadOrganizations, logoutUser, setIsLoggedIn, setAcceptedTerms },
+  mapDispatchToProps: { loadLessonData: loadTrainingData, loadUserData, loadTrainingSessions, loadOrganizations, logoutUser, setIsLoggedIn, setAcceptedTerms },
   component: IonicApp
 });

@@ -1,5 +1,5 @@
 import {UserActions} from './user.actions';
-import {UserState} from './user.state';
+import {TrainingSessions, UserState} from './user.state';
 import {initialState} from "../state";
 
 export function userReducer(state: UserState, action: UserActions): UserState {
@@ -8,13 +8,6 @@ export function userReducer(state: UserState, action: UserActions): UserState {
       return { ...state, loading: action.isLoading };
     case 'set-user-data':
       return { ...state, ...action.data };
-    case 'reset-user-data':
-      let newState = {...initialState.user};
-      newState.isLoggedIn = false;
-      newState.acceptedTerms = false;
-      newState.profile = undefined;
-      newState.intercomUser = undefined;
-      return newState;
     case 'set-dark-mode':
       return { ...state, darkMode: action.darkMode };
     case 'set-accepted-terms':
@@ -35,5 +28,32 @@ export function userReducer(state: UserState, action: UserActions): UserState {
       return { ...state, lessons: lessons };
     case 'set-organizations':
       return { ...state, organizations: action.organizations };
+    case 'set-training-sessions': {
+      return { ...state, sessions: action.sessions };
+    }
+    case 'set-training-session': {
+      let sessions = {...state.sessions} as TrainingSessions;
+      if (action.session.id) {
+        sessions[action.session.id] = action.session;
+      }
+      return { ...state, sessions: sessions };
+    }
+    case 'set-session-archived': {
+      let sessions = {...state.sessions} as TrainingSessions;
+      if (action.session.id) {
+        delete sessions[action.session.id];
+      }
+      return { ...state, sessions: sessions};
+    }
+    case 'reset-user-data':
+      let newState = {...initialState.user};
+      newState.isLoggedIn = false;
+      newState.isRegistered = false;
+      newState.acceptedTerms = false;
+      newState.profile = undefined;
+      newState.intercomUser = undefined;
+      newState.lessons = {};
+      newState.sessions = {};
+      return newState;
   }
 }

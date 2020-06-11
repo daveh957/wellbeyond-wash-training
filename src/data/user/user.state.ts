@@ -1,8 +1,12 @@
-import {LessonProgress} from "../../models/Training";
-import {UserProfile, Organization, IntercomUser} from "../../models/User";
+import {LessonProgress, TrainingSession} from "../../models/Training";
+import {IntercomUser, Organization, UserProfile} from "../../models/User";
 
 export interface UserLessons {
   [lessonId:string] : LessonProgress
+}
+
+export interface TrainingSessions {
+  [id: string]: TrainingSession
 }
 
 export interface UserState {
@@ -14,6 +18,7 @@ export interface UserState {
   loading: boolean;
   intercomUser?: IntercomUser;
   profile?: UserProfile;
-  lessons?: UserLessons;
   organizations?: Organization[];
+  lessons?: UserLessons;
+  sessions?: TrainingSessions;
 }

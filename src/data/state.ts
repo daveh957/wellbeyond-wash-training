@@ -7,13 +7,13 @@ export const initialState: AppState = {
     subjects: [],
     lessons: [],
     loading: false,
-    menuEnabled: true,
-    sessions: {}
+    menuEnabled: true
   },
   user: {
     darkMode: false,
     loading: false,
-    lessons: {}
+    lessons: {},
+    sessions: {}
   }
 };
 

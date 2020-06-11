@@ -32,8 +32,7 @@ import * as selectors from '../data/selectors';
 
 import {Lesson, LessonProgress, Question, Subject, TrainingSession} from '../models/Training';
 import {Answer} from '../models/User';
-import {updateTrainingLesson} from "../data/training/training.actions";
-import {updateUserLesson} from "../data/user/user.actions";
+import {updateTrainingLesson} from "../data/user/user.actions";
 import BackToLessonsLink from "../components/BackToLessons";
 
 interface OwnProps extends RouteComponentProps {
@@ -50,12 +49,11 @@ interface StateProps {
 
 interface DispatchProps {
   updateTrainingLesson: typeof updateTrainingLesson;
-  updateUserLesson: typeof updateUserLesson;
 }
 
 interface QuestionPageProps extends OwnProps, StateProps, DispatchProps {}
 
-const QuestionPage: React.FC<QuestionPageProps> = ({ history, subject, lesson, question, idx, lessonProgress, activeSession, updateTrainingLesson, updateUserLesson }) => {
+const QuestionPage: React.FC<QuestionPageProps> = ({ history, subject, lesson, question, idx, lessonProgress, activeSession, updateTrainingLesson }) => {
 
   const { t } = useTranslation(['translation'], {i18n} );
 
@@ -138,12 +136,7 @@ const QuestionPage: React.FC<QuestionPageProps> = ({ history, subject, lesson, q
       }
     }
     if (answer) {
-      if (activeSession) {
-        updateTrainingLesson(activeSession, lessonProgress);
-      }
-      else {
-        updateUserLesson(lessonProgress);
-      }
+      updateTrainingLesson(activeSession, lessonProgress);
     }
     history.push(nextUrl);
   }
@@ -151,7 +144,8 @@ const QuestionPage: React.FC<QuestionPageProps> = ({ history, subject, lesson, q
   const handleLessonComplete = () => {
     lessonProgress.completed = lessonProgress.completed || new Date();
     let correct = 0, preCorrect = 0;
-    lessonProgress.answers.forEach(a => {
+    // eslint-disable-next-line array-callback-return
+    lessonProgress.answers.map(a => {
       if (a.answerAfter === a.correctAnswer) correct++;
       if (a.answerBefore === a.correctAnswer) preCorrect++;
     });
@@ -183,11 +177,11 @@ const QuestionPage: React.FC<QuestionPageProps> = ({ history, subject, lesson, q
                   <IonList>
                     <IonRadioGroup value={answer} onIonChange={e => handleAnswer(e.detail.value)}>
                       <IonItem>
-                        <IonLabel>{t('training.labels.yes')}</IonLabel>
+                        <IonLabel>Yes</IonLabel>
                         <IonRadio disabled={lockAnswer} slot="start" value="yes" />
                       </IonItem>
                       <IonItem>
-                        <IonLabel>{t('training.labels.no')}</IonLabel>
+                        <IonLabel>No</IonLabel>
                         <IonRadio disabled={lockAnswer} slot="start" value="no" />
                       </IonItem>
                     </IonRadioGroup>
@@ -222,7 +216,7 @@ const QuestionPage: React.FC<QuestionPageProps> = ({ history, subject, lesson, q
                   {answer === question.correctAnswer ?
                     <p>{t('resources.lessons.questions.right')}</p>
                     :
-                    <p>{t('resources.lessons.questions.wrong')}<strong> {question.questionType === 'yes-no' ? t('training.labels.'+question.correctAnswer.toString().toLowerCase()) : question.correctAnswer}</strong>.</p>}
+                    <p>{t('resources.lessons.questions.wrong')}<strong>{question.correctAnswer}</strong>.</p>}
                   <div dangerouslySetInnerHTML={{__html: question.explanation || ''}}></div>
                 </div>}
             </IonCardContent>
@@ -242,8 +236,7 @@ const QuestionPage: React.FC<QuestionPageProps> = ({ history, subject, lesson, q
 
 export default connect({
   mapDispatchToProps: {
-    updateTrainingLesson: updateTrainingLesson,
-    updateUserLesson: updateUserLesson
+    updateTrainingLesson: updateTrainingLesson
   },
   mapStateToProps: (state, ownProps) => ({
     subject: selectors.getSubject(state, ownProps),

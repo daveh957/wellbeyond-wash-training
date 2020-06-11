@@ -1,23 +1,18 @@
-import * as firebase from 'firebase/app';
 import 'firebase/auth';
 import 'firebase/firestore';
-import {UserLessons, UserState} from "./user.state";
-import {LessonProgress} from "../../models/Training";
+import {TrainingSessions, UserLessons} from "./user.state";
+import {LessonProgress, TrainingSession} from "../../models/Training";
 import {UserProfile} from "../../models/User";
+import * as firebase from "firebase";
 
 let unsubUser:any, unsubAdmin:any, unsubLessons:any, unsubTraningSessions:any;
 
-/**
- *
- * @param {*} email
- * @param {*} password
- */
-export const loginWithEmail = (email:string, password:string) => {
-  return firebase.auth().signInWithEmailAndPassword(email, password);
-};
 
 export const getCurrentUser = () => {
   return firebase.auth().currentUser;
+};
+export const loginWithEmail = (email:string, password:string) => {
+  return firebase.auth().signInWithEmailAndPassword(email, password);
 };
 export const sendPasswordResetEmail = (email:string) => {
   return firebase.auth().sendPasswordResetEmail(email);
@@ -38,8 +33,24 @@ export const logout = () => {
   return firebase.auth().signOut();
 };
 
+export const authCheck = async (callback: any) => {
+  return new Promise(resolve => {
+    // Listen for authentication state to change.
+    firebase.auth().onAuthStateChanged(async user => {
+      if (user != null) {
+        console.log("We are authenticated now!");
+        return resolve(await callback(user));
+      } else {
+        console.log("We did not authenticate.");
+        callback(null);
+        return resolve(null);
+      }
+    });
+  });
+};
+
 export const listenForUserProfile = async (callback:any) : Promise<any> => {
-  let user = firebase.auth().currentUser;
+  const user = firebase.auth().currentUser;
   if (!user || !user.uid) {
     return Promise.resolve();
   }
@@ -49,8 +60,7 @@ export const listenForUserProfile = async (callback:any) : Promise<any> => {
     .where('id', '==', user.uid);
   return unsubUser = query
     .onSnapshot(querySnapshot => {
-      // @ts-ignore
-      let profile = {id: user.uid, email: user.email, phoneNumber: user.phoneNumber, name: user.displayName, photoURL: user.photoURL} as UserProfile;
+      const profile = {id: user.uid, email: user.email, phoneNumber: user.phoneNumber, name: user.displayName, photoURL: user.photoURL} as UserProfile;
       querySnapshot.forEach(doc => {
         Object.assign(profile, doc.data());
       });
@@ -59,13 +69,13 @@ export const listenForUserProfile = async (callback:any) : Promise<any> => {
 };
 
 export const listenForUserLessons = async (callback:any) : Promise<any> => {
-  let user = firebase.auth().currentUser;
+  const user = firebase.auth().currentUser;
   if (!user || !user.uid) {
     return Promise.resolve();
   }
 
-  let lessons:UserLessons = {};
-  let query:firebase.firestore.Query<firebase.firestore.DocumentData> = firebase.firestore()
+  const lessons:UserLessons = {};
+  const query:firebase.firestore.Query<firebase.firestore.DocumentData> = firebase.firestore()
     .collection('users')
     .doc(user.uid)
     .collection('lessons');
@@ -78,6 +88,31 @@ export const listenForUserLessons = async (callback:any) : Promise<any> => {
         }
       });
       callback(lessons);
+    });
+};
+
+export const listenForTrainingSessions = async (callback:any) : Promise<any> => {
+  const user = firebase.auth().currentUser;
+  if (!user || !user.uid) {
+    return Promise.resolve();
+  }
+
+  const results = {} as TrainingSessions;
+  const query:firebase.firestore.Query<firebase.firestore.DocumentData> = firebase.firestore()
+    .collection('sessions')
+    .where('userId', '==', user.uid);
+  return unsubTraningSessions = query
+    .onSnapshot(querySnapshot => {
+      querySnapshot.forEach(function(doc) {
+        if (doc.exists) {
+          const data = doc.data() as TrainingSession;
+          if (!data.archived) {
+            // @ts-ignore id is always defined
+            results[data.id] = data;
+          }
+        }
+      });
+      callback(results);
     });
 };
 
@@ -218,7 +253,7 @@ export const updateEmail = async (email: string) => {
 };
 
 export const updateProfile = async (profile: Partial<UserProfile>) => {
-  let user = firebase.auth().currentUser;
+  const user = firebase.auth().currentUser;
   if (!user || !user.uid) {
     return null;
   }
@@ -241,9 +276,9 @@ export const updateProfile = async (profile: Partial<UserProfile>) => {
     .then(() => {
       let update = {
         ...profile,
-        email: profile.email || (user && user.email),
-        phoneNumber: profile.phoneNumber || (user && user.phoneNumber),
-        name: profile.name || (user && user.displayName)
+        email: profile.email || user.email,
+        phoneNumber: profile.phoneNumber || user.phoneNumber,
+        name: profile.name || user.displayName
       } as UserProfile;
       // @ts-ignore
       Object.keys(update).forEach(key => update[key] === undefined && delete update[key]); // Remove any undefined
@@ -307,6 +342,27 @@ export const createOrUpdateLessonProgress = async (lesson: LessonProgress) => {
     });
 };
 
+export const createOrUpdateTrainingSession = async (session:TrainingSession) => {
+  let user = firebase.auth().currentUser;
+  if (!user || !user.uid) {
+    return null;
+  }
+  session.started = session.started || new Date();
+  if (!session.id) {
+    session.id = (user && user.uid) + ':' + session.subjectId + ':' + session.started.getTime();
+  }
+  return firebase
+    .firestore()
+    .collection('sessions')
+    .doc(session.id)
+    .set(session, {merge: true})
+    .then(() => {
+      return session;
+    })
+    .catch(error => {
+      console.log("Error writing document:", error);
+    });
+}
 export const listenForOrganizationData = async (callback:any) : Promise<any> => {
   let query:firebase.firestore.Query<firebase.firestore.DocumentData> = firebase.firestore().collection('organizations');
   return query

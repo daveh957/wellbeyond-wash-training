@@ -36,8 +36,7 @@ import * as selectors from '../data/selectors';
 import {Lesson, LessonPage, LessonProgress, Subject, TrainingSession} from '../models/Training';
 import VideoPlayer from "../components/VideoPlayer";
 import ImageZoomModal from "../components/ImageZoomModal";
-import {updateTrainingLesson} from "../data/training/training.actions";
-import {updateUserLesson} from "../data/user/user.actions";
+import {updateTrainingLesson} from "../data/user/user.actions";
 import BackToLessonsLink from "../components/BackToLessons";
 
 interface OwnProps extends RouteComponentProps {
@@ -54,12 +53,11 @@ interface StateProps {
 
 interface DispatchProps {
   updateTrainingLesson: typeof updateTrainingLesson;
-  updateUserLesson: typeof updateUserLesson;
 }
 
 interface LessonPageProps extends OwnProps, StateProps, DispatchProps {}
 
-const LessonPagePage: React.FC<LessonPageProps> = ({ history, subject, lesson, page, idx, lessonProgress, activeSession, updateTrainingLesson, updateUserLesson }) => {
+const LessonPagePage: React.FC<LessonPageProps> = ({ history, subject, lesson, page, idx, lessonProgress, activeSession, updateTrainingLesson }) => {
 
   const {navigate} = useContext(NavContext);
   const { t } = useTranslation(['translation'], {i18n} );
@@ -77,12 +75,7 @@ const LessonPagePage: React.FC<LessonPageProps> = ({ history, subject, lesson, p
       if (lessonProgress.pageViews.length !== lesson.pages.length) {
         lessonProgress.pageViews.length = 0;
         lesson.pages.forEach(() => {lessonProgress.pageViews.push({})});
-        if (activeSession) {
-          updateTrainingLesson(activeSession, lessonProgress);
-        }
-        else {
-          updateUserLesson(lessonProgress);
-        }
+        updateTrainingLesson(activeSession, lessonProgress);
       }
       const pageView = lessonProgress.pageViews[idx];
       setPageView(pageView);
@@ -90,7 +83,7 @@ const LessonPagePage: React.FC<LessonPageProps> = ({ history, subject, lesson, p
         setShowNext(true);
       }
     }
-  },[lesson, page, lessonProgress, idx, activeSession, updateTrainingLesson, updateUserLesson]);
+  },[lesson, page, lessonProgress, idx, activeSession, updateTrainingLesson]);
 
   useEffect(() => {
     if (subject && lesson && idx > -1) {
@@ -146,12 +139,7 @@ const LessonPagePage: React.FC<LessonPageProps> = ({ history, subject, lesson, p
       }
       if (page.video || page.attestation) {
         lessonProgress.pageViews[idx] = pageView;
-        if (activeSession) {
-          updateTrainingLesson(activeSession, lessonProgress);
-        }
-        else {
-          updateUserLesson(lessonProgress);
-        }
+        updateTrainingLesson(activeSession, lessonProgress);
       }
     }
   }
@@ -256,8 +244,7 @@ const LessonPagePage: React.FC<LessonPageProps> = ({ history, subject, lesson, p
 
 export default connect({
   mapDispatchToProps: {
-    updateTrainingLesson: updateTrainingLesson,
-    updateUserLesson: updateUserLesson
+    updateTrainingLesson: updateTrainingLesson
   },
   mapStateToProps: (state, ownProps) => ({
     subject: selectors.getSubject(state, ownProps),
