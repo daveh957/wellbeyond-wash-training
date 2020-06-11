@@ -60,7 +60,7 @@ export const updateTrainingSession = (session: TrainingSession) => async (dispat
 export const updateTrainingLesson = (session: TrainingSession, lesson: LessonProgress) => async (dispatch: React.Dispatch<any>) => {
   session.lessons = session.lessons || {};
   session.lessons[lesson.lessonId] = lesson;
-  dispatch(createOrUpdateTrainingSession(session));
+  createOrUpdateTrainingSession(session);
 }
 
 export const archiveTrainingSession = (session: TrainingSession) => async (dispatch: React.Dispatch<any>) => {
