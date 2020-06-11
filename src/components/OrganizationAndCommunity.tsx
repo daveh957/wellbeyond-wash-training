@@ -1,24 +1,32 @@
 import React, {useEffect, useState} from 'react';
-import {IonAlert, IonItem, IonLabel, IonList, IonSelect, IonSelectOption} from '@ionic/react';
+import {IonAlert, IonItem, IonLabel, IonList, IonSelect, IonSelectOption, IonText} from '@ionic/react';
 import {useTranslation} from "react-i18next";
 import i18n from '../i18n';
-import {Organization} from "../models/User";
+import {Organization, UserProfile} from "../models/User";
+import {connect} from "../data/connect";
+import * as selectors from "../data/selectors";
+import {setDarkMode} from "../data/user/user.actions";
+import {withRouter} from "react-router";
 
-interface MyProps {
+interface StateProps {
   organizations?: Organization[];
-  organization?: Organization;
-  community?: string;
-  setOrganization(organization:Organization): void;
-  setCommunity(community:string): void;
 }
 
-const OrganizationAndCommunity: React.FC<MyProps> = ({organizations, organization, community, setOrganization, setCommunity }) => {
+interface MyProps extends StateProps {
+  profile: UserProfile,
+  setProfile(profile:UserProfile): void;
+  error: string;
+}
+
+const OrganizationAndCommunity: React.FC<MyProps> = ({organizations, profile, setProfile, error }) => {
 
   const { t } = useTranslation(['translation'], {i18n} );
   const [showOrganizationTextInput, setShowOrganizationTextInput] = useState(false);
   const [showCommunityTextInput, setShowCommunityTextInput] = useState(false);
   const [organizationList, setOrganizationList] = useState();
   const [communityList, setCommunityList] = useState();
+  const [organization, setOrganization] = useState();
+  const [community, setCommunity] = useState();
 
   useEffect(() => {
     if (organizations) {
@@ -41,13 +49,14 @@ const OrganizationAndCommunity: React.FC<MyProps> = ({organizations, organizatio
     else {
       setCommunityList(undefined);
     }
-  }, [organization]);
+  }, [profile]);
 
   const handleChange = (field:string, value:any) => {
     if (field === 'organization') {
       setOrganization(value);
-      if (value && value.id === '_other')
+      if (value && value.id === '_other') {
         setShowOrganizationTextInput(true);
+      }
     }
     if (field === 'community') {
       setCommunity(value);
@@ -109,6 +118,11 @@ const OrganizationAndCommunity: React.FC<MyProps> = ({organizations, organizatio
           }
           buttons={ [{ text: t('buttons.cancel'), role: 'cancel'}, { text: t('buttons.ok') }] }
         />
+        {error && <IonText color="danger">
+          <p className="ion-padding-start">
+            {t(error)}
+          </p>
+        </IonText>}
       </IonItem>}
 
       {communityList && communityList.length &&

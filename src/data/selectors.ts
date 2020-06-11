@@ -16,13 +16,18 @@ export const getSubjects = (state: AppState) => {
 export const getLessons = (state: AppState) => {
   return state.data.lessons;
 }
+export const getOrganizations = (state: AppState) => {
+  return state.user.organizations;
+}
 export const getUserId = (state: AppState) => {
   return state.user.id;
 }
-export const getUserOrganizationId = (state: AppState) => {
-  return state.user.organizationId;
+export const getUserProfile = (state: AppState) => {
+  return state.user.profile;
 }
-
+export const getUserOrganizationId = (state: AppState) => {
+  return state.user.profile ? state.user.profile.organizationId : undefined;
+}
 const getSubjectIdParam = (_state: AppState, props: any) => {
   return props.match.params['subjectId'];
 }

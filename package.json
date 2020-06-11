@@ -46,7 +46,8 @@
     "deploy-rules": "firebase deploy --only firestore:rules",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "resources": "cordova-res ios && cordova-res android && node tools/resources.js"
+    "resources": "cordova-res ios && cordova-res android && node tools/resources.js",
+    "translate": "npx json-autotranslate -i src/locales -t keybased -m i18next -c .firebase/private-key.json"
   },
   "eslintConfig": {
     "extends": "react-app"

@@ -5,6 +5,8 @@ import {UserLessons, UserState} from "./user.state";
 import {LessonProgress} from "../../models/Training";
 import {UserProfile} from "../../models/User";
 
+let unsubUser:any, unsubAdmin:any, unsubLessons:any, unsubTraningSessions:any;
+
 /**
  *
  * @param {*} email
@@ -20,11 +22,63 @@ export const getCurrentUser = () => {
 export const sendPasswordResetEmail = (email:string) => {
   return firebase.auth().sendPasswordResetEmail(email);
 };
-/**
- *
- */
 export const logout = () => {
+  if (unsubUser) {
+    unsubUser();
+  }
+  if (unsubAdmin) {
+    unsubAdmin();
+  }
+  if (unsubLessons) {
+    unsubLessons();
+  }
+  if (unsubTraningSessions) {
+    unsubTraningSessions();
+  }
   return firebase.auth().signOut();
+};
+
+export const listenForUserProfile = async (callback:any) : Promise<any> => {
+  let user = firebase.auth().currentUser;
+  if (!user || !user.uid) {
+    return Promise.resolve();
+  }
+
+  let query:firebase.firestore.Query<firebase.firestore.DocumentData> = firebase.firestore()
+    .collection('users')
+    .where('id', '==', user.uid);
+  return unsubUser = query
+    .onSnapshot(querySnapshot => {
+      // @ts-ignore
+      let profile = {id: user.uid, email: user.email, phoneNumber: user.phoneNumber, name: user.displayName, photoURL: user.photoURL} as UserProfile;
+      querySnapshot.forEach(doc => {
+        Object.assign(profile, doc.data());
+      });
+      callback(profile);
+    });
+};
+
+export const listenForUserLessons = async (callback:any) : Promise<any> => {
+  let user = firebase.auth().currentUser;
+  if (!user || !user.uid) {
+    return Promise.resolve();
+  }
+
+  let lessons:UserLessons = {};
+  let query:firebase.firestore.Query<firebase.firestore.DocumentData> = firebase.firestore()
+    .collection('users')
+    .doc(user.uid)
+    .collection('lessons');
+  return unsubLessons = query
+    .onSnapshot(querySnapshot => {
+      querySnapshot.forEach(function(doc) {
+        if (doc.exists) {
+          const data = doc.data() as LessonProgress;
+          lessons[data.lessonId] = data;
+        }
+      });
+      callback(lessons);
+    });
 };
 
 /**

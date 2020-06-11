@@ -16,12 +16,14 @@ import './Account.scss';
 import {useTranslation} from "react-i18next";
 import i18n from '../i18n';
 import {connect} from '../data/connect';
+import * as selectors from "../data/selectors";
 import {RouteComponentProps} from 'react-router';
 import {Redirect} from "react-router-dom";
 import {getGravatarUrl} from "../util/gravatar";
 import ChangeEmailModal from "../components/ChangeEmailModal";
 import ChangePasswordModal from "../components/ChangePasswordModal";
 import ChangeProfileModal from "../components/ChangeProfileModal";
+import {UserProfile} from "../models/User";
 
 export interface ToastProps {
   color?:string;
@@ -33,10 +35,7 @@ interface OwnProps extends RouteComponentProps { }
 
 interface StateProps {
   isLoggedIn?: boolean;
-  name?: string;
-  email?: string;
-  photoURL?: string;
-  organization?: string;
+  userProfile?: UserProfile;
 }
 
 interface DispatchProps {
@@ -44,7 +43,7 @@ interface DispatchProps {
 
 interface AccountProps extends OwnProps, StateProps, DispatchProps { }
 
-const Account: React.FC<AccountProps> = ({ name, email, photoURL, organization, isLoggedIn,  }) => {
+const Account: React.FC<AccountProps> = ({ isLoggedIn, userProfile,  }) => {
 
   const { t } = useTranslation(['translation'], {i18n} );
 
@@ -94,12 +93,12 @@ const Account: React.FC<AccountProps> = ({ name, email, photoURL, organization, 
           <IonTitle>{t('registration.pages.account')}</IonTitle>
         </IonToolbar>
       </IonHeader>
-      <IonContent>
-          <div className="ion-padding-top ion-text-center">
-            <img src={photoURL || getGravatarUrl(email)} alt={t('registration.labels.avatar')} />
-            <h2>{ name }</h2>
-            <h3>{ email }</h3>
-            <h3>{ organization }</h3>
+      {userProfile && <IonContent>
+        <div className="ion-padding-top ion-text-center">
+            <img src={userProfile.photoURL || getGravatarUrl(userProfile.email)} alt={t('registration.labels.avatar')} />
+            <h2>{ userProfile.name }</h2>
+            <h3>{ userProfile.email }</h3>
+            <h3>{ userProfile.organization }</h3>
             <IonList inset>
               <IonItem>
                 <IonButton expand="full" fill="clear" color="secondary" onClick={openProfileModal}>{t('registration.modals.changeProfile')}</IonButton>
@@ -112,23 +111,18 @@ const Account: React.FC<AccountProps> = ({ name, email, photoURL, organization, 
               </IonItem>
             </IonList>
           </div>
-        {/* eslint-disable-next-line react/jsx-no-undef */}
-        <ChangeProfileModal showModal={showProfileModal} name={name} organization={organization} closeModal={closeProfileModal} showToast={showToast}/>
         <ChangePasswordModal showModal={showPasswordModal} closeModal={closePasswordModal} showToast={showToast}/>
-        <ChangeEmailModal showModal={showEmailModal} closeModal={closeEmailModal} email={email}  showToast={showToast}/>
+        <ChangeEmailModal showModal={showEmailModal} closeModal={closeEmailModal} email={userProfile.email}  showToast={showToast}/>
         <IonToast isOpen={openToast} header={toastHeader} message={toastMessage} color={toastColor||'success'} duration={2000} onDidDismiss={() => setOpenToast(false)} />
-      </IonContent>
+      </IonContent>}
     </IonPage>
   );
 };
 
 export default connect<OwnProps, StateProps, DispatchProps>({
   mapStateToProps: (state) => ({
-    name: state.user.name,
-    email: state.user.email,
-    organization: state.user.organization,
-    photoURL: state.user.photoURL,
-    isLoggedIn: state.user.isLoggedIn
+    isLoggedIn: state.user.isLoggedIn,
+    userProfile: selectors.getUserProfile(state)
   }),
   mapDispatchToProps: {
   },

@@ -17,7 +17,7 @@ import {
 } from '@ionic/react';
 import {useTranslation} from "react-i18next";
 import i18n from "../i18n";
-import {setData} from "../data/user/user.actions";
+import {setUserProfile} from "../data/user/user.actions";
 import {connect} from "../data/connect";
 import {updateProfile} from "../data/user/userApi";
 import {ToastProps} from "../pages/Account";
@@ -33,12 +33,12 @@ interface StateProps {
 }
 
 interface DispatchProps {
-  setData: typeof setData;
+  setUserProfile: typeof setUserProfile;
 }
 
 interface ChangeProfileProps extends OwnProps, StateProps, DispatchProps { }
 
-const ChangeProfileModal: React.FC<ChangeProfileProps> = ({showModal, closeModal, name, organization, showToast, setData}) => {
+const ChangeProfileModal: React.FC<ChangeProfileProps> = ({showModal, closeModal, name, showToast, setUserProfile}) => {
 
   const { t } = useTranslation(['translation'], {i18n} );
 
@@ -51,10 +51,10 @@ const ChangeProfileModal: React.FC<ChangeProfileProps> = ({showModal, closeModal
   const [serverError, setServerError] = useState<Error>();
 
   useEffect(() =>{
-    setFormValues({name: name, organization: organization});
+    setFormValues({name: name});
     setFormErrors({name: null, organization: null});
     setServerError(undefined);
-  }, [showModal, name, organization]);
+  }, [showModal, name]);
 
   const handleChange = (field:string, value:string) => {
     let errors = {...formErrors};
@@ -76,7 +76,7 @@ const ChangeProfileModal: React.FC<ChangeProfileProps> = ({showModal, closeModal
     setFormSubmitted(true);
     if(validate()) {
       updateProfile({name: formValues.name, organization: formValues.organization}).then(() => {
-        setData({name: formValues.name, organization: formValues.organization});
+        setUserProfile({name: formValues.name, organization: formValues.organization});
         showToast({message: t('registration.messages.profileChanged')});
         closeModal();
       })
@@ -145,7 +145,7 @@ const ChangeProfileModal: React.FC<ChangeProfileProps> = ({showModal, closeModal
 
 export default connect<OwnProps, {}, DispatchProps>({
   mapDispatchToProps: {
-    setData
+    setUserProfile
   },
   component: ChangeProfileModal
 })

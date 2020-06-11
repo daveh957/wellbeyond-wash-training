@@ -17,7 +17,7 @@ import {
 } from '@ionic/react';
 import {useTranslation} from "react-i18next";
 import i18n from "../i18n";
-import {setData} from "../data/user/user.actions";
+import {setData, setUserProfile} from "../data/user/user.actions";
 import {connect} from "../data/connect";
 import {updateEmail} from "../data/user/userApi";
 import {ToastProps} from "../pages/Account";
@@ -77,7 +77,7 @@ const ChangeEmailModal: React.FC<ChangeEmailProps> = ({showModal, closeModal, em
     if(validate()) {
       let email = formValues.email.trim().toLowerCase();
       updateEmail(email).then(() => {
-        setData({email: email});
+        setUserProfile({email: email});
         showToast({message: t('registration.messages.emailChanged')});
         closeModal();
       })

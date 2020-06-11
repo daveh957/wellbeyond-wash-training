@@ -1,5 +1,5 @@
 import {LessonProgress} from "../../models/Training";
-import {UserProfile, Organization} from "../../models/User";
+import {UserProfile, Organization, IntercomUser} from "../../models/User";
 
 export interface UserLessons {
   [lessonId:string] : LessonProgress
@@ -12,6 +12,7 @@ export interface UserState {
   acceptedTerms?: boolean;
   darkMode: boolean;
   loading: boolean;
+  intercomUser?: IntercomUser;
   profile?: UserProfile;
   lessons?: UserLessons;
   organizations?: Organization[];

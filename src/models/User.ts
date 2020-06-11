@@ -13,6 +13,14 @@ export interface Answer {
   correctAnswer?: string | number;
 }
 
+export interface IntercomUser {
+  user_id: string;
+  user_hash: string;
+  phone?: string;
+  email?: string;
+  name?: string;
+}
+
 export interface UserProfile {
   id: string;
   name: string;

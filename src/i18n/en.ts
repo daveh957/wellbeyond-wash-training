@@ -67,6 +67,7 @@ export default
       "buttons": {
         "login": "Login",
         "signup": "Signup",
+        "register": "Register",
         "newuser": "New User?",
         "existinguser": "Already a User?",
         "forgotPassword": "Forgot Password?",
@@ -81,7 +82,8 @@ export default
       },
       "messages": {
         "loginInfo": "Please login to get started using the WellBeyond Wash Training Application.",
-        "signupInfo": "Please register to get started using the WellBeyond Wash Training Application.",
+        "signupInfo": "Please register to get started using the WellBeyond WASH Training Application.",
+        "registerInfo": "Please complete your registration to get started using the WellBeyond WASH Training Application.",
         "passwordChanged": "Password updated",
         "emailChanged": "Email updated",
         "profileChanged": "Profile updated",
@@ -91,6 +93,7 @@ export default
       "pages": {
         "signup": "Signup",
         "login": "Login",
+        "register": "Register",
         "terms": "Accept Terms",
         "account": "Account"
       },

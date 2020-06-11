@@ -26,11 +26,12 @@ import './Login.scss';
 import {useTranslation} from "react-i18next";
 import i18n from '../i18n';
 import {connect} from '../data/connect';
+import * as selectors from "../data/selectors";
 import {RouteComponentProps} from 'react-router';
 import {Redirect} from "react-router-dom";
 import {registerWithEmail, updateProfile} from "../data/user/userApi";
 import {loadUserData, setIsLoggedIn, setIsRegistered, setLoading} from "../data/user/user.actions";
-import {Organization} from "../models/User";
+import {Organization, UserProfile} from "../models/User";
 import OrganizationAndCommunity from "../components/OrganizationAndCommunity";
 
 interface OwnProps extends RouteComponentProps {}
@@ -38,6 +39,7 @@ interface OwnProps extends RouteComponentProps {}
 interface StateProps {
   isLoggedIn?: boolean;
   isRegistered?: boolean;
+  userProfile?: UserProfile;
   organizations?: Organization[];
 }
 
@@ -49,52 +51,40 @@ interface DispatchProps {
 
 interface RegisterProps extends OwnProps, StateProps, DispatchProps { }
 
-const Register: React.FC<RegisterProps> = ({isLoggedIn, isRegistered,organizations,  setLoading, setIsRegistered, loadUserData}) => {
+const Register: React.FC<RegisterProps> = ({isLoggedIn, isRegistered, userProfile, organizations,setLoading, setIsRegistered, loadUserData}) => {
 
   const { t } = useTranslation(['translation'], {i18n} );
   const {navigate} = useContext(NavContext);
+
+  const [profile, setProfile] = useState<UserProfile>(userProfile || {} as UserProfile);
   const [formSubmitted, setFormSubmitted] = useState(false);
   const [serverError, setServerError] = useState<Error>();
-  const [name, setName] = useState();
-  const [organization, setOrganization] = useState();
-  const [community, setCommunity] = useState();
   const [nameError, setNameError] = useState();
   const [organizationError, setOrganizationError] = useState();
 
+  useEffect (() => {
+    if (userProfile) {
+      setProfile(userProfile);
+    }
+  }, [userProfile]);
 
   const validate = ():boolean => {
-    if (!name) {
-      setNameError('registration.errors.nameRequired');
-      return false;
-    }
-    return true;
+    setNameError(profile.name ? undefined :'registration.errors.nameRequired');
+    setOrganizationError(profile.organizationId || profile.organization ? undefined : 'registration.errors.organizationRequired');
+    return !!(profile.name && (profile.organizationId || profile.organization));
   }
 
   const register = async (e: React.FormEvent) => {
     e.preventDefault();
     setFormSubmitted(true);
+    setServerError(undefined);
     if(validate()) {
-      let profile:any = {
-        name: name
-      }
-      if (organization) {
-        if (organization.id && organization.id !== '_other' && organization.id !== '_custom') {
-          profile.organizationId = organization.id;
-        }
-        else {
-          profile.organization = organization.name;
-        }
-        if (community) {
-          profile.community = community;
-        }
-      }
       setLoading(true);
         updateProfile(profile)
           .then(() => {
             setLoading(false);
-            setIsLoggedIn(true);
+            setIsRegistered(true);
             navigate('/terms', 'forward');
-            loadUserData();
           })
           .catch(error => {
             setLoading(false);
@@ -106,11 +96,9 @@ const Register: React.FC<RegisterProps> = ({isLoggedIn, isRegistered,organizatio
   if (isLoggedIn === false) {
     return <Redirect to={'/login'} />
   }
-/*
   if (isRegistered) {
-    return <Redirect to={'/terms'} />
+    // return <Redirect to={'/terms'} />
   }
-*/
   // @ts-ignore
   return (
     <IonPage id="register-page">
@@ -134,8 +122,8 @@ const Register: React.FC<RegisterProps> = ({isLoggedIn, isRegistered,organizatio
               <IonList>
                 <IonItem>
                   <IonLabel position="stacked" color="primary">{t('registration.labels.name')}</IonLabel>
-                  <IonInput name="name" type="text" value={name} spellCheck={false} autocapitalize="on" autocomplete="on" required={true} onIonChange={e => {
-                    setName(e.detail.value!);
+                  <IonInput name="name" type="text" value={profile.name} spellCheck={false} autocapitalize="on" autocomplete="on" required={true} onIonChange={e => {
+                    setProfile(Object.assign(profile, {name: e.detail.value!}));
                   }}>
                   </IonInput>
                 </IonItem>
@@ -147,7 +135,7 @@ const Register: React.FC<RegisterProps> = ({isLoggedIn, isRegistered,organizatio
                 </IonText>}
               </IonList>
 
-              <OrganizationAndCommunity setOrganization={setOrganization} setCommunity={setCommunity} organizations={organizations} organization={organization} community={community} />
+              <OrganizationAndCommunity organizations={organizations} profile={profile} setProfile={setProfile} error={organizationError} />
 
               {formSubmitted && serverError && <IonText color="danger">
                 <p className="ion-padding-start">
@@ -179,7 +167,8 @@ export default connect<OwnProps, StateProps, DispatchProps>({
   mapStateToProps: (state) => ({
     isLoggedIn: state.user.isLoggedIn,
     isRegistered: state.user.isRegistered,
-    organizations: state.user.organizations
+    userProfile: selectors.getUserProfile(state),
+    organizations: selectors.getOrganizations(state)
   }),
   component: Register
 })

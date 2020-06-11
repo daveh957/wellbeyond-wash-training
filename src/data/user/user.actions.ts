@@ -8,7 +8,7 @@ import {
 import {ActionType} from '../../util/types'
 import {UserLessons, UserState} from './user.state';
 import {LessonProgress} from "../../models/Training";
-import {Organization, UserProfile} from "../../models/User";
+import {IntercomUser, Organization, UserProfile} from "../../models/User";
 
 export const loadOrganizations = () => async (dispatch: React.Dispatch<any>) => {
   listenForOrganizationData(function(organizations:Organization[]) {
@@ -91,6 +91,16 @@ export const setUserLesson = (lesson: LessonProgress) => ({
   lesson
 } as const);
 
+export const setUserProfile = (profile: UserProfile) => ({
+  type: 'set-user-profile',
+  profile
+} as const);
+
+export const setIntercomUser = (intercomUser: IntercomUser) => ({
+  type: 'set-intercom-user',
+  intercomUser
+} as const);
+
 export const setOrganizations = (organizations: Organization[]) => ({
   type: 'set-organizations',
   organizations
@@ -106,4 +116,6 @@ export type UserActions =
   | ActionType<typeof setAcceptedTerms>
   | ActionType<typeof setUserLessons>
   | ActionType<typeof setUserLesson>
+  | ActionType<typeof setUserProfile>
+  | ActionType<typeof setIntercomUser>
   | ActionType<typeof setOrganizations>
