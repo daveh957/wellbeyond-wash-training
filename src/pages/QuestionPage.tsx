@@ -144,8 +144,7 @@ const QuestionPage: React.FC<QuestionPageProps> = ({ history, subject, lesson, q
   const handleLessonComplete = () => {
     lessonProgress.completed = lessonProgress.completed || new Date();
     let correct = 0, preCorrect = 0;
-    // eslint-disable-next-line array-callback-return
-    lessonProgress.answers.map(a => {
+    lessonProgress.answers.forEach(a => {
       if (a.answerAfter === a.correctAnswer) correct++;
       if (a.answerBefore === a.correctAnswer) preCorrect++;
     });
@@ -177,11 +176,11 @@ const QuestionPage: React.FC<QuestionPageProps> = ({ history, subject, lesson, q
                   <IonList>
                     <IonRadioGroup value={answer} onIonChange={e => handleAnswer(e.detail.value)}>
                       <IonItem>
-                        <IonLabel>Yes</IonLabel>
+                        <IonLabel>{t('training.labels.yes')}</IonLabel>
                         <IonRadio disabled={lockAnswer} slot="start" value="yes" />
                       </IonItem>
                       <IonItem>
-                        <IonLabel>No</IonLabel>
+                        <IonLabel>{t('training.labels.no')}</IonLabel>
                         <IonRadio disabled={lockAnswer} slot="start" value="no" />
                       </IonItem>
                     </IonRadioGroup>
@@ -216,7 +215,7 @@ const QuestionPage: React.FC<QuestionPageProps> = ({ history, subject, lesson, q
                   {answer === question.correctAnswer ?
                     <p>{t('resources.lessons.questions.right')}</p>
                     :
-                    <p>{t('resources.lessons.questions.wrong')}<strong>{question.correctAnswer}</strong>.</p>}
+                    <p>{t('resources.lessons.questions.wrong')}<strong> {question.questionType === 'yes-no' ? t('training.labels.'+question.correctAnswer.toString().toLowerCase()) : question.correctAnswer}</strong>.</p>}
                   <div dangerouslySetInnerHTML={{__html: question.explanation || ''}}></div>
                 </div>}
             </IonCardContent>

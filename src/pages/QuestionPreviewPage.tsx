@@ -157,11 +157,11 @@ const QuestionPreviewPage: React.FC<QuestionPageProps> = ({ history, subject, le
                 <IonList>
                   <IonRadioGroup value={answer} onIonChange={e => handleAnswer(e.detail.value)}>
                     <IonItem>
-                      <IonLabel>Yes</IonLabel>
+                      <IonLabel>{t('training.labels.yes')}</IonLabel>
                       <IonRadio slot="start" value="yes" />
                     </IonItem>
                     <IonItem>
-                      <IonLabel>No</IonLabel>
+                      <IonLabel>{t('training.labels.no')}</IonLabel>
                       <IonRadio slot="start" value="no" />
                     </IonItem>
                   </IonRadioGroup>
