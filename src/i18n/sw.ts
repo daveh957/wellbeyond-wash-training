@@ -46,7 +46,7 @@ export default
         "password": "Nenosiri (kiwango cha chini cha herufi 8)",
         "newPassword": "Nenosiri mpya (chini ya herufi 8)",
         "passwordRepeat": "Rudia neno siri",
-        "organization": "Jina la shirika (hiari)",
+        "organization": "Jina la shirika",
         "organizationWritein": "Ingiza Jina la Shirika",
         "community": "Jumuiya (hiari)",
         "communityWritein": "Ingiza Jina la Jumuiya",
@@ -62,7 +62,8 @@ export default
         "passwordMismatch": "Nywila hazifanani",
         "termsNotChecked": "Tafadhali angalia kisanduku kuendelea",
         "loginUsernameRequired": "Barua pepe inahitajika",
-        "loginPasswordRequired": "Nywila inahitajika"
+        "loginPasswordRequired": "Nywila inahitajika",
+        "organizationRequired": "Tafadhali chagua moja ya Asasi Zetu za Washirika wa NGO"
       },
       "buttons": {
         "login": "Ingia",
@@ -77,22 +78,25 @@ export default
         "createAccount": "Tengeneza akaunti",
         "reauthenticate": "Thibitisha Nenosiri",
         "acceptTerms": "Anzisha",
-        "sendPasswordReset": "Kutuma barua pepe"
+        "sendPasswordReset": "Kutuma barua pepe",
+        "register": "Jiandikishe"
       },
       "messages": {
         "loginInfo": "Tafadhali ingia ili uanze kutumia Programu ya mafunzo ya WellBeyond Wash.",
-        "signupInfo": "Tafadhali jiandikishe ili uanze kutumia Maombi ya mafunzo ya WellBeyond Wash.",
+        "signupInfo": "Tafadhali jiandikishe ili uanze kutumia Maombi ya Mafunzo ya WellBeyond WASH.",
         "passwordChanged": "Nywila imesasishwa",
         "emailChanged": "Barua pepe imesasishwa",
         "profileChanged": "Profaili imesasishwa",
         "passwordResetInfo": "Ni sawa, sote tunasahau nywila zetu. Tuambie barua pepe ambayo umesajili na, na tutakutumia kiunga ambacho unaweza kutumia ili kuiweka upya.",
-        "passwordResetSent": "Barua pepe imetumwa kwa {{email}} na kiungo cha kuweka upya nywila yako. Hakikisha kuangalia folda yako ya SPAM kisha urudi hapa kuingia baada ya kuweka nywila mpya."
+        "passwordResetSent": "Barua pepe imetumwa kwa {{email}} na kiungo cha kuweka upya nywila yako. Hakikisha kuangalia folda yako ya SPAM kisha urudi hapa kuingia baada ya kuweka nywila mpya.",
+        "registerInfo": "Tafadhali kamilisha usajili wako ili uanze kutumia Maombi ya Mafunzo ya WellBeyond WASH."
       },
       "pages": {
         "signup": "Jisajili",
         "login": "Ingia",
         "terms": "Kukubali Masharti",
-        "account": "Akaunti"
+        "account": "Akaunti",
+        "register": "Jiandikishe"
       },
       "communities": {
         "selectOne": "Chagua Jumuiya",

@@ -46,7 +46,7 @@ export default
         "password": "Mot de passe (8 caractères minimum)",
         "newPassword": "Nouveau mot de passe (8 caractères minimum)",
         "passwordRepeat": "Répéter le mot de passe",
-        "organization": "Nom de l'organisation (facultatif)",
+        "organization": "nom de l'organisation",
         "organizationWritein": "Entrez le nom de l'organisation",
         "community": "Communauté (facultatif)",
         "communityWritein": "Entrez le nom de la communauté",
@@ -62,7 +62,8 @@ export default
         "passwordMismatch": "Les mots de passe ne correspondent pas",
         "termsNotChecked": "Veuillez cocher la case pour continuer",
         "loginUsernameRequired": "L'email est requis",
-        "loginPasswordRequired": "Mot de passe requis"
+        "loginPasswordRequired": "Mot de passe requis",
+        "organizationRequired": "Veuillez sélectionner une de nos ONG partenaires"
       },
       "buttons": {
         "login": "S'identifier",
@@ -77,22 +78,25 @@ export default
         "createAccount": "Créer un compte",
         "reauthenticate": "vérifier le mot de passe",
         "acceptTerms": "Commencer",
-        "sendPasswordReset": "Envoyer un e-mail"
+        "sendPasswordReset": "Envoyer un e-mail",
+        "register": "S'inscrire"
       },
       "messages": {
         "loginInfo": "Veuillez vous connecter pour commencer à utiliser l'application de formation WellBeyond Wash.",
-        "signupInfo": "Veuillez vous inscrire pour commencer à utiliser l'application de formation WellBeyond Wash.",
+        "signupInfo": "Veuillez vous inscrire pour commencer à utiliser l'application de formation WellBeyond WASH.",
         "passwordChanged": "Mot de passe mis à jour",
         "emailChanged": "Courriel mis à jour",
         "profileChanged": "Profil mis à jour",
         "passwordResetInfo": "C'est bon, nous oublions tous nos mots de passe. Dites-nous simplement l'e-mail avec lequel vous vous êtes inscrit et nous vous enverrons un lien que vous pourrez utiliser pour le réinitialiser.",
-        "passwordResetSent": "Un e-mail a été envoyé à {{email}} avec un lien pour réinitialiser votre mot de passe. Assurez-vous de vérifier votre dossier SPAM puis revenez ici pour vous connecter après avoir défini un nouveau mot de passe."
+        "passwordResetSent": "Un e-mail a été envoyé à {{email}} avec un lien pour réinitialiser votre mot de passe. Assurez-vous de vérifier votre dossier SPAM puis revenez ici pour vous connecter après avoir défini un nouveau mot de passe.",
+        "registerInfo": "Veuillez compléter votre inscription pour commencer à utiliser l'application de formation WellBeyond WASH."
       },
       "pages": {
         "signup": "S'inscrire",
         "login": "S'identifier",
         "terms": "Accepter les termes",
-        "account": "Compte"
+        "account": "Compte",
+        "register": "S'inscrire"
       },
       "communities": {
         "selectOne": "Sélectionnez une communauté",
