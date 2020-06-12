@@ -1,7 +1,7 @@
 import * as firebase from 'firebase/app';
 import 'firebase/auth';
 import 'firebase/firestore';
-import {Lesson, LessonProgress, Subject, TrainingSession} from '../../models/Training';
+import {Lesson, Subject} from '../../models/Training';
 import {getLessonIconUrl} from "../../util/cloudinary";
 import {checkIsAdmin} from "../user/userApi";
 

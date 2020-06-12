@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect} from 'react';
 import {Redirect, Route} from 'react-router-dom';
 import {IonApp, IonLoading, IonRouterOutlet, IonSplitPane} from '@ionic/react';
 import {IonReactRouter} from '@ionic/react-router';
@@ -27,11 +27,12 @@ import 'firebase/firestore';
 import 'firebase/functions';
 import {firebaseConfig} from './FIREBASE_CONFIG';
 
+import * as selectors from './data/selectors';
 import MainTabs from './pages/MainTabs';
 import {connect} from './data/connect';
 import {AppContextProvider} from './data/AppContext';
-import {loadOrganizations, loadUserData, logoutUser, setAcceptedTerms, setIsLoggedIn} from './data/user/user.actions';
-import {loadTrainingData, loadTrainingSessions} from './data/training/training.actions';
+import {loadOrganizations, logoutUser, watchAuthState} from './data/user/user.actions';
+import {loadTrainingData} from './data/training/training.actions';
 import AcceptTerms from './pages/AcceptTerms';
 import Account from './pages/Account';
 import Login from './pages/Login';
@@ -52,16 +53,14 @@ const App: React.FC = () => {
 interface StateProps {
   darkMode: boolean;
   loading: boolean;
+  intercomUser: any;
 }
 
 interface DispatchProps {
-  loadLessonData: typeof loadTrainingData;
-  loadUserData: typeof loadUserData;
-  loadTrainingSessions: typeof loadTrainingSessions;
+  loadTrainingData: typeof loadTrainingData;
   loadOrganizations: typeof loadOrganizations;
+  watchAuthState: typeof watchAuthState;
   logoutUser: typeof logoutUser;
-  setIsLoggedIn: typeof setIsLoggedIn;
-  setAcceptedTerms: typeof setAcceptedTerms;
 }
 
 interface IonicAppProps extends StateProps, DispatchProps { }
@@ -85,41 +84,15 @@ if (!firebase.apps.length) {
     });
 }
 
-const IonicApp: React.FC<IonicAppProps> = ({ darkMode, loading, loadLessonData, loadUserData, loadTrainingSessions, loadOrganizations, logoutUser, setIsLoggedIn, setAcceptedTerms}) => {
+const IonicApp: React.FC<IonicAppProps> = ({ darkMode, loading, intercomUser, loadTrainingData, loadOrganizations, watchAuthState, logoutUser}) => {
 
   const { t } = useTranslation(['translation'], {i18n} );
-  const [intercomUser, setIntercomUser] = useState()
 
   useEffect(() => {
-    const getUserIdHash = firebase.functions().httpsCallable('getUserIdHash');
-    firebase.auth().useDeviceLanguage();
-    firebase.auth().onAuthStateChanged(async user => {
-      if (user != null) {
-        console.log("We are authenticated now!");
-        setIsLoggedIn(true);
-        loadUserData();
-        loadTrainingSessions();
-        if (process.env.NODE_ENV === 'production') {
-          getUserIdHash().then(function (result) {
-            setIntercomUser({
-              user_id: user.uid,
-              phone: user.phoneNumber || undefined,
-              email: user.email || undefined,
-              name: user.displayName || undefined,
-              user_hash: result.data.hash
-            });
-          });
-        }
-      } else {
-        console.log("We did not authenticate.");
-        setIsLoggedIn(false);
-        setAcceptedTerms(false);
-        setIntercomUser(undefined);
-      }
-    });
-    loadLessonData();
     loadOrganizations();
-  }, [loadLessonData, loadTrainingSessions, loadUserData, loadOrganizations, setAcceptedTerms, setIsLoggedIn]);
+    loadTrainingData();
+    watchAuthState();
+  }, [loadTrainingData, loadOrganizations, watchAuthState]);
 
   // @ts-ignore
   return (
@@ -159,10 +132,10 @@ export default App;
 
 const IonicAppConnected = connect<{}, StateProps, DispatchProps>({
   mapStateToProps: (state) => ({
-    darkMode: state.user.darkMode,
-    loading: state.user.loading
+    darkMode: selectors.getDarkMode(state),
+    loading: selectors.getLoading(state),
+    intercomUser: selectors.getIntercomUser(state),
   }),
-  // @ts-ignore
-  mapDispatchToProps: { loadLessonData: loadTrainingData, loadUserData, loadTrainingSessions, loadOrganizations, logoutUser, setIsLoggedIn, setAcceptedTerms },
+  mapDispatchToProps: { loadTrainingData, loadOrganizations, watchAuthState, logoutUser },
   component: IonicApp
 });

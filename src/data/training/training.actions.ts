@@ -1,9 +1,5 @@
 import {ActionType} from '../../util/types';
-import {
-  cacheImagesAndVideos,
-  listenForTrainingData,
-
-} from './trainingApi'
+import {cacheImagesAndVideos, listenForTrainingData,} from './trainingApi'
 import {TrainingState} from './training.state';
 import {Lesson, Question, Subject} from '../../models/Training';
 

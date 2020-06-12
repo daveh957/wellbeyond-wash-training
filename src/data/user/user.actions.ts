@@ -2,12 +2,10 @@ import {
   authCheck,
   createOrUpdateLessonProgress,
   createOrUpdateTrainingSession,
-  getUserLessons,
-  getUserProfile,
   listenForOrganizationData,
-  listenForUserProfile,
-  listenForUserLessons,
   listenForTrainingSessions,
+  listenForUserLessons,
+  listenForUserProfile,
   logout,
   updateProfile
 } from './userApi';
@@ -15,6 +13,7 @@ import {ActionType} from '../../util/types'
 import {TrainingSessions, UserLessons, UserState} from './user.state';
 import {LessonProgress, TrainingSession} from "../../models/Training";
 import {IntercomUser, Organization, UserProfile} from "../../models/User";
+import * as firebase from "firebase";
 
 export const loadOrganizations = () => async (dispatch: React.Dispatch<any>) => {
   listenForOrganizationData(function(organizations:Organization[]) {
@@ -23,46 +22,57 @@ export const loadOrganizations = () => async (dispatch: React.Dispatch<any>) => 
 }
 
 export const watchAuthState = () => async (dispatch: React.Dispatch<any>) => {
-
-}
-
-
-export const loadUserData = () => async (dispatch: React.Dispatch<any>) => {
-  dispatch(setLoading(true));
-  const profile:(UserProfile|void) = await getUserProfile();
-  if (profile) {
-    dispatch(setIsRegistered(true));
-    dispatch(setAcceptedTerms(!!profile.acceptedTerms));
-    dispatch(setData({profile: profile}));
-    const lessons = await getUserLessons();
-    dispatch(setUserLessons(lessons || {}));
-  }
-  dispatch(setLoading(false));
+  authCheck((user:any) => {
+    if (user != null) {
+      dispatch(setIsLoggedIn(true));
+      listenForUserProfile((profile:UserProfile) => {
+        const getUserIdHash = firebase.functions().httpsCallable('getUserIdHash');
+        dispatch(setIsRegistered(true));
+        dispatch(setAcceptedTerms(!!profile.acceptedTerms));
+        dispatch(setUserProfile(profile));
+        if (process.env.NODE_ENV === 'production') {
+          getUserIdHash().then(function (result) {
+            dispatch(setIntercomUser({
+              user_id: profile.id,
+              phone: profile.phoneNumber || undefined,
+              email: profile.email || undefined,
+              name: profile.name || undefined,
+              user_hash: result.data.hash
+            }));
+          });
+        }
+      });
+      listenForUserLessons((lessons:UserLessons) => {
+        dispatch(setUserLessons(lessons));
+      });
+      listenForTrainingSessions((sessions:TrainingSessions) => {
+        dispatch(setTrainingSessions(sessions));
+      });
+    } else {
+      dispatch(setIsLoggedIn(false));
+    }
+  })
 }
 
 export const acceptTerms = () => async (dispatch: React.Dispatch<any>) => {
   dispatch(setAcceptedTerms(true));
   updateProfile({acceptedTerms: true}); // Don't wait for it to complete since we have offline support
-}
+};
+
 export const logoutUser = () => async (dispatch: React.Dispatch<any>) => {
   logout();
   dispatch(resetData());
 };
-export const loadTrainingSessions = () => async (dispatch: React.Dispatch<any>) => {
-  listenForTrainingSessions((sessions:TrainingSessions) => {
-    dispatch(setTrainingSessions(sessions));
-  });
-}
 
 export const startTrainingSession = (session: TrainingSession) => async (dispatch: React.Dispatch<any>) => {
   createOrUpdateTrainingSession(session);
   dispatch(setTrainingSession(session));
-}
+};
 
 export const updateTrainingSession = (session: TrainingSession) => async (dispatch: React.Dispatch<any>) => {
   createOrUpdateTrainingSession(session);
   dispatch(setTrainingSession(session));
-}
+};
 
 export const updateTrainingLesson = (session: TrainingSession|undefined, lesson: LessonProgress) => async (dispatch: React.Dispatch<any>) => {
   if (session) {
@@ -74,14 +84,13 @@ export const updateTrainingLesson = (session: TrainingSession|undefined, lesson:
     dispatch(setUserLesson(lesson));
     createOrUpdateLessonProgress(lesson); // Don't wait for it to complete since we have offline support
   }
-}
+};
 
 export const archiveTrainingSession = (session: TrainingSession) => async (dispatch: React.Dispatch<any>) => {
   session.archived = true;
   createOrUpdateTrainingSession(session);
   dispatch(setSessionArchived(session));
-}
-
+};
 
 export const setLoading = (isLoading: boolean) => ({
   type: 'set-user-loading',

@@ -46,7 +46,7 @@ export default
         "password": "Password (8 characters minimum)",
         "newPassword": "New Password (8 characters minimum)",
         "passwordRepeat": "Repeat Password",
-        "organization": "Organization Name (optional)",
+        "organization": "Organization Name",
         "organizationWritein": "Enter Organization Name",
         "community": "Community (optional)",
         "communityWritein": "Enter Community Name",
@@ -62,7 +62,8 @@ export default
         "passwordMismatch": "Passwords don\"t match",
         "termsNotChecked": "Please check the box to continue",
         "loginUsernameRequired": "Email is required",
-        "loginPasswordRequired": "Password is required"
+        "loginPasswordRequired": "Password is required",
+        "organizationRequired": "Please select one of our NGO Partner Organizations"
       },
       "buttons": {
         "login": "Login",

@@ -4,8 +4,17 @@ import {Lesson} from '../models/Training';
 import queryString from 'query-string';
 import i18n from '../i18n';
 
+export const getLoading  = (state: AppState) => {
+  return !!state.data.loading;
+}
+export const getDarkMode  = (state: AppState) => {
+  return state.user.darkMode;
+}
+export const getIntercomUser  = (state: AppState) => {
+  return state.user.intercomUser;
+}
 export const getTrainingSessions = (state: AppState) => {
-  return state.data.sessions;
+  return state.user.sessions;
 }
 export const getUserLessons = (state: AppState) => {
   return state.user.lessons;
@@ -20,7 +29,7 @@ export const getOrganizations = (state: AppState) => {
   return state.user.organizations;
 }
 export const getUserId = (state: AppState) => {
-  return state.user.id;
+  return state.user.profile && state.user.profile.id;
 }
 export const getUserProfile = (state: AppState) => {
   return state.user.profile;

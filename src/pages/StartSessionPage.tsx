@@ -26,7 +26,7 @@ import {RouteComponentProps} from 'react-router';
 import {Lesson, Subject, TrainingSession} from "../models/Training";
 import * as selectors from "../data/selectors";
 import BackToSubjectLink from "../components/BackToSubject";
-import {startTrainingSession} from "../data/training/training.actions";
+import {startTrainingSession} from "../data/user/user.actions";
 
 interface OwnProps extends RouteComponentProps {
   subject: Subject;

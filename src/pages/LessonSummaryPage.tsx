@@ -54,14 +54,12 @@ const LessonSummaryPage: React.FC<LessonSummaryProps> = ({ subject, lesson, less
     if (lesson && lessons && lessonProgress) {
       const lastPage = ('/tabs/subjects/' + subject.id + '/lessons/' + lesson.id) + (lesson.pages && lesson.pages.length ?  + ('/page/' + lesson.pages.length) : '/intro');
       const lastQuestion = lesson.questions && lesson.questions.length ? ('/tabs/subjects/' + subject.id + '/lessons/' + lesson.id + '/question/' + lesson.questions.length) : lastPage;
-      let i:number, nextLesson:Lesson|undefined, nextLessonId:string;
-      for(i=0;i<subject.lessons.length;i++) {
-        if (subject.lessons[i] && subject.lessons[i].lessonId === lesson.id && i < (subject.lessons.length - 1)) {
-          nextLessonId = subject.lessons[i+1].lessonId;
-          nextLesson = nextLessonId ? lessons.find(l => l.id === nextLessonId) : undefined;
-        }
-      }
+
+      const idx = subject.lessons.findIndex((l) => l.lessonId === lesson.id);
+      const nextLessonId = (idx < (subject.lessons.length - 1)) ? subject.lessons[idx + 1].lessonId : undefined;
+      const nextLesson = nextLessonId ? lessons.find(l => l.id === nextLessonId) : undefined;
       setNextLesson(nextLesson);
+
       setPrevUrl(lastQuestion + (activeSession && activeSession.id ? ('?tsId=' + activeSession.id) : ''));
       setNextUrl('/tabs/subjects/' + subject.id + (nextLesson ? ('/lessons/' + nextLesson.id + '/intro') : '/progress')  + (activeSession && activeSession.id ? ('?tsId=' + activeSession.id) : ''));
     }

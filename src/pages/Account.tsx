@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   IonButton,
   IonButtons,
@@ -23,7 +23,8 @@ import {getGravatarUrl} from "../util/gravatar";
 import ChangeEmailModal from "../components/ChangeEmailModal";
 import ChangePasswordModal from "../components/ChangePasswordModal";
 import ChangeProfileModal from "../components/ChangeProfileModal";
-import {UserProfile} from "../models/User";
+import {Organization, UserProfile} from "../models/User";
+import {setLoading} from "../data/user/user.actions";
 
 export interface ToastProps {
   color?:string;
@@ -35,15 +36,18 @@ interface OwnProps extends RouteComponentProps { }
 
 interface StateProps {
   isLoggedIn?: boolean;
-  userProfile?: UserProfile;
+  isRegistered?: boolean;
+  profile?: UserProfile;
+  organizations?: Organization[];
 }
 
 interface DispatchProps {
+  setLoading: typeof setLoading;
 }
 
 interface AccountProps extends OwnProps, StateProps, DispatchProps { }
 
-const Account: React.FC<AccountProps> = ({ isLoggedIn, userProfile,  }) => {
+const Account: React.FC<AccountProps> = ({ isLoggedIn, isRegistered, profile, organizations, setLoading  }) => {
 
   const { t } = useTranslation(['translation'], {i18n} );
 
@@ -54,6 +58,26 @@ const Account: React.FC<AccountProps> = ({ isLoggedIn, userProfile,  }) => {
   const [toastColor, setToastColor] = useState<string|undefined>();
   const [toastHeader, setToastHeader] = useState<string|undefined>();
   const [toastMessage, setToastMessage] = useState<string>();
+  const [organization, setOrganization] = useState<Organization>();
+  const [community, setCommunity] = useState<string>();
+
+  useEffect(() => {
+    if (!profile || !organizations) {
+      return;
+    }
+    let organization;
+    if (profile.organizationId) {
+      organization = organizations.find((o) => o.id === profile.organizationId);
+    }
+    else if (profile.organization === 'Other') {
+      organization = {id: '_other', name: 'Other', communities: []};
+    }
+    else if (profile.organization) {
+      organization = {id: '_custom', name: profile.organization, communities: []};
+    }
+    setOrganization(organization);
+    setCommunity(profile.community);
+  }, [profile, organizations])
 
   const openPasswordModal = () => {
     setShowPasswordModal(true);
@@ -82,6 +106,9 @@ const Account: React.FC<AccountProps> = ({ isLoggedIn, userProfile,  }) => {
   if (isLoggedIn === false) {
     return <Redirect to="/login" />
   }
+  if (isRegistered === false) {
+    return <Redirect to={'/register'} />
+  }
 
   return (
     <IonPage id="account-page">
@@ -93,12 +120,12 @@ const Account: React.FC<AccountProps> = ({ isLoggedIn, userProfile,  }) => {
           <IonTitle>{t('registration.pages.account')}</IonTitle>
         </IonToolbar>
       </IonHeader>
-      {userProfile && <IonContent>
+      {profile && <IonContent>
         <div className="ion-padding-top ion-text-center">
-            <img src={userProfile.photoURL || getGravatarUrl(userProfile.email)} alt={t('registration.labels.avatar')} />
-            <h2>{ userProfile.name }</h2>
-            <h3>{ userProfile.email }</h3>
-            <h3>{ userProfile.organization }</h3>
+            <img src={profile.photoURL || getGravatarUrl(profile.email)} alt={t('registration.labels.avatar')} />
+            <h2>{ profile.name }</h2>
+            <h3>{ profile.email || profile.phoneNumber }</h3>
+            { organization && <h3>{ organization.name + (community ? (' - ' + community ) : '')}</h3>}
             <IonList inset>
               <IonItem>
                 <IonButton expand="full" fill="clear" color="secondary" onClick={openProfileModal}>{t('registration.modals.changeProfile')}</IonButton>
@@ -111,8 +138,9 @@ const Account: React.FC<AccountProps> = ({ isLoggedIn, userProfile,  }) => {
               </IonItem>
             </IonList>
           </div>
+        <ChangeProfileModal showModal={showProfileModal} closeModal={closeProfileModal} showToast={showToast} profile={profile} organizations={organizations} setLoading={setLoading}/>
         <ChangePasswordModal showModal={showPasswordModal} closeModal={closePasswordModal} showToast={showToast}/>
-        <ChangeEmailModal showModal={showEmailModal} closeModal={closeEmailModal} email={userProfile.email}  showToast={showToast}/>
+        <ChangeEmailModal showModal={showEmailModal} closeModal={closeEmailModal} email={profile.email}  showToast={showToast}/>
         <IonToast isOpen={openToast} header={toastHeader} message={toastMessage} color={toastColor||'success'} duration={2000} onDidDismiss={() => setOpenToast(false)} />
       </IonContent>}
     </IonPage>
@@ -120,11 +148,14 @@ const Account: React.FC<AccountProps> = ({ isLoggedIn, userProfile,  }) => {
 };
 
 export default connect<OwnProps, StateProps, DispatchProps>({
+  mapDispatchToProps: {
+    setLoading,
+  },
   mapStateToProps: (state) => ({
     isLoggedIn: state.user.isLoggedIn,
-    userProfile: selectors.getUserProfile(state)
+    isRegistered: state.user.isRegistered,
+    profile: selectors.getUserProfile(state),
+    organizations: selectors.getOrganizations(state)
   }),
-  mapDispatchToProps: {
-  },
   component: Account
 })

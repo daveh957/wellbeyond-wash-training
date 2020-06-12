@@ -55,15 +55,12 @@ export const listenForUserProfile = async (callback:any) : Promise<any> => {
     return Promise.resolve();
   }
 
-  let query:firebase.firestore.Query<firebase.firestore.DocumentData> = firebase.firestore()
+  return unsubUser = firebase.firestore()
     .collection('users')
-    .where('id', '==', user.uid);
-  return unsubUser = query
-    .onSnapshot(querySnapshot => {
+    .doc(user.uid)
+    .onSnapshot(doc => {
       const profile = {id: user.uid, email: user.email, phoneNumber: user.phoneNumber, name: user.displayName, photoURL: user.photoURL} as UserProfile;
-      querySnapshot.forEach(doc => {
-        Object.assign(profile, doc.data());
-      });
+      Object.assign(profile, doc.data());
       callback(profile);
     });
 };
@@ -255,7 +252,7 @@ export const updateEmail = async (email: string) => {
 export const updateProfile = async (profile: Partial<UserProfile>) => {
   const user = firebase.auth().currentUser;
   if (!user || !user.uid) {
-    return null;
+    return Promise.resolve(undefined);
   }
 
   const updateAuthIfNecessary = async () => {
@@ -269,7 +266,7 @@ export const updateProfile = async (profile: Partial<UserProfile>) => {
     if (user && doUpdate) {
       return user.updateProfile({displayName: profile.name, photoURL: profile.photoURL});
     }
-    return Promise.resolve();
+    return Promise.resolve(undefined);
   }
 
   return updateAuthIfNecessary()
@@ -345,7 +342,7 @@ export const createOrUpdateLessonProgress = async (lesson: LessonProgress) => {
 export const createOrUpdateTrainingSession = async (session:TrainingSession) => {
   let user = firebase.auth().currentUser;
   if (!user || !user.uid) {
-    return null;
+    return Promise.resolve();
   }
   session.started = session.started || new Date();
   if (!session.id) {

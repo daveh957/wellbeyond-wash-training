@@ -32,7 +32,7 @@ export function userReducer(state: UserState, action: UserActions): UserState {
       return { ...state, sessions: action.sessions };
     }
     case 'set-training-session': {
-      let sessions = {...state.sessions} as TrainingSessions;
+      let sessions = Object.assign({}, state.sessions);
       if (action.session.id) {
         sessions[action.session.id] = action.session;
       }

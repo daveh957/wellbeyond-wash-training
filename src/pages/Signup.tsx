@@ -29,7 +29,7 @@ import {connect} from '../data/connect';
 import {RouteComponentProps} from 'react-router';
 import {Redirect} from "react-router-dom";
 import {registerWithEmail, updateProfile} from "../data/user/userApi";
-import {loadUserData, setIsLoggedIn, setLoading} from "../data/user/user.actions";
+import {setIsLoggedIn, setLoading} from "../data/user/user.actions";
 import {Organization} from "../models/User";
 
 interface OwnProps extends RouteComponentProps {}
@@ -42,7 +42,6 @@ interface StateProps {
 interface DispatchProps {
   setLoading: typeof setLoading;
   setIsLoggedIn: typeof setIsLoggedIn;
-  loadUserData: typeof loadUserData;
 }
 
 interface SignupProps extends OwnProps, StateProps, DispatchProps { }
@@ -168,7 +167,6 @@ const Signup: React.FC<SignupProps> = ({isLoggedIn,organizations,  setLoading, s
               setLoading(false);
               setIsLoggedIn(true);
               navigate('/terms', 'forward');
-              loadUserData();
             })
             .catch(error => {
               setLoading(false);
@@ -347,7 +345,6 @@ export default connect<OwnProps, StateProps, DispatchProps>({
   mapDispatchToProps: {
     setLoading,
     setIsLoggedIn,
-    loadUserData
   },
   mapStateToProps: (state) => ({
     isLoggedIn: state.user.isLoggedIn,

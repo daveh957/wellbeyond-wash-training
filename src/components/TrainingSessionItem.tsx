@@ -14,7 +14,7 @@ import {checkmark} from 'ionicons/icons';
 import {useTranslation} from "react-i18next";
 import i18n from "../i18n";
 import {connect} from "../data/connect";
-import {archiveTrainingSession} from "../data/training/training.actions";
+import {archiveTrainingSession} from "../data/user/user.actions";
 
 interface DispatchProps {
   archiveTrainingSession: typeof archiveTrainingSession

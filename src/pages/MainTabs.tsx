@@ -18,6 +18,7 @@ interface OwnProps {}
 
 interface StateProps {
   isLoggedIn?: boolean;
+  isRegistered?: boolean;
   acceptedTerms?: boolean;
 }
 
@@ -25,11 +26,11 @@ interface DispatchProps { }
 
 interface MainTabsProps extends OwnProps, StateProps, DispatchProps { }
 
-const MainTabs: React.FC<MainTabsProps> = ({isLoggedIn, acceptedTerms}) => {
+const MainTabs: React.FC<MainTabsProps> = ({isLoggedIn, isRegistered, acceptedTerms}) => {
 
   const { t } = useTranslation(['translation'], {i18n} );
 
-  if (typeof isLoggedIn === 'undefined' || typeof acceptedTerms === 'undefined') {
+  if (typeof isLoggedIn === 'undefined' || typeof isRegistered === 'undefined' || typeof acceptedTerms === 'undefined') {
     return (
       <IonContent>
         <IonLoading
@@ -41,6 +42,9 @@ const MainTabs: React.FC<MainTabsProps> = ({isLoggedIn, acceptedTerms}) => {
   }
   if (!isLoggedIn) {
     return <Redirect to="/login" />;
+  }
+  if (!isRegistered) {
+    return <Redirect to="/register" />;
   }
   if (!acceptedTerms) {
     return <Redirect to="/terms" />;
@@ -70,6 +74,7 @@ const MainTabs: React.FC<MainTabsProps> = ({isLoggedIn, acceptedTerms}) => {
 export default connect<OwnProps, StateProps, DispatchProps>({
   mapStateToProps: (state, ownProps) => ({
     isLoggedIn: state.user.isLoggedIn,
+    isRegistered: state.user.isRegistered,
     acceptedTerms: state.user.acceptedTerms,
   }),
   component: MainTabs

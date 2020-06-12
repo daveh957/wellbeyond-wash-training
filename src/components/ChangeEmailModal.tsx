@@ -17,7 +17,6 @@ import {
 } from '@ionic/react';
 import {useTranslation} from "react-i18next";
 import i18n from "../i18n";
-import {setData, setUserProfile} from "../data/user/user.actions";
 import {connect} from "../data/connect";
 import {updateEmail} from "../data/user/userApi";
 import {ToastProps} from "../pages/Account";
@@ -33,12 +32,11 @@ interface StateProps {
 }
 
 interface DispatchProps {
-  setData: typeof setData;
 }
 
 interface ChangeEmailProps extends OwnProps, StateProps, DispatchProps { }
 
-const ChangeEmailModal: React.FC<ChangeEmailProps> = ({showModal, closeModal, email, showToast, setData}) => {
+const ChangeEmailModal: React.FC<ChangeEmailProps> = ({showModal, closeModal, email, showToast}) => {
 
   const { t } = useTranslation(['translation'], {i18n} );
 
@@ -77,7 +75,6 @@ const ChangeEmailModal: React.FC<ChangeEmailProps> = ({showModal, closeModal, em
     if(validate()) {
       let email = formValues.email.trim().toLowerCase();
       updateEmail(email).then(() => {
-        setUserProfile({email: email});
         showToast({message: t('registration.messages.emailChanged')});
         closeModal();
       })
@@ -144,7 +141,6 @@ const ChangeEmailModal: React.FC<ChangeEmailProps> = ({showModal, closeModal, em
 
 export default connect<OwnProps, {}, DispatchProps>({
   mapDispatchToProps: {
-    setData
   },
   component: ChangeEmailModal
 })
