@@ -90,6 +90,9 @@ const UpdateProfileForm: React.FC<MyProps> = ({profile, organizations, onSave, s
   const handleOrganizationSelected = (organization:Organization) => {
     setOrganization(organization);
     updateCommunityList(organization);
+    if (organization.id === '_other') {
+      setShowOrganizationTextInput(true);
+    }
   }
 
   const handleOrganizationTextChange = (ev:CustomEvent) => {

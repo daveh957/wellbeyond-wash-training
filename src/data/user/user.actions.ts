@@ -26,20 +26,26 @@ export const watchAuthState = () => async (dispatch: React.Dispatch<any>) => {
     if (user != null) {
       dispatch(setIsLoggedIn(true));
       listenForUserProfile((profile:UserProfile) => {
-        const getUserIdHash = firebase.functions().httpsCallable('getUserIdHash');
-        dispatch(setIsRegistered(true));
-        dispatch(setAcceptedTerms(!!profile.acceptedTerms));
-        dispatch(setUserProfile(profile));
-        if (process.env.NODE_ENV === 'production') {
-          getUserIdHash().then(function (result) {
-            dispatch(setIntercomUser({
-              user_id: profile.id,
-              phone: profile.phoneNumber || undefined,
-              email: profile.email || undefined,
-              name: profile.name || undefined,
-              user_hash: result.data.hash
-            }));
-          });
+        if (profile) {
+          const getUserIdHash = firebase.functions().httpsCallable('getUserIdHash');
+          dispatch(setIsRegistered(true));
+          dispatch(setAcceptedTerms(!!profile.acceptedTerms));
+          dispatch(setUserProfile(profile));
+          if (process.env.NODE_ENV === 'production') {
+            getUserIdHash().then(function (result) {
+              dispatch(setIntercomUser({
+                user_id: profile.id,
+                phone: profile.phoneNumber || undefined,
+                email: profile.email || undefined,
+                name: profile.name || undefined,
+                user_hash: result.data.hash
+              }));
+            });
+          }
+        }
+        else {
+          dispatch(setIsRegistered(false));
+          dispatch(setAcceptedTerms(false));
         }
       });
       listenForUserLessons((lessons:UserLessons) => {

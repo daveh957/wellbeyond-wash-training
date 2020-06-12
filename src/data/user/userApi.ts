@@ -59,9 +59,20 @@ export const listenForUserProfile = async (callback:any) : Promise<any> => {
     .collection('users')
     .doc(user.uid)
     .onSnapshot(doc => {
-      const profile = {id: user.uid, email: user.email, phoneNumber: user.phoneNumber, name: user.displayName, photoURL: user.photoURL} as UserProfile;
-      Object.assign(profile, doc.data());
-      callback(profile);
+      if (doc.exists) {
+        const profile = {
+          id: user.uid,
+          email: user.email,
+          phoneNumber: user.phoneNumber,
+          name: user.displayName,
+          photoURL: user.photoURL
+        } as UserProfile;
+        Object.assign(profile, doc.data());
+        callback(profile);
+      }
+      else {
+        callback();
+      }
     });
 };
 

@@ -4,7 +4,7 @@ import {
   IonCard,
   IonCardContent,
   IonContent,
-  IonHeader,
+  IonHeader, IonLoading,
   IonMenuButton,
   IonPage,
   IonTitle,
@@ -50,6 +50,16 @@ const Register: React.FC<RegisterProps> = ({isLoggedIn, isRegistered, profile, o
 
   if (isLoggedIn === false) {
     return <Redirect to={'/login'} />
+  }
+  if (typeof isRegistered === 'undefined') {
+    return (
+      <IonContent>
+        <IonLoading
+          isOpen={true}
+          message={t('menu.pleaseWait')}
+        />
+      </IonContent>
+    );
   }
   if (isRegistered) {
     return <Redirect to={'/terms'} />

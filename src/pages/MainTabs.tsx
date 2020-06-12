@@ -30,7 +30,7 @@ const MainTabs: React.FC<MainTabsProps> = ({isLoggedIn, isRegistered, acceptedTe
 
   const { t } = useTranslation(['translation'], {i18n} );
 
-  if (typeof isLoggedIn === 'undefined') {
+  if (typeof isLoggedIn === 'undefined' || typeof isRegistered === 'undefined' || typeof acceptedTerms === 'undefined') {
     return (
       <IonContent>
         <IonLoading
