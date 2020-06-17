@@ -30,19 +30,19 @@ const UpdateProfileForm: React.FC<MyProps> = ({profile, organizations, onSave, s
 
   const { t } = useTranslation(['translation'], {i18n} );
 
-  const [showOrganizationTextInput, setShowOrganizationTextInput] = useState(false);
-  const [showCommunityTextInput, setShowCommunityTextInput] = useState(false);
-  const [organizationList, setOrganizationList] = useState();
-  const [communityList, setCommunityList] = useState();
+  const [showOrganizationTextInput, setShowOrganizationTextInput] = useState<boolean>(false);
+  const [showCommunityTextInput, setShowCommunityTextInput] = useState<boolean>(false);
+  const [organizationList, setOrganizationList] = useState<Organization[]>([]);
+  const [communityList, setCommunityList] = useState<string[]>();
 
-  const [name, setName] = useState();
-  const [organization, setOrganization] = useState();
-  const [community, setCommunity] = useState();
+  const [name, setName] = useState<string>();
+  const [organization, setOrganization] = useState<Organization>();
+  const [community, setCommunity] = useState<string>();
 
-  const [formSubmitted, setFormSubmitted] = useState(false);
+  const [formSubmitted, setFormSubmitted] = useState<boolean>(false);
   const [serverError, setServerError] = useState<Error>();
-  const [nameError, setNameError] = useState();
-  const [organizationError, setOrganizationError] = useState();
+  const [nameError, setNameError] = useState<string>();
+  const [organizationError, setOrganizationError] = useState<string>();
 
   useEffect(() => {
     if (organizations) {
@@ -137,12 +137,14 @@ const UpdateProfileForm: React.FC<MyProps> = ({profile, organizations, onSave, s
       const profile = {
         name: name
       } as Partial<UserProfile>;
-      if (organization.id === '_other' || organization.id === '_custom') {
-        profile.organization = organization.name;
-      }
-      else {
-        profile.organizationId = organization.id;
-        profile.community = community || '';
+      if (organization) {
+        if (organization.id === '_other' || organization.id === '_custom') {
+          profile.organization = organization.name;
+        }
+        else {
+          profile.organizationId = organization.id;
+          profile.community = community || '';
+        }
       }
       updateProfile(profile)
         .then((result) => {

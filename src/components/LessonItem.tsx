@@ -13,7 +13,7 @@ interface LessonItemProps {
 
 const LessonItem: React.FC<LessonItemProps> = ({ subject,lesson, activeSession, completed, clickable}) => {
 
-  const [lessonIcon, setLessonIcon] = useState();
+  const [lessonIcon, setLessonIcon] = useState<string>();
   useEffect(() => {
     if (lesson && lesson.photo) {
       setLessonIcon(getLessonIconUrl(lesson.photo, completed));

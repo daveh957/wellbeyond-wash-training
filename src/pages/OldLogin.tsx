@@ -56,11 +56,11 @@ const Login: React.FC<LoginProps> = ({isLoggedIn, acceptedTerms, setLoading, set
   const { t } = useTranslation(['translation'], {i18n} );
   const {navigate} = useContext(NavContext);
 
-  const [username, setUsername] = useState();
-  const [password, setPassword] = useState();
-  const [formSubmitted, setFormSubmitted] = useState();
-  const [usernameError, setUsernameError] = useState();
-  const [passwordError, setPasswordError] = useState();
+  const [username, setUsername] = useState<string>();
+  const [password, setPassword] = useState<string>();
+  const [formSubmitted, setFormSubmitted] = useState<boolean>();
+  const [usernameError, setUsernameError] = useState<string>();
+  const [passwordError, setPasswordError] = useState<string>();
   const [serverError, setServerError] = useState<Error>();
   const [showForgotPasswordModal, setShowForgotPasswordModal] = useState<boolean>(false);
   const [openToast, setOpenToast] = useState<boolean>(false);
@@ -71,9 +71,9 @@ const Login: React.FC<LoginProps> = ({isLoggedIn, acceptedTerms, setLoading, set
   useEffect(() => {
     setUsername('');
     setPassword('');
-    setFormSubmitted(null);
-    setUsernameError(null);
-    setPasswordError(null);
+    setFormSubmitted(false);
+    setUsernameError('');
+    setPasswordError('');
   }, [isLoggedIn])
 
 

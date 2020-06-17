@@ -12,7 +12,7 @@ interface BackToLessonsProps {
 const BackToLessonsLink: React.FC<BackToLessonsProps> = ({ subject, session}) => {
 
   const {navigate} = useContext(NavContext);
-  const [backLink, setBackLink] = useState();
+  const [backLink, setBackLink] = useState<string>('/tabs/training');
 
   useEffect(() => {
     if (subject) {;

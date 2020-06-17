@@ -33,7 +33,7 @@ import i18n from '../i18n';
 import {connect} from '../data/connect';
 import * as selectors from '../data/selectors';
 
-import {Lesson, LessonPage, LessonProgress, Subject, TrainingSession} from '../models/Training';
+import {Lesson, LessonPage, LessonProgress, PageView, Subject, TrainingSession} from '../models/Training';
 import VideoPlayer from "../components/VideoPlayer";
 import ImageZoomModal from "../components/ImageZoomModal";
 import {updateTrainingLesson} from "../data/user/user.actions";
@@ -62,12 +62,12 @@ const LessonPagePage: React.FC<LessonPageProps> = ({ history, subject, lesson, p
   const {navigate} = useContext(NavContext);
   const { t } = useTranslation(['translation'], {i18n} );
 
-  const [nextUrl, setNextUrl] = useState();
-  const [prevUrl, setPrevUrl] = useState();
-  const [videoPlayed, setVideoPlayed] = useState();
-  const [showNext, setShowNext] = useState();
-  const [showModal, setShowModal] = useState();
-  const [pageView, setPageView] = useState();
+  const [nextUrl, setNextUrl] = useState<string>('/tabs/training');
+  const [prevUrl, setPrevUrl] = useState<string>('/tabs/training');
+  const [videoPlayed, setVideoPlayed] = useState<boolean>(false);
+  const [showNext, setShowNext] = useState<boolean>(false);
+  const [showModal, setShowModal] = useState<boolean>(false);
+  const [pageView, setPageView] = useState<PageView>();
 
   useEffect(() => {
     if (lesson && page && lessonProgress) {
@@ -116,7 +116,7 @@ const LessonPagePage: React.FC<LessonPageProps> = ({ history, subject, lesson, p
   },[subject, lesson, lessonProgress, idx, activeSession]);
 
   useEffect(() => {
-    if (videoPlayed) {
+    if (pageView && videoPlayed) {
         pageView.videoWatched = true;
         setPageView(pageView);
       }
@@ -125,9 +125,11 @@ const LessonPagePage: React.FC<LessonPageProps> = ({ history, subject, lesson, p
   const openModal = () => {setShowModal(true)};
   const closeModal = () => {setShowModal(false)};
   const setAttestationChecked = (checked:boolean) => {
-    pageView.attestationChecked = checked;
-    setPageView(pageView);
-    setShowNext(checked);
+    if (pageView) {
+      pageView.attestationChecked = checked;
+      setPageView(pageView);
+      setShowNext(checked);
+    }
   }
   const savePageView = () => {
     if (pageView) {
@@ -146,7 +148,7 @@ const LessonPagePage: React.FC<LessonPageProps> = ({ history, subject, lesson, p
   const handleNext = (e:any) => {
     e.preventDefault();
     savePageView();
-    history.push(nextUrl);
+    navigate(nextUrl, 'forward');
   }
   const handlePrev = (e:any) => {
     e.preventDefault();

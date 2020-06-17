@@ -57,8 +57,8 @@ const QuestionPreviewPage: React.FC<QuestionPageProps> = ({ history, subject, le
 
   const { t } = useTranslation(['translation'], {i18n} );
 
-  const [nextUrl, setNextUrl] = useState();
-  const [prevUrl, setPrevUrl] = useState();
+  const [nextUrl, setNextUrl] = useState<string>('/tabs/training');
+  const [prevUrl, setPrevUrl] = useState<string>('/tabs/training');
   const [answer, setAnswer] = useState<string|number|undefined>();
   const [showNext, setShowNext] = useState<boolean>();
 

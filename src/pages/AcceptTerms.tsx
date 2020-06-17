@@ -43,8 +43,8 @@ interface AcceptTermsProps extends OwnProps, StateProps, DispatchProps { }
 
 const AcceptTerms: React.FC<AcceptTermsProps> = ({acceptTerms, acceptedTerms, isLoggedIn, isRegistered}) => {
 
-  const [formSubmitted, setFormSubmitted] = useState();
-  const [checked, setChecked] = useState();
+  const [formSubmitted, setFormSubmitted] = useState<boolean>(false);
+  const [checked, setChecked] = useState<boolean>(false);
 
   useEffect(() => {
     setChecked(!!acceptedTerms);

@@ -12,7 +12,7 @@ interface VideoPlayerProps {
 
 const VideoPlayer: React.FC<VideoPlayerProps> = ({ id,src, setVideoPlayer, setVideoPlayed}) => {
 
-  const [player , setPlayer] = useState();
+  const [player , setPlayer] = useState<any>();
   const handleStateChange = (state:any) => {
     if (state.ended || (state.currentTime > 0 && state.duration > 0 && (state.currentTime / state.duration) > 0.8)) {
       if (setVideoPlayed) {

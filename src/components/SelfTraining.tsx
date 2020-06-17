@@ -26,14 +26,14 @@ interface SelfTrainingProps {
 const SelfTraining: React.FC<SelfTrainingProps> = ({ finishedTraining, subject,lessons, userLessons}) => {
 
   const { t } = useTranslation(['translation'], {i18n} );
-  const [resumeLink, setResumeLink] = useState();
-  const [lessonsStarted, setLessonsStarted] = useState();
-  const [lessonsCompleted, setLessonsCompleted] = useState();
+  const [resumeLink, setResumeLink] = useState<string>();
+  const [lessonsStarted, setLessonsStarted] = useState<number>();
+  const [lessonsCompleted, setLessonsCompleted] = useState<number>();
 
   useEffect(() => {
     if (subject && lessons && userLessons) {
       if (finishedTraining) {
-        setResumeLink('/tabs/subjects/' + subject.id + '/progress');
+        setResumeLink(`/tabs/subjects/${subject.id}/progress`);
         setLessonsCompleted(lessons.length);
       }
       else {

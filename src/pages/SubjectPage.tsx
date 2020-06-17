@@ -46,10 +46,10 @@ const SubjectPage: React.FC<SubjectProps> = ({ subject, lessons, userLessons, tr
 
   const { t } = useTranslation(['translation'], {i18n} );
 
-  const [finishedTraining, setFinishedTraining] = useState();
-  const [canTeach, setCanTeach] = useState();
-  const [completedSessions, setCompletedSessions] = useState();
-  const [activeSessions, setActiveSessions] = useState();
+  const [finishedTraining, setFinishedTraining] = useState<boolean>(false);
+  const [canTeach, setCanTeach] = useState<boolean>(false);
+  const [completedSessions, setCompletedSessions] = useState<any>();
+  const [activeSessions, setActiveSessions] = useState<any>();
 
   useEffect(() => {
     if (subject && lessons && userLessons) {

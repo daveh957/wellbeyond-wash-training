@@ -29,9 +29,9 @@ interface LessonItemProps extends DispatchProps {
 const TrainingSessionItem: React.FC<LessonItemProps> = ({ subject, lessons, session, archiveTrainingSession}) => {
 
   const { t } = useTranslation(['translation'], {i18n} );
-  const [resumeLink, setResumeLink] = useState();
-  const [lessonsCompleted, setLessonsCompleted] = useState();
-  const [sessionCompleted, setSessionCompleted] = useState();
+  const [resumeLink, setResumeLink] = useState<string>();
+  const [lessonsCompleted, setLessonsCompleted] = useState<number>();
+  const [sessionCompleted, setSessionCompleted] = useState<boolean>();
 
   useEffect(() => {
     if (subject && lessons && session) {

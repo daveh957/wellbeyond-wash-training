@@ -60,12 +60,12 @@ const Signup: React.FC<SignupProps> = ({isLoggedIn,organizations,  setLoading, s
     community: '',
   });
   const [formErrors, setFormErrors] = useState<any>({});
-  const [formSubmitted, setFormSubmitted] = useState(false);
-  const [showOrganizationTextInput, setShowOrganizationTextInput] = useState(false);
-  const [showCommunityTextInput, setShowCommunityTextInput] = useState(false);
+  const [formSubmitted, setFormSubmitted] = useState<boolean>(false);
+  const [showOrganizationTextInput, setShowOrganizationTextInput] = useState<boolean>(false);
+  const [showCommunityTextInput, setShowCommunityTextInput] = useState<boolean>(false);
   const [serverError, setServerError] = useState<Error>();
-  const [organizationList, setOrganizationList] = useState();
-  const [communityList, setCommunityList] = useState();
+  const [organizationList, setOrganizationList] = useState<Organization[]>([]);
+  const [communityList, setCommunityList] = useState<string[]>([]);
 
   useEffect(() => {
     if (organizations) {
@@ -86,7 +86,7 @@ const Signup: React.FC<SignupProps> = ({isLoggedIn,organizations,  setLoading, s
       setCommunityList(list);
     }
     else {
-      setCommunityList(undefined);
+      setCommunityList([]);
     }
   }, [formValues.organization]);
 

@@ -48,8 +48,8 @@ interface LessonIntroProps extends OwnProps, StateProps, DispatchProps {}
 const LessonIntroPage: React.FC<LessonIntroProps> = ({ subject,lesson, lessonProgress, activeSession, updateTrainingLesson }) => {
 
   const { t } = useTranslation(['translation'], {i18n} );
-  const [lessonIcon, setLessonIcon] = useState();
-  const [nextUrl, setNextUrl] = useState();
+  const [lessonIcon, setLessonIcon] = useState<string>();
+  const [nextUrl, setNextUrl] = useState<string>();
   useEffect(() => {
     if (lesson && lesson.photo) {
       setLessonIcon(getLessonIconUrl(lesson.photo, false));

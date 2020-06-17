@@ -46,9 +46,9 @@ interface LessonSummaryProps extends OwnProps, StateProps, DispatchProps {}
 const LessonSummaryPage: React.FC<LessonSummaryProps> = ({ subject, lesson, lessons, lessonProgress,  activeSession }) => {
 
   const { t } = useTranslation(['translation'], {i18n} );
-  const [nextUrl, setNextUrl] = useState();
-  const [prevUrl, setPrevUrl] = useState();
-  const [nextLesson, setNextLesson] = useState();
+  const [nextUrl, setNextUrl] = useState<string>('/tabs/training');
+  const [prevUrl, setPrevUrl] = useState<string>('/tabs/training');
+  const [nextLesson, setNextLesson] = useState<Lesson>();
 
   useEffect(() => {
     if (lesson && lessons && lessonProgress) {

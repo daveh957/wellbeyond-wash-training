@@ -1,5 +1,6 @@
 import React from 'react';
 import App from './App';
+// @ts-ignore
 import {render} from '@testing-library/react'
 
 it('renders without crashing', () => {
