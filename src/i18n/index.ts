@@ -18,18 +18,34 @@ i18n
     interpolation: {
       escapeValue: false, // react already safes from xss
       format: function(value, format, lng) {
-        if (format === 'uppercase') return value.toUpperCase();
-        if(format === 'date' && value.toDate) {
-          return Intl.DateTimeFormat(lng, { month: "long", day: "numeric", year: "numeric" }).format(value.toDate());
-        }
-        if(format === 'dateAndTime' && value.toDate) {
-          return Intl.DateTimeFormat(lng, { month: "long", day: "numeric", year: "numeric", hour: "numeric", minute: "numeric", hour12: true }).format(value.toDate());
-        }
-        if(format === 'date' && value instanceof Date) {
-          return Intl.DateTimeFormat(lng, { month: "long", day: "numeric", year: "numeric" }).format(value);
-        }
-        if(format === 'dateAndTime' && value instanceof Date) {
-          return Intl.DateTimeFormat(lng, { month: "long", day: "numeric", year: "numeric", hour: "numeric", minute: "numeric", hour12: true }).format(value);
+        if (value) {
+          if (format === 'uppercase') return value.toUpperCase();
+          if (format === 'date' && value.toDate) {
+            return Intl.DateTimeFormat(lng, {month: "long", day: "numeric", year: "numeric"}).format(value.toDate());
+          }
+          if (format === 'dateAndTime' && value.toDate) {
+            return Intl.DateTimeFormat(lng, {
+              month: "long",
+              day: "numeric",
+              year: "numeric",
+              hour: "numeric",
+              minute: "numeric",
+              hour12: true
+            }).format(value.toDate());
+          }
+          if (format === 'date' && value instanceof Date) {
+            return Intl.DateTimeFormat(lng, {month: "long", day: "numeric", year: "numeric"}).format(value);
+          }
+          if (format === 'dateAndTime' && value instanceof Date) {
+            return Intl.DateTimeFormat(lng, {
+              month: "long",
+              day: "numeric",
+              year: "numeric",
+              hour: "numeric",
+              minute: "numeric",
+              hour12: true
+            }).format(value);
+          }
         }
         return value;
       }

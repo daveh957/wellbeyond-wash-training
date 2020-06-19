@@ -26,6 +26,7 @@ import * as selectors from '../data/selectors';
 
 import {Lesson, LessonProgress, Subject, TrainingSession} from '../models/Training';
 import BackToLessonsLink from "../components/BackToLessons";
+import {updateTrainingLesson, updateTrainingSession} from "../data/user/user.actions";
 
 interface OwnProps extends RouteComponentProps {
   subject: Subject;
@@ -39,11 +40,12 @@ interface StateProps {
 }
 
 interface DispatchProps {
+  updateTrainingSession: typeof updateTrainingSession;
 }
 
 interface LessonSummaryProps extends OwnProps, StateProps, DispatchProps {}
 
-const LessonSummaryPage: React.FC<LessonSummaryProps> = ({ subject, lesson, lessons, lessonProgress,  activeSession }) => {
+const LessonSummaryPage: React.FC<LessonSummaryProps> = ({ history, subject, lesson, lessons, lessonProgress,  activeSession, updateTrainingSession }) => {
 
   const { t } = useTranslation(['translation'], {i18n} );
   const [nextUrl, setNextUrl] = useState<string>('/tabs/training');
@@ -63,7 +65,22 @@ const LessonSummaryPage: React.FC<LessonSummaryProps> = ({ subject, lesson, less
       setPrevUrl(lastQuestion + (activeSession && activeSession.id ? ('?tsId=' + activeSession.id) : ''));
       setNextUrl('/tabs/subjects/' + subject.id + (nextLesson ? ('/lessons/' + nextLesson.id + '/intro') : '/progress')  + (activeSession && activeSession.id ? ('?tsId=' + activeSession.id) : ''));
     }
-  },[subject, lesson, lessons, lessonProgress, activeSession])
+  },[subject, lesson, lessons, lessonProgress, activeSession]);
+
+
+  const handleNext = () => {
+    if (activeSession && !activeSession.completed && subject && subject.lessons) {
+      const lessonsCompleted = subject.lessons.reduce((count, l) => {
+        return count + ((activeSession.lessons && activeSession.lessons[l.lessonId] && activeSession.lessons[l.lessonId].completed) ? 1 : 0);
+      }, 0);
+      if (lessonsCompleted === subject.lessons.length) {
+        activeSession.completed = new Date();
+        updateTrainingSession(activeSession);
+      }
+    }
+    history.push(nextUrl);
+  }
+
 
   return (
     <IonPage id="lesson-summary">
@@ -98,7 +115,7 @@ const LessonSummaryPage: React.FC<LessonSummaryProps> = ({ subject, lesson, less
         <IonToolbar>
           <IonButtons slot={'start'}>
             <IonButton fill="solid" color="primary" routerLink={prevUrl} routerDirection='back'>{t('buttons.previous')}</IonButton>
-            <IonButton fill="solid" color="primary"  routerLink={nextUrl} routerDirection='root'>{t(nextLesson ? 'buttons.next' : 'buttons.done')}</IonButton>
+            <IonButton fill="solid" color="primary" onClick={handleNext}>{t(nextLesson ? 'buttons.next' : 'buttons.done')}</IonButton>
           </IonButtons>
         </IonToolbar>
       </IonFooter>
@@ -107,6 +124,7 @@ const LessonSummaryPage: React.FC<LessonSummaryProps> = ({ subject, lesson, less
 
 export default connect({
   mapDispatchToProps: {
+    updateTrainingSession: updateTrainingSession
   },
   mapStateToProps: (state, ownProps) => ({
     subject: selectors.getSubject(state, ownProps),
