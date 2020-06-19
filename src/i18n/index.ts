@@ -2,10 +2,14 @@ import i18n from "i18next";
 import {initReactI18next} from "react-i18next";
 import english from './en';
 import swahili from './sw';
+import hindi from './hi';
+import amharic from './am';
 
 const resources = {
   en: english,
-  sw: swahili
+  sw: swahili,
+  hi: hindi,
+  am: amharic
 };
 
 i18n
