@@ -82,7 +82,7 @@ export default
         "register": "S'inscrire"
       },
       "messages": {
-        "loginInfo": "Veuillez vous connecter pour commencer à utiliser l'application de formation WellBeyond Wash.",
+        "loginInfo": "Veuillez vous connecter pour commencer à utiliser l'application de formation WellBeyond WASH.",
         "signupInfo": "Veuillez vous inscrire pour commencer à utiliser l'application de formation WellBeyond WASH.",
         "passwordChanged": "Mot de passe mis à jour",
         "emailChanged": "Courriel mis à jour",

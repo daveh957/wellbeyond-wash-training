@@ -82,7 +82,7 @@ export default
         "sendPasswordReset": "Send Email"
       },
       "messages": {
-        "loginInfo": "Please login to get started using the WellBeyond Wash Training Application.",
+        "loginInfo": "Please login to get started using the WellBeyond WASH Training Application.",
         "signupInfo": "Please register to get started using the WellBeyond WASH Training Application.",
         "registerInfo": "Please complete your registration to get started using the WellBeyond WASH Training Application.",
         "passwordChanged": "Password updated",

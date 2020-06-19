@@ -63,7 +63,7 @@ export default
         "termsNotChecked": "Tafadhali angalia kisanduku kuendelea",
         "loginUsernameRequired": "Barua pepe inahitajika",
         "loginPasswordRequired": "Nywila inahitajika",
-        "organizationRequired": "Tafadhali chagua moja ya Asasi Zetu za Washirika wa NGO"
+        "organizationRequired": "Tafadhali chagua moja ya Asasi Zetu za WASHirika wa NGO"
       },
       "buttons": {
         "login": "Ingia",
@@ -82,7 +82,7 @@ export default
         "register": "Jiandikishe"
       },
       "messages": {
-        "loginInfo": "Tafadhali ingia ili uanze kutumia Programu ya mafunzo ya WellBeyond Wash.",
+        "loginInfo": "Tafadhali ingia ili uanze kutumia Programu ya mafunzo ya WellBeyond WASH.",
         "signupInfo": "Tafadhali jiandikishe ili uanze kutumia Maombi ya Mafunzo ya WellBeyond WASH.",
         "passwordChanged": "Nywila imesasishwa",
         "emailChanged": "Barua pepe imesasishwa",
