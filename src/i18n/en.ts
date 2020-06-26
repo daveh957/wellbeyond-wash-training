@@ -162,8 +162,10 @@ export default
         "groupSizeRequired": "Please select a group size for the training"
       },
       "headers": {
-        "yourTraining": "1. Complete the Training",
-        "trainOthers": "2. Share the Training",
+        "yourTraining": "1. Individual Training",
+        "yourTrainingSub": "Choose this option if you're completing the training on your own.",
+        "trainOthers": "2. Group Training",
+        "trainOthersSub": "Choose this training if you're completing the training in a group.",
         "previousTraining": "Previous Training Sessions"
       },
       "buttons": {

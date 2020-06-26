@@ -161,9 +161,11 @@
         "groupSizeRequired": "Tafadhali chagua saizi ya kikundi kwa mafunzo"
       },
       "headers": {
-        "yourTraining": "1. Kamilisha Mafunzo",
-        "trainOthers": "2. Shiriki Mafunzo",
-        "previousTraining": "Sehemu za Mafunzo ya awali"
+        "yourTraining": "1. Mafunzo ya kibinafsi",
+        "trainOthers": "2. Mafunzo ya Kikundi",
+        "previousTraining": "Sehemu za Mafunzo ya awali",
+        "yourTrainingSub": "Chagua chaguo hili ikiwa unamaliza mafunzo peke yako.",
+        "trainOthersSub": "Chagua mafunzo haya ikiwa unamaliza mafunzo katika kikundi."
       },
       "buttons": {
         "startTraining": "Anza Mafunzo yako",

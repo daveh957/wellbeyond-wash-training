@@ -161,9 +161,11 @@
         "groupSizeRequired": "እባክዎ ለሥልጠናው የቡድን መጠን ይምረጡ"
       },
       "headers": {
-        "yourTraining": "1. ስልጠናውን አጠናቅቁ",
-        "trainOthers": "2. ስልጠናውን ያካፍሉ",
-        "previousTraining": "ቀዳሚ የሥልጠና ክፍለ ጊዜዎች"
+        "yourTraining": "1. የግለሰብ ስልጠና",
+        "trainOthers": "2. የቡድን ስልጠና",
+        "previousTraining": "ቀዳሚ የሥልጠና ክፍለ ጊዜዎች",
+        "yourTrainingSub": "ስልጠናውን በእራስዎ ካጠናቀቁ ይህንን አማራጭ ይምረጡ ፡፡",
+        "trainOthersSub": "በቡድን ውስጥ ስልጠናውን ካጠናቀቁ ይህንን ስልጠና ይምረጡ ፡፡"
       },
       "buttons": {
         "startTraining": "ስልጠናዎን ይጀምሩ",

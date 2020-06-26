@@ -103,6 +103,7 @@ const SubjectPage: React.FC<SubjectProps> = ({ subject, lessons, userLessons, tr
               <IonCardHeader>
                 <IonCardTitle>
                   <h2>{t('training.headers.trainOthers')}</h2>
+                  <h3><em>{t('training.headers.trainOthersSub')}</em></h3>
                 </IonCardTitle>
                 {(activeSessions || completedSessions) &&
                   <IonCardSubtitle>

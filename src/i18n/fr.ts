@@ -162,9 +162,11 @@ export default
         "groupSizeRequired": "Veuillez sélectionner une taille de groupe pour la formation"
       },
       "headers": {
-        "yourTraining": "1. Terminez la formation",
-        "trainOthers": "2. Partagez la formation",
-        "previousTraining": "Sessions de formation précédentes"
+        "yourTraining": "1. Formation individuelle",
+        "trainOthers": "2. Formation de groupe",
+        "previousTraining": "Sessions de formation précédentes",
+        "yourTrainingSub": "Choisissez cette option si vous terminez la formation par vous-même.",
+        "trainOthersSub": "Choisissez cette formation si vous terminez la formation en groupe."
       },
       "buttons": {
         "startTraining": "Commencez votre formation",

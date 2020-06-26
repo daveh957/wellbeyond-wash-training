@@ -58,6 +58,7 @@ const SelfTraining: React.FC<SelfTrainingProps> = ({ finishedTraining, subject,l
       <IonCardHeader>
         <IonCardTitle>
           <h2>{t('training.headers.yourTraining')}</h2>
+          <h3><em>{t('training.headers.yourTrainingSub')}</em></h3>
         </IonCardTitle>
       </IonCardHeader>
       <IonCardContent>
