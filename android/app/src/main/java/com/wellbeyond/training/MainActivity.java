@@ -1,4 +1,4 @@
-package com.wellbeyond.training;
+package com.wellbeyond.wash;
 
 import android.os.Bundle;
 
