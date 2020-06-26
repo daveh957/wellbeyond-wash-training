@@ -26,7 +26,7 @@ import * as selectors from '../data/selectors';
 
 import {Lesson, LessonProgress, Subject, TrainingSession} from '../models/Training';
 import BackToLessonsLink from "../components/BackToLessons";
-import {updateTrainingLesson, updateTrainingSession} from "../data/user/user.actions";
+import {updateTrainingSession} from "../data/user/user.actions";
 
 interface OwnProps extends RouteComponentProps {
   subject: Subject;
