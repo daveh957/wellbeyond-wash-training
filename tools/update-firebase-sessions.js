@@ -20,18 +20,18 @@ sessionRef
       })
     });
     async.forEachSeries(sessions, function(session, cb) {
-      if (!session || !session.lessons || session.completed) {
+      if (!session || !session.groupSize || session.groupSizeNum) {
         return cb();
       }
-      let sessionCompleted = true, completedTs = 0;
-      Object.values(session.lessons).forEach(value => {
-        sessionCompleted = sessionCompleted && value.completed;
-        completedTs = value.completed ? Math.max(completedTs, value.completed.toDate().getTime()) : 0;
-      });
-      if (!sessionCompleted) {
-        return cb();
+      const sizes = {
+        "1-5": 3,
+        "6-10": 8,
+        "11-20": 15,
+        "21-50": 35,
+        "50-100" : 75,
+        "More than 100": 100,
       }
-      session.completed = new Date(completedTs);
+      session.groupSizeNum = sizes[session.groupSize] || 1;
       return sessionRef
         .doc(session.id)
         .set(session, {merge: true})
@@ -46,6 +46,7 @@ sessionRef
   });
 
 setTimeout(function() {
+  // eslint-disable-next-line no-undef
   process.exit(0)
 }, 600000);
 

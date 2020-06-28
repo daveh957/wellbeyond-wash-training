@@ -5,6 +5,7 @@ import {
   IonCol,
   IonContent,
   IonHeader,
+  IonInput,
   IonItem,
   IonLabel,
   IonList,
@@ -52,7 +53,7 @@ const StartTrainingSession: React.FC<StartTrainingSessionProps> = ({subject, les
   const [formErrors, setFormErrors] = useState<any>({});
   const [formSubmitted, setFormSubmitted] = useState(false);
 
-  const handleChange = (field:string, value:string) => {
+  const handleChange = (field:string, value:string|number) => {
     let errors = {...formErrors};
     let values = {...formValues};
     errors[field] = null;
@@ -78,7 +79,7 @@ const StartTrainingSession: React.FC<StartTrainingSessionProps> = ({subject, les
         started: new Date(),
         archived: false,
         groupType: formValues.groupType,
-        groupSize: formValues.groupSize,
+        groupSizeNum: formValues.groupSize,
         lessons: {}
       };
       session.id = userId + ':' + session.subjectId + ':' + (session.started && session.started.getTime());
@@ -134,18 +135,14 @@ const StartTrainingSession: React.FC<StartTrainingSessionProps> = ({subject, les
 
             <IonItem>
               <IonLabel position="stacked" color="primary">{t('training.labels.groupSize')}</IonLabel>
-              <IonSelect value={formValues.groupSize}
-                         placeholder={t('training.groupSizes.selectOne')}
-                         cancelText={t('training.buttons.cancel')}
-                         okText={t('training.buttons.ok')}
-                         onIonChange={e => {handleChange('groupSize', e.detail.value!);}}>
-                <IonSelectOption value={english.translation.training.groupSizes.xs}>{t('training.groupSizes.xs')}</IonSelectOption>
-                <IonSelectOption value={english.translation.training.groupSizes.sm}>{t('training.groupSizes.sm')}</IonSelectOption>
-                <IonSelectOption value={english.translation.training.groupSizes.md}>{t('training.groupSizes.md')}</IonSelectOption>
-                <IonSelectOption value={english.translation.training.groupSizes.lg}>{t('training.groupSizes.lg')}</IonSelectOption>
-                <IonSelectOption value={english.translation.training.groupSizes.xl}>{t('training.groupSizes.xl')}</IonSelectOption>
-                <IonSelectOption value={english.translation.training.groupSizes.xxl}>{t('training.groupSizes.xxl')}</IonSelectOption>
-              </IonSelect>
+              <IonInput value={formValues.groupSize}
+                        type="number"
+                        inputmode="numeric"
+                        min="1"
+                        max="100000"
+                        step="1"
+                        onIonChange={e => {handleChange('groupSize', e.detail.value!);}}>
+              </IonInput>
             </IonItem>
 
             {formSubmitted && formErrors.groupSize && <IonText color="danger">

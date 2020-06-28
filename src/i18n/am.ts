@@ -159,7 +159,7 @@ export default
       "errors": {
         "locationRequired": "እባክዎን ለስልጠና አንድ ቦታ ያቅርቡ",
         "groupTypeRequired": "እባክዎን ለስልጠና የቡድን አይነት ይምረጡ",
-        "groupSizeRequired": "እባክዎ ለሥልጠናው የቡድን መጠን ይምረጡ"
+        "groupSizeRequired": "እባክዎን ለስልጠናው ከ 0 የሚበልጠውን የቡድን መጠን ያስገቡ"
       },
       "headers": {
         "yourTraining": "1. የግለሰብ ስልጠና",

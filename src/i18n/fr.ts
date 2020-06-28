@@ -159,7 +159,7 @@ export default
       "errors": {
         "locationRequired": "Veuillez fournir un emplacement pour la formation",
         "groupTypeRequired": "Veuillez sélectionner un type de groupe pour la formation",
-        "groupSizeRequired": "Veuillez sélectionner une taille de groupe pour la formation"
+        "groupSizeRequired": "Veuillez saisir une taille de groupe supérieure à 0 pour la formation"
       },
       "headers": {
         "yourTraining": "1. Formation individuelle",

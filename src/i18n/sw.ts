@@ -159,7 +159,7 @@ export default
       "errors": {
         "locationRequired": "Tafadhali toa eneo la mafunzo",
         "groupTypeRequired": "Tafadhali chagua aina ya kikundi kwa mafunzo",
-        "groupSizeRequired": "Tafadhali chagua saizi ya kikundi kwa mafunzo"
+        "groupSizeRequired": "Tafadhali ingiza saizi ya kikundi kubwa kuliko 0 kwa mafunzo"
       },
       "headers": {
         "yourTraining": "1. Mafunzo ya kibinafsi",

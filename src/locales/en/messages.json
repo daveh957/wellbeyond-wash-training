@@ -158,7 +158,7 @@
       "errors": {
         "locationRequired": "Please provide a location for the training",
         "groupTypeRequired": "Please select a group type for the training",
-        "groupSizeRequired": "Please select a group size for the training"
+        "groupSizeRequired": "Please enter a group size greater than 0 for the training"
       },
       "headers": {
         "yourTraining": "1. Individual Training",

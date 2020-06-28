@@ -66,6 +66,7 @@ export interface TrainingSession {
   subjectId: string;
   groupType?: string;
   groupSize?: string;
+  groupSizeNum?: number;
   started?: Date;
   completed?: Date;
   lessons?: LessonProgressHash;
