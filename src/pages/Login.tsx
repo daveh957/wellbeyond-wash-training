@@ -44,7 +44,7 @@ const Login: React.FC<LoginProps> = ({isLoggedIn, isRegistered, acceptedTerms, }
 // Configure FirebaseUI.
   const uiConfig = {
     // Popup signin flow rather than redirect flow.
-    signInFlow: 'redirect',
+    signInFlow: 'popup',
     // Redirect to /signedIn after sign in is successful. Alternatively you can provide a callbacks.signInSuccess function.
     signInSuccessUrl: '/register',
     tosUrl: '/termsOfUse',
