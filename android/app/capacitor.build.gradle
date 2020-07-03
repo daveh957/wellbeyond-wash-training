@@ -10,8 +10,10 @@ android {
 apply from: "../capacitor-cordova-android-plugins/cordova.variables.gradle"
 dependencies {
 
-
+    implementation "com.android.support:customtabs:23.3.0"
 }
+apply from: "../../node_modules/cordova-plugin-browsertab/src/android/BrowserTab.gradle"
+apply from: "../../node_modules/cordova-plugin-buildinfo/src/android/BuildInfo.gradle"
 apply from: "../../node_modules/cordova-plugin-ionic/src/android/cordovapluginionic.gradle"
 
 if (hasProperty('postBuildExtras')) {
