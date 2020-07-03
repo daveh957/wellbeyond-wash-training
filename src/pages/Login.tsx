@@ -1,5 +1,6 @@
 import React from 'react';
 import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth';
+import firebaseui from 'firebaseui';
 import firebase from 'firebase';
 import {
   IonButtons,
@@ -44,7 +45,8 @@ const Login: React.FC<LoginProps> = ({isLoggedIn, isRegistered, acceptedTerms, }
 // Configure FirebaseUI.
   const uiConfig = {
     // Popup signin flow rather than redirect flow.
-    signInFlow: 'popup',
+    signInFlow: 'redirect',
+    credentialHelper: firebaseui.auth.CredentialHelper.NONE,
     // Redirect to /signedIn after sign in is successful. Alternatively you can provide a callbacks.signInSuccess function.
     signInSuccessUrl: '/register',
     tosUrl: '/termsOfUse',
@@ -57,6 +59,11 @@ const Login: React.FC<LoginProps> = ({isLoggedIn, isRegistered, acceptedTerms, }
       },
       {
         provider: firebase.auth.GoogleAuthProvider.PROVIDER_ID,
+        customParameters: {
+          // Forces account selection even when one account
+          // is available.
+          prompt: 'select_account'
+        }
       },
       {
         provider: firebase.auth.PhoneAuthProvider.PROVIDER_ID,
