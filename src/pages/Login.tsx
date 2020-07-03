@@ -1,6 +1,5 @@
 import React from 'react';
 import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth';
-import firebaseui from 'firebaseui';
 import firebase from 'firebase';
 import {
   IonButtons,
@@ -46,7 +45,7 @@ const Login: React.FC<LoginProps> = ({isLoggedIn, isRegistered, acceptedTerms, }
   const uiConfig = {
     // Popup signin flow rather than redirect flow.
     signInFlow: 'redirect',
-    credentialHelper: firebaseui.auth.CredentialHelper.NONE,
+    credentialHelper: 'none',
     // Redirect to /signedIn after sign in is successful. Alternatively you can provide a callbacks.signInSuccess function.
     signInSuccessUrl: '/register',
     tosUrl: '/termsOfUse',
