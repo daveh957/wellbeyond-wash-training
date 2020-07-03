@@ -2,10 +2,6 @@
 <widget version="1.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
   <access origin="*" />
   
-  <feature name="BrowserTab">
-    <param name="ios-package" value="CBTBrowserTab"/>
-  </feature>
-
   <feature name="BuildInfo">
     <param name="ios-package" value="CDVBuildInfo"/>
   </feature>
