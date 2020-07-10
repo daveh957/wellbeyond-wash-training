@@ -1,8 +1,7 @@
-import React, {useEffect, useRef, Fragment} from 'react';
+import React, {useRef} from 'react';
 import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth';
-import firebase from 'firebase/app';
+import firebase, {UserInfo} from 'firebase/app';
 import {cfaSignIn, mapUserToUserInfo} from 'capacitor-firebase-auth';
-import {UserInfo} from 'firebase/app';
 import {
   IonButtons,
   IonCard,
