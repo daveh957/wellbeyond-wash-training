@@ -14,7 +14,8 @@
             android:configChanges="orientation|keyboardHidden|keyboard|screenSize|locale"
             android:name="com.wellbeyond.wash.MainActivity"
             android:label="@string/title_activity_main"
-            android:theme="@style/AppTheme.NoActionBarLaunch"
+            android:theme="@style/AppTheme.NoActionBarLaunch"key
+            android:usesCleartextTraffic="true"
             android:launchMode="singleInstance">
 
             <intent-filter>
