@@ -49,7 +49,8 @@ const UpdateProfileForm: React.FC<MyProps> = ({profile, organizations, onSave, s
       let list = organizations.sort((a: Organization, b: Organization) => {
         return a.name < b.name ? -1 : +1;
       });
-      list.push({id: '_other', name: 'Other', communities: []});
+      // Don't show Other as a choice for Organization
+      // list.push({id: '_other', name: 'Other', communities: []});
       setOrganizationList(list);
     }
   }, [organizations]);

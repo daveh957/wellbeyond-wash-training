@@ -4,5 +4,15 @@
   "bundledWebRuntime": false,
   "npmClient": "npm",
   "webDir": "build",
-  "cordova": {}
+  "cordova": {},
+  "plugins": {
+    "CapacitorFirebaseAuth": {
+      "providers": ["google.com"],
+      "languageCode": "en",
+      "nativeAuth": false,
+      "permissions": {
+        "google": ["profile"]
+      }
+    }
+  }
 }
