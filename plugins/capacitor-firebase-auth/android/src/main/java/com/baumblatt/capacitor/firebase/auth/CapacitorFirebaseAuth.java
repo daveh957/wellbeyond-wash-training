@@ -57,7 +57,7 @@ public class CapacitorFirebaseAuth extends Plugin {
 
         String[] providers = {"google.com",};
         this.nativeAuth = true;
-        String languageCode = "en"
+        String languageCode = "en";
 
         // FirebaseApp is not initialized in this process - Error #1
         Log.d(PLUGIN_TAG, "Verifying if the default FirebaseApp was initialized.");
