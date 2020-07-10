@@ -1,0 +1,86 @@
+{
+  "_from": "capacitor-firebase-auth",
+  "_id": "capacitor-firebase-auth@2.2.1",
+  "_inBundle": false,
+  "_integrity": "sha512-RYRLh8uwYQXDgKRMNvVxabY2LhjmowLPUxqQbhoVGWBcOUlgpzfJOutyA4U4EixhRcwtdS8O+YZzH/muxhAhyQ==",
+  "_location": "/capacitor-firebase-auth",
+  "_phantomChildren": {
+    "tslib": "1.13.0"
+  },
+  "_requested": {
+    "type": "tag",
+    "registry": true,
+    "raw": "capacitor-firebase-auth",
+    "name": "capacitor-firebase-auth",
+    "escapedName": "capacitor-firebase-auth",
+    "rawSpec": "",
+    "saveSpec": null,
+    "fetchSpec": "latest"
+  },
+  "_requiredBy": [
+    "#USER",
+    "/"
+  ],
+  "_resolved": "https://registry.npmjs.org/capacitor-firebase-auth/-/capacitor-firebase-auth-2.2.1.tgz",
+  "_shasum": "6155e3c1611076e0380ccc40485196b28e681276",
+  "_spec": "capacitor-firebase-auth",
+  "_where": "C:\\Users\\daveh\\Workspaces\\wellbeyond\\wellbeyond-wash-training",
+  "author": {
+    "name": "Bernardo Baumblatt"
+  },
+  "bugs": {
+    "url": "https://github.com/baumblatt/capacitor-firebase-auth.git/issues"
+  },
+  "bundleDependencies": false,
+  "capacitor": {
+    "ios": {
+      "src": "ios"
+    },
+    "android": {
+      "src": "android"
+    }
+  },
+  "dependencies": {
+    "@capacitor/core": "latest"
+  },
+  "deprecated": false,
+  "description": "Capacitor plugin for Firebase Authentication",
+  "devDependencies": {
+    "@capacitor/android": "latest",
+    "@capacitor/ios": "latest",
+    "rimraf": "^3.0.0",
+    "typescript": "^3.9.5"
+  },
+  "files": [
+    "alternative/",
+    "dist/",
+    "ios/",
+    "android/",
+    "CapacitorFirebaseAuth.podspec"
+  ],
+  "homepage": "https://github.com/baumblatt/capacitor-firebase-auth#readme",
+  "keywords": [
+    "capacitor",
+    "plugin",
+    "native"
+  ],
+  "license": "MIT",
+  "main": "dist/esm/index.js",
+  "name": "capacitor-firebase-auth",
+  "peerDependencies": {
+    "firebase": "^7.14.2",
+    "rxjs": "~6.5.5"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/baumblatt/capacitor-firebase-auth.git"
+  },
+  "scripts": {
+    "build": "npm run clean && tsc",
+    "clean": "rimraf ./dist",
+    "prepublishOnly": "npm run build",
+    "watch": "tsc --watch"
+  },
+  "types": "dist/esm/index.d.ts",
+  "version": "2.2.1"
+}
