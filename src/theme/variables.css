@@ -416,3 +416,6 @@
 
   --ion-tab-bar-background: #1f1f1f;
 }
+html.plt-ios.plt-hybrid ion-header.ios {
+  margin-top: 20px;
+}
