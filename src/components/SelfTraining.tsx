@@ -1,5 +1,5 @@
-import React, {useEffect, useState} from 'react';
-import {Lesson, Subject} from '../models/Training';
+import React, {useContext, useEffect, useState} from 'react';
+import {Lesson, Subject, TrainingSession} from '../models/Training';
 import {
   IonButton,
   IonCard,
@@ -9,49 +9,101 @@ import {
   IonCol,
   IonItem,
   IonList,
-  IonRow
+  IonRow, NavContext
 } from '@ionic/react';
-import {UserLessons} from "../data/user/user.state";
 import {useTranslation} from "react-i18next";
 import i18n from "../i18n";
+import {Organization} from "../models/User";
+import {startTrainingSession} from "../data/user/user.actions";
+import {connect} from "../data/connect";
+import * as selectors from "../data/selectors";
+import {RouteComponentProps} from "react-router";
 
-
-interface SelfTrainingProps {
-  finishedTraining: boolean;
+interface OwnProps {
   subject: Subject;
   lessons: Lesson[];
-  userLessons?: UserLessons;
+  session?: TrainingSession;
 }
 
-const SelfTraining: React.FC<SelfTrainingProps> = ({ finishedTraining, subject,lessons, userLessons}) => {
+interface StateProps {
+  userId?: string;
+  organization?: Organization;
+  community?: string;
+}
+
+interface DispatchProps {
+  startTrainingSession: typeof startTrainingSession;
+}
+
+interface SelfTrainingProps extends OwnProps, StateProps, DispatchProps { }
+
+const SelfTraining: React.FC<SelfTrainingProps> = ({ subject,lessons, session, userId, organization, community, startTrainingSession}) => {
 
   const { t } = useTranslation(['translation'], {i18n} );
-  const [resumeLink, setResumeLink] = useState<string>();
-  const [lessonsStarted, setLessonsStarted] = useState<number>();
-  const [lessonsCompleted, setLessonsCompleted] = useState<number>();
+  const {navigate} = useContext(NavContext);
 
-  useEffect(() => {
-    if (subject && lessons && userLessons) {
+  const [lessonsCompleted, setLessonsCompleted] = useState<number>(0);
+  const [startedTraining, setStartedTraining] = useState<boolean>();
+  const [finishedTraining, setFinishedTraining] = useState<boolean>();
+
+  const resumeTraining = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (session) {
       if (finishedTraining) {
-        setResumeLink(`/tabs/subjects/${subject.id}/progress`);
-        setLessonsCompleted(lessons.length);
+        navigate('/tabs/subjects/' + subject.id + '/progress?tsId=' + session.id);
       }
       else {
-        const nextLesson = lessons.find((l) => {
-          return (userLessons[l.id] && !userLessons[l.id].completed);
-        });
-        const lessonsStarted = lessons.reduce((count, l) => {
-          return count + ((userLessons[l.id] && userLessons[l.id].started) ? 1 : 0);
-        }, 0);
-        const lessonsCompleted = lessons.reduce((count, l) => {
-          return count + ((userLessons[l.id] && userLessons[l.id].completed) ? 1 : 0);
-        }, 0);
-        setResumeLink(nextLesson ? ('/tabs/subjects/' + subject.id + '/lessons/' + nextLesson.id + '/intro') : ('/tabs/subjects/' + subject.id + '/progress'));
-        setLessonsStarted(lessonsStarted);
-        setLessonsCompleted(lessonsCompleted);
+        const nextLesson = lessons.find((l) => (session.lessons && session.lessons[l.id] && !session.lessons[l.id].completed));
+        navigate((nextLesson ? ('/tabs/subjects/' + subject.id + '/lessons/' + nextLesson.id + '/intro') : ('/tabs/subjects/' + subject.id + '/progress')) + '?tsId=' + session.id);
       }
     }
-  }, [finishedTraining, subject, lessons, userLessons]);
+    else {
+      const session:TrainingSession = {
+        subjectId: subject.id,
+        userId: userId || '',
+        organizationId: organization && organization.id,
+        organization: organization && organization.name,
+        community: community,
+        started: new Date(),
+        archived: false,
+        name: '',
+        groupType: 'self',
+        groupSizeNum: 1,
+        lessons: {}
+      };
+      session.id = userId + ':' + session.subjectId + ':' + (session.started && session.started.getTime());
+      lessons.forEach((l) => {
+        if (session.lessons && l.id) {
+          session.lessons[l.id] = {
+            id: l.id,
+            lessonId: l.id,
+            answers: [],
+            pageViews: []
+          };
+        }
+      });
+      startTrainingSession(session);
+      navigate('/tabs/subjects/' + subject.id + '/progress?tsId=' + session.id);
+    }
+  }
+
+  useEffect(() => {
+    if (subject && lessons) {
+      if (session) {
+        setStartedTraining(true);
+        const lessonsCompleted = lessons.reduce((count, l) => {
+          return count + ((session.lessons && session.lessons[l.id] && session.lessons[l.id].completed) ? 1 : 0);
+        }, 0);
+        setLessonsCompleted(lessonsCompleted);
+        if (lessonsCompleted === lessons.length) {
+          setFinishedTraining(true);
+        }
+        else {
+          setFinishedTraining(false);
+        }
+      }
+    }
+  }, [subject, lessons, session]);
 
   return (
     <IonCard>
@@ -75,8 +127,8 @@ const SelfTraining: React.FC<SelfTrainingProps> = ({ finishedTraining, subject,l
         </IonList>
         <IonRow>
           <IonCol>
-            <IonButton expand="block" fill="solid" color="primary" routerLink={resumeLink}>
-              {t('training.buttons.'+ (finishedTraining ? 'reviewTraining' : (lessonsStarted ? 'resumeTraining' : 'startTraining')))}
+            <IonButton expand="block" fill="solid" color="primary"  onClick={resumeTraining}>
+              {t('training.buttons.'+ (finishedTraining ? 'reviewTraining' : (startedTraining ? 'resumeTraining' : 'startTraining')))}
             </IonButton>
           </IonCol>
         </IonRow>
@@ -85,4 +137,14 @@ const SelfTraining: React.FC<SelfTrainingProps> = ({ finishedTraining, subject,l
   );
 };
 
-export default SelfTraining;
+export default connect<OwnProps, StateProps, DispatchProps>({
+  mapDispatchToProps: {
+    startTrainingSession
+  },
+  mapStateToProps: (state) => ({
+    userId: selectors.getUserId(state),
+    organization: selectors.getUserOrganization(state),
+    community: selectors.getUserCommunity(state),
+  }),
+  component: SelfTraining
+});

@@ -1,0 +1,71 @@
+{
+  "_from": "cordova-plugin-intercom",
+  "_id": "cordova-plugin-intercom@9.1.0",
+  "_inBundle": false,
+  "_integrity": "sha512-LvAWQ+vkFqKcMiHeN7F4T1sryp7sZNUD5oDwhgfkH1Jm9nIVh1KxWu/LemmCKBORLdW7uxRlEOC4+Pq1DJa5uA==",
+  "_location": "/cordova-plugin-intercom",
+  "_phantomChildren": {},
+  "_requested": {
+    "type": "tag",
+    "registry": true,
+    "raw": "cordova-plugin-intercom",
+    "name": "cordova-plugin-intercom",
+    "escapedName": "cordova-plugin-intercom",
+    "rawSpec": "",
+    "saveSpec": null,
+    "fetchSpec": "latest"
+  },
+  "_requiredBy": [
+    "#USER",
+    "/"
+  ],
+  "_resolved": "https://registry.npmjs.org/cordova-plugin-intercom/-/cordova-plugin-intercom-9.1.0.tgz",
+  "_shasum": "f255b2039f62f75f47500d042dd324ab6fc943dd",
+  "_spec": "cordova-plugin-intercom",
+  "_where": "C:\\Users\\daveh\\Workspaces\\wellbeyond\\wellbeyond-wash-training",
+  "author": {
+    "name": "Intercom"
+  },
+  "bugs": {
+    "url": "https://github.com/intercom/intercom-cordova/issues"
+  },
+  "bundleDependencies": false,
+  "cordova": {
+    "id": "cordova-plugin-intercom",
+    "platforms": [
+      "ios",
+      "android"
+    ]
+  },
+  "deprecated": false,
+  "description": "Official Cordova/PhoneGap plugin for Intercom",
+  "engines": [
+    {
+      "name": "cordova",
+      "version": ">=9.0.0"
+    },
+    {
+      "name": "cordova-android",
+      "version": ">=9.0.0"
+    },
+    {
+      "name": "cordova-ios",
+      "version": ">=5.0.0"
+    }
+  ],
+  "homepage": "https://github.com/intercom/intercom-cordova#readme",
+  "keywords": [
+    "intercom",
+    "intercom-cordova",
+    "ecosystem:cordova",
+    "cordova-ios",
+    "cordova-android"
+  ],
+  "license": "MIT License",
+  "name": "cordova-plugin-intercom",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/intercom/intercom-cordova.git"
+  },
+  "version": "9.1.0"
+}

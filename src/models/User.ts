@@ -32,6 +32,7 @@ export interface UserProfile {
   community?: string;
   acceptedTerms?: boolean;
   canTeach?: boolean;
+  notificationsOn?: boolean;
 }
 
 export interface Admin {
@@ -39,10 +40,15 @@ export interface Admin {
   isAdmin?: boolean;
 }
 
+export interface Community {
+  name: string;
+}
+
 export interface Organization {
   id: string;
   name: string;
-  communities: string[];
+  communities: Community[];
+
 }
 
 

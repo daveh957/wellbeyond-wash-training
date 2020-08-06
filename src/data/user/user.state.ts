@@ -16,6 +16,7 @@ export interface UserState {
   acceptedTerms?: boolean;
   darkMode: boolean;
   loading: boolean;
+  notificationsOn: boolean;
   intercomUser?: IntercomUser;
   profile?: UserProfile;
   organizations?: Organization[];

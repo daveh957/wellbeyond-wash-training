@@ -10,6 +10,8 @@ export function userReducer(state: UserState, action: UserActions): UserState {
       return { ...state, ...action.data };
     case 'set-dark-mode':
       return { ...state, darkMode: action.darkMode };
+    case 'set-notifications-on':
+      return { ...state, notificationsOn: action.notificationsOn };
     case 'set-accepted-terms':
       return { ...state, acceptedTerms: action.acceptedTerms };
     case 'set-is-loggedin':

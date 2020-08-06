@@ -1,8 +1,9 @@
+/* eslint-disable no-unused-vars,no-undef */
 const functions = require('firebase-functions');
 const crypto = require('crypto');
 const Intercom = require('intercom-client');
-const INTERCOM_ACCESS_TOKEN = 'dG9rOjBkZjUwMmMyX2I3MjdfNGVmNV85YmYzXzkxYzkzYTM5M2UyYToxOjA';
-const INTERCOM_SECRET_KEY = 'oSQZgcVNTsUwhyEO72AmuwVE8KUu4dy9T0pYz1Sy';
+const INTERCOM_ACCESS_TOKEN = functions.config().intercom.access_token;
+const INTERCOM_SECRET_KEY = functions.config().intercom.secret_key;
 
 /**
  *
@@ -17,13 +18,16 @@ exports.getUserHash = functions.https.onCall((data, context) => {
   return {email: context.auth.token.email, hash: hash};
 });
 exports.getUserIdHash = functions.https.onCall((data, context) => {
+  const platform = (data && data.platform) || 'web';
   const identifier = context.auth.token.uid;
+  const secret = functions.config().intercom[platform+'_verification_secret'] || INTERCOM_SECRET_KEY;
   const hash = crypto
-    .createHmac('sha256', INTERCOM_SECRET_KEY)
+    .createHmac('sha256', secret)
     .update(identifier)
     .digest('hex');
   return {hash: hash};
 });
+/*
 exports.updateIntercom = functions.database.ref('/users/{userId}').onWrite((change, context) => {
   if (!change.after.exists()) {
     return null; // Don't propagate deletes
@@ -38,5 +42,5 @@ exports.updateIntercom = functions.database.ref('/users/{userId}').onWrite((chan
       }
     }
   }
-
 });
+ */

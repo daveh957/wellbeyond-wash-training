@@ -1,23 +1,16 @@
 import i18n from "i18next";
+import Backend from 'i18next-http-backend';
 import {initReactI18next} from "react-i18next";
-import english from './en';
-import swahili from './sw';
-import hindi from './hi';
-import amharic from './am';
+import {isPlatform} from '@ionic/react';
 
-const resources = {
-  en: english,
-  sw: swahili,
-  hi: hindi,
-  am: amharic
-};
+const loadPath = (isPlatform('hybrid') ? 'https://app.wellbeyondwater.com' : '' ) + '/locales/{{lng}}/{{ns}}.json'
 
 i18n
+  .use(Backend)
   .use(initReactI18next) // passes i18n down to react-i18next
   .init({
     debug: true,
-    resources: resources,
-    lng: 'en',
+    defaultNS: 'translation',
     fallbackLng: 'en',
     interpolation: {
       escapeValue: false, // react already safes from xss
@@ -54,6 +47,10 @@ i18n
         return value;
       }
     }
-  });
+  }).then((t) => {
+    console.log('initialized i18n ok')
+    i18n.loadNamespaces('translation')
+});
+
 
 export default i18n;

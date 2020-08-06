@@ -12,12 +12,12 @@ import {
   IonMenuToggle,
   IonToggle
 } from '@ionic/react';
-import {fingerPrint, globe, logIn, logOut, moonOutline, person,} from 'ionicons/icons';
+import {fingerPrint, globe, logIn, logOut, moonOutline, person, notificationsOutline} from 'ionicons/icons';
 import {useTranslation} from "react-i18next";
 import i18n from '../i18n';
 
 import {connect} from '../data/connect';
-import {setDarkMode} from '../data/user/user.actions';
+import {enableNotifications, setDarkMode} from '../data/user/user.actions';
 
 import './Menu.css'
 import {Subject} from "../models/Training";
@@ -47,6 +47,7 @@ interface Pages {
 }
 interface StateProps {
   darkMode: boolean;
+  notificationsOn: boolean;
   isLoggedIn?: boolean;
   menuEnabled: boolean;
   subjects: Subject[]
@@ -54,11 +55,12 @@ interface StateProps {
 
 interface DispatchProps {
   setDarkMode: typeof setDarkMode
+  enableNotifications: typeof enableNotifications
 }
 
 interface MenuProps extends RouteComponentProps, StateProps, DispatchProps { }
 
-const Menu: React.FC<MenuProps> = ({ darkMode, isLoggedIn, setDarkMode, menuEnabled, subjects }) => {
+const Menu: React.FC<MenuProps> = ({ darkMode, notificationsOn, isLoggedIn, menuEnabled, subjects, setDarkMode, enableNotifications }) => {
   const location = useLocation();
   const { t } = useTranslation(['translation'], {i18n} );
 
@@ -102,6 +104,11 @@ const Menu: React.FC<MenuProps> = ({ darkMode, isLoggedIn, setDarkMode, menuEnab
             <IonLabel>{t('menu.darkMode')}</IonLabel>
             <IonToggle checked={darkMode} onClick={() => setDarkMode(!darkMode)} />
           </IonItem>
+          <IonItem>
+            <IonIcon slot="start" icon={notificationsOutline}></IonIcon>
+            <IonLabel>{t('menu.notificationsOn')}</IonLabel>
+            <IonToggle checked={notificationsOn} onClick={() => enableNotifications(!notificationsOn)} />
+          </IonItem>
         </IonList>
 
         <IonList lines="none">
@@ -119,12 +126,14 @@ const Menu: React.FC<MenuProps> = ({ darkMode, isLoggedIn, setDarkMode, menuEnab
 export default connect<{}, StateProps, {}>({
   mapStateToProps: (state) => ({
     darkMode: state.user.darkMode,
+    notificationsOn: state.user.notificationsOn,
     isLoggedIn: state.user.isLoggedIn,
     menuEnabled: state.data.menuEnabled,
     subjects: selectors.getSubjectsForOrganization(state)
   }),
   mapDispatchToProps: ({
     setDarkMode,
+    enableNotifications,
   }),
   component: withRouter(Menu)
 })

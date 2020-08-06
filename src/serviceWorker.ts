@@ -9,6 +9,14 @@
 
 // To learn more about the benefits of this model and instructions on how to
 // opt-in, read https://bit.ly/CRA-PWA
+/* Firebase */
+import * as firebase from 'firebase/app';
+import 'firebase/messaging';
+import {firebaseConfig} from './FIREBASE_CONFIG';
+
+if (!firebase.apps.length) {
+  firebase.initializeApp(firebaseConfig);
+}
 
 const isLocalhost = Boolean(
   window.location.hostname === 'localhost' ||
@@ -26,7 +34,8 @@ type Config = {
 };
 
 export function register(config?: Config) {
-  if (process.env.NODE_ENV === 'production' && 'serviceWorker' in navigator) {
+  if ('serviceWorker' in navigator) {
+
     // The URL constructor is available in all browsers that support SW.
     const publicUrl = new URL(
       process.env.PUBLIC_URL,
@@ -40,7 +49,10 @@ export function register(config?: Config) {
     }
 
     window.addEventListener('load', () => {
-      const swUrl = `${process.env.PUBLIC_URL}/sw.js`;
+      const fbConf = encodeURIComponent(JSON.stringify(firebaseConfig));
+      const swUrl = process.env.NODE_ENV === 'production' ?
+        `${process.env.PUBLIC_URL}/sw.js?env=${process.env.NODE_ENV}&fbConf=${fbConf}` :
+        `${process.env.PUBLIC_URL}/firebase-messaging-sw.js?env=${process.env.NODE_ENV}&fbConf=${fbConf}`;
 
       if (isLocalhost) {
         // This is running on localhost. Let's check if a service worker still exists or not.
@@ -66,6 +78,7 @@ function registerValidSW(swUrl: string, config?: Config) {
   navigator.serviceWorker
     .register(swUrl)
     .then(registration => {
+      firebase.messaging().useServiceWorker(registration);
       registration.onupdatefound = () => {
         const installingWorker = registration.installing;
         if (installingWorker == null) {

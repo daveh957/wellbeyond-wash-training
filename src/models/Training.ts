@@ -29,6 +29,10 @@ export interface Lesson {
   questions: Question[]; // Embedded list
 }
 
+export interface GroupType {
+  name: string;
+}
+
 export interface Subject {
   id: string;
   organizationId?: string;
@@ -37,6 +41,7 @@ export interface Subject {
   description: string;
   photo: string;
   lessons: Array<{lessonId: string}>; // Ordered list of lesson ids
+  groupTypes?: GroupType[];
 }
 
 export interface PageView {
@@ -61,8 +66,12 @@ export interface LessonProgressHash {
 
 export interface TrainingSession {
   id?: string;
+  name?: string;
   archived: boolean;
   userId: string;
+  organizationId?: string;
+  organization?: string;
+  community?: string;
   subjectId: string;
   groupType?: string;
   groupSize?: string;

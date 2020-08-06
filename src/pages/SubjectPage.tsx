@@ -18,7 +18,7 @@ import {
   IonToolbar
 } from '@ionic/react';
 import {Lesson, Subject, TrainingSession} from '../models/Training';
-import {TrainingSessions, UserLessons} from '../data/user/user.state';
+import {TrainingSessions} from '../data/user/user.state';
 import {connect} from '../data/connect';
 import * as selectors from '../data/selectors';
 import './SubjectPage.scss';
@@ -27,6 +27,7 @@ import {useTranslation} from "react-i18next";
 import i18n from '../i18n';
 import SelfTraining from "../components/SelfTraining";
 import TrainingSessionItem from "../components/TrainingSessionItem";
+import {Organization} from "../models/User";
 
 interface OwnProps extends RouteComponentProps {
   subject: Subject;
@@ -34,46 +35,46 @@ interface OwnProps extends RouteComponentProps {
 }
 
 interface StateProps {
-  userLessons?: UserLessons;
   trainingSessions?: TrainingSessions;
+  userId?: string;
+  organization?: Organization;
+  community?: string;
 }
 
 interface DispatchProps { }
 
 interface SubjectProps extends OwnProps, StateProps, DispatchProps { }
 
-const SubjectPage: React.FC<SubjectProps> = ({ subject, lessons, userLessons, trainingSessions}) => {
+const SubjectPage: React.FC<SubjectProps> = ({ subject, lessons, trainingSessions, userId, organization, community}) => {
 
   const { t } = useTranslation(['translation'], {i18n} );
 
-  const [finishedTraining, setFinishedTraining] = useState<boolean>(false);
   const [canTeach, setCanTeach] = useState<boolean>(false);
   const [completedSessions, setCompletedSessions] = useState<any>();
   const [activeSessions, setActiveSessions] = useState<any>();
+  const [selfTrainingSession, setSelfTrainingSession] = useState<any>();
 
   useEffect(() => {
-    if (subject && lessons && userLessons) {
-      const finishedTraining = lessons.every((l) => {
-        return !!(userLessons[l.id] && userLessons[l.id].completed);
-      });
-      setFinishedTraining(finishedTraining);
+    if (subject && lessons) {
       // For now, let anyone teach the subject
       setCanTeach(true);
     }
 
-  }, [subject, lessons, userLessons]);
+  }, [subject, lessons]);
 
   useEffect(() => {
     if (trainingSessions) {
       const values = Object.values(trainingSessions);
       if (values.length) {
         // @ts-ignore
-        const activeSessions = values.filter((s) => !s.completed);
-        const completedSessions = values.filter((s) => !!s.completed);
+        const selfTrainingSession = values.find((s) => s.groupType === 'self');
+        const activeSessions = values.filter((s) => !s.completed && s.groupType !== 'self');
+        const completedSessions = values.filter((s) => !!s.completed && s.groupType !== 'self');
         // @ts-ignore
         setActiveSessions(activeSessions.length ? activeSessions.sort((a,b) => (a && b && a.started < b.started) ? 1 : -1) : undefined);
         // @ts-ignore
         setCompletedSessions(completedSessions.length ? completedSessions.sort((a,b) => (a && b && a.started < b.started) ? 1 : -1) : undefined);
+        setSelfTrainingSession(selfTrainingSession);
       }
       else {
         setActiveSessions(undefined);
@@ -97,7 +98,7 @@ const SubjectPage: React.FC<SubjectProps> = ({ subject, lessons, userLessons, tr
 
       { subject &&
         <IonContent fullscreen={true}>
-          <SelfTraining finishedTraining={finishedTraining} subject={subject} lessons={lessons} userLessons={userLessons} />
+          <SelfTraining session={selfTrainingSession} subject={subject} lessons={lessons} />
           {canTeach &&
             <IonCard>
               <IonCardHeader>
@@ -146,8 +147,10 @@ export default connect<OwnProps, StateProps, DispatchProps>({
   mapStateToProps: (state, ownProps) => ({
     subject: selectors.getSubject(state, ownProps),
     lessons: selectors.getSubjectLessons(state, ownProps),
-    userLessons: selectors.getUserLessons(state),
     trainingSessions: selectors.getTrainingSessions(state),
+    userId: selectors.getUserId(state),
+    organization: selectors.getUserOrganization(state),
+    community: selectors.getUserCommunity(state),
   }),
   component: SubjectPage
 });

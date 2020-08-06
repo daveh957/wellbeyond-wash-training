@@ -1,5 +1,7 @@
 {
   "projects": {
-    "default": "wellbeyond-wash-training"
+    "default": "wellbeyond-wash-training",
+    "dev": "wellbeyond-development",
+    "prod": "wellbeyond-wash-training"
   }
 }

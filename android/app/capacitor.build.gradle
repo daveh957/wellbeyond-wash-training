@@ -9,10 +9,12 @@ android {
 
 apply from: "../capacitor-cordova-android-plugins/cordova.variables.gradle"
 dependencies {
+    implementation project(':capacitor-community-fcm')
     implementation project(':capacitor-firebase-auth')
 
 }
-apply from: "../../node_modules/cordova-plugin-buildinfo/src/android/BuildInfo.gradle"
+apply from: "../../node_modules/cordova-plugin-intercom/src/android/intercom.gradle"
+apply from: "../../node_modules/cordova-plugin-intercom/src/android/build-extras-intercom.gradle"
 apply from: "../../node_modules/cordova-plugin-ionic/src/android/cordovapluginionic.gradle"
 
 if (hasProperty('postBuildExtras')) {
