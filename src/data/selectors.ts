@@ -16,9 +16,6 @@ export const getIntercomUser  = (state: AppState) => {
 export const getTrainingSessions = (state: AppState) => {
   return state.user.sessions;
 }
-export const getUserLessons = (state: AppState) => {
-  return state.user.lessons;
-}
 export const getSubjects = (state: AppState) => {
   return state.data.subjects;
 }
@@ -37,6 +34,9 @@ export const getUserProfile = (state: AppState) => {
 export const getUserOrganizationId = (state: AppState) => {
   return state.user.profile ? state.user.profile.organizationId : undefined;
 }
+export const getUserCommunity = (state: AppState) => {
+  return state.user.profile ? state.user.profile.community : undefined;
+}
 const getSubjectIdParam = (_state: AppState, props: any) => {
   return props.match.params['subjectId'];
 }
@@ -53,6 +53,16 @@ const getTrainingSessionIdParam  = (_state: AppState, props: any) => {
   const values = queryString.parse(props.location.search);
   return values['tsId'];
 }
+export const getUserOrganization = createSelector(
+  getOrganizations, getUserOrganizationId,
+  (organizations, organizationId) => {
+    if (organizations) {
+      if (organizationId) {
+        return organizations.find((o) => o.id === organizationId)
+      }
+    }
+  }
+);
 export const getSubjectsForOrganization = createSelector(
   getSubjects, getUserId, getUserOrganizationId,
   (subjects, userId, organizationId) => {
@@ -123,13 +133,10 @@ export const getQuestionIdx = createSelector(
 );
 
 export const getLessonProgress = createSelector(
-  getTrainingSession, getUserLessons, getLessonIdParam, getUserId,
-  (activeSession, userLessons, id, userId) => {
+  getTrainingSession, getLessonIdParam, getUserId,
+  (activeSession, id, userId) => {
     if (activeSession && id) {
       return (activeSession && activeSession.lessons &&  activeSession.lessons[id]) || {id: id, lessonId: id, answers: []}
-    }
-    if (userLessons && id && userId) {
-      return userLessons[id] || {id:userId + ':' + id, lessonId: id, answers: []}
     }
   }
 );

@@ -1,6 +1,6 @@
 import 'firebase/auth';
 import 'firebase/firestore';
-import {TrainingSessions, UserLessons} from "./user.state";
+import {TrainingSessions} from "./user.state";
 import {LessonProgress, TrainingSession} from "../../models/Training";
 import {UserProfile} from "../../models/User";
 import * as firebase from "firebase";
@@ -73,29 +73,6 @@ export const listenForUserProfile = async (callback:any) : Promise<any> => {
       else {
         callback();
       }
-    });
-};
-
-export const listenForUserLessons = async (callback:any) : Promise<any> => {
-  const user = firebase.auth().currentUser;
-  if (!user || !user.uid) {
-    return Promise.resolve();
-  }
-
-  const lessons:UserLessons = {};
-  const query:firebase.firestore.Query<firebase.firestore.DocumentData> = firebase.firestore()
-    .collection('users')
-    .doc(user.uid)
-    .collection('lessons');
-  return unsubLessons = query
-    .onSnapshot(querySnapshot => {
-      querySnapshot.forEach(function(doc) {
-        if (doc.exists) {
-          const data = doc.data() as LessonProgress;
-          lessons[data.lessonId] = data;
-        }
-      });
-      callback(lessons);
     });
 };
 
@@ -209,34 +186,6 @@ export const checkIsAdmin = async () => {
     });
 };
 
-export const getUserLessons = async () => {
-  const lessons:UserLessons = {};
-  let user = firebase.auth().currentUser;
-  if (!user || !user.uid) {
-    return null;
-  }
-
-  return firebase
-    .firestore()
-    .collection("users")
-    .doc(user.uid)
-    .collection('lessons')
-    .get()
-    .then(querySnapshot => {
-      querySnapshot.forEach(function(doc) {
-        if (doc.exists) {
-          const data = doc.data() as LessonProgress;
-          lessons[data.lessonId] = data;
-        }
-      });
-      return lessons;
-    })
-    .catch(error => {
-      console.log("Error getting document:", error);
-      return lessons;
-    });
-};
-
 export const updateEmail = async (email: string) => {
   let user = firebase.auth().currentUser;
   if (!user || !user.uid) {
@@ -323,30 +272,6 @@ export const updatePassword = async (password: string) => {
   user.updatePassword(password)
     .then(() => {
       return user;
-    });
-};
-
-export const createOrUpdateLessonProgress = async (lesson: LessonProgress) => {
-  console.log(lesson);
-  let user = firebase.auth().currentUser;
-  if (!user || !user.uid) {
-    return null;
-  }
-  if (!lesson.id) {
-    lesson.id = (user && user.uid) + ':' + lesson.lessonId;
-  }
-  return firebase
-    .firestore()
-    .collection('users')
-    .doc(user.uid)
-    .collection('lessons')
-    .doc(lesson.id)
-    .set(lesson, {merge: true})
-    .then(() => {
-      return lesson;
-    })
-    .catch(error => {
-      console.log("Error writing document:", error);
     });
 };
 

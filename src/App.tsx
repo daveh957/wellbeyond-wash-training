@@ -1,6 +1,6 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, Suspense} from 'react';
 import {Redirect, Route} from 'react-router-dom';
-import {IonApp, IonLoading, IonRouterOutlet, IonSplitPane} from '@ionic/react';
+import {IonApp, IonLoading, IonRouterOutlet, IonSplitPane, isPlatform} from '@ionic/react';
 import {IonReactRouter} from '@ionic/react-router';
 import Intercom from 'react-intercom';
 
@@ -31,7 +31,7 @@ import * as selectors from './data/selectors';
 import MainTabs from './pages/MainTabs';
 import {connect} from './data/connect';
 import {AppContextProvider} from './data/AppContext';
-import {loadOrganizations, logoutUser, watchAuthState} from './data/user/user.actions';
+import {loadOrganizations, logoutUser, watchAuthState, setupMessaging} from './data/user/user.actions';
 import {loadTrainingData} from './data/training/training.actions';
 import AcceptTerms from './pages/AcceptTerms';
 import Account from './pages/Account';
@@ -44,9 +44,15 @@ import Privacy from "./pages/Privacy";
 
 const App: React.FC = () => {
   return (
-    <AppContextProvider>
-      <IonicAppConnected />
-    </AppContextProvider>
+    <Suspense fallback={
+      <IonLoading
+        isOpen={true}
+      />
+    }>
+      <AppContextProvider>
+        <IonicAppConnected />
+      </AppContextProvider>
+    </Suspense>
   );
 };
 
@@ -61,30 +67,31 @@ interface DispatchProps {
   loadOrganizations: typeof loadOrganizations;
   watchAuthState: typeof watchAuthState;
   logoutUser: typeof logoutUser;
+  setupMessaging: typeof setupMessaging;
 }
 
 interface IonicAppProps extends StateProps, DispatchProps { }
 
 if (!firebase.apps.length) {
   firebase.initializeApp(firebaseConfig);
-  firebase.firestore().enablePersistence()
-    .then(function() {
-      console.log('Offline persistence enabled')
-    })
-    .catch(function(err) {
-      if (err.code === 'failed-precondition') {
-        // Multiple tabs open, persistence can only be enabled
-        // in one tab at a a time.
-        // ...
-      } else if (err.code === 'unimplemented') {
-        // The current browser does not support all of the
-        // features required to enable persistence
-        // ...
-      }
-    });
 }
+firebase.firestore().enablePersistence()
+  .then(function() {
+    console.log('Offline persistence enabled')
+  })
+  .catch(function(err) {
+    if (err.code === 'failed-precondition') {
+      // Multiple tabs open, persistence can only be enabled
+      // in one tab at a a time.
+      // ...
+    } else if (err.code === 'unimplemented') {
+      // The current browser does not support all of the
+      // features required to enable persistence
+      // ...
+    }
+  });
 
-const IonicApp: React.FC<IonicAppProps> = ({ darkMode, loading, intercomUser, loadTrainingData, loadOrganizations, watchAuthState, logoutUser}) => {
+const IonicApp: React.FC<IonicAppProps> = ({ darkMode, loading, intercomUser, loadTrainingData, loadOrganizations, watchAuthState, logoutUser, setupMessaging}) => {
 
   const { t } = useTranslation(['translation'], {i18n} );
 
@@ -92,7 +99,8 @@ const IonicApp: React.FC<IonicAppProps> = ({ darkMode, loading, intercomUser, lo
     loadOrganizations();
     loadTrainingData();
     watchAuthState();
-  }, [loadTrainingData, loadOrganizations, watchAuthState]);
+    setupMessaging();
+  }, [loadTrainingData, loadOrganizations, watchAuthState, setupMessaging,]);
 
   // @ts-ignore
   return (
@@ -121,9 +129,11 @@ const IonicApp: React.FC<IonicAppProps> = ({ darkMode, loading, intercomUser, lo
             isOpen={loading}
             message={t('menu.pleaseWait')}
           />
-        <div className="app">
-          <Intercom appID="ywg09h0a" alignment={'right'} { ...intercomUser } />
-        </div>
+        {process.env.NODE_ENV === 'production' &&
+          <div className="app">
+            <Intercom appID="ywg09h0a" alignment={'right'} {...intercomUser} />
+          </div>
+        }
       </IonApp>
   )
 }
@@ -136,6 +146,6 @@ const IonicAppConnected = connect<{}, StateProps, DispatchProps>({
     loading: selectors.getLoading(state),
     intercomUser: selectors.getIntercomUser(state),
   }),
-  mapDispatchToProps: { loadTrainingData, loadOrganizations, watchAuthState, logoutUser },
+  mapDispatchToProps: { loadTrainingData, loadOrganizations, watchAuthState, logoutUser, setupMessaging },
   component: IonicApp
 });

@@ -14,6 +14,8 @@ const buildSW = () => {
 
       globPatterns: ["**/*.{js,css,html,png,svg}"],
 
+      globIgnores: ["firebase-messaging-sw-js"],
+
       maximumFileSizeToCacheInBytes: 5 * 1024 * 1024,
     })
     .then(({ count, size, warnings }) => {

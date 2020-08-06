@@ -1,9 +1,11 @@
 /* eslint-disable no-restricted-globals */
 /* eslint-disable no-undef */
+
 if ("function" === typeof importScripts) {
-  importScripts(
-    "https://storage.googleapis.com/workbox-cdn/releases/3.5.0/workbox-sw.js"
-  );
+  const env = new URL(location).searchParams.get('env');
+  const fbConf = encodeURIComponent(new URL(location).searchParams.get('fbConf'));
+  importScripts("https://storage.googleapis.com/workbox-cdn/releases/3.5.0/workbox-sw.js");
+  importScripts(`firebase-messaging-sw.js?env=${env}&fbConf=${fbConf}`);
 
   // Global workbox
   if (workbox) {
@@ -81,4 +83,5 @@ if ("function" === typeof importScripts) {
   } else {
     console.error("Workbox could not be loaded. No offline support");
   }
+
 }

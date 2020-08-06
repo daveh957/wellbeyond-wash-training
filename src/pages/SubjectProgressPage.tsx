@@ -2,7 +2,6 @@ import React, {useEffect, useState} from 'react';
 import {IonButtons, IonCol, IonContent, IonGrid, IonHeader, IonPage, IonRow, IonTitle, IonToolbar} from '@ionic/react';
 import LessonItem from '../components/LessonItem';
 import {Lesson, Subject, TrainingSession} from '../models/Training';
-import {UserLessons} from '../data/user/user.state';
 import {connect} from '../data/connect';
 import * as selectors from '../data/selectors';
 import './SubjectPage.scss';
@@ -18,7 +17,6 @@ interface OwnProps extends RouteComponentProps {
 }
 
 interface StateProps {
-  userLessons?: UserLessons;
 }
 
 interface LessonFlags {
@@ -30,29 +28,23 @@ interface DispatchProps { }
 
 interface SubjectProps extends OwnProps, StateProps, DispatchProps { }
 
-const SubjectProgressPage: React.FC<SubjectProps> = ({ subject, lessons, userLessons, activeSession}) => {
+const SubjectProgressPage: React.FC<SubjectProps> = ({ subject, lessons,  activeSession}) => {
 
   const { t } = useTranslation(['translation'], {i18n} );
   const [lessonFlags, setLessonFlags] = useState<LessonFlags[]>();
   useEffect(() => {
-    if (subject && lessons && (userLessons || activeSession)) {
+    if (subject && lessons && activeSession) {
       const flags = new Array<LessonFlags>();
       lessons.forEach((l, idx) => {
         const pl = idx>0 ? lessons[idx-1] : undefined;
         let currentLesson, previousLesson;
-        if (activeSession) {
-          currentLesson = activeSession.lessons && activeSession.lessons[l.id];
-          previousLesson = pl && activeSession.lessons && activeSession.lessons[pl.id];
-        }
-        else {
-          currentLesson = userLessons && userLessons[l.id];
-          previousLesson = pl && userLessons && userLessons[pl.id];
-        }
-        flags.push({completed: !!(currentLesson && currentLesson.completed), clickable: !!(activeSession || idx === 0 || (currentLesson && currentLesson.completed) || (previousLesson && previousLesson.completed))});
+        currentLesson = activeSession.lessons && activeSession.lessons[l.id];
+        previousLesson = pl && activeSession.lessons && activeSession.lessons[pl.id];
+        flags.push({completed: !!(currentLesson && currentLesson.completed), clickable: !!(activeSession.groupType !== 'self' || idx === 0 || (currentLesson && currentLesson.completed) || (previousLesson && previousLesson.completed))});
       });
       setLessonFlags(flags);
     }
-  }, [subject, lessons, userLessons, activeSession]);
+  }, [subject, lessons, activeSession]);
 
   return (
     <IonPage id="lesson-list">
@@ -95,7 +87,6 @@ export default connect<OwnProps, StateProps, DispatchProps>({
     subject: selectors.getSubject(state, ownProps),
     lessons: selectors.getSubjectLessons(state, ownProps),
     activeSession: selectors.getTrainingSession(state, ownProps),
-    userLessons: selectors.getUserLessons(state),
   }),
   component: SubjectProgressPage
 });

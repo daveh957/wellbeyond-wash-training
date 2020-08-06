@@ -21,13 +21,13 @@ import {
 import './Login.scss';
 import {useTranslation} from "react-i18next";
 import i18n from '../i18n';
-import english from '../i18n/en';
 import {connect} from '../data/connect';
 import {RouteComponentProps} from 'react-router';
 import {Lesson, Subject, TrainingSession} from "../models/Training";
 import * as selectors from "../data/selectors";
 import BackToSubjectLink from "../components/BackToSubject";
 import {startTrainingSession} from "../data/user/user.actions";
+import {Organization} from "../models/User";
 
 interface OwnProps extends RouteComponentProps {
   subject: Subject;
@@ -36,6 +36,8 @@ interface OwnProps extends RouteComponentProps {
 
 interface StateProps {
   userId?: string;
+  organization?: Organization;
+  community?: string;
 }
 
 interface DispatchProps {
@@ -44,7 +46,7 @@ interface DispatchProps {
 
 interface StartTrainingSessionProps extends OwnProps, StateProps, DispatchProps { }
 
-const StartTrainingSession: React.FC<StartTrainingSessionProps> = ({subject, lessons, userId, startTrainingSession }) => {
+const StartTrainingSession: React.FC<StartTrainingSessionProps> = ({subject, lessons, userId, organization, community, startTrainingSession }) => {
 
   const { t } = useTranslation(['translation'], {i18n} );
   const {navigate} = useContext(NavContext);
@@ -76,8 +78,12 @@ const StartTrainingSession: React.FC<StartTrainingSessionProps> = ({subject, les
       let session: TrainingSession = {
         subjectId: subject.id,
         userId: userId || '',
+        organizationId: organization && organization.id,
+        organization: organization && organization.name,
+        community: community,
         started: new Date(),
         archived: false,
+        name: formValues.name,
         groupType: formValues.groupType,
         groupSizeNum: formValues.groupSize,
         lessons: {}
@@ -111,7 +117,6 @@ const StartTrainingSession: React.FC<StartTrainingSessionProps> = ({subject, les
       <IonContent>
         <form noValidate onSubmit={startNewTrainingSession}>
           <IonList>
-
             <IonItem>
               <IonLabel position="stacked" color="primary">{t('training.labels.groupType')}</IonLabel>
               <IonSelect value={formValues.groupType}
@@ -119,11 +124,11 @@ const StartTrainingSession: React.FC<StartTrainingSessionProps> = ({subject, les
                          cancelText={t('training.buttons.cancel')}
                          okText={t('training.buttons.ok')}
                          onIonChange={e => {handleChange('groupType', e.detail.value!);}}>
-                <IonSelectOption value={english.translation.training.groupTypes.committee}>{t('training.groupTypes.committee')}</IonSelectOption>
-                <IonSelectOption value={english.translation.training.groupTypes.household}>{t('training.groupTypes.household')}</IonSelectOption>
-                <IonSelectOption value={english.translation.training.groupTypes.school}>{t('training.groupTypes.school')}</IonSelectOption>
-                <IonSelectOption value={english.translation.training.groupTypes.clinic}>{t('training.groupTypes.clinic')}</IonSelectOption>
-                <IonSelectOption value={english.translation.training.groupTypes.other}>{t('training.groupTypes.other')}</IonSelectOption>
+                <IonSelectOption value="Water Committee">{t('training.groupTypes.committee')}</IonSelectOption>
+                <IonSelectOption value="Household">{t('training.groupTypes.household')}</IonSelectOption>
+                <IonSelectOption value="School">{t('training.groupTypes.school')}</IonSelectOption>
+                <IonSelectOption value="Medical Clinic">{t('training.groupTypes.clinic')}</IonSelectOption>
+                <IonSelectOption value="Other">{t('training.groupTypes.other')}</IonSelectOption>
               </IonSelect>
             </IonItem>
 
@@ -174,6 +179,8 @@ export default connect<OwnProps, StateProps, DispatchProps>({
     subject: selectors.getSubject(state, ownProps),
     lessons: selectors.getSubjectLessons(state, ownProps),
     userId: selectors.getUserId(state),
+    organization: selectors.getUserOrganization(state),
+    community: selectors.getUserCommunity(state),
   }),
   component: StartTrainingSession
 })

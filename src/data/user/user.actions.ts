@@ -1,24 +1,112 @@
 import {
+  isPlatform
+} from "@ionic/react";
+import {
   authCheck,
-  createOrUpdateLessonProgress,
   createOrUpdateTrainingSession,
   listenForOrganizationData,
   listenForTrainingSessions,
-  listenForUserLessons,
   listenForUserProfile,
   logout,
   updateProfile
 } from './userApi';
 import {ActionType} from '../../util/types'
-import {TrainingSessions, UserLessons, UserState} from './user.state';
+import {TrainingSessions, UserState} from './user.state';
 import {LessonProgress, TrainingSession} from "../../models/Training";
 import {IntercomUser, Organization, UserProfile} from "../../models/User";
-import * as firebase from "firebase";
+import * as firebase from "firebase/app";
+import 'firebase/functions';
+import 'firebase/messaging';
+import {firebaseConfig} from "../../FIREBASE_CONFIG";
 
 export const loadOrganizations = () => async (dispatch: React.Dispatch<any>) => {
   listenForOrganizationData(function(organizations:Organization[]) {
     dispatch(setOrganizations(organizations));
   });
+}
+
+export const setupMessaging = () => async (dispatch: React.Dispatch<any>) =>  {
+  if (isPlatform('hybrid')) {
+  }
+  else {
+    const messaging = firebase.messaging();
+    messaging.usePublicVapidKey(firebaseConfig.vapidPublicKey);
+
+    // Callback fired if Instance ID token is updated.
+    messaging.onTokenRefresh(() => {
+      messaging.getToken().then((refreshedToken) => {
+        console.log('Token refreshed.');
+        console.log(refreshedToken);
+        // Indicate that the new Instance ID token has not yet been sent to the
+        // app server.
+        // setTokenSentToServer(false);
+        // Send Instance ID token to app server.
+        // sendTokenToServer(refreshedToken);
+        // ...
+      }).catch((err) => {
+        console.log('Unable to retrieve refreshed token ', err);
+        // showToken('Unable to retrieve refreshed token ', err);
+      });
+    });
+
+    messaging.onMessage((payload) => {
+      console.log('Message received. ', payload);
+      // ...
+    });
+  }
+}
+
+const requestNotificationPermission = async (dispatch: React.Dispatch<any>) =>  {
+  console.log('Requesting permission...');
+  if (isPlatform('hybrid')) {
+  }
+  else {
+    Notification.requestPermission().then((permission) => {
+      if (permission === 'granted') {
+        console.log('Notification permission granted.');
+        dispatch(setNotificationsOn(true));
+        updateProfile({notificationsOn: true}); // Don't wait for it to complete since we have offline support
+        getMessagingToken(dispatch);
+        // [START_EXCLUDE]
+        // In many cases once an app has been granted notification permission,
+        // it should update its UI reflecting this.
+        // [END_EXCLUDE]
+      } else {
+        dispatch(setNotificationsOn(false));
+        updateProfile({notificationsOn: false}); // Don't wait for it to complete since we have offline support
+        console.log('Unable to get permission to notify.');
+      }
+    });
+  }
+}
+
+const getMessagingToken = async (dispatch: React.Dispatch<any>) =>  {
+// Get Instance ID token. Initially this makes a network call, once retrieved
+// subsequent calls to getToken will return from cache.
+  console.log('Retrieving FCM messaging token...');
+  if (isPlatform('hybrid')) {
+  }
+  else {
+    const messaging = firebase.messaging();
+    messaging.getToken().then((currentToken) => {
+      if (currentToken) {
+        console.log('Token retrieved.');
+        console.log(currentToken);
+        // sendTokenToServer(currentToken);
+        // updateUIForPushEnabled(currentToken);
+      } else {
+        // Show permission request.
+        console.log('No Instance ID token available. Request permission to generate one.');
+        // Show permission UI.
+        // updateUIForPushPermissionRequired();
+        // setTokenSentToServer(false);
+      }
+    }).catch((err) => {
+      console.log('An error occurred while retrieving token. ', err);
+      // showToken('Error retrieving Instance ID token. ', err);
+      // setTokenSentToServer(false);
+    });
+  }
 }
 
 export const watchAuthState = () => async (dispatch: React.Dispatch<any>) => {
@@ -30,6 +118,7 @@ export const watchAuthState = () => async (dispatch: React.Dispatch<any>) => {
           const getUserIdHash = firebase.functions().httpsCallable('getUserIdHash');
           dispatch(setIsRegistered(true));
           dispatch(setAcceptedTerms(!!profile.acceptedTerms));
+          dispatch(setNotificationsOn(!!profile.notificationsOn));
           dispatch(setUserProfile(profile));
           if (process.env.NODE_ENV === 'production') {
             getUserIdHash().then(function (result) {
@@ -48,14 +137,12 @@ export const watchAuthState = () => async (dispatch: React.Dispatch<any>) => {
           dispatch(setAcceptedTerms(false));
         }
       });
-      listenForUserLessons((lessons:UserLessons) => {
-        dispatch(setUserLessons(lessons));
-      });
       listenForTrainingSessions((sessions:TrainingSessions) => {
         dispatch(setTrainingSessions(sessions));
       });
     } else {
       dispatch(setIsLoggedIn(false));
+      dispatch(setIntercomUser(undefined));
     }
   })
 }
@@ -63,6 +150,16 @@ export const watchAuthState = () => async (dispatch: React.Dispatch<any>) => {
 export const acceptTerms = () => async (dispatch: React.Dispatch<any>) => {
   dispatch(setAcceptedTerms(true));
   updateProfile({acceptedTerms: true}); // Don't wait for it to complete since we have offline support
+};
+
+export const enableNotifications = (notificationsOn:boolean) => async (dispatch: React.Dispatch<any>) => {
+  if (notificationsOn) {
+    requestNotificationPermission(dispatch);
+  }
+  else {
+    dispatch(setNotificationsOn(notificationsOn));
+    updateProfile({notificationsOn: notificationsOn}); // Don't wait for it to complete since we have offline support
+  }
 };
 
 export const logoutUser = () => async (dispatch: React.Dispatch<any>) => {
@@ -85,10 +182,6 @@ export const updateTrainingLesson = (session: TrainingSession|undefined, lesson:
     session.lessons = session.lessons || {};
     session.lessons[lesson.lessonId] = lesson;
     createOrUpdateTrainingSession(session);
-  }
-  else {
-    dispatch(setUserLesson(lesson));
-    createOrUpdateLessonProgress(lesson); // Don't wait for it to complete since we have offline support
   }
 };
 
@@ -131,19 +224,14 @@ export const setDarkMode = (darkMode: boolean) => ({
   darkMode
 } as const);
 
+export const setNotificationsOn = (notificationsOn: boolean) => ({
+  type: 'set-notifications-on',
+  notificationsOn
+} as const);
+
 export const setAcceptedTerms = (acceptedTerms?: boolean) => ({
   type: 'set-accepted-terms',
   acceptedTerms
-} as const);
-
-export const setUserLessons = (lessons: UserLessons) => ({
-  type: 'set-user-lessons',
-  lessons
-} as const);
-
-export const setUserLesson = (lesson: LessonProgress) => ({
-  type: 'set-user-lesson',
-  lesson
 } as const);
 
 export const setUserProfile = (profile: UserProfile) => ({
@@ -151,7 +239,7 @@ export const setUserProfile = (profile: UserProfile) => ({
   profile
 } as const);
 
-export const setIntercomUser = (intercomUser: IntercomUser) => ({
+export const setIntercomUser = (intercomUser?: IntercomUser) => ({
   type: 'set-intercom-user',
   intercomUser
 } as const);
@@ -183,9 +271,8 @@ export type UserActions =
   | ActionType<typeof setIsLoggedIn>
   | ActionType<typeof setIsRegistered>
   | ActionType<typeof setDarkMode>
+  | ActionType<typeof setNotificationsOn>
   | ActionType<typeof setAcceptedTerms>
-  | ActionType<typeof setUserLessons>
-  | ActionType<typeof setUserLesson>
   | ActionType<typeof setUserProfile>
   | ActionType<typeof setIntercomUser>
   | ActionType<typeof setOrganizations>
