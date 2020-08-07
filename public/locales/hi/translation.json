@@ -14,7 +14,8 @@
     "signup": "साइन अप करें",
     "support": "सहयोग",
     "darkMode": "डार्क मोड",
-    "pleaseWait": "कृपया प्रतीक्षा कीजिये..."
+    "pleaseWait": "कृपया प्रतीक्षा कीजिये...",
+    "notificationsOn": "नोटिफिकेशन की अनुमति दें"
   },
   "buttons": {
     "previous": "पिछला",
@@ -127,7 +128,8 @@
       "groupType": "यह किस प्रकार के समूह के लिए है?",
       "groupSize": "समूह कितना बड़ा है?",
       "yes": "हाँ",
-      "no": "नहीं"
+      "no": "नहीं",
+      "sessionName": "इस प्रशिक्षण सत्र (वैकल्पिक) का नाम बताइए?"
     },
     "groupTypes": {
       "committee": "जल समिति",
@@ -152,7 +154,8 @@
       "sessionDescription": "{{size}} लोगों के {{type}} समूह के लिए प्रशिक्षण",
       "sessionStartedAt": "शुरू किया <span>०</span>",
       "sessionCompletedAt": "पूर्ण <span>०</span>",
-      "swipeInstructions": "सत्र को फिर से शुरू करने या इसे छोड़ने के लिए दाएं स्वाइप करें"
+      "swipeInstructions": "सत्र को फिर से शुरू करने या इसे छोड़ने के लिए दाएं स्वाइप करें",
+      "sessionDescription_plural": "{{count}} लोगों के {{type}} समूह के लिए प्रशिक्षण"
     },
     "errors": {
       "locationRequired": "कृपया प्रशिक्षण के लिए एक स्थान प्रदान करें",

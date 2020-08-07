@@ -1,7 +1,7 @@
 import 'firebase/auth';
 import 'firebase/firestore';
 import {TrainingSessions} from "./user.state";
-import {LessonProgress, TrainingSession} from "../../models/Training";
+import {TrainingSession} from "../../models/Training";
 import {UserProfile} from "../../models/User";
 import * as firebase from "firebase";
 

@@ -2,13 +2,12 @@ import React from 'react';
 import {RouteComponentProps, useLocation, withRouter} from 'react-router';
 
 import {
-  IonApp,
   IonContent,
   IonIcon,
   IonItem,
   IonLabel,
   IonList,
-  IonListHeader, IonLoading,
+  IonListHeader,
   IonMenu,
   IonMenuToggle,
   IonToggle

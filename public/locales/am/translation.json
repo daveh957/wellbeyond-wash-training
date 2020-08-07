@@ -14,7 +14,8 @@
     "signup": "ክፈት",
     "support": "ድጋፍ",
     "darkMode": "ጨለማ ሁኔታ",
-    "pleaseWait": "እባክህ በትእግስት ተጠባበቅ..."
+    "pleaseWait": "እባክህ በትእግስት ተጠባበቅ...",
+    "notificationsOn": "ማስታወቂያዎች ፍቀድ"
   },
   "buttons": {
     "previous": "የቀድሞው",
@@ -127,7 +128,8 @@
       "groupType": "ምን ዓይነት ቡድን ነው?",
       "groupSize": "ቡድኑ ምን ያህል ትልቅ ነው?",
       "yes": "አዎ",
-      "no": "አይ"
+      "no": "አይ",
+      "sessionName": "ይህን የስልጠና ክፍለ ጊዜ ይሰይሙ (አማራጭ)?"
     },
     "groupTypes": {
       "committee": "የውሃ ኮሚቴ",
@@ -152,7 +154,8 @@
       "sessionDescription": "{{size}} ሰዎች {{type}} ቡድን ስልጠና",
       "sessionStartedAt": "{{date, dateAndTime}} ተጀምሯል",
       "sessionCompletedAt": "{{date, dateAndTime}} ተጠናቋል",
-      "swipeInstructions": "ክፍለ-ጊዜን ለመቀጠል ወደ ግራ ያንሸራትቱ ወይም እሱን ለማስወገድ ቀኝ"
+      "swipeInstructions": "ክፍለ-ጊዜን ለመቀጠል ወደ ግራ ያንሸራትቱ ወይም እሱን ለማስወገድ ቀኝ",
+      "sessionDescription_plural": "{{count}} ሰዎች {{type}} ቡድን ስልጠና"
     },
     "errors": {
       "locationRequired": "እባክዎን ለስልጠና አንድ ቦታ ያቅርቡ",

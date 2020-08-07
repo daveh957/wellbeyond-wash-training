@@ -17,7 +17,6 @@ import {Organization} from "../models/User";
 import {startTrainingSession} from "../data/user/user.actions";
 import {connect} from "../data/connect";
 import * as selectors from "../data/selectors";
-import {RouteComponentProps} from "react-router";
 
 interface OwnProps {
   subject: Subject;

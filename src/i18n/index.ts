@@ -1,9 +1,10 @@
 import i18n from "i18next";
+import Detector from 'i18next-browser-languagedetector';
 import Backend from 'i18next-http-backend';
 import {initReactI18next} from "react-i18next";
-import {isPlatform} from '@ionic/react';
 
 i18n
+  .use(Detector)
   .use(Backend)
   .use(initReactI18next) // passes i18n down to react-i18next
   .init({
