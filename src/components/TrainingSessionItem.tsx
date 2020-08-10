@@ -48,6 +48,8 @@ const TrainingSessionItem: React.FC<LessonItemProps> = ({ subject, lessons, sess
         setResumeLink((nextLesson ? ('/tabs/subjects/' + subject.id + '/lessons/' + nextLesson.id + '/intro') : ('/tabs/subjects/' + subject.id + '/progress')) + '?tsId=' + session.id);
         setSessionCompleted(false);
       }
+      // @ts-ignore
+      session.groupSizeNum = session.groupSizeNum ? parseInt(session.groupSizeNum) : 0;
     }
   }, [subject, lessons, session]);
 
@@ -62,12 +64,14 @@ const TrainingSessionItem: React.FC<LessonItemProps> = ({ subject, lessons, sess
       </IonItemOptions>
       <IonItem>
         <IonLabel className="ion-text-wrap">
-          {sessionCompleted ?
+          {session.name ?
+            <h2>{session.name}</h2>
+            : sessionCompleted ?
             <h2>{t('training.messages.sessionCompletedAt',{date: session.completed })}</h2>
               :
             <h2>{t('training.messages.sessionStartedAt',{date: session.started })}</h2>
           }
-          <p> {t('training.messages.sessionDescription',{type: session.groupType, size: session.groupSize })}</p>
+          <p> {t('training.messages.sessionDescription',{type: session.groupType, count: session.groupSizeNum })}</p>
         </IonLabel>
         <IonNote slot={'end'}>
           {session.completed ?

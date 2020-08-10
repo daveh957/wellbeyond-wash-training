@@ -14,7 +14,8 @@
     "signup": "Jisajili",
     "support": "Msaada",
     "darkMode": "Njia ya Giza",
-    "pleaseWait": "Tafadhali subiri..."
+    "pleaseWait": "Tafadhali subiri...",
+    "notificationsOn": "Ruhusu Arifa"
   },
   "buttons": {
     "previous": "Iliyopita",
@@ -127,7 +128,8 @@
       "groupType": "Ni kikundi cha aina gani?",
       "groupSize": "Kikundi ni kipi?",
       "yes": "Ndio",
-      "no": "Hapana"
+      "no": "Hapana",
+      "sessionName": "Sema kikao hiki cha mafunzo (hiari)?"
     },
     "groupTypes": {
       "committee": "Kamati ya Maji",
@@ -152,7 +154,8 @@
       "sessionDescription": "Mafunzo kwa kikundi {{type}} cha watu {{size}}",
       "sessionStartedAt": "Imeanza {{date, dateAndTime}}",
       "sessionCompletedAt": "Imekamilika {{date, dateAndTime}}",
-      "swipeInstructions": "Swipe kushoto ili kuendelea tena na kikao au kulia ili uitupe"
+      "swipeInstructions": "Swipe kushoto ili kuendelea tena na kikao au kulia ili uitupe",
+      "sessionDescription_plural": "Mafunzo kwa kikundi {{type}} cha watu {{count}}"
     },
     "errors": {
       "locationRequired": "Tafadhali toa eneo la mafunzo",

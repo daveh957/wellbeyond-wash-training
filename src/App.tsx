@@ -72,30 +72,30 @@ interface DispatchProps {
 
 interface IonicAppProps extends StateProps, DispatchProps { }
 
-if (!firebase.apps.length) {
-  firebase.initializeApp(firebaseConfig);
-}
-firebase.firestore().enablePersistence()
-  .then(function() {
-    console.log('Offline persistence enabled')
-  })
-  .catch(function(err) {
-    if (err.code === 'failed-precondition') {
-      // Multiple tabs open, persistence can only be enabled
-      // in one tab at a a time.
-      // ...
-    } else if (err.code === 'unimplemented') {
-      // The current browser does not support all of the
-      // features required to enable persistence
-      // ...
-    }
-  });
 
 const IonicApp: React.FC<IonicAppProps> = ({ darkMode, loading, intercomUser, loadTrainingData, loadOrganizations, watchAuthState, logoutUser, setupMessaging}) => {
 
   const { t } = useTranslation(['translation'], {i18n} );
 
   useEffect(() => {
+    if (!firebase.apps.length) {
+      firebase.initializeApp(firebaseConfig);
+    }
+    firebase.firestore().enablePersistence()
+      .then(function() {
+        console.log('Offline persistence enabled')
+      })
+      .catch(function(err) {
+        if (err.code === 'failed-precondition') {
+          // Multiple tabs open, persistence can only be enabled
+          // in one tab at a a time.
+          // ...
+        } else if (err.code === 'unimplemented') {
+          // The current browser does not support all of the
+          // features required to enable persistence
+          // ...
+        }
+      });
     loadOrganizations();
     loadTrainingData();
     watchAuthState();

@@ -127,6 +127,7 @@
       "location": "Where are you holding the training?",
       "groupType": "What type of group is it for?",
       "groupSize": "How large is the group?",
+      "sessionName": "Name this training session (optional)?",
       "yes": "Yes",
       "no": "No"
     },
@@ -150,7 +151,8 @@
     "messages": {
       "partiallyComplete": "You have completed {{completed}} of the {{count}} modules for {{subject}}.",
       "fullyComplete": "You have completed the training for {{subject}}.",
-      "sessionDescription": "Training for {{type}} group of {{size}} people",
+      "sessionDescription": "Training for {{count}} person ({{type}})",
+      "sessionDescription_plural": "Training for {{type}} group of {{count}} people",
       "sessionStartedAt": "Started {{date, dateAndTime}}",
       "sessionCompletedAt": "Completed {{date, dateAndTime}}",
       "swipeInstructions": "Swipe left to resume session or right to discard it"

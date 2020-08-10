@@ -23,7 +23,7 @@ import {useTranslation} from "react-i18next";
 import i18n from '../i18n';
 import {connect} from '../data/connect';
 import {RouteComponentProps} from 'react-router';
-import {Lesson, Subject, TrainingSession} from "../models/Training";
+import {GroupType, Lesson, Subject, TrainingSession} from "../models/Training";
 import * as selectors from "../data/selectors";
 import BackToSubjectLink from "../components/BackToSubject";
 import {startTrainingSession} from "../data/user/user.actions";
@@ -85,7 +85,7 @@ const StartTrainingSession: React.FC<StartTrainingSessionProps> = ({subject, les
         archived: false,
         name: formValues.name,
         groupType: formValues.groupType,
-        groupSizeNum: formValues.groupSize,
+        groupSizeNum: parseInt(formValues.groupSize),
         lessons: {}
       };
       session.id = userId + ':' + session.subjectId + ':' + (session.started && session.started.getTime());
@@ -119,17 +119,27 @@ const StartTrainingSession: React.FC<StartTrainingSessionProps> = ({subject, les
           <IonList>
             <IonItem>
               <IonLabel position="stacked" color="primary">{t('training.labels.groupType')}</IonLabel>
-              <IonSelect value={formValues.groupType}
-                         placeholder={t('training.groupTypes.selectOne')}
-                         cancelText={t('training.buttons.cancel')}
-                         okText={t('training.buttons.ok')}
-                         onIonChange={e => {handleChange('groupType', e.detail.value!);}}>
-                <IonSelectOption value="Water Committee">{t('training.groupTypes.committee')}</IonSelectOption>
-                <IonSelectOption value="Household">{t('training.groupTypes.household')}</IonSelectOption>
-                <IonSelectOption value="School">{t('training.groupTypes.school')}</IonSelectOption>
-                <IonSelectOption value="Medical Clinic">{t('training.groupTypes.clinic')}</IonSelectOption>
-                <IonSelectOption value="Other">{t('training.groupTypes.other')}</IonSelectOption>
-              </IonSelect>
+              {subject.groupTypes && subject.groupTypes ?
+                <IonSelect value={formValues.groupType}
+                           placeholder={t('training.groupTypes.selectOne')}
+                           cancelText={t('training.buttons.cancel')}
+                           okText={t('training.buttons.ok')}
+                           onIonChange={e => {handleChange('groupType', e.detail.value!);}}>
+                  {subject.groupTypes.map((g:GroupType) => <IonSelectOption value={g.name} key={'gt-'+g.name}>{g.name}</IonSelectOption>)}
+                </IonSelect>
+                :
+                <IonSelect value={formValues.groupType}
+                           placeholder={t('training.groupTypes.selectOne')}
+                           cancelText={t('training.buttons.cancel')}
+                           okText={t('training.buttons.ok')}
+                           onIonChange={e => {handleChange('groupType', e.detail.value!);}}>
+                  <IonSelectOption value="Water Committee">{t('training.groupTypes.committee')}</IonSelectOption>
+                  <IonSelectOption value="Household">{t('training.groupTypes.household')}</IonSelectOption>
+                  <IonSelectOption value="School">{t('training.groupTypes.school')}</IonSelectOption>
+                  <IonSelectOption value="Medical Clinic">{t('training.groupTypes.clinic')}</IonSelectOption>
+                  <IonSelectOption value="Other">{t('training.groupTypes.other')}</IonSelectOption>
+                </IonSelect>
+              }
             </IonItem>
 
             {formSubmitted && formErrors.groupType && <IonText color="danger">
@@ -155,6 +165,14 @@ const StartTrainingSession: React.FC<StartTrainingSessionProps> = ({subject, les
                 {t(formErrors.groupSize)}
               </p>
             </IonText>}
+
+            <IonItem>
+              <IonLabel position="stacked" color="primary">{t('training.labels.sessionName')}</IonLabel>
+              <IonInput name="sessionName" type="text" value={formValues.name} spellCheck={false} autocapitalize="on" autocomplete="off" required={false}
+                        onIonChange={e => {handleChange('name', e.detail.value!);}}>
+              </IonInput>
+            </IonItem>
+
 
           </IonList>
 

@@ -18,16 +18,10 @@ export function userReducer(state: UserState, action: UserActions): UserState {
       return { ...state, isLoggedIn: action.loggedIn };
     case 'set-is-registered':
       return { ...state, isRegistered: action.registered };
-    case 'set-user-lessons':
-      return { ...state, lessons: action.lessons };
     case 'set-user-profile':
       return { ...state, profile: action.profile };
     case 'set-intercom-user':
       return { ...state, intercomUser: action.intercomUser};
-    case 'set-user-lesson':
-      let lessons = Object.assign({}, state.lessons);
-      lessons[action.lesson.lessonId] = action.lesson;
-      return { ...state, lessons: lessons };
     case 'set-organizations':
       return { ...state, organizations: action.organizations };
     case 'set-training-sessions': {
@@ -54,7 +48,6 @@ export function userReducer(state: UserState, action: UserActions): UserState {
       newState.acceptedTerms = false;
       newState.profile = undefined;
       newState.intercomUser = undefined;
-      newState.lessons = {};
       newState.sessions = {};
       return newState;
   }

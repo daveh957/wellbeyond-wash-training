@@ -13,7 +13,6 @@ export const initialState: AppState = {
     darkMode: false,
     notificationsOn: false,
     loading: false,
-    lessons: {},
     sessions: {}
   }
 };

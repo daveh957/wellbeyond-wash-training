@@ -14,7 +14,8 @@
     "signup": "S'inscrire",
     "support": "Soutien",
     "darkMode": "Mode sombre",
-    "pleaseWait": "S'il vous plaît, attendez..."
+    "pleaseWait": "S'il vous plaît, attendez...",
+    "notificationsOn": "Autoriser les notifications"
   },
   "buttons": {
     "previous": "Précédent",
@@ -127,7 +128,8 @@
       "groupType": "À quel type de groupe s'adresse-t-il?",
       "groupSize": "Quelle est la taille du groupe?",
       "yes": "Oui",
-      "no": "Non"
+      "no": "Non",
+      "sessionName": "Nommez cette session de formation (facultatif)?"
     },
     "groupTypes": {
       "committee": "Comité de l'eau",
@@ -152,7 +154,8 @@
       "sessionDescription": "Formation pour {{type}} groupe de {{size}} personnes",
       "sessionStartedAt": "Commencé {{date, dateAndTime}}",
       "sessionCompletedAt": "Terminé {{date, dateAndTime}}",
-      "swipeInstructions": "Balayez vers la gauche pour reprendre la session ou vers la droite pour la supprimer"
+      "swipeInstructions": "Balayez vers la gauche pour reprendre la session ou vers la droite pour la supprimer",
+      "sessionDescription_plural": "Formation pour {{type}} groupe de {{count}} personnes"
     },
     "errors": {
       "locationRequired": "Veuillez fournir un emplacement pour la formation",

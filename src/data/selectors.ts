@@ -16,9 +16,6 @@ export const getIntercomUser  = (state: AppState) => {
 export const getTrainingSessions = (state: AppState) => {
   return state.user.sessions;
 }
-export const getUserLessons = (state: AppState) => {
-  return state.user.lessons;
-}
 export const getSubjects = (state: AppState) => {
   return state.data.subjects;
 }
@@ -136,13 +133,10 @@ export const getQuestionIdx = createSelector(
 );
 
 export const getLessonProgress = createSelector(
-  getTrainingSession, getUserLessons, getLessonIdParam, getUserId,
-  (activeSession, userLessons, id, userId) => {
+  getTrainingSession, getLessonIdParam, getUserId,
+  (activeSession, id, userId) => {
     if (activeSession && id) {
       return (activeSession && activeSession.lessons &&  activeSession.lessons[id]) || {id: id, lessonId: id, answers: []}
-    }
-    if (userLessons && id && userId) {
-      return userLessons[id] || {id:userId + ':' + id, lessonId: id, answers: []}
     }
   }
 );
