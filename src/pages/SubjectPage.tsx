@@ -98,7 +98,6 @@ const SubjectPage: React.FC<SubjectProps> = ({ subject, lessons, trainingSession
 
       { subject &&
         <IonContent fullscreen={true}>
-          <SelfTraining session={selfTrainingSession} subject={subject} lessons={lessons} />
           {canTeach &&
             <IonCard>
               <IonCardHeader>
@@ -137,6 +136,8 @@ const SubjectPage: React.FC<SubjectProps> = ({ subject, lessons, trainingSession
               </IonCardContent>
             </IonCard>
           }
+
+          <SelfTraining session={selfTrainingSession} subject={subject} lessons={lessons} />
         </IonContent>
       }
     </IonPage>

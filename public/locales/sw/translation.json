@@ -51,7 +51,9 @@
       "communityWritein": "Ingiza Jina la Jumuiya",
       "pleaseAcceptTerms": "Tafadhali angalia kisanduku kinachoonyesha kuwa umesoma na ukubali masharti haya ya matumizi.",
       "userAcceptsTerms": "Nakubali masharti na masharti hapo juu",
-      "avatar": "Avatar"
+      "avatar": "Avatar",
+      "organizationPassword": "Nenosiri la shirika",
+      "organizationPasswordHint": "{{organization}} inapaswa kuwa imekupa nywila ya usajili."
     },
     "errors": {
       "nameRequired": "Jina inahitajika",
@@ -62,7 +64,10 @@
       "termsNotChecked": "Tafadhali angalia kisanduku kuendelea",
       "loginUsernameRequired": "Barua pepe inahitajika",
       "loginPasswordRequired": "Nywila inahitajika",
-      "organizationRequired": "Tafadhali chagua moja ya Asasi Zetu za Washirika wa NGO"
+      "organizationRequired": "Tafadhali chagua moja ya Asasi Zetu za Washirika wa NGO",
+      "organizationPasswordRequired": "Nenosiri linalohitajika kujiandikisha kwa {{organization}} .",
+      "organizationPasswordIncorrect": "Nenosiri sio sahihi.",
+      "organizationPasswordContact": "Tafadhali wasiliana na {{contactName}} kwa {{contactEmail}} ikiwa unahitaji msaada."
     },
     "buttons": {
       "login": "Ingia",
@@ -163,8 +168,8 @@
       "groupSizeRequired": "Tafadhali ingiza saizi ya kikundi kubwa kuliko 0 kwa mafunzo"
     },
     "headers": {
-      "yourTraining": "1. Mafunzo ya kibinafsi",
-      "trainOthers": "2. Mafunzo ya Kikundi",
+      "yourTraining": "2. Mafunzo ya kibinafsi",
+      "trainOthers": "1. Mafunzo ya Kikundi",
       "previousTraining": "Sehemu za Mafunzo ya awali",
       "yourTrainingSub": "Chagua chaguo hili ikiwa unamaliza mafunzo peke yako.",
       "trainOthersSub": "Chagua mafunzo haya ikiwa unamaliza mafunzo katika kikundi."

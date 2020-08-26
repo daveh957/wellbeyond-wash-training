@@ -51,7 +51,9 @@
       "communityWritein": "የማህበረሰብ ስም ያስገቡ",
       "pleaseAcceptTerms": "እባክዎን በእነዚህ የአገልግሎት ውሎች ያነበቡ እና መስማማትዎን የሚያሳይ ሳጥን ላይ ምልክት ያድርጉ ፡፡",
       "userAcceptsTerms": "ከዚህ በላይ ባሉት ውሎችና ሁኔታዎች እስማማለሁ",
-      "avatar": "አምሳያ"
+      "avatar": "አምሳያ",
+      "organizationPassword": "የድርጅት የይለፍ ቃል",
+      "organizationPasswordHint": "{{organization}} ለምዝገባ የይለፍ ቃል ሊሰጥዎ ይገባል ፡፡"
     },
     "errors": {
       "nameRequired": "ስም ያስፈልጋል",
@@ -62,7 +64,10 @@
       "termsNotChecked": "ለመቀጠል እባክዎ ሳጥኑ ላይ ምልክት ያድርጉ",
       "loginUsernameRequired": "ኢሜል ያስፈልጋል",
       "loginPasswordRequired": "የይለፍ ቃል ያስፈልጋል",
-      "organizationRequired": "እባክዎን ከ መንግስታዊ ያልሆነ አጋር አጋር ድርጅታችን አንዱን ይምረጡ"
+      "organizationRequired": "እባክዎን ከ መንግስታዊ ያልሆነ አጋር አጋር ድርጅታችን አንዱን ይምረጡ",
+      "organizationPasswordRequired": "ለ {{organization}} ለመመዝገብ የይለፍ ቃል",
+      "organizationPasswordIncorrect": "የተሳሳተ የይለፍ ቃል",
+      "organizationPasswordContact": "እርዳታ ከፈለጉ እባክዎ <span>0 ን</span> በ {{contactEmail}} ያነጋግሩ።"
     },
     "buttons": {
       "login": "ግባ",
@@ -163,8 +168,8 @@
       "groupSizeRequired": "እባክዎን ለስልጠናው ከ 0 የሚበልጠውን የቡድን መጠን ያስገቡ"
     },
     "headers": {
-      "yourTraining": "1. የግለሰብ ስልጠና",
-      "trainOthers": "2. የቡድን ስልጠና",
+      "yourTraining": "2. የግለሰብ ስልጠና",
+      "trainOthers": "1. የቡድን ስልጠና",
       "previousTraining": "ቀዳሚ የሥልጠና ክፍለ ጊዜዎች",
       "yourTrainingSub": "ስልጠናውን በእራስዎ ካጠናቀቁ ይህንን አማራጭ ይምረጡ ፡፡",
       "trainOthersSub": "በቡድን ውስጥ ስልጠናውን ካጠናቀቁ ይህንን ስልጠና ይምረጡ ፡፡"

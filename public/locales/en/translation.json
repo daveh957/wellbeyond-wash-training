@@ -46,6 +46,8 @@
       "newPassword": "New Password (8 characters minimum)",
       "passwordRepeat": "Repeat Password",
       "organization": "Organization Name",
+      "organizationPassword": "Organization Password",
+      "organizationPasswordHint": "{{organization}} should have provided you with a password for registration.",
       "organizationWritein": "Enter Organization Name",
       "community": "Community (optional)",
       "communityWritein": "Enter Community Name",
@@ -62,7 +64,10 @@
       "termsNotChecked": "Please check the box to continue",
       "loginUsernameRequired": "Email is required",
       "loginPasswordRequired": "Password is required",
-      "organizationRequired": "Please select one of our NGO Partner Organizations"
+      "organizationRequired": "Please select one of our NGO Partner Organizations",
+      "organizationPasswordRequired": "Password required to register for {{organization}}.",
+      "organizationPasswordIncorrect": "Password incorrect.",
+      "organizationPasswordContact": "Please contact {{contactName}} at {{contactEmail}} if you need assistance."
     },
     "buttons": {
       "login": "Login",
@@ -163,9 +168,9 @@
       "groupSizeRequired": "Please enter a group size greater than 0 for the training"
     },
     "headers": {
-      "yourTraining": "1. Individual Training",
+      "yourTraining": "2. Individual Training",
       "yourTrainingSub": "Choose this option if you're completing the training on your own.",
-      "trainOthers": "2. Group Training",
+      "trainOthers": "1. Group Training",
       "trainOthersSub": "Choose this training if you're completing the training in a group.",
       "previousTraining": "Previous Training Sessions"
     },
