@@ -163,8 +163,8 @@
       "groupSizeRequired": "Tafadhali ingiza saizi ya kikundi kubwa kuliko 0 kwa mafunzo"
     },
     "headers": {
-      "yourTraining": "1. Mafunzo ya kibinafsi",
-      "trainOthers": "2. Mafunzo ya Kikundi",
+      "yourTraining": "2. Mafunzo ya kibinafsi",
+      "trainOthers": "1. Mafunzo ya Kikundi",
       "previousTraining": "Sehemu za Mafunzo ya awali",
       "yourTrainingSub": "Chagua chaguo hili ikiwa unamaliza mafunzo peke yako.",
       "trainOthersSub": "Chagua mafunzo haya ikiwa unamaliza mafunzo katika kikundi."

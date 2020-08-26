@@ -163,8 +163,8 @@
       "groupSizeRequired": "እባክዎን ለስልጠናው ከ 0 የሚበልጠውን የቡድን መጠን ያስገቡ"
     },
     "headers": {
-      "yourTraining": "1. የግለሰብ ስልጠና",
-      "trainOthers": "2. የቡድን ስልጠና",
+      "yourTraining": "2. የግለሰብ ስልጠና",
+      "trainOthers": "1. የቡድን ስልጠና",
       "previousTraining": "ቀዳሚ የሥልጠና ክፍለ ጊዜዎች",
       "yourTrainingSub": "ስልጠናውን በእራስዎ ካጠናቀቁ ይህንን አማራጭ ይምረጡ ፡፡",
       "trainOthersSub": "በቡድን ውስጥ ስልጠናውን ካጠናቀቁ ይህንን ስልጠና ይምረጡ ፡፡"

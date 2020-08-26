@@ -163,9 +163,9 @@
       "groupSizeRequired": "Please enter a group size greater than 0 for the training"
     },
     "headers": {
-      "yourTraining": "1. Individual Training",
+      "yourTraining": "2. Individual Training",
       "yourTrainingSub": "Choose this option if you're completing the training on your own.",
-      "trainOthers": "2. Group Training",
+      "trainOthers": "1. Group Training",
       "trainOthersSub": "Choose this training if you're completing the training in a group.",
       "previousTraining": "Previous Training Sessions"
     },

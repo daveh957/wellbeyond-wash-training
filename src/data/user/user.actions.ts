@@ -14,11 +14,21 @@ import {ActionType} from '../../util/types'
 import {TrainingSessions, UserState} from './user.state';
 import {LessonProgress, TrainingSession} from "../../models/Training";
 import {IntercomUser, Organization, UserProfile} from "../../models/User";
-import * as firebase from "firebase/app";
+import {
+  Plugins,
+  PushNotification,
+  PushNotificationToken,
+  PushNotificationActionPerformed } from '@capacitor/core';
+import { FCM } from '@capacitor-community/fcm';
+import * as firebase from 'firebase/app';
 import 'firebase/functions';
 import 'firebase/messaging';
 import {firebaseConfig} from "../../FIREBASE_CONFIG";
 
+declare var intercom: any;
+
+const { PushNotifications } = Plugins;
+const fcm = new FCM();
 export const loadOrganizations = () => async (dispatch: React.Dispatch<any>) => {
   listenForOrganizationData(function(organizations:Organization[]) {
     dispatch(setOrganizations(organizations));
@@ -27,6 +37,7 @@ export const loadOrganizations = () => async (dispatch: React.Dispatch<any>) => 
 
 export const setupMessaging = () => async (dispatch: React.Dispatch<any>) =>  {
   if (isPlatform('hybrid')) {
+    intercom.setLauncherVisibility('VISIBLE');
   }
   else {
     const messaging = firebase.messaging();
@@ -59,6 +70,51 @@ export const setupMessaging = () => async (dispatch: React.Dispatch<any>) =>  {
 const requestNotificationPermission = async (dispatch: React.Dispatch<any>) =>  {
   console.log('Requesting permission...');
   if (isPlatform('hybrid')) {
+    // Request permission to use push notifications
+    // iOS will prompt user and return if they granted permission or not
+    // Android will just grant without prompting
+    PushNotifications.requestPermission().then( result => {
+      if (result.granted) {
+        console.log('Notification permission granted.');
+        dispatch(setNotificationsOn(true));
+        updateProfile({notificationsOn: true}); // Don't wait for it to complete since we have offline support
+        PushNotifications.register() // Register with Apple / Google to receive push via APNS/FCM
+          .then(() => {
+            getMessagingToken(dispatch);
+          })
+          .catch((err) => alert(JSON.stringify(err)));
+      } else {
+        // Show some error
+      }
+    });
+
+    // On success, we should be able to receive notifications
+    PushNotifications.addListener('registration',
+      (token: PushNotificationToken) => {
+        console.log('Push registration success, token: ' + token.value);
+      }
+    );
+
+    // Some issue with our setup and push will not work
+    PushNotifications.addListener('registrationError',
+      (error: any) => {
+        console.log('Error on registration: ' + JSON.stringify(error));
+      }
+    );
+
+    // Show us the notification payload if the app is open on our device
+    PushNotifications.addListener('pushNotificationReceived',
+      (notification: PushNotification) => {
+        console.log('Push received: ' + JSON.stringify(notification));
+      }
+    );
+
+    // Method called when tapping on a notification
+    PushNotifications.addListener('pushNotificationActionPerformed',
+      (notification: PushNotificationActionPerformed) => {
+        console.log('Push action performed: ' + JSON.stringify(notification));
+      }
+    );
   }
   else {
     Notification.requestPermission().then((permission) => {
@@ -85,6 +141,21 @@ const getMessagingToken = async (dispatch: React.Dispatch<any>) =>  {
 // subsequent calls to getToken will return from cache.
   console.log('Retrieving FCM messaging token...');
   if (isPlatform('hybrid')) {
+    fcm
+      .getToken()
+      .then((r) => {
+        console.log(`Token ${r.token}`)
+        // Subscribe to a specific topic
+        fcm
+          .subscribeTo({ topic: 'test' })
+          .then((r) => {
+            console.log(`subscribed to test topic`)
+          })
+          .catch((err) => {
+            console.log(err)
+          });
+      })
+      .catch((err) => console.log(err));
   }
   else {
     const messaging = firebase.messaging();
@@ -120,16 +191,24 @@ export const watchAuthState = () => async (dispatch: React.Dispatch<any>) => {
           dispatch(setAcceptedTerms(!!profile.acceptedTerms));
           dispatch(setNotificationsOn(!!profile.notificationsOn));
           dispatch(setUserProfile(profile));
-          if (process.env.NODE_ENV === 'production') {
-            getUserIdHash().then(function (result) {
-              dispatch(setIntercomUser({
-                user_id: profile.id,
-                phone: profile.phoneNumber || undefined,
-                email: profile.email || undefined,
-                name: profile.name || undefined,
-                user_hash: result.data.hash
-              }));
-            });
+          const platform = isPlatform('ios') ? 'ios' : (isPlatform('android') ? 'android' : 'web');
+          getUserIdHash({platform: platform}).then(function (result) {
+            console.log('userId: '+ profile.id + ', userIdHash: ' + result.data.hash);
+            const intercomUser:IntercomUser = {
+              user_id: profile.id,
+              phone: profile.phoneNumber || undefined,
+              email: profile.email || undefined,
+              name: profile.name || undefined,
+              user_hash: result.data.hash
+            };
+            // @ts-ignore
+            if (isPlatform('hybrid')) {
+              intercom.registerIdentifiedUser(intercomUser);
+            }
+            dispatch(setIntercomUser(intercomUser));
+          });
+          if (profile.notificationsOn) {
+            getMessagingToken(dispatch);
           }
         }
         else {
@@ -142,6 +221,9 @@ export const watchAuthState = () => async (dispatch: React.Dispatch<any>) => {
       });
     } else {
       dispatch(setIsLoggedIn(false));
+      if (isPlatform('hybrid')) {
+        intercom.registerUnidentifiedUser();
+      }
       dispatch(setIntercomUser(undefined));
     }
   })

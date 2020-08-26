@@ -86,15 +86,16 @@ exports.getIntercomCompanies = functions.https.onCall((data, context) => {
   });
 });
 
-exports.updateIntercomUser = functions.database.ref('/users/{userId}').onWrite((change, context) => {
+exports.updateIntercomUser = functions.firestore.document('users/{userId}').onWrite((change, context) => {
   const before = change.before.data() || {};
   const after = change.after.data() || {};
   const userId = context.params.userId;
 
+  console.log({before: before, after: after, userId: userId})
+
   if (!after.organizationId || after.organizationId === before.organizationId) {
-    if (!after.community || after.community === before.community) {
+      console.log('No update to organization')
       return; // No change to the fields we want to sync
-    }
   }
   const apiKey = functions.config().intercom.api_key;
   const client = new Intercom.Client({ token: apiKey });
@@ -114,6 +115,9 @@ exports.updateIntercomUser = functions.database.ref('/users/{userId}').onWrite((
               id: doc.id,
               ...doc.data()
             };
+          }
+          else {
+            console.log('Organization not found');
           }
           return cb();
         })
@@ -177,6 +181,9 @@ exports.updateIntercomUser = functions.database.ref('/users/{userId}').onWrite((
     ], function(err) {
       if (err) {
         console.log(err);
+      }
+      else {
+        console.log({contact: contact, company: company, tag: tag});
       }
       resolve({contact: contact, company: company, tag: tag});
     });
