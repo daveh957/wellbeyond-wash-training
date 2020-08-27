@@ -17,7 +17,6 @@ import i18n from '../i18n';
 import {Organization, UserProfile} from "../models/User";
 import {setLoading} from "../data/user/user.actions";
 import {updateProfile} from "../data/user/userApi";
-import {TransformComponent} from "react-zoom-pan-pinch/dist";
 
 interface MyProps {
   profile?: UserProfile;
