@@ -51,7 +51,9 @@
       "communityWritein": "Ingiza Jina la Jumuiya",
       "pleaseAcceptTerms": "Tafadhali angalia kisanduku kinachoonyesha kuwa umesoma na ukubali masharti haya ya matumizi.",
       "userAcceptsTerms": "Nakubali masharti na masharti hapo juu",
-      "avatar": "Avatar"
+      "avatar": "Avatar",
+      "organizationPassword": "Nenosiri la shirika",
+      "organizationPasswordHint": "{{organization}} inapaswa kuwa imekupa nywila ya usajili."
     },
     "errors": {
       "nameRequired": "Jina inahitajika",
@@ -62,7 +64,10 @@
       "termsNotChecked": "Tafadhali angalia kisanduku kuendelea",
       "loginUsernameRequired": "Barua pepe inahitajika",
       "loginPasswordRequired": "Nywila inahitajika",
-      "organizationRequired": "Tafadhali chagua moja ya Asasi Zetu za Washirika wa NGO"
+      "organizationRequired": "Tafadhali chagua moja ya Asasi Zetu za Washirika wa NGO",
+      "organizationPasswordRequired": "Nenosiri linalohitajika kujiandikisha kwa {{organization}} .",
+      "organizationPasswordIncorrect": "Nenosiri sio sahihi.",
+      "organizationPasswordContact": "Tafadhali wasiliana na {{contactName}} kwa {{contactEmail}} ikiwa unahitaji msaada."
     },
     "buttons": {
       "login": "Ingia",

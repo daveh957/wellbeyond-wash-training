@@ -51,7 +51,9 @@
       "communityWritein": "Entrez le nom de la communauté",
       "pleaseAcceptTerms": "Veuillez cocher la case indiquant que vous avez lu et accepté ces conditions d'utilisation.",
       "userAcceptsTerms": "J'accepte les termes et conditions ci-dessus",
-      "avatar": "Avatar"
+      "avatar": "Avatar",
+      "organizationPassword": "Mot de passe de l'organisation",
+      "organizationPasswordHint": "{{organization}} devrait vous avoir fourni un mot de passe pour l&#39;enregistrement."
     },
     "errors": {
       "nameRequired": "Le nom est requis",
@@ -62,7 +64,10 @@
       "termsNotChecked": "Veuillez cocher la case pour continuer",
       "loginUsernameRequired": "L'email est requis",
       "loginPasswordRequired": "Mot de passe requis",
-      "organizationRequired": "Veuillez sélectionner une de nos ONG partenaires"
+      "organizationRequired": "Veuillez sélectionner une de nos ONG partenaires",
+      "organizationPasswordRequired": "Mot de passe requis pour s&#39;inscrire à {{organization}} .",
+      "organizationPasswordIncorrect": "Mot de passe incorrect.",
+      "organizationPasswordContact": "Veuillez contacter {{contactName}} à {{contactEmail}} si vous avez besoin d&#39;aide."
     },
     "buttons": {
       "login": "S'identifier",

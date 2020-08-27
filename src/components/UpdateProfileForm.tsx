@@ -6,13 +6,13 @@ import {
   IonInput,
   IonItem,
   IonLabel,
-  IonList,
+  IonList, IonNote,
   IonRow,
   IonSelect,
   IonSelectOption,
   IonText
 } from '@ionic/react';
-import {useTranslation} from "react-i18next";
+import {Trans, useTranslation} from "react-i18next";
 import i18n from '../i18n';
 import {Organization, UserProfile} from "../models/User";
 import {setLoading} from "../data/user/user.actions";
@@ -38,11 +38,13 @@ const UpdateProfileForm: React.FC<MyProps> = ({profile, organizations, onSave, s
   const [name, setName] = useState<string>();
   const [organization, setOrganization] = useState<Organization>();
   const [community, setCommunity] = useState<string>();
+  const [orgPassword, setOrgPassword] = useState<string>();
 
   const [formSubmitted, setFormSubmitted] = useState<boolean>(false);
   const [serverError, setServerError] = useState<Error>();
   const [nameError, setNameError] = useState<string>();
   const [organizationError, setOrganizationError] = useState<string>();
+  const [orgPasswordError, setOrgPasswordError] = useState<string>();
 
   useEffect(() => {
     if (organizations) {
@@ -124,9 +126,14 @@ const UpdateProfileForm: React.FC<MyProps> = ({profile, organizations, onSave, s
   }
 
   const validate = ():boolean => {
-    setNameError(name ? undefined :'registration.errors.nameRequired');
-    setOrganizationError(organization ? undefined : 'registration.errors.organizationRequired');
-    return !!(name && organization);
+    const nameError = name ? undefined :'registration.errors.nameRequired';
+    const organizationError = organization ? undefined : 'registration.errors.organizationRequired';
+    const orgPasswordError  = (organization && organization.password && orgPassword !== organization.password) ?
+      (orgPassword ? 'registration.errors.organizationPasswordIncorrect' : 'registration.errors.organizationPasswordRequired') : undefined;
+    setNameError(nameError);
+    setOrganizationError(organizationError);
+    setOrgPasswordError(orgPasswordError);
+    return !(nameError || organizationError || orgPasswordError);
   }
 
   const save = async (e: React.FormEvent) => {
@@ -209,7 +216,31 @@ const UpdateProfileForm: React.FC<MyProps> = ({profile, organizations, onSave, s
               {t(organizationError)}
             </p>
           </IonText>}
-        </IonItem>}
+        </IonItem>
+        }
+
+        {organization && organization.password &&
+        <IonItem>
+          <IonLabel position="stacked" color="primary">{t('registration.labels.organizationPassword')}</IonLabel>
+          <IonInput name="password" type="password" value={orgPassword} required={true} onIonChange={e => {
+            setOrgPassword(e.detail.value!);
+          }}>
+          </IonInput>
+          <IonNote>{t('registration.labels.organizationPasswordHint', {organization: organization.name})}</IonNote>
+          {organization.contactName && organization.contactEmail &&
+            <IonNote>
+              <Trans
+                i18nKey="registration.errors.organizationPasswordContact"
+                values={{contactName: organization.contactName, contactEmail: organization.contactEmail}}/>
+            </IonNote>
+          }
+          {orgPasswordError && <IonText color="danger">
+            <p className="ion-padding-start">
+              {t(orgPasswordError, {organization: organization.name})}
+            </p>
+          </IonText>}
+        </IonItem>
+        }
 
         {communityList && communityList.length &&
         <IonItem>

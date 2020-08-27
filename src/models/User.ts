@@ -47,6 +47,9 @@ export interface Community {
 export interface Organization {
   id: string;
   name: string;
+  password?: string;
+  contactName?: string;
+  contactEmail?: string;
   communities: Community[];
 
 }

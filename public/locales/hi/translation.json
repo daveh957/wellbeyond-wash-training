@@ -51,7 +51,9 @@
       "communityWritein": "सामुदायिक नाम दर्ज करें",
       "pleaseAcceptTerms": "कृपया यह इंगित करने वाले बॉक्स को देखें कि आपने इन उपयोग की शर्तों को पढ़ा है और इससे सहमत हैं।",
       "userAcceptsTerms": "मैं ऊपर दिए गए नियमों और शर्तों से सहमत हूं",
-      "avatar": "अवतार"
+      "avatar": "अवतार",
+      "organizationPassword": "संगठन का पासवर्ड",
+      "organizationPasswordHint": "{{organization}} आपको पंजीकरण के लिए एक पासवर्ड प्रदान करना चाहिए।"
     },
     "errors": {
       "nameRequired": "नाम आवश्यक है",
@@ -62,7 +64,10 @@
       "termsNotChecked": "कृपया जारी रखने के लिए बॉक्स की जाँच करें",
       "loginUsernameRequired": "ईमेल जरुरी है",
       "loginPasswordRequired": "पासवर्ड की आवश्यकता है",
-      "organizationRequired": "कृपया हमारे एनजीओ साथी संगठनों में से एक का चयन करें"
+      "organizationRequired": "कृपया हमारे एनजीओ साथी संगठनों में से एक का चयन करें",
+      "organizationPasswordRequired": "पासवर्ड <span>0 के</span> लिए रजिस्टर करने के लिए आवश्यक है।",
+      "organizationPasswordIncorrect": "गलत पासवर्ड।",
+      "organizationPasswordContact": "यदि आपको सहायता की आवश्यकता है तो कृपया {{contactName}} से {{contactEmail}} पर संपर्क करें।"
     },
     "buttons": {
       "login": "लॉग इन करें",
