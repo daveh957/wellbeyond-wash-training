@@ -14,22 +14,6 @@ if ("function" === typeof importScripts) {
     console.log('Firebase Config: ', firebaseConfig);
 
     firebase.initializeApp(firebaseConfig);
-    const messaging = firebase.messaging();
 
-    // If you would like to customize notifications that are received in the
-    // background (Web app is closed or not in browser focus) then you should
-    // implement this optional method.
-    messaging.setBackgroundMessageHandler(function(payload) {
-      console.log('[firebase-messaging-sw.js] Received background message ', payload);
-      // Customize notification here
-      const notificationTitle = 'Background Message Title';
-      const notificationOptions = {
-        body: 'Background Message body.',
-        icon: '/firebase-logo.png'
-      };
-
-      return self.registration.showNotification(notificationTitle,
-        notificationOptions);
-    });
   }
 }

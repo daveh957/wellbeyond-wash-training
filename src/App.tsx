@@ -31,7 +31,7 @@ import * as selectors from './data/selectors';
 import MainTabs from './pages/MainTabs';
 import {connect} from './data/connect';
 import {AppContextProvider} from './data/AppContext';
-import {loadOrganizations, logoutUser, watchAuthState, setupMessaging} from './data/user/user.actions';
+import {loadOrganizations, logoutUser, watchAuthState} from './data/user/user.actions';
 import {loadTrainingData} from './data/training/training.actions';
 import AcceptTerms from './pages/AcceptTerms';
 import Account from './pages/Account';
@@ -67,13 +67,12 @@ interface DispatchProps {
   loadOrganizations: typeof loadOrganizations;
   watchAuthState: typeof watchAuthState;
   logoutUser: typeof logoutUser;
-  setupMessaging: typeof setupMessaging;
 }
 
 interface IonicAppProps extends StateProps, DispatchProps { }
 
 
-const IonicApp: React.FC<IonicAppProps> = ({ darkMode, loading, intercomUser, loadTrainingData, loadOrganizations, watchAuthState, logoutUser, setupMessaging}) => {
+const IonicApp: React.FC<IonicAppProps> = ({ darkMode, loading, intercomUser, loadTrainingData, loadOrganizations, watchAuthState, logoutUser}) => {
 
   const { t } = useTranslation(['translation'], {i18n} );
 
@@ -99,8 +98,7 @@ const IonicApp: React.FC<IonicAppProps> = ({ darkMode, loading, intercomUser, lo
     loadOrganizations();
     loadTrainingData();
     watchAuthState();
-    setupMessaging();
-  }, [loadTrainingData, loadOrganizations, watchAuthState, setupMessaging,]);
+  }, [loadTrainingData, loadOrganizations, watchAuthState]);
 
   // @ts-ignore
   return (
@@ -146,6 +144,6 @@ const IonicAppConnected = connect<{}, StateProps, DispatchProps>({
     loading: selectors.getLoading(state),
     intercomUser: selectors.getIntercomUser(state),
   }),
-  mapDispatchToProps: { loadTrainingData, loadOrganizations, watchAuthState, logoutUser, setupMessaging },
+  mapDispatchToProps: { loadTrainingData, loadOrganizations, watchAuthState, logoutUser},
   component: IonicApp
 });

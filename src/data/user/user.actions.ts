@@ -33,38 +33,6 @@ export const loadOrganizations = () => async (dispatch: React.Dispatch<any>) => 
   });
 }
 
-export const setupMessaging = () => async (dispatch: React.Dispatch<any>) =>  {
-  if (isPlatform('hybrid')) {
-    intercom.setLauncherVisibility('VISIBLE');
-  }
-  else {
-    const messaging = firebase.messaging();
-    messaging.usePublicVapidKey(firebaseConfig.vapidPublicKey);
-
-    // Callback fired if Instance ID token is updated.
-    messaging.onTokenRefresh(() => {
-      messaging.getToken().then((refreshedToken) => {
-        console.log('Token refreshed.');
-        console.log(refreshedToken);
-        // Indicate that the new Instance ID token has not yet been sent to the
-        // app server.
-        // setTokenSentToServer(false);
-        // Send Instance ID token to app server.
-        // sendTokenToServer(refreshedToken);
-        // ...
-      }).catch((err) => {
-        console.log('Unable to retrieve refreshed token ', err);
-        // showToken('Unable to retrieve refreshed token ', err);
-      });
-    });
-
-    messaging.onMessage((payload) => {
-      console.log('Message received. ', payload);
-      // ...
-    });
-  }
-}
-
 const requestNotificationPermission = async (dispatch: React.Dispatch<any>) =>  {
   console.log('Requesting permission...');
   if (isPlatform('hybrid')) {
@@ -142,16 +110,7 @@ const getMessagingToken = async (dispatch: React.Dispatch<any>) =>  {
     fcm
       .getToken()
       .then((r) => {
-        console.log(`Token ${r.token}`)
-        // Subscribe to a specific topic
-        fcm
-          .subscribeTo({ topic: 'test' })
-          .then((r) => {
-            console.log(`subscribed to test topic`)
-          })
-          .catch((err) => {
-            console.log(err)
-          });
+        console.log(`Token ${r.token}`);
       })
       .catch((err) => console.log(err));
   }
@@ -159,10 +118,12 @@ const getMessagingToken = async (dispatch: React.Dispatch<any>) =>  {
     const messaging = firebase.messaging();
     messaging.getToken().then((currentToken) => {
       if (currentToken) {
-        console.log('Token retrieved.');
-        console.log(currentToken);
-        // sendTokenToServer(currentToken);
-        // updateUIForPushEnabled(currentToken);
+        console.log(`Token ${currentToken}`);
+        messaging.onMessage((payload) => {
+          console.log('Message received. ');
+          console.log(payload);
+          // ...
+        });
       } else {
         // Show permission request.
         console.log('No Instance ID token available. Request permission to generate one.');
@@ -170,11 +131,8 @@ const getMessagingToken = async (dispatch: React.Dispatch<any>) =>  {
         // updateUIForPushPermissionRequired();
         // setTokenSentToServer(false);
       }
-    }).catch((err) => {
-      console.log('An error occurred while retrieving token. ', err);
-      // showToken('Error retrieving Instance ID token. ', err);
-      // setTokenSentToServer(false);
-    });
+    })
+    .catch((err) => console.log(err));
   }
 }
 
@@ -201,7 +159,15 @@ export const watchAuthState = () => async (dispatch: React.Dispatch<any>) => {
             };
             // @ts-ignore
             if (isPlatform('hybrid')) {
+              intercom.setUserHash(result.data.hash);
               intercom.registerIdentifiedUser(intercomUser);
+              intercom.setLauncherVisibility('VISIBLE');
+              if (profile.notificationsOn) {
+                intercom.registerForPush();
+              }
+            }
+            else {
+              intercomUser.user_hash = result.data.hash;
             }
             dispatch(setIntercomUser(intercomUser));
           });
@@ -221,6 +187,7 @@ export const watchAuthState = () => async (dispatch: React.Dispatch<any>) => {
       dispatch(setIsLoggedIn(false));
       if (isPlatform('hybrid')) {
         intercom.registerUnidentifiedUser();
+        intercom.setLauncherVisibility('VISIBLE');
       }
       dispatch(setIntercomUser(undefined));
     }

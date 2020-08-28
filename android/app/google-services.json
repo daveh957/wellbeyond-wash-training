@@ -15,11 +15,19 @@
       },
       "oauth_client": [
         {
-          "client_id": "654062401402-gv1rmir3rl2svp5so8q4f7p4pq5pjkmb.apps.googleusercontent.com",
+          "client_id": "654062401402-ue6ig0ifm3kc6jm7tp2b3247e74vdnib.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.wellbeyond.wash",
             "certificate_hash": "de4e30b5119c8312b02f99106b4bba03285ff201"
+          }
+        },
+        {
+          "client_id": "654062401402-ionoigctdid9ec75e6d5ljv0l4e9kk9t.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.wellbeyond.wash",
+            "certificate_hash": "9e1f8db1b715de9d3d71b2e1274d27b9f3372c16"
           }
         },
         {
@@ -38,6 +46,14 @@
             {
               "client_id": "654062401402-vktg37bv37k5oci3tg90g6s2ks0p5up2.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "654062401402-b74sbbu67aptnvghe01iegalc202ievv.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.wellbeyond.wash",
+                "app_store_id": "1523507404"
+              }
             }
           ]
         }
