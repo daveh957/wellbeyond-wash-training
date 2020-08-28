@@ -4,8 +4,6 @@ import {TrainingSessions} from "./user.state";
 import {TrainingSession} from "../../models/Training";
 import {UserProfile} from "../../models/User";
 import * as firebase from "firebase/app";
-import 'firebase/auth';
-import 'firebase/firestore';
 
 let unsubUser:any, unsubAdmin:any, unsubLessons:any, unsubTraningSessions:any;
 

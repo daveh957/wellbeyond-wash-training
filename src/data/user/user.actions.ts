@@ -12,16 +12,11 @@ import {ActionType} from '../../util/types'
 import {TrainingSessions, UserState} from './user.state';
 import {LessonProgress, TrainingSession} from "../../models/Training";
 import {IntercomUser, Organization, UserProfile} from "../../models/User";
-import {
-  Plugins,
-  PushNotification,
-  PushNotificationToken,
-  PushNotificationActionPerformed } from '@capacitor/core';
-import { FCM } from '@capacitor-community/fcm';
+import {Plugins, PushNotification, PushNotificationActionPerformed, PushNotificationToken} from '@capacitor/core';
+import {FCM} from '@capacitor-community/fcm';
 import * as firebase from 'firebase/app';
 import 'firebase/functions';
 import 'firebase/messaging';
-import {firebaseConfig} from "../../FIREBASE_CONFIG";
 
 declare var intercom: any;
 

@@ -1,4 +1,4 @@
-import React, {useEffect, Suspense} from 'react';
+import React, {Suspense, useEffect} from 'react';
 import {Redirect, Route} from 'react-router-dom';
 import {IonApp, IonLoading, IonRouterOutlet, IonSplitPane, isPlatform} from '@ionic/react';
 import {IonReactRouter} from '@ionic/react-router';

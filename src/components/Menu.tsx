@@ -12,7 +12,7 @@ import {
   IonMenuToggle,
   IonToggle
 } from '@ionic/react';
-import {fingerPrint, globe, logIn, logOut, moonOutline, person, notificationsOutline} from 'ionicons/icons';
+import {fingerPrint, globe, logIn, logOut, moonOutline, notificationsOutline, person} from 'ionicons/icons';
 import {useTranslation} from "react-i18next";
 import i18n from '../i18n';
 
