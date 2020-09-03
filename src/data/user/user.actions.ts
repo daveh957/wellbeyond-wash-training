@@ -106,6 +106,13 @@ const getMessagingToken = async (dispatch: React.Dispatch<any>) =>  {
       .getToken()
       .then((r) => {
         console.log(`Token ${r.token}`);
+        try {
+          intercom.registerForPush();
+          intercom.sendPushTokenToIntercom(r.token);
+        }
+        catch (err) {
+          console.log(err);
+        }
       })
       .catch((err) => console.log(err));
   }
@@ -155,7 +162,13 @@ export const watchAuthState = () => async (dispatch: React.Dispatch<any>) => {
             // @ts-ignore
             if (isPlatform('hybrid')) {
               intercom.setUserHash(result.data.hash);
-              intercom.registerIdentifiedUser(intercomUser);
+              intercom.registerIdentifiedUser({userId: profile.id});
+              intercom.updateUser({
+                userId: profile.id,
+                phone: profile.phoneNumber || null,
+                email: profile.email || null,
+                name: profile.name || null
+              });
               intercom.setLauncherVisibility('VISIBLE');
               if (profile.notificationsOn) {
                 intercom.registerForPush();
@@ -165,10 +178,10 @@ export const watchAuthState = () => async (dispatch: React.Dispatch<any>) => {
               intercomUser.user_hash = result.data.hash;
             }
             dispatch(setIntercomUser(intercomUser));
+            if (profile.notificationsOn) {
+              requestNotificationPermission(dispatch);
+            }
           });
-          if (profile.notificationsOn) {
-            getMessagingToken(dispatch);
-          }
         }
         else {
           dispatch(setIsRegistered(false));

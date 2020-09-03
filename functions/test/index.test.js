@@ -33,11 +33,11 @@ const updateIntercomUser = test.wrap(myFunctions.updateIntercomUser);
 
 describe('updateIntercomUser', () => {
   it('should update Intercom', (done) => {
-    const beforeSnap = test.firestore.makeDocumentSnapshot({name: 'test'}, 'users/GQvUrwq2Q2NXUa8yRPVDKhxqAZY2');
-    const afterSnap = test.firestore.makeDocumentSnapshot({name: 'test', organizationId: 'GCQVJPBWwNUWJEsAuXpq', community: 'Olpejata'}, 'users/GQvUrwq2Q2NXUa8yRPVDKhxqAZY2');
+    const beforeSnap = test.firestore.makeDocumentSnapshot({name: 'test'}, 'users/w6QlOcjZyhSogLdioIaz2kMuoMi2');
+    const afterSnap = test.firestore.makeDocumentSnapshot({name: 'test', organizationId: 'AxenYeunlMA21dZazXmZ', community: 'Bap Block: Other'}, 'users/w6QlOcjZyhSogLdioIaz2kMuoMi2');
     const change = test.makeChange(beforeSnap, afterSnap);
 
-    updateIntercomUser(change, {params: {userId: 'GQvUrwq2Q2NXUa8yRPVDKhxqAZY2'}}).then((result) => {
+    updateIntercomUser(change, {params: {userId: 'w6QlOcjZyhSogLdioIaz2kMuoMi2'}}).then((result) => {
       console.log(result);
       done();
     });

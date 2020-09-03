@@ -9,8 +9,7 @@
       "DisableDeploy": true,
       "intercom-app-id": "ywg09h0a",
       "intercom-ios-api-key": "ios_sdk-c0d3372da410222801f53d625eab05d4546fff55",
-      "intercom-android-api-key": "android_sdk-0b29a3423e173d209b9e645c53e91dea737b29fe",
-      "intercom-android-push-type": "FCM"
+      "intercom-android-api-key": "android_sdk-0b29a3423e173d209b9e645c53e91dea737b29fe"
     }
   },
   "plugins": {

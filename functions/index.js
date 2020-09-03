@@ -86,17 +86,8 @@ exports.getIntercomCompanies = functions.https.onCall((data, context) => {
   });
 });
 
-exports.updateIntercomUser = functions.firestore.document('users/{userId}').onWrite((change, context) => {
-  const before = change.before.data() || {};
-  const after = change.after.data() || {};
-  const userId = context.params.userId;
+function doIntercomUpdate (userId, organizationId) {
 
-  console.log({before: before, after: after, userId: userId})
-
-  if (!after.organizationId || after.organizationId === before.organizationId) {
-      console.log('No update to organization')
-      return; // No change to the fields we want to sync
-  }
   const apiKey = functions.config().intercom.api_key;
   const client = new Intercom.Client({ token: apiKey });
   const result = {};
@@ -109,7 +100,7 @@ exports.updateIntercomUser = functions.firestore.document('users/{userId}').onWr
     async.series([
       function (cb) {
         // Retrieve the organization record from Firebase
-        admin.firestore().collection('organizations').doc(after.organizationId).get().then(doc => {
+        admin.firestore().collection('organizations').doc(organizationId).get().then(doc => {
           if (doc.exists) {
             organization = {
               id: doc.id,
@@ -127,13 +118,28 @@ exports.updateIntercomUser = functions.firestore.document('users/{userId}').onWr
           });
       },
       function (cb) {
-        // Read the intercom user
-        client.post('/contacts/search', {query: {field: 'external_id', operator: '=', value: userId}}, function(err, resp) {
-          if (err || !resp) {
-            console.log(err || 'No response reading intercom contact');
-            return cb();
+        // Read the intercom user (retry up to 5 times)
+        let retries = 0;
+        async.whilst(function(cb1) {
+          return cb1(null, !contact && retries < 5);
+        }, function(cb1) {
+          if (retries) {
+            console.log('Retrying contact search in Intercom');
           }
-          contact = resp && resp.body && resp.body.data && resp.body.data.length ? resp.body.data[0] : undefined;
+          client.post('/contacts/search', {query: {field: 'external_id', operator: '=', value: userId}}, function(err, resp) {
+            if (err || !resp) {
+              console.log(err || 'No response reading intercom contact');
+              return cb1(err);
+            }
+            contact = resp && resp.body && resp.body.data && resp.body.data.length ? resp.body.data[0] : undefined;
+            if (contact) {
+              return cb1();
+            }
+            retries++;
+            console.log('No results from contact search in Intercom');
+            setTimeout(cb1, 14000);
+          });
+        }, function () {
           cb();
         });
       },
@@ -188,4 +194,18 @@ exports.updateIntercomUser = functions.firestore.document('users/{userId}').onWr
       resolve({contact: contact, company: company, tag: tag});
     });
   });
+}
+
+exports.updateIntercomUser = functions.firestore.document('users/{userId}').onWrite((change, context) => {
+  const before = change.before.data() || {};
+  const after = change.after.data() || {};
+  const userId = context.params.userId;
+
+  console.log({before: before, after: after, userId: userId})
+
+  if (!after.organizationId || after.organizationId === before.organizationId) {
+      console.log('No update to organization')
+      return Promise.resolve(); // No change to the fields we want to sync
+  }
+  return doIntercomUpdate(userId, organizationId)
 });

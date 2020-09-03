@@ -14,10 +14,8 @@ buildscript {
         maven { url 'https://maven.google.com' }
     }
     dependencies {
+        classpath 'com.google.gms:google-services:4.3.3'
         classpath 'com.android.tools.build:gradle:4.0.1'
-        if (pushType == 'fcm') {
-            classpath 'com.google.gms:google-services:3.2.0'
-        }
     }
 }
 
@@ -29,10 +27,8 @@ repositories {
 
 dependencies {
     implementation 'io.intercom.android:intercom-sdk-base:7.2.0'
-    if (pushType == 'fcm' || pushType == 'fcm-without-build-plugin') {
-        implementation 'com.google.firebase:firebase-messaging:20.+'
-        implementation 'io.intercom.android:intercom-sdk-fcm:7.2.0'
-    }
+    implementation 'com.google.firebase:firebase-messaging:20.+'
+    implementation 'io.intercom.android:intercom-sdk-fcm:7.2.0'
 }
 
 def googleServicesJsonPath = '../../../google-services.json'
