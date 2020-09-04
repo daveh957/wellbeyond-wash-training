@@ -15,19 +15,25 @@ import {
 } from '@ionic/react';
 import {Trans, useTranslation} from "react-i18next";
 import i18n from '../i18n';
-import {Organization, UserProfile} from "../models/User";
+import {IntercomUser, Organization, UserProfile} from "../models/User";
 import {setLoading} from "../data/user/user.actions";
 import {updateProfile} from "../data/user/userApi";
+import {connect} from "../data/connect";
 
-interface MyProps {
+
+interface DispatchProps {
+  setLoading: typeof setLoading
+}
+
+interface UpdateProfileProps extends DispatchProps {
   profile?: UserProfile;
+  intercomUser?: IntercomUser;
   organizations?: Organization[];
   onSave(): void;
   saveButtonLabel: string;
-  setLoading: typeof setLoading;
 }
 
-const UpdateProfileForm: React.FC<MyProps> = ({profile, organizations, onSave, saveButtonLabel, setLoading }) => {
+const UpdateProfileForm: React.FC<UpdateProfileProps> = ({profile, intercomUser, organizations, onSave, saveButtonLabel, setLoading,  }) => {
 
   const { t } = useTranslation(['translation'], {i18n} );
 
@@ -153,6 +159,20 @@ const UpdateProfileForm: React.FC<MyProps> = ({profile, organizations, onSave, s
         else {
           profile.organizationId = organization.id;
           profile.community = community || '';
+          if (organization.intercomTag) {
+            profile.intercomTag = {id: organization.intercomTag, name: organization.name};
+          }
+          if (community) {
+            const found = organization.communities && organization.communities.find((c) => {
+              return c.name === community;
+            });
+            if (found) {
+              profile.intercomCompany = {id: found.intercomCompany, name: found.name};
+            }
+          }
+          if (!profile.intercomCompany && organization.intercomCompany) {
+            profile.intercomCompany = {id: organization.intercomCompany, name: organization.name};
+          }
         }
       }
       updateProfile(profile)
@@ -168,7 +188,6 @@ const UpdateProfileForm: React.FC<MyProps> = ({profile, organizations, onSave, s
         });
     }
   };
-
 
   // @ts-ignore
   return (
@@ -287,4 +306,10 @@ const UpdateProfileForm: React.FC<MyProps> = ({profile, organizations, onSave, s
   );
 };
 
-export default UpdateProfileForm;
+
+export default connect({
+  mapDispatchToProps: {
+    setLoading
+  },
+  component: UpdateProfileForm
+});

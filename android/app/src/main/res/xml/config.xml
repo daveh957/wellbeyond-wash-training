@@ -17,7 +17,6 @@
   </feature>
 
   
-  <preference name="DisableDeploy" value="true" />
   <preference name="intercom-app-id" value="ywg09h0a" />
   <preference name="intercom-ios-api-key" value="ios_sdk-c0d3372da410222801f53d625eab05d4546fff55" />
   <preference name="intercom-android-api-key" value="android_sdk-0b29a3423e173d209b9e645c53e91dea737b29fe" />

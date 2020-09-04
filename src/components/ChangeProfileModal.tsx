@@ -2,7 +2,6 @@ import React from 'react';
 import {IonButton, IonButtons, IonContent, IonHeader, IonModal, IonTitle, IonToolbar,} from '@ionic/react';
 import {useTranslation} from "react-i18next";
 import i18n from "../i18n";
-import {setLoading} from "../data/user/user.actions";
 import {ToastProps} from "../pages/Account";
 import UpdateProfileForm from "./UpdateProfileForm";
 import {Organization, UserProfile} from "../models/User";
@@ -14,10 +13,9 @@ interface ChangeProfileProps {
   showToast(props:ToastProps): void,
   profile?: UserProfile;
   organizations?: Organization[];
-  setLoading: typeof  setLoading;
 }
 
-const ChangeProfileModal: React.FC<ChangeProfileProps> = ({showModal, closeModal, showToast, profile, organizations, setLoading}) => {
+const ChangeProfileModal: React.FC<ChangeProfileProps> = ({showModal, closeModal, showToast, profile, organizations}) => {
 
   const { t } = useTranslation(['translation'], {i18n} );
 
@@ -39,7 +37,7 @@ const ChangeProfileModal: React.FC<ChangeProfileProps> = ({showModal, closeModal
         </IonToolbar>
       </IonHeader>
       <IonContent>
-        <UpdateProfileForm profile={profile} organizations={organizations} onSave={onSave} saveButtonLabel={t('registration.modals.changeProfile')} setLoading={setLoading} />
+        <UpdateProfileForm profile={profile} organizations={organizations} onSave={onSave} saveButtonLabel={t('registration.modals.changeProfile')} />
       </IonContent>
     </IonModal>
   );

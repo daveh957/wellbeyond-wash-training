@@ -19,6 +19,8 @@ export interface IntercomUser {
   phone?: string;
   email?: string;
   name?: string;
+  company?: object;
+  tag?: object;
 }
 
 export interface UserProfile {
@@ -33,6 +35,8 @@ export interface UserProfile {
   acceptedTerms?: boolean;
   canTeach?: boolean;
   notificationsOn?: boolean;
+  intercomCompany?: object;
+  intercomTag?: object;
 }
 
 export interface Admin {
@@ -42,6 +46,7 @@ export interface Admin {
 
 export interface Community {
   name: string;
+  intercomCompany?: string;
 }
 
 export interface Organization {
@@ -51,7 +56,8 @@ export interface Organization {
   contactName?: string;
   contactEmail?: string;
   communities: Community[];
-
+  intercomCompany?: string;
+  intercomTag?: string;
 }
 
 

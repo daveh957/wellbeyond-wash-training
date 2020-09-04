@@ -116,6 +116,7 @@ const IonicApp: React.FC<IonicAppProps> = ({ darkMode, loading, intercomUser, lo
               <Route path="/termsOfUse" component={Terms} />
               <Route path="/privacyPolicy" component={Privacy} />
               <Route path="/logout" render={() => {
+                i18n.changeLanguage('en');
                 logoutUser();
                 return <Redirect to="/login" />
               }} />

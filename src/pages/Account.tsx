@@ -24,7 +24,6 @@ import ChangeEmailModal from "../components/ChangeEmailModal";
 import ChangePasswordModal from "../components/ChangePasswordModal";
 import ChangeProfileModal from "../components/ChangeProfileModal";
 import {Organization, UserProfile} from "../models/User";
-import {setLoading} from "../data/user/user.actions";
 
 export interface ToastProps {
   color?:string;
@@ -42,12 +41,11 @@ interface StateProps {
 }
 
 interface DispatchProps {
-  setLoading: typeof setLoading;
 }
 
 interface AccountProps extends OwnProps, StateProps, DispatchProps { }
 
-const Account: React.FC<AccountProps> = ({ isLoggedIn, isRegistered, profile, organizations, setLoading  }) => {
+const Account: React.FC<AccountProps> = ({ isLoggedIn, isRegistered, profile, organizations,   }) => {
 
   const { t } = useTranslation(['translation'], {i18n} );
 
@@ -138,7 +136,7 @@ const Account: React.FC<AccountProps> = ({ isLoggedIn, isRegistered, profile, or
               </IonItem>
             </IonList>
           </div>
-        <ChangeProfileModal showModal={showProfileModal} closeModal={closeProfileModal} showToast={showToast} profile={profile} organizations={organizations} setLoading={setLoading}/>
+        <ChangeProfileModal showModal={showProfileModal} closeModal={closeProfileModal} showToast={showToast} profile={profile} organizations={organizations} />
         <ChangePasswordModal showModal={showPasswordModal} closeModal={closePasswordModal} showToast={showToast}/>
         <ChangeEmailModal showModal={showEmailModal} closeModal={closeEmailModal} email={profile.email}  showToast={showToast}/>
         <IonToast isOpen={openToast} header={toastHeader} message={toastMessage} color={toastColor||'success'} duration={2000} onDidDismiss={() => setOpenToast(false)} />
@@ -148,9 +146,6 @@ const Account: React.FC<AccountProps> = ({ isLoggedIn, isRegistered, profile, or
 };
 
 export default connect<OwnProps, StateProps, DispatchProps>({
-  mapDispatchToProps: {
-    setLoading,
-  },
   mapStateToProps: (state) => ({
     isLoggedIn: state.user.isLoggedIn,
     isRegistered: state.user.isRegistered,

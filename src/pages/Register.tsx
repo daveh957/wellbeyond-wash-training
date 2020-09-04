@@ -19,8 +19,8 @@ import {connect} from '../data/connect';
 import * as selectors from "../data/selectors";
 import {RouteComponentProps} from 'react-router';
 import {Redirect} from "react-router-dom";
-import {setIsRegistered, setLoading} from "../data/user/user.actions";
-import {Organization, UserProfile} from "../models/User";
+import {setIsRegistered} from "../data/user/user.actions";
+import {IntercomUser, Organization, UserProfile} from "../models/User";
 import UpdateProfileForm from "../components/UpdateProfileForm";
 
 interface OwnProps extends RouteComponentProps {}
@@ -29,18 +29,17 @@ interface StateProps {
   isLoggedIn?: boolean;
   isRegistered?: boolean;
   profile?: UserProfile;
+  intercomUser?: IntercomUser;
   organizations?: Organization[];
 }
 
 interface DispatchProps {
   setIsRegistered: typeof setIsRegistered;
-  setLoading: typeof setLoading;
 }
 
 interface RegisterProps extends OwnProps, StateProps, DispatchProps { }
 
-const Register: React.FC<RegisterProps> = ({isLoggedIn, isRegistered, profile, organizations, setIsRegistered, setLoading}) => {
-
+const Register: React.FC<RegisterProps> = ({isLoggedIn, isRegistered, profile, organizations, setIsRegistered}) => {
   const { t } = useTranslation(['translation'], {i18n} );
   const {navigate} = useContext(NavContext);
 
@@ -65,6 +64,7 @@ const Register: React.FC<RegisterProps> = ({isLoggedIn, isRegistered, profile, o
   if (isRegistered) {
     return <Redirect to={'/terms'} />
   }
+
   // @ts-ignore
   return (
     <IonPage id="register-page">
@@ -84,7 +84,7 @@ const Register: React.FC<RegisterProps> = ({isLoggedIn, isRegistered, profile, o
               </div>
               <p>{t('registration.messages.registerInfo')}</p>
 
-              <UpdateProfileForm profile={profile} organizations={organizations} onSave={onSave} saveButtonLabel={t('registration.buttons.register')} setLoading={setLoading} />
+              <UpdateProfileForm profile={profile} organizations={organizations} onSave={onSave} saveButtonLabel={t('registration.buttons.register')} />
 
             </IonCardContent>
           </IonCard>
@@ -97,13 +97,13 @@ const Register: React.FC<RegisterProps> = ({isLoggedIn, isRegistered, profile, o
 
 export default connect<OwnProps, StateProps, DispatchProps>({
   mapDispatchToProps: {
-    setIsRegistered,
-    setLoading,
+    setIsRegistered
   },
   mapStateToProps: (state) => ({
     isLoggedIn: state.user.isLoggedIn,
     isRegistered: state.user.isRegistered,
     profile: selectors.getUserProfile(state),
+    intercomUser: selectors.getIntercomUser(state),
     organizations: selectors.getOrganizations(state)
   }),
   component: Register

@@ -1,3 +1,4 @@
+import React from 'react';
 import {isPlatform} from "@ionic/react";
 import {
   authCheck,
@@ -20,10 +21,10 @@ import 'firebase/messaging';
 
 declare var intercom: any;
 
-const { PushNotifications } = Plugins;
+const { PushNotifications, LocalNotifications } = Plugins;
 const fcm = new FCM();
 export const loadOrganizations = () => async (dispatch: React.Dispatch<any>) => {
-  listenForOrganizationData(function(organizations:Organization[]) {
+  await listenForOrganizationData(function(organizations:Organization[]) {
     dispatch(setOrganizations(organizations));
   });
 }
@@ -41,7 +42,7 @@ const requestNotificationPermission = async (dispatch: React.Dispatch<any>) =>  
         updateProfile({notificationsOn: true}); // Don't wait for it to complete since we have offline support
         PushNotifications.register() // Register with Apple / Google to receive push via APNS/FCM
           .then(() => {
-            getMessagingToken(dispatch);
+            getMessagingToken();
           })
           .catch((err) => alert(JSON.stringify(err)));
       } else {
@@ -67,6 +68,38 @@ const requestNotificationPermission = async (dispatch: React.Dispatch<any>) =>  
     PushNotifications.addListener('pushNotificationReceived',
       (notification: PushNotification) => {
         console.log('Push received: ' + JSON.stringify(notification));
+        if (notification.title && notification.body) {
+          LocalNotifications.schedule({
+            notifications: [
+              {
+                title: notification.title,
+                body: notification.body,
+                id: notification.id  ? parseInt(notification.id) : Date.now(),
+                schedule: { at: new Date(Date.now() + 2000) },
+                actionTypeId: "",
+                extra: null
+              }
+            ]
+          }).then((notifs) => {
+            console.log('scheduled notifications', notifs);
+          });
+        }
+        else if (notification.data && notification.data.title && notification.data.message) {
+          LocalNotifications.schedule({
+            notifications: [
+              {
+                title: notification.data.title,
+                body: notification.data.message,
+                id: notification.data.instance_id ? parseInt(notification.data.instance_id) : Date.now(),
+                schedule: { at: new Date(Date.now() + 2000) },
+                actionTypeId: "",
+                extra: null
+              }
+            ]
+          }).then((notifs) => {
+            console.log('scheduled notifications', notifs);
+          });
+        }
       }
     );
 
@@ -83,7 +116,7 @@ const requestNotificationPermission = async (dispatch: React.Dispatch<any>) =>  
         console.log('Notification permission granted.');
         dispatch(setNotificationsOn(true));
         updateProfile({notificationsOn: true}); // Don't wait for it to complete since we have offline support
-        getMessagingToken(dispatch);
+        getMessagingToken();
         // [START_EXCLUDE]
         // In many cases once an app has been granted notification permission,
         // it should update its UI reflecting this.
@@ -97,7 +130,7 @@ const requestNotificationPermission = async (dispatch: React.Dispatch<any>) =>  
   }
 }
 
-const getMessagingToken = async (dispatch: React.Dispatch<any>) =>  {
+const getMessagingToken = async () =>  {
 // Get Instance ID token. Initially this makes a network call, once retrieved
 // subsequent calls to getToken will return from cache.
   console.log('Retrieving FCM messaging token...');
@@ -139,7 +172,7 @@ const getMessagingToken = async (dispatch: React.Dispatch<any>) =>  {
 }
 
 export const watchAuthState = () => async (dispatch: React.Dispatch<any>) => {
-  authCheck((user:any) => {
+  await authCheck((user:any) => {
     if (user != null) {
       dispatch(setIsLoggedIn(true));
       listenForUserProfile((profile:UserProfile) => {
@@ -159,23 +192,34 @@ export const watchAuthState = () => async (dispatch: React.Dispatch<any>) => {
               name: profile.name || undefined,
               user_hash: result.data.hash
             };
+            if (profile.intercomCompany) {
+              intercomUser.company = profile.intercomCompany;
+            }
+            if (profile.intercomTag) {
+              intercomUser.tag = profile.intercomTag;
+            }
+            console.log('Intercom User: ', intercomUser);
             // @ts-ignore
             if (isPlatform('hybrid')) {
               intercom.setUserHash(result.data.hash);
               intercom.registerIdentifiedUser({userId: profile.id});
-              intercom.updateUser({
+              const userUpdate:any = {
                 userId: profile.id,
                 phone: profile.phoneNumber || null,
                 email: profile.email || null,
                 name: profile.name || null
-              });
+              };
+              if (profile.intercomCompany) {
+                userUpdate.company = {id: profile.intercomCompany};
+              }
+              if (profile.intercomTag) {
+                userUpdate.tag = {id: profile.intercomTag};
+              }
+              intercom.updateUser(userUpdate);
               intercom.setLauncherVisibility('VISIBLE');
               if (profile.notificationsOn) {
                 intercom.registerForPush();
               }
-            }
-            else {
-              intercomUser.user_hash = result.data.hash;
             }
             dispatch(setIntercomUser(intercomUser));
             if (profile.notificationsOn) {
@@ -237,6 +281,7 @@ export const updateTrainingLesson = (session: TrainingSession|undefined, lesson:
     session.lessons = session.lessons || {};
     session.lessons[lesson.lessonId] = lesson;
     createOrUpdateTrainingSession(session);
+    dispatch(setTrainingSession(session));
   }
 };
 

@@ -86,7 +86,7 @@ exports.getIntercomCompanies = functions.https.onCall((data, context) => {
   });
 });
 
-function doIntercomUpdate (userId, organizationId) {
+function doIntercomUpdate (userId, organizationId, community) {
 
   const apiKey = functions.config().intercom.api_key;
   const client = new Intercom.Client({ token: apiKey });
@@ -118,10 +118,10 @@ function doIntercomUpdate (userId, organizationId) {
           });
       },
       function (cb) {
-        // Read the intercom user (retry up to 5 times)
+        // Read the intercom user (retry up to 12 times)
         let retries = 0;
         async.whilst(function(cb1) {
-          return cb1(null, !contact && retries < 5);
+          return cb1(null, !contact && retries < 12);
         }, function(cb1) {
           if (retries) {
             console.log('Retrying contact search in Intercom');
@@ -137,7 +137,7 @@ function doIntercomUpdate (userId, organizationId) {
             }
             retries++;
             console.log('No results from contact search in Intercom');
-            setTimeout(cb1, 14000);
+            setTimeout(cb1, 15000);
           });
         }, function () {
           cb();
@@ -163,12 +163,12 @@ function doIntercomUpdate (userId, organizationId) {
           return cb();
         }
         let companyId;
-        if (after.community) {
-          const community = organization.communities && organization.communities.find((c) => {
-            return c.name === after.community;
+        if (community) {
+          const found = organization.communities && organization.communities.find((c) => {
+            return c.name === community;
           });
-          if (community) {
-            companyId = community.intercomCompany;
+          if (found) {
+            companyId = found.intercomCompany;
           }
         }
         companyId = companyId || organization.intercomCompany;
@@ -207,5 +207,5 @@ exports.updateIntercomUser = functions.firestore.document('users/{userId}').onWr
       console.log('No update to organization')
       return Promise.resolve(); // No change to the fields we want to sync
   }
-  return doIntercomUpdate(userId, organizationId)
+  return doIntercomUpdate(userId, after.organizationId, after.community)
 });
