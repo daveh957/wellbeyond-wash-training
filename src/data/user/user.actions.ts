@@ -180,7 +180,7 @@ export const watchAuthState = () => async (dispatch: React.Dispatch<any>) => {
           const getUserIdHash = firebase.functions().httpsCallable('getUserIdHash');
           dispatch(setIsRegistered(true));
           dispatch(setAcceptedTerms(!!profile.acceptedTerms));
-          dispatch(setNotificationsOn(!!profile.notificationsOn));
+          dispatch(setNotificationsOn(profile.notificationsOn !== false));
           dispatch(setUserProfile(profile));
           const platform = isPlatform('ios') ? 'ios' : (isPlatform('android') ? 'android' : 'web');
           getUserIdHash({platform: platform}).then(function (result) {

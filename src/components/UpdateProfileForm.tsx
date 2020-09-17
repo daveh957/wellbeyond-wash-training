@@ -166,11 +166,11 @@ const UpdateProfileForm: React.FC<UpdateProfileProps> = ({profile, intercomUser,
             const found = organization.communities && organization.communities.find((c) => {
               return c.name === community;
             });
-            if (found) {
+            if (found && found.intercomCompany && found.name) {
               profile.intercomCompany = {id: found.intercomCompany, name: found.name};
             }
           }
-          if (!profile.intercomCompany && organization.intercomCompany) {
+          if (!profile.intercomCompany && organization.intercomCompany && organization.name) {
             profile.intercomCompany = {id: organization.intercomCompany, name: organization.name};
           }
         }
