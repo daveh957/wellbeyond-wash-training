@@ -50,27 +50,26 @@ const UpdateProfileForm: React.FC<UpdateProfileProps> = ({profile, intercomUser,
   const [formSubmitted, setFormSubmitted] = useState<boolean>(false);
   const [serverError, setServerError] = useState<Error>();
   const [nameError, setNameError] = useState<string>();
+  const [communityError, setCommunityError] = useState<string>();
   const [organizationError, setOrganizationError] = useState<string>();
   const [orgPasswordError, setOrgPasswordError] = useState<string>();
 
   useEffect(() => {
-    if (organizations) {
-      let list = organizations.sort((a: Organization, b: Organization) => {
-        return a.name < b.name ? -1 : +1;
-      });
-      // Don't show Other as a choice for Organization
-      // list.push({id: '_other', name: 'Other', communities: []});
-      setOrganizationList(list);
+    if (!organizations) {
+      return;
     }
-  }, [organizations]);
-
-  useEffect(() => {
-    if (!profile || !organizations) {
+    let list = organizations.sort((a: Organization, b: Organization) => {
+      return a.name < b.name ? -1 : +1;
+    });
+    // Don't show Other as a choice for Organization
+    // list.push({id: '_other', name: 'Other', communities: []});
+    setOrganizationList(list);
+    if (!profile) {
       return;
     }
     let organization;
     if (profile.organizationId) {
-      organization = organizations.find((o) => o.id === profile.organizationId);
+      organization = list.find((o) => o.id === profile.organizationId);
     }
     else if (profile.organization === 'Other') {
       organization = {id: '_other', name: 'Other', communities: []};
@@ -134,13 +133,15 @@ const UpdateProfileForm: React.FC<UpdateProfileProps> = ({profile, intercomUser,
 
   const validate = ():boolean => {
     const nameError = name ? undefined :'registration.errors.nameRequired';
+    const communityError = (organization && communityList && communityList.length && !community) ? 'registration.errors.communityRequired': undefined;
     const organizationError = organization ? undefined : 'registration.errors.organizationRequired';
     const orgPasswordError  = (organization && organization.password && orgPassword !== organization.password) ?
       (orgPassword ? 'registration.errors.organizationPasswordIncorrect' : 'registration.errors.organizationPasswordRequired') : undefined;
     setNameError(nameError);
+    setCommunityError(communityError);
     setOrganizationError(organizationError);
     setOrgPasswordError(orgPasswordError);
-    return !(nameError || organizationError || orgPasswordError);
+    return !(nameError || organizationError || orgPasswordError || communityError);
   }
 
   const save = async (e: React.FormEvent) => {
@@ -207,7 +208,7 @@ const UpdateProfileForm: React.FC<UpdateProfileProps> = ({profile, intercomUser,
           </p>
         </IonText>}
 
-        {organizationList && organizationList.length &&
+        {organizationList && organizationList.length ?
         <IonItem>
           <IonLabel position="stacked" color="primary">{t('registration.labels.organization')}</IonLabel>
           <IonSelect value={organization}
@@ -237,7 +238,7 @@ const UpdateProfileForm: React.FC<UpdateProfileProps> = ({profile, intercomUser,
             </p>
           </IonText>}
         </IonItem>
-        }
+        : undefined}
 
         {organization && organization.password &&
         <IonItem>
@@ -262,7 +263,7 @@ const UpdateProfileForm: React.FC<UpdateProfileProps> = ({profile, intercomUser,
         </IonItem>
         }
 
-        {communityList && communityList.length &&
+        {communityList && communityList.length ?
         <IonItem>
           <IonLabel position="stacked" color="primary">{t('registration.labels.community')}</IonLabel>
           <IonSelect value={community}
@@ -286,7 +287,12 @@ const UpdateProfileForm: React.FC<UpdateProfileProps> = ({profile, intercomUser,
             }
             buttons={ [{ text: t('buttons.cancel'), role: 'cancel'}, { text: t('buttons.ok') }] }
           />
-        </IonItem>}
+          {communityError && <IonText color="danger">
+            <p className="ion-padding-start">
+              {t(communityError, {organization: organization ? organization.name : ''})}
+            </p>
+          </IonText>}
+        </IonItem> : undefined}
       </IonList>
 
       {formSubmitted && serverError &&

@@ -47,7 +47,7 @@
       "passwordRepeat": "पासवर्ड दोहराएं",
       "organization": "संस्था का नाम",
       "organizationWritein": "संगठन का नाम दर्ज करें",
-      "community": "समुदाय (वैकल्पिक)",
+      "community": "समुदाय",
       "communityWritein": "सामुदायिक नाम दर्ज करें",
       "pleaseAcceptTerms": "कृपया यह इंगित करने वाले बॉक्स को देखें कि आपने इन उपयोग की शर्तों को पढ़ा है और इससे सहमत हैं।",
       "userAcceptsTerms": "मैं ऊपर दिए गए नियमों और शर्तों से सहमत हूं",
@@ -67,7 +67,8 @@
       "organizationRequired": "कृपया हमारे एनजीओ साथी संगठनों में से एक का चयन करें",
       "organizationPasswordRequired": "पासवर्ड <span>0 के</span> लिए रजिस्टर करने के लिए आवश्यक है।",
       "organizationPasswordIncorrect": "गलत पासवर्ड।",
-      "organizationPasswordContact": "यदि आपको सहायता की आवश्यकता है तो कृपया {{contactName}} से {{contactEmail}} पर संपर्क करें।"
+      "organizationPasswordContact": "यदि आपको सहायता की आवश्यकता है तो कृपया {{contactName}} से {{contactEmail}} पर संपर्क करें।",
+      "communityRequired": "कृपया <span>0 में से</span> किसी एक समुदाय का चयन करें।"
     },
     "buttons": {
       "login": "लॉग इन करें",

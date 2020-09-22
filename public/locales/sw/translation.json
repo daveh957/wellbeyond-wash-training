@@ -47,7 +47,7 @@
       "passwordRepeat": "Rudia neno siri",
       "organization": "Jina la shirika",
       "organizationWritein": "Ingiza Jina la Shirika",
-      "community": "Jumuiya (hiari)",
+      "community": "Jamii",
       "communityWritein": "Ingiza Jina la Jumuiya",
       "pleaseAcceptTerms": "Tafadhali angalia kisanduku kinachoonyesha kuwa umesoma na ukubali masharti haya ya matumizi.",
       "userAcceptsTerms": "Nakubali masharti na masharti hapo juu",
@@ -67,7 +67,8 @@
       "organizationRequired": "Tafadhali chagua moja ya Asasi Zetu za Washirika wa NGO",
       "organizationPasswordRequired": "Nenosiri linalohitajika kujiandikisha kwa {{organization}} .",
       "organizationPasswordIncorrect": "Nenosiri sio sahihi.",
-      "organizationPasswordContact": "Tafadhali wasiliana na {{contactName}} kwa {{contactEmail}} ikiwa unahitaji msaada."
+      "organizationPasswordContact": "Tafadhali wasiliana na {{contactName}} kwa {{contactEmail}} ikiwa unahitaji msaada.",
+      "communityRequired": "Tafadhali chagua moja ya jamii kwa {{organization}} ."
     },
     "buttons": {
       "login": "Ingia",
