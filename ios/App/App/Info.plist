@@ -89,5 +89,21 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<true/>
+  <key>UIBackgroundModes</key>
+  <array>
+    <string>remote-notification</string>
+  </array>
+  <key>IonAppId</key>
+  <string>$APP_ID</string>
+  <key>IonApi</key>
+  <string>$UPDATE_API</string>
+  <key>IonChannelName</key>
+  <string>$CHANNEL_NAME</string>
+  <key>IonMaxVersions</key>
+  <string>$MAX_STORE</string>
+  <key>IonMinBackgroundDuration</key>
+  <string>$MIN_BACKGROUND_DURATION</string>
+  <key>IonUpdateMethod</key>
+  <string>$UPDATE_METHOD</string>
 </dict>
 </plist>
