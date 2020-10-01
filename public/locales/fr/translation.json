@@ -47,7 +47,7 @@
       "passwordRepeat": "Répéter le mot de passe",
       "organization": "nom de l'organisation",
       "organizationWritein": "Entrez le nom de l'organisation",
-      "community": "Communauté (facultatif)",
+      "community": "Communauté",
       "communityWritein": "Entrez le nom de la communauté",
       "pleaseAcceptTerms": "Veuillez cocher la case indiquant que vous avez lu et accepté ces conditions d'utilisation.",
       "userAcceptsTerms": "J'accepte les termes et conditions ci-dessus",
@@ -67,7 +67,8 @@
       "organizationRequired": "Veuillez sélectionner une de nos ONG partenaires",
       "organizationPasswordRequired": "Mot de passe requis pour s&#39;inscrire à {{organization}} .",
       "organizationPasswordIncorrect": "Mot de passe incorrect.",
-      "organizationPasswordContact": "Veuillez contacter {{contactName}} à {{contactEmail}} si vous avez besoin d&#39;aide."
+      "organizationPasswordContact": "Veuillez contacter {{contactName}} à {{contactEmail}} si vous avez besoin d&#39;aide.",
+      "communityRequired": "Veuillez sélectionner l&#39;une des communautés pour {{organization}} ."
     },
     "buttons": {
       "login": "S'identifier",

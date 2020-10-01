@@ -180,7 +180,7 @@ export const watchAuthState = () => async (dispatch: React.Dispatch<any>) => {
           const getUserIdHash = firebase.functions().httpsCallable('getUserIdHash');
           dispatch(setIsRegistered(true));
           dispatch(setAcceptedTerms(!!profile.acceptedTerms));
-          dispatch(setNotificationsOn(!!profile.notificationsOn));
+          dispatch(setNotificationsOn(profile.notificationsOn !== false));
           dispatch(setUserProfile(profile));
           const platform = isPlatform('ios') ? 'ios' : (isPlatform('android') ? 'android' : 'web');
           getUserIdHash({platform: platform}).then(function (result) {
@@ -192,12 +192,6 @@ export const watchAuthState = () => async (dispatch: React.Dispatch<any>) => {
               name: profile.name || undefined,
               user_hash: result.data.hash
             };
-            if (profile.intercomCompany) {
-              intercomUser.company = profile.intercomCompany;
-            }
-            if (profile.intercomTag) {
-              intercomUser.tag = profile.intercomTag;
-            }
             console.log('Intercom User: ', intercomUser);
             // @ts-ignore
             if (isPlatform('hybrid')) {
@@ -209,12 +203,6 @@ export const watchAuthState = () => async (dispatch: React.Dispatch<any>) => {
                 email: profile.email || null,
                 name: profile.name || null
               };
-              if (profile.intercomCompany) {
-                userUpdate.company = {id: profile.intercomCompany};
-              }
-              if (profile.intercomTag) {
-                userUpdate.tag = {id: profile.intercomTag};
-              }
               intercom.updateUser(userUpdate);
               intercom.setLauncherVisibility('VISIBLE');
               if (profile.notificationsOn) {

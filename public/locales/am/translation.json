@@ -47,7 +47,7 @@
       "passwordRepeat": "የማለፊያ ቃልዎን ይድገሙ",
       "organization": "የድርጅት ስም",
       "organizationWritein": "የድርጅት ስም ያስገቡ",
-      "community": "ማህበረሰብ (አማራጭ)",
+      "community": "ማህበረሰብ",
       "communityWritein": "የማህበረሰብ ስም ያስገቡ",
       "pleaseAcceptTerms": "እባክዎን በእነዚህ የአገልግሎት ውሎች ያነበቡ እና መስማማትዎን የሚያሳይ ሳጥን ላይ ምልክት ያድርጉ ፡፡",
       "userAcceptsTerms": "ከዚህ በላይ ባሉት ውሎችና ሁኔታዎች እስማማለሁ",
@@ -67,7 +67,8 @@
       "organizationRequired": "እባክዎን ከ መንግስታዊ ያልሆነ አጋር አጋር ድርጅታችን አንዱን ይምረጡ",
       "organizationPasswordRequired": "ለ {{organization}} ለመመዝገብ የይለፍ ቃል",
       "organizationPasswordIncorrect": "የተሳሳተ የይለፍ ቃል",
-      "organizationPasswordContact": "እርዳታ ከፈለጉ እባክዎ <span>0 ን</span> በ {{contactEmail}} ያነጋግሩ።"
+      "organizationPasswordContact": "እርዳታ ከፈለጉ እባክዎ <span>0 ን</span> በ {{contactEmail}} ያነጋግሩ።",
+      "communityRequired": "እባክዎ ለ {{organization}} ከማህበረሰቡ አንዱን ይምረጡ ፡፡"
     },
     "buttons": {
       "login": "ግባ",

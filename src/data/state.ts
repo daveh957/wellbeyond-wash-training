@@ -11,7 +11,7 @@ export const initialState: AppState = {
   },
   user: {
     darkMode: false,
-    notificationsOn: false,
+    notificationsOn: true,
     loading: false,
     sessions: {}
   }
