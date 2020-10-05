@@ -54,6 +54,13 @@ const requestNotificationPermission = async (dispatch: React.Dispatch<any>) =>  
     PushNotifications.addListener('registration',
       (token: PushNotificationToken) => {
         console.log('Push registration success, token: ' + token.value);
+        try {
+          intercom.registerForPush();
+          intercom.sendPushTokenToIntercom(token.value);
+        }
+        catch (err) {
+          console.log(err);
+        }
       }
     );
 
@@ -133,42 +140,28 @@ const requestNotificationPermission = async (dispatch: React.Dispatch<any>) =>  
 const getMessagingToken = async () =>  {
 // Get Instance ID token. Initially this makes a network call, once retrieved
 // subsequent calls to getToken will return from cache.
-  console.log('Retrieving FCM messaging token...');
   if (isPlatform('hybrid')) {
-    fcm
-      .getToken()
-      .then((r) => {
-        console.log(`Token ${r.token}`);
-        try {
-          intercom.registerForPush();
-          intercom.sendPushTokenToIntercom(r.token);
-        }
-        catch (err) {
-          console.log(err);
-        }
-      })
-      .catch((err) => console.log(err));
+    return Promise.resolve();
   }
-  else {
-    const messaging = firebase.messaging();
-    messaging.getToken().then((currentToken) => {
-      if (currentToken) {
-        console.log(`Token ${currentToken}`);
-        messaging.onMessage((payload) => {
-          console.log('Message received. ');
-          console.log(payload);
-          // ...
-        });
-      } else {
-        // Show permission request.
-        console.log('No Instance ID token available. Request permission to generate one.');
-        // Show permission UI.
-        // updateUIForPushPermissionRequired();
-        // setTokenSentToServer(false);
-      }
-    })
-    .catch((err) => console.log(err));
-  }
+  console.log('Retrieving FCM messaging token...');
+  const messaging = firebase.messaging();
+  messaging.getToken().then((currentToken) => {
+    if (currentToken) {
+      console.log(`Token ${currentToken}`);
+      messaging.onMessage((payload) => {
+        console.log('Message received. ');
+        console.log(payload);
+        // ...
+      });
+    } else {
+      // Show permission request.
+      console.log('No Instance ID token available. Request permission to generate one.');
+      // Show permission UI.
+      // updateUIForPushPermissionRequired();
+      // setTokenSentToServer(false);
+    }
+  })
+  .catch((err) => console.log(err));
 }
 
 export const watchAuthState = () => async (dispatch: React.Dispatch<any>) => {

@@ -1,0 +1,221 @@
+{
+  "app": {
+    "title": "WellBeyond Mobile App",
+    "logo": "Calaamadaha WellBeyond"
+  },
+  "menu": {
+    "about": "Ku saabsan WellBeyond",
+    "privacy": "Qaanuunka Arrimaha Khaaska ah",
+    "terms": "Shuruudaha Adeegga",
+    "training": "Tababar",
+    "account": "Xisaab",
+    "login": "Soo gal",
+    "logout": "Ka bax",
+    "signup": "Saxeex",
+    "support": "Taageero",
+    "darkMode": "Habka Mugdiga ah",
+    "notificationsOn": "Oggolow ogeysiisyada",
+    "pleaseWait": "Fadlan sug..."
+  },
+  "buttons": {
+    "previous": "Hore",
+    "next": "Xiga",
+    "done": "La dhammeeyay",
+    "close": "Xidh",
+    "cancel": "Jooji",
+    "ok": "OK"
+  },
+  "registration": {
+    "modals": {
+      "changeEmail": "Beddel Cinwaanka Emailka",
+      "changePassword": "Badalida Lambarka sirta ah",
+      "changePhoto": "Beddel Sawirka Sawirka",
+      "changeProfile": "Beddel Macluumaadka Macluumaadka",
+      "reauthenticate": "Dib u gal lambarkaaga sirta ah",
+      "forgotPassword": "Udiri Dib-u-habeynta ereyga"
+    },
+    "labels": {
+      "name": "Magaca Hore iyo Dambe",
+      "email": "Cinwaanka emailka",
+      "oldEmail": "Cinwaanka Emailka ee Hada",
+      "newEmail": "Cinwaanka Emailka Cusub",
+      "loginUsername": "Cinwaanka emailka",
+      "passwordResetEmail": "Cinwaanka emailka",
+      "loginPassword": "Furaha",
+      "password": "Password (8 xuruuf ugu yar)",
+      "newPassword": "Furaha Cusub (8 xarfaha ugu yar)",
+      "passwordRepeat": "Ku celi ereyga sirta ah",
+      "organization": "Magaca Ururka",
+      "organizationPassword": "Furaha Ururka",
+      "organizationPasswordHint": "<span>0 waxay</span> ahayd inuu ku siiyo lambarka sirta ah ee diiwaangelinta.",
+      "organizationWritein": "Gali Magaca Ururka",
+      "community": "Bulshada",
+      "communityWritein": "Gali Magaca Beesha",
+      "pleaseAcceptTerms": "Fadlan calaamadee sanduuqa muujinaya inaad aqrisay oo aad ogolaatay shuruudahaan adeegsiga.",
+      "userAcceptsTerms": "Waan oggolahay shuruudaha iyo xaaladaha kor ku xusan",
+      "avatar": "Avatar"
+    },
+    "errors": {
+      "nameRequired": "Magaca ayaa loo baahan yahay",
+      "emailRequired": "Email ayaa loo baahan yahay",
+      "passwordRequired": "Password ayaa loo baahan yahay",
+      "passwordLength": "Furaha sirta ahi waa inay ahaadaan uguyaraan 8 xaraf",
+      "passwordMismatch": "Furaha sirta ah ha u dhigmin",
+      "termsNotChecked": "Fadlan calaamadee sanduuqa si aad u sii wadato",
+      "loginUsernameRequired": "Email ayaa loo baahan yahay",
+      "loginPasswordRequired": "Password ayaa loo baahan yahay",
+      "communityRequired": "Fadlan ka dooro mid ka mid ah beelaha {{organization}} .",
+      "organizationRequired": "Fadlan xulo mid ka mid ah Ururada Iskaashatada Aan Wada Shaqeynta Ahayn",
+      "organizationPasswordRequired": "Furaha sirta ah ayaa loo baahan yahay si loogu diiwaangaliyo {{organization}} .",
+      "organizationPasswordIncorrect": "Password qaldan",
+      "organizationPasswordContact": "Fadlan la xiriir {{contactName}} at {{contactEmail}} haddii aad u baahan tahay gargaar."
+    },
+    "buttons": {
+      "login": "Soo gal",
+      "signup": "Saxeex",
+      "register": "Diiwaangeli",
+      "newuser": "Isticmaale Cusub?",
+      "existinguser": "Horeba isticmaale?",
+      "forgotPassword": "Ilowday Furaha",
+      "changePassword": "Cusbooneysii ereyga sirta ah",
+      "changeProfile": "Cusbooneysii Profile",
+      "changeEmail": "Cusboonaysii Email",
+      "changePhoto": "Cusbooneysii Sawirka",
+      "createAccount": "Abuur Akoon",
+      "reauthenticate": "Hubso Furaha",
+      "acceptTerms": "Bilow",
+      "sendPasswordReset": "U dir Email"
+    },
+    "messages": {
+      "loginInfo": "Fadlan soo gal si aad u bilowdo adeegsiga Codsiga Tababbarka Wash ee WellBeyond.",
+      "signupInfo": "Fadlan isdiiwaangeli si aad u bilowdo adeegsiga Codsiga Tababbarka WellBeyond WASH.",
+      "registerInfo": "Fadlan dhammaystir diiwaangelintaada si aad u bilowdo adeegsiga Codsiga Tababbarka WellBeyond WASH.",
+      "passwordChanged": "Password la cusbooneysiiyay",
+      "emailChanged": "Emailka waa la cusboonaysiiyay",
+      "profileChanged": "Macluumaadka waa la cusbooneysiiyay",
+      "passwordResetInfo": "Waa caadi, waa wada iloobi karnaa furayaasheena sirta ah. Kaliya noo sheeg emailka aad iska diiwaan gelisay, waxaanan kuu soo diri doonaa xiriiriye aad isticmaali karto si aad dib ugu dajiso.",
+      "passwordResetSent": "E-mayl ayaa loo diray <span>0 oo</span> leh xiriirin si dib loogu dhigo lambarkaaga sirta ah. Hubso inaad hubiso galkaaga SPAM ka dibna ku soo noqo halkan si aad u gasho ka dib markaad dejiso lambarka sirta ah."
+    },
+    "pages": {
+      "signup": "Saxeex",
+      "login": "Soo gal",
+      "register": "Diiwaangeli",
+      "terms": "Aqbal Shuruudaha",
+      "account": "Xisaab"
+    },
+    "communities": {
+      "selectOne": "Xullo Beel",
+      "Olpejeta": "Olpejeta",
+      "Kithoka": "Kithoka",
+      "Sikizana": "Sikizana",
+      "Olmoran": "Olmoran",
+      "Meta": "Meta",
+      "Cheptori": "Cheptori",
+      "Kavuthu": "Kavuthu",
+      "Kaliini": "Kaliini",
+      "Muruku": "Muruku",
+      "Salaita": "Salaita",
+      "Sauti Kuu": "Sauti Kuu",
+      "Mutaki": "Mutaki",
+      "Other": "Kale"
+    },
+    "organizations": {
+      "selectOne": "Xulo Urur",
+      "Well Aware": "Well Wareysi",
+      "Other": "Kale"
+    }
+  },
+  "training": {
+    "pages": {
+      "start": "Kulan Tababar Cusub"
+    },
+    "labels": {
+      "location": "Xagee ku haysaa tababarka?",
+      "groupType": "Koox noocee ah ayaa loogu talagalay?",
+      "groupSize": "Intee ayey le'eg tahay kooxdu?",
+      "sessionName": "Magac kulankaan tababarka (ikhtiyaari)?",
+      "yes": "Haa",
+      "no": "Maya"
+    },
+    "groupTypes": {
+      "committee": "Guddiga Biyaha",
+      "household": "Reerka",
+      "school": "Iskuulka",
+      "clinic": "Rug Caafimaad",
+      "other": "Kale",
+      "selectOne": "Xulo nooc koox ah"
+    },
+    "groupSizes": {
+      "xs": "1-5",
+      "sm": "6-10",
+      "md": "11-20",
+      "lg": "21-50",
+      "xl": "50-100",
+      "xxl": "In kabadan 100",
+      "selectOne": "Xullo cabir kooxeed"
+    },
+    "messages": {
+      "partiallyComplete": "Waxaad dhameystirtay {{completed}} kamid ah <span>1-da</span> module ee {{subject}} .",
+      "fullyComplete": "Waxaad ku dhamaysay tababarka {{subject}} .",
+      "sessionDescription": "Tababar loogu talagalay {{count}} qof ( {{type}} )",
+      "sessionDescription_plural": "Tababar loogu talagalay {{type}} koox oo ka kooban {{count}} qof",
+      "sessionStartedAt": "Bilaabay {{date, dateAndTime}}",
+      "sessionCompletedAt": "Dhameystiray {{date, dateAndTime}}",
+      "swipeInstructions": "Bidix u mari si aad dib ugu bilowdo kalfadhiga ama midig si aad u tuurto"
+    },
+    "errors": {
+      "locationRequired": "Fadlan bixi goobta tababarka",
+      "groupTypeRequired": "Fadlan u xulo nooc koox ah tababarka",
+      "groupSizeRequired": "Fadlan qor koox ka weyn 0 tababarka"
+    },
+    "headers": {
+      "yourTraining": "2. Tababar shaqsiyeed",
+      "yourTrainingSub": "Dooro xulashadan haddii aad kaligaa tababarka u dhammaysanayso.",
+      "trainOthers": "1. Tababar kooxeed",
+      "trainOthersSub": "Xulo tababarkan haddii aad tababarka ku dhammaynayso koox ahaan.",
+      "previousTraining": "Kal-fadhiyadii Tababarka ee Hore"
+    },
+    "buttons": {
+      "startTraining": "Bilow Tababarkaaga",
+      "reviewTraining": "Dib u eeg Tababarkaaga",
+      "resumeTraining": "Dib U Bilaw Tababarkaaga",
+      "startNewSession": "Ku bilow Kalfadhi Cusub",
+      "resumeSession": "Dib u bilow",
+      "archiveSession": "Tuur",
+      "beginTraining": "Ku Bilow Tababarka",
+      "ok": "OK",
+      "cancel": "LA SOO JOOJIYO"
+    }
+  },
+  "resources": {
+    "subjects": {
+      "name": "Mawduuca",
+      "name_plural": "Mawduucyada",
+      "nonefound": "Maadooyin lama helin"
+    },
+    "lessons": {
+      "name": "Cashar",
+      "name_plural": "Casharo",
+      "imageZoom": "Muuqaalka Sawirka",
+      "intro": {
+        "title": "Hordhac",
+        "completed": "Adigu horay ayaad u dhammaysay qaybtani, laakiin waad ku soo noqon kartaa halkan wakhti kasta oo aad dib u eegto.",
+        "firsttime": "Kahor intaadan bilaabin barnaamijka, waxaan ku weydiinaynaa dhowr su'aalood si aan u aragno inta aad horay u taqaanay. Waxaan markale ku weydiin doonaa su'aalahan ka dib markaad dhammaystirto cutubka."
+      },
+      "summary": {
+        "title": "Casharka Oo Dhameystiran",
+        "completed": "Waxaad si guul leh u dhammaystiratay cutubkan oo aad si sax ah uga jawaabtay {{score}} % su&#39;aalaha.",
+        "nextLesson": "Qeybta xigta waa {{lesson}} . Guji marka xigta markaad diyaar u tahay inaad bilowdo.",
+        "allDone": "Waxaad dhammaystirtay dhammaan qaybaha &#39; <span>0&#39;</span> ."
+      },
+      "questions": {
+        "title": "Su&#39;aasha {{num}} ee {{count}}",
+        "right": "Shaqo fiican, waad saxday.",
+        "wrong": "Waan ka xumahay, waad khaldantay Jawaabta saxda ahi waa"
+      },
+      "attestationHeader": "Fadlan xaqiiji inaad adigu howshaas fulisay adiga oo calaamadeeya sanduuqa hoose.",
+      "completed": "Dhameystiray",
+      "introduction": "Hordhac"
+    }
+  }
+}
