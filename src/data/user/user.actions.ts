@@ -14,7 +14,6 @@ import {TrainingSessions, UserState} from './user.state';
 import {LessonProgress, TrainingSession} from "../../models/Training";
 import {IntercomUser, Organization, UserProfile} from "../../models/User";
 import {Plugins, PushNotification, PushNotificationActionPerformed, PushNotificationToken} from '@capacitor/core';
-import {FCM} from '@capacitor-community/fcm';
 import * as firebase from 'firebase/app';
 import 'firebase/functions';
 import 'firebase/messaging';
@@ -22,7 +21,6 @@ import 'firebase/messaging';
 declare var intercom: any;
 
 const { PushNotifications, LocalNotifications } = Plugins;
-const fcm = new FCM();
 export const loadOrganizations = () => async (dispatch: React.Dispatch<any>) => {
   await listenForOrganizationData(function(organizations:Organization[]) {
     dispatch(setOrganizations(organizations));

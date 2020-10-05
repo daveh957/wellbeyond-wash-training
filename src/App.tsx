@@ -1,5 +1,5 @@
 import React, {Suspense, useEffect} from 'react';
-import {Redirect, Route} from 'react-router-dom';
+import {Redirect, Route, Switch} from 'react-router-dom';
 import {IonApp, IonLoading, IonRouterOutlet, IonSplitPane, isPlatform} from '@ionic/react';
 import {IonReactRouter} from '@ionic/react-router';
 import Intercom from 'react-intercom';
@@ -107,19 +107,21 @@ const IonicApp: React.FC<IonicAppProps> = ({ darkMode, loading, intercomUser, lo
           <IonSplitPane contentId="main">
             <Menu />
             <IonRouterOutlet id="main" animated={false}>
-              <Redirect exact path="/" to="/tabs" />
-              <Route path="/tabs" component={MainTabs} />
-              <Route path="/account" component={Account} />
-              <Route path="/terms" component={AcceptTerms} />
-              <Route path="/register" component={Register} />
-              <Route path="/login" component={Login} />
-              <Route path="/termsOfUse" component={Terms} />
-              <Route path="/privacyPolicy" component={Privacy} />
-              <Route path="/logout" render={() => {
-                i18n.changeLanguage('en');
-                logoutUser();
-                return <Redirect to="/login" />
-              }} />
+              <Switch>
+                <Redirect exact path="/" to="/tabs" />
+                <Route path="/tabs" component={MainTabs} />
+                <Route path="/account" component={Account} />
+                <Route path="/terms" component={AcceptTerms} />
+                <Route path="/register" component={Register} />
+                <Route path="/login" component={Login} />
+                <Route path="/termsOfUse" component={Terms} />
+                <Route path="/privacyPolicy" component={Privacy} />
+                <Route path="/logout" render={() => {
+                  i18n.changeLanguage('en');
+                  logoutUser();
+                  return <Redirect to="/login" />
+                }} />
+              </Switch>
             </IonRouterOutlet>
           </IonSplitPane>
         </IonReactRouter>
