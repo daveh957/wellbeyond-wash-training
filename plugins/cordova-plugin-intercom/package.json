@@ -1,27 +1,26 @@
 {
-  "_from": "cordova-plugin-intercom",
-  "_id": "cordova-plugin-intercom@9.1.0",
+  "_from": "cordova-plugin-intercom@^9.2.1",
+  "_id": "cordova-plugin-intercom@9.2.1",
   "_inBundle": false,
-  "_integrity": "sha512-LvAWQ+vkFqKcMiHeN7F4T1sryp7sZNUD5oDwhgfkH1Jm9nIVh1KxWu/LemmCKBORLdW7uxRlEOC4+Pq1DJa5uA==",
+  "_integrity": "sha512-xd+ardS+Tw+PAxCx0F4VXQXrHreo9i0F1HXFH3nZ9624JRb5QgE3Q2FQJJZAk47GEckjUZ1ks0uVsY3tko0+8A==",
   "_location": "/cordova-plugin-intercom",
   "_phantomChildren": {},
   "_requested": {
-    "type": "tag",
+    "type": "range",
     "registry": true,
-    "raw": "cordova-plugin-intercom",
+    "raw": "cordova-plugin-intercom@^9.2.1",
     "name": "cordova-plugin-intercom",
     "escapedName": "cordova-plugin-intercom",
-    "rawSpec": "",
+    "rawSpec": "^9.2.1",
     "saveSpec": null,
-    "fetchSpec": "latest"
+    "fetchSpec": "^9.2.1"
   },
   "_requiredBy": [
-    "#USER",
     "/"
   ],
-  "_resolved": "https://registry.npmjs.org/cordova-plugin-intercom/-/cordova-plugin-intercom-9.1.0.tgz",
-  "_shasum": "f255b2039f62f75f47500d042dd324ab6fc943dd",
-  "_spec": "cordova-plugin-intercom",
+  "_resolved": "https://registry.npmjs.org/cordova-plugin-intercom/-/cordova-plugin-intercom-9.2.1.tgz",
+  "_shasum": "f058c824324a6a69f0bf7451660a52074580d7a9",
+  "_spec": "cordova-plugin-intercom@^9.2.1",
   "_where": "C:\\Users\\daveh\\Workspaces\\wellbeyond\\wellbeyond-wash-training",
   "author": {
     "name": "Intercom"
@@ -67,5 +66,5 @@
     "type": "git",
     "url": "git+https://github.com/intercom/intercom-cordova.git"
   },
-  "version": "9.1.0"
+  "version": "9.2.1"
 }
