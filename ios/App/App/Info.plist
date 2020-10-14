@@ -35,7 +35,7 @@
 			<string></string>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>com.googleusercontent.apps.654062401402-b74sbbu67aptnvghe01iegalc202ievv</string>
+				<string>com.googleusercontent.apps.654062401402-t83vj62scqp8q1pelo852nf4memrs8d9</string>
 			</array>
 		</dict>
 		<dict>
@@ -43,10 +43,24 @@
 			<string>Editor</string>
 			<key>CFBundleURLName</key>
 			<string></string>
+			<key>CFBundleURLSchemes</key>
+			<array/>
 		</dict>
 	</array>
 	<key>CFBundleVersion</key>
 	<string>1</string>
+	<key>IonApi</key>
+	<string>$UPDATE_API</string>
+	<key>IonAppId</key>
+	<string>$APP_ID</string>
+	<key>IonChannelName</key>
+	<string>$CHANNEL_NAME</string>
+	<key>IonMaxVersions</key>
+	<string>$MAX_STORE</string>
+	<key>IonMinBackgroundDuration</key>
+	<string>$MIN_BACKGROUND_DURATION</string>
+	<key>IonUpdateMethod</key>
+	<string>$UPDATE_METHOD</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSAppTransportSecurity</key>
@@ -66,6 +80,10 @@
 	<string>Store camera photos to camera</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>To Pick Photos from Library</string>
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>remote-notification</string>
+	</array>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>
@@ -89,21 +107,5 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<true/>
-  <key>UIBackgroundModes</key>
-  <array>
-    <string>remote-notification</string>
-  </array>
-  <key>IonAppId</key>
-  <string>$APP_ID</string>
-  <key>IonApi</key>
-  <string>$UPDATE_API</string>
-  <key>IonChannelName</key>
-  <string>$CHANNEL_NAME</string>
-  <key>IonMaxVersions</key>
-  <string>$MAX_STORE</string>
-  <key>IonMinBackgroundDuration</key>
-  <string>$MIN_BACKGROUND_DURATION</string>
-  <key>IonUpdateMethod</key>
-  <string>$UPDATE_METHOD</string>
 </dict>
 </plist>
