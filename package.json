@@ -1,6 +1,6 @@
 {
   "name": "wellbeyond-wash-training",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "private": true,
   "dependencies": {
     "@capacitor-community/fcm": "^1.0.8",

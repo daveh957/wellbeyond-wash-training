@@ -129,7 +129,7 @@ const Login: React.FC<LoginProps> = ({isLoggedIn, isRegistered, acceptedTerms, }
             <div ref={providersRef}>
               <StyledFirebaseAuth uiConfig={uiConfig} firebaseAuth={firebase.auth()}/>
             </div>
-            {isPlatform('hybrid') &&
+            {isPlatform('hybrid') && !isPlatform('ios') &&
               <ul>
                 <li className="firebaseui-list-item" ref={googleRef}>
                   <button type="button" onClick={googleLogin}
