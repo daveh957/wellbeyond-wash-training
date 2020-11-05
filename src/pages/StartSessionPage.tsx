@@ -1,4 +1,4 @@
-import React, {useContext, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import {
   IonButton,
   IonButtons,
@@ -54,6 +54,25 @@ const StartTrainingSession: React.FC<StartTrainingSessionProps> = ({subject, les
   const [formValues, setFormValues] = useState<any>({});
   const [formErrors, setFormErrors] = useState<any>({});
   const [formSubmitted, setFormSubmitted] = useState(false);
+  const [communityList, setCommunityList] = useState<string[]>();
+
+  useEffect(() => {
+    if (community && formValues && !formValues.community) {
+      const values = {...formValues};
+      values.community = community;
+      setFormValues(values);
+    }
+    if (organization && organization.communities && organization.communities.length) {
+      let list = organization.communities.map((c:any) => c.name).sort((a: string, b: string) => {
+        return a < b ? -1 : +1;
+      });
+      list.push('Other');
+      setCommunityList(list);
+    }
+    else {
+      setCommunityList(undefined);
+    }
+  }, [organization, community, formValues]);
 
   const handleChange = (field:string, value:string|number) => {
     let errors = {...formErrors};
@@ -67,6 +86,7 @@ const StartTrainingSession: React.FC<StartTrainingSessionProps> = ({subject, les
     let errors = {...formErrors};
     errors.groupType = formValues.groupType ? null : 'training.errors.groupTypeRequired';
     errors.groupSize = formValues.groupSize ? null : 'training.errors.groupSizeRequired';
+    errors.community = formValues.community || !communityList || !communityList.length ? null : 'registration.errors.communityRequired';
     setFormErrors(errors);
     return !Object.values(errors).some(x => (x !== null && x !== ''));
   }
@@ -80,7 +100,7 @@ const StartTrainingSession: React.FC<StartTrainingSessionProps> = ({subject, les
         userId: userId || '',
         organizationId: organization && organization.id,
         organization: organization && organization.name,
-        community: community,
+        community: formValues.community,
         started: new Date(),
         archived: false,
         name: formValues.name,
@@ -117,6 +137,24 @@ const StartTrainingSession: React.FC<StartTrainingSessionProps> = ({subject, les
       <IonContent>
         <form noValidate onSubmit={startNewTrainingSession}>
           <IonList>
+
+            {communityList && communityList.length ?
+              <IonItem>
+                <IonLabel position="stacked" color="primary">{t('training.labels.community')}</IonLabel>
+                <IonSelect value={formValues.community}
+                           placeholder={t('registration.communities.selectOne')}
+                           cancelText={t('buttons.cancel')}
+                           okText={t('buttons.ok')}
+                           onIonChange={e => {handleChange('community', e.detail.value!);}}>
+                  {communityList.map((c:string) => <IonSelectOption value={c} key={c}>{c}</IonSelectOption>)}
+                </IonSelect>
+                {formSubmitted && formErrors.community && <IonText color="danger">
+                  <p className="ion-padding-start">
+                    {t(formErrors.community, {organization: organization ? organization.name : ''})}
+                  </p>
+                </IonText>}
+              </IonItem> : undefined}
+
             <IonItem>
               <IonLabel position="stacked" color="primary">{t('training.labels.groupType')}</IonLabel>
               {subject.groupTypes && subject.groupTypes ?
@@ -166,13 +204,12 @@ const StartTrainingSession: React.FC<StartTrainingSessionProps> = ({subject, les
               </p>
             </IonText>}
 
-            <IonItem>
+          <IonItem>
               <IonLabel position="stacked" color="primary">{t('training.labels.sessionName')}</IonLabel>
               <IonInput name="sessionName" type="text" value={formValues.name} spellCheck={false} autocapitalize="on" autocomplete="off" required={false}
                         onIonChange={e => {handleChange('name', e.detail.value!);}}>
               </IonInput>
             </IonItem>
-
 
           </IonList>
 

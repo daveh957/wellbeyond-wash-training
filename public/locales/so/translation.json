@@ -135,7 +135,8 @@
       "groupSize": "Intee ayey le'eg tahay kooxdu?",
       "sessionName": "Magac kulankaan tababarka (ikhtiyaari)?",
       "yes": "Haa",
-      "no": "Maya"
+      "no": "Maya",
+      "community": "Beeshee bey u tahay tababarka?"
     },
     "groupTypes": {
       "committee": "Guddiga Biyaha",

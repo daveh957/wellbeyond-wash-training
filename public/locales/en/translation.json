@@ -130,6 +130,7 @@
       "start": "New Training Session"
     },
     "labels": {
+      "community": "Which community is the training for?",
       "location": "Where are you holding the training?",
       "groupType": "What type of group is it for?",
       "groupSize": "How large is the group?",

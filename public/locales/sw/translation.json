@@ -135,7 +135,8 @@
       "groupSize": "Kikundi ni kipi?",
       "yes": "Ndio",
       "no": "Hapana",
-      "sessionName": "Sema kikao hiki cha mafunzo (hiari)?"
+      "sessionName": "Sema kikao hiki cha mafunzo (hiari)?",
+      "community": "Mafunzo ni ya jamii gani?"
     },
     "groupTypes": {
       "committee": "Kamati ya Maji",

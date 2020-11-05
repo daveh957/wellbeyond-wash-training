@@ -135,7 +135,8 @@
       "groupSize": "Quelle est la taille du groupe?",
       "yes": "Oui",
       "no": "Non",
-      "sessionName": "Nommez cette session de formation (facultatif)?"
+      "sessionName": "Nommez cette session de formation (facultatif)?",
+      "community": "À quelle communauté la formation est-elle destinée?"
     },
     "groupTypes": {
       "committee": "Comité de l'eau",
