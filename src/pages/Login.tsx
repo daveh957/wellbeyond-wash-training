@@ -78,28 +78,31 @@ const Login: React.FC<LoginProps> = ({isLoggedIn, isRegistered, acceptedTerms, }
       {
         provider: firebase.auth.EmailAuthProvider.PROVIDER_ID,
         requireDisplayName: false, // We will ask for display name after sign in
-      },
-      {
-        provider: firebase.auth.PhoneAuthProvider.PROVIDER_ID,
-        recaptchaParameters: {
-          type: 'image', // 'audio'
-          size: 'invisible', // 'invisible' or 'compact'
-          badge: 'bottomleft' //' bottomright' or 'inline' applies to invisible.
-        }
       }
     ]
   };
 
+  if (!isPlatform('hybrid') || !isPlatform('ios')) {
+    uiConfig.signInOptions.push({
+      provider: firebase.auth.PhoneAuthProvider.PROVIDER_ID,
+      // @ts-ignore
+      recaptchaParameters: {
+        type: 'image', // 'audio'
+        size: 'invisible', // 'invisible' or 'compact'
+        badge: 'bottomleft' //' bottomright' or 'inline' applies to invisible.
+      }
+    });
+  }
   if (!isPlatform('hybrid')) {
     uiConfig.signInOptions.push({
-        provider: firebase.auth.GoogleAuthProvider.PROVIDER_ID,
+      provider: firebase.auth.GoogleAuthProvider.PROVIDER_ID,
       // @ts-ignore
-        customParameters: {
-          // Forces account selection even when one account
-          // is available.
-          prompt: 'select_account'
-        }
-      });
+      customParameters: {
+        // Forces account selection even when one account
+        // is available.
+        prompt: 'select_account'
+      }
+    });
   }
 
   if (isLoggedIn) {

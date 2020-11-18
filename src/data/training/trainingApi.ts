@@ -1,7 +1,7 @@
 import * as firebase from 'firebase/app';
 import 'firebase/auth';
 import 'firebase/firestore';
-import {Lesson, Subject} from '../../models/Training';
+import {Lesson, Subject, Topic} from '../../models/Training';
 import {getLessonIconUrl} from "../../util/cloudinary";
 import {checkIsAdmin} from "../user/userApi";
 
@@ -24,7 +24,7 @@ export const listenForTrainingData = async (collectionPath:string, callback:any)
 };
 
 
-export const cacheImagesAndVideos = async (lessons:Lesson[], subjects:Subject[]) => {
+export const cacheImagesAndVideos = async (lessons:Lesson[], subjects:Subject[], topics:Topic[]) => {
   const images:string[] = [];
   const videos:string[] = [];
   if (lessons && lessons.length) {
@@ -44,6 +44,11 @@ export const cacheImagesAndVideos = async (lessons:Lesson[], subjects:Subject[])
   if (subjects && subjects.length) {
     subjects.forEach(subject => {
       subject.photo && images.push(subject.photo);
+    });
+  }
+  if (topics && topics.length) {
+    topics.forEach(topic => {
+      topic.photo && images.push(topic.photo);
     });
   }
   addImagesToCache(images).then(() => {

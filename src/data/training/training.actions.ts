@@ -1,22 +1,24 @@
 import {ActionType} from '../../util/types';
 import {cacheImagesAndVideos, listenForTrainingData,} from './trainingApi'
 import {TrainingState} from './training.state';
-import {Lesson, Question, Subject} from '../../models/Training';
+import {Lesson, Question, Subject, Topic} from '../../models/Training';
 
 export const loadTrainingData = () => (async (dispatch: React.Dispatch<any>) => {
   dispatch(setLoading(true));
-  listenForTrainingData('subjects', (subjects:Subject[]) => {
-    listenForTrainingData('lessons', (lessons:Lesson[]) => {
-      if (lessons && lessons.length) {
-        lessons.forEach(lesson => {
-          if (lesson.questions) {
-            lesson.questions = lesson.questions.filter((q:Question) => q.questionType && q.questionText && q.correctAnswer);
-          }
-        });
-      }
-      cacheImagesAndVideos(lessons, subjects);
-      dispatch(setData({lessons, subjects}));
-      dispatch(setLoading(false));
+  listenForTrainingData('topics', (topics:Topic[]) => {
+    listenForTrainingData('subjects', (subjects:Subject[]) => {
+      listenForTrainingData('lessons', (lessons:Lesson[]) => {
+        if (lessons && lessons.length) {
+          lessons.forEach(lesson => {
+            if (lesson.questions) {
+              lesson.questions = lesson.questions.filter((q:Question) => q.questionType && q.questionText && q.correctAnswer);
+            }
+          });
+        }
+        cacheImagesAndVideos(lessons, subjects, topics);
+        dispatch(setData({lessons, subjects}));
+        dispatch(setLoading(false));
+      });
     });
   });
 });

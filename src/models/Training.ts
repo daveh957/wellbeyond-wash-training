@@ -33,8 +33,16 @@ export interface GroupType {
   name: string;
 }
 
+export interface Topic {
+  id: string;
+  name: string;
+  description: string;
+  photo: string;
+}
+
 export interface Subject {
   id: string;
+  topicId?: string;
   organizationId?: string;
   locale?: string;
   name: string;
