@@ -92,7 +92,7 @@ const LessonPagePage: React.FC<LessonPageProps> = ({ history, subject, lesson, p
       const next = idx + 1;
       if (prev < 0) {
         if (lesson.questions && lesson.questions.length && !lessonProgress.completed) {
-          setPrevUrl(path + '/question/' + lesson.questions.length + '/preview' + (activeSession && activeSession.id ? ('?tsId=' + activeSession.id) : ''));
+          setPrevUrl(path + '/preview/' + lesson.questions.length + (activeSession && activeSession.id ? ('?tsId=' + activeSession.id) : ''));
         }
         else {
           setPrevUrl(path + '/intro' + (activeSession && activeSession.id ? ('?tsId=' + activeSession.id) : ''));
