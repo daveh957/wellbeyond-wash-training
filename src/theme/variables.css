@@ -247,7 +247,9 @@
  */
 
 .ios {
-
+  --ion-statusbar-padding: 10px;
+  --ion-safe-area-bottom: 10px;
+  --ion-safe-area-top: 10px;
 }
 
 /*
