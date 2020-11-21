@@ -424,3 +424,6 @@ html.plt-ios ionheader.ios {
 html.plt-ios.plt-hybrid ion-header.ios {
   margin-top: 20px;
 }
+.footer-ios ion-toolbar {
+  padding-left: 10px;
+}
