@@ -57,6 +57,10 @@ const StartTrainingSession: React.FC<StartTrainingSessionProps> = ({subject, les
   const [communityList, setCommunityList] = useState<string[]>();
 
   useEffect(() => {
+    i18n.changeLanguage(subject.locale || 'en');
+  }, [subject]);
+
+  useEffect(() => {
     if (community && formValues && !formValues.community) {
       const values = {...formValues};
       values.community = community;

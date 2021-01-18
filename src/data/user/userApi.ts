@@ -1,9 +1,9 @@
 import 'firebase/auth';
 import 'firebase/firestore';
-import {TrainingSessions} from "./user.state";
 import {TrainingSession} from "../../models/Training";
 import {UserProfile} from "../../models/User";
-import * as firebase from "firebase/app";
+import firebase from "firebase/app";
+import {TrainingSessions} from "../training/training.state";
 
 let unsubUser:any, unsubAdmin:any, unsubLessons:any, unsubTraningSessions:any;
 
@@ -90,7 +90,7 @@ export const listenForTrainingSessions = async (callback:any) : Promise<any> => 
     .onSnapshot(querySnapshot => {
       querySnapshot.forEach(function(doc) {
         if (doc.exists) {
-          const data = doc.data() as TrainingSession;
+          const data = {id: doc.id, ...doc.data()} as TrainingSession;
           if (!data.archived) {
             // @ts-ignore id is always defined
             results[data.id] = data;

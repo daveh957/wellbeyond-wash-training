@@ -1,6 +1,7 @@
 import {UserActions} from './user.actions';
-import {TrainingSessions, UserState} from './user.state';
+import {UserState} from './user.state';
 import {initialState} from "../state";
+import {TrainingSessions} from "../training/training.state";
 
 export function userReducer(state: UserState, action: UserActions): UserState {
   switch (action.type) {
@@ -8,6 +9,8 @@ export function userReducer(state: UserState, action: UserActions): UserState {
       return { ...state, loading: action.isLoading };
     case 'set-user-data':
       return { ...state, ...action.data };
+    case 'set-default-language':
+      return { ...state, defaultLanguage: action.language };
     case 'set-dark-mode':
       return { ...state, darkMode: action.darkMode };
     case 'set-notifications-on':

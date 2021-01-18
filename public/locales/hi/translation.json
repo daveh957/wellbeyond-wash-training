@@ -15,7 +15,8 @@
     "support": "सहयोग",
     "darkMode": "डार्क मोड",
     "pleaseWait": "कृपया प्रतीक्षा कीजिये...",
-    "notificationsOn": "नोटिफिकेशन की अनुमति दें"
+    "notificationsOn": "नोटिफिकेशन की अनुमति दें",
+    "maintenance": "रखरखाव"
   },
   "buttons": {
     "previous": "पिछला",
@@ -217,6 +218,84 @@
       "attestationHeader": "कृपया पुष्टि करें कि आप नीचे दिए गए बॉक्स की जाँच करके यह जानकारी देते हैं।",
       "completed": "पूरा कर लिया है",
       "introduction": "परिचय"
+    },
+    "topics": {
+      "name": "प्रशिक्षण विषय",
+      "name_plural": "प्रशिक्षण विषय",
+      "nonefound": "कोई विषय नहीं मिला"
+    },
+    "systems": {
+      "name": "पानी की व्यवस्था",
+      "name_plural": "पानी की व्यवस्था",
+      "nonefound": "कोई जल प्रणाली नहीं मिली"
+    }
+  },
+  "maintenance": {
+    "modals": {
+      "stepComplete": "पूरा <span>०</span>",
+      "startMaintenance": "<span>0 के</span> लिए रखरखाव शुरू करें"
+    },
+    "checklist": {
+      "choose": "कृपया एक रखरखाव चेकलिस्ट चुनें",
+      "notfound": "रखरखाव चेकलिस्ट खोजने में असमर्थ",
+      "stepCount": "{{count}} स्टेप",
+      "stepCount_plural": "{{count}} कदम",
+      "schedule-daily": "हर दिन निर्धारित",
+      "schedule-weekly": "सप्ताह में एक बार निर्धारित",
+      "schedule-biweekly": "अनुसूचित हर 2 सप्ताह",
+      "schedule-monthly": "महीने में एक बार अनुसूचित",
+      "schedule-quarterly": "हर 3 महीने में अनुसूचित",
+      "schedule-semiannual": "साल में दो बार अनुसूचित",
+      "schedule-annual": "वर्ष में एक बार निर्धारित"
+    },
+    "step": {
+      "notStarted": "अभी तक शुरू नहीं किया",
+      "completed": "सफलतापुर्वक पूरा",
+      "incomplete": "पूर्ण करने में असमर्थ",
+      "repairs-needed": "मरम्मत की जरूरत है"
+    },
+    "logs": {
+      "listhdr": "हाल ही में रखरखाव",
+      "activehdr": "वर्तमान में प्रगति पर है",
+      "recenthdr": "हाल ही में पूरा हुआ",
+      "noactive": "वर्तमान में कुछ भी प्रगति पर नहीं है",
+      "norecent": "अभी तक कोई रखरखाव पूरा नहीं हुआ है",
+      "infolabel": "यदि आवश्यक पूरा या मरम्मत में असमर्थ हैं, तो कृपया नीचे अतिरिक्त जानकारी प्रदान करें:",
+      "status": {
+        "choose": "इस चरण की स्थिति क्या है?",
+        "completed": "पूरा कर लिया है",
+        "incomplete": "पूर्ण करने में असमर्थ",
+        "repairs": "मरम्मत की जरूरत है"
+      },
+      "startedOn": "{{date, dateAndTime}} पर शुरू हुआ",
+      "completedOn": "{{date, dateAndTime}} पर पूरा हुआ",
+      "stepCount": "पूर्ण करने के लिए {{remaining}} चरण शेष है",
+      "stepCount_plural": "<span>0 में</span> से {{count}} चरण पूरा होने में शेष है",
+      "completedCount": "{{count}} चरण सफलतापूर्वक पूरा हुआ",
+      "completedCount_plural": "{{count}} चरण सफलतापूर्वक पूरे हुए",
+      "incompleteCount": "{{count}} चरण पूरा करने में असमर्थ",
+      "incompleteCount_plural": "{{count}} चरण पूरे करने में असमर्थ",
+      "repairsCount": "{{count}} चरण के लिए आवश्यक मरम्मत",
+      "repairsCount_plural": "{{count}} चरणों के लिए आवश्यक मरम्मत"
+    },
+    "buttons": {
+      "archive": "रद्द करें",
+      "resume": "बायोडाटा",
+      "review": "समीक्षा",
+      "start": "एक नई चेकलिस्ट शुरू करें",
+      "startChecklist": "चेकलिस्ट शुरू करें",
+      "complete": "नवीनतम स्थिति",
+      "completeStep": "इस कदम के साथ किया"
+    },
+    "messages": {
+      "step-completed": "चरण को सफलतापूर्वक पूरा किया गया",
+      "step-incomplete": "चरण को पूरा करने में असमर्थ के रूप में चिह्नित",
+      "step-repairs-needed": "मरम्मत की आवश्यकता के रूप में चिह्नित कदम",
+      "swipeInstructions": "इनमें से एक चेकलिस्ट को फिर से शुरू करने या इसे छोड़ने का अधिकार देने के लिए बाएं स्वाइप करें"
+    },
+    "errors": {
+      "checklistRequired": "कृपया <span>0 में से</span> किसी एक चेकलिस्ट का चयन करें",
+      "statusRequired": "कृपया इस चरण के लिए एक स्थिति प्रदान करें"
     }
   }
 }

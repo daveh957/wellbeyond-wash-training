@@ -15,7 +15,8 @@
     "support": "Msaada",
     "darkMode": "Njia ya Giza",
     "pleaseWait": "Tafadhali subiri...",
-    "notificationsOn": "Ruhusu Arifa"
+    "notificationsOn": "Ruhusu Arifa",
+    "maintenance": "Matengenezo"
   },
   "buttons": {
     "previous": "Iliyopita",
@@ -217,6 +218,84 @@
       "attestationHeader": "Tafadhali thibitisha kwamba unachukua habari hii kwa kuangalia kisanduku hapa chini.",
       "completed": "Imekamilika",
       "introduction": "Utangulizi"
+    },
+    "topics": {
+      "name": "Mada ya Mafunzo",
+      "name_plural": "Mada za Mafunzo",
+      "nonefound": "Hakuna Mada Zilizopatikana"
+    },
+    "systems": {
+      "name": "Mfumo wa Maji",
+      "name_plural": "Mifumo ya Maji",
+      "nonefound": "Hakuna Mifumo ya Maji Iliyopatikana"
+    }
+  },
+  "maintenance": {
+    "modals": {
+      "stepComplete": "Kamilisha {{step}}",
+      "startMaintenance": "Anza Matengenezo ya {{system}}"
+    },
+    "checklist": {
+      "choose": "Tafadhali chagua orodha ya matengenezo",
+      "notfound": "Imeshindwa kupata orodha ya matengenezo",
+      "stepCount": "{{count}} hatua",
+      "stepCount_plural": "Hatua {{count}}",
+      "schedule-daily": "Imepangwa Kila Siku",
+      "schedule-weekly": "Imepangwa Mara Moja kwa Wiki",
+      "schedule-biweekly": "Iliyopangwa kila wiki 2",
+      "schedule-monthly": "Imepangwa mara moja kwa mwezi",
+      "schedule-quarterly": "Imepangwa Kila Miezi 3",
+      "schedule-semiannual": "Imepangwa mara mbili kwa mwaka",
+      "schedule-annual": "Imepangwa mara moja kwa mwaka"
+    },
+    "step": {
+      "notStarted": "Bado haijaanza",
+      "completed": "Imekamilika kwa mafanikio",
+      "incomplete": "Imeshindwa kukamilisha",
+      "repairs-needed": "Matengenezo yanahitajika"
+    },
+    "logs": {
+      "listhdr": "Matengenezo ya Hivi Karibuni",
+      "activehdr": "Hivi sasa inaendelea",
+      "recenthdr": "Hivi karibuni Imekamilika",
+      "noactive": "Hakuna chochote kinachoendelea",
+      "norecent": "Hakuna matengenezo ambayo yamekamilika bado",
+      "infolabel": "Ikiwa imeshindwa kukamilisha au kukarabati inahitajika, tafadhali toa maelezo ya ziada hapa chini:",
+      "status": {
+        "choose": "Je! Hatua hii ikoje?",
+        "completed": "Imekamilika",
+        "incomplete": "Imeshindwa Kukamilisha",
+        "repairs": "Matengenezo yanahitajika"
+      },
+      "startedOn": "Ilianza tarehe {{date, dateAndTime}}",
+      "completedOn": "Imekamilika tarehe {{date, dateAndTime}}",
+      "stepCount": "<span>Imebaki</span> hatua {{remaining}} kukamilisha",
+      "stepCount_plural": "Zimesalia hatua {{remaining}} kati ya {{count}} kukamilisha",
+      "completedCount": "Hatua {{count}} imekamilika",
+      "completedCount_plural": "Hatua {{count}} zimekamilishwa",
+      "incompleteCount": "Imeshindwa kukamilisha hatua {{count}}",
+      "incompleteCount_plural": "Imeshindwa kukamilisha hatua {{count}}",
+      "repairsCount": "Matengenezo yanahitajika kwa hatua {{count}}",
+      "repairsCount_plural": "Matengenezo yanahitajika kwa hatua {{count}}"
+    },
+    "buttons": {
+      "archive": "Tupa",
+      "resume": "Rejea",
+      "review": "Pitia",
+      "start": "Anza Orodha mpya",
+      "startChecklist": "Anzisha orodha ya ukaguzi",
+      "complete": "Sasisha Hali",
+      "completeStep": "Imefanywa na hatua hii"
+    },
+    "messages": {
+      "step-completed": "Hatua iliyotiwa alama kuwa imekamilika kwa mafanikio",
+      "step-incomplete": "Hatua imetiwa alama kuwa haiwezi kukamilika",
+      "step-repairs-needed": "Hatua iliyowekwa alama kama inayohitaji ukarabati",
+      "swipeInstructions": "Telezesha kidole kushoto ili uendelee moja ya orodha hizi au kulia ili uitupe"
+    },
+    "errors": {
+      "checklistRequired": "Tafadhali chagua orodha moja ya orodha ya {{System}}",
+      "statusRequired": "Tafadhali toa hali ya hatua hii"
     }
   }
 }

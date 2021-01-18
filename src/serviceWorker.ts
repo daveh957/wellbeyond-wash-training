@@ -10,7 +10,7 @@
 // To learn more about the benefits of this model and instructions on how to
 // opt-in, read https://bit.ly/CRA-PWA
 /* Firebase */
-import * as firebase from 'firebase/app';
+import firebase from 'firebase/app';
 import 'firebase/messaging';
 import {firebaseConfig} from './FIREBASE_CONFIG';
 

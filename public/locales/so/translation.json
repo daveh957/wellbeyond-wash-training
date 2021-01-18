@@ -15,7 +15,8 @@
     "support": "Taageero",
     "darkMode": "Habka Mugdiga ah",
     "notificationsOn": "Oggolow ogeysiisyada",
-    "pleaseWait": "Fadlan sug..."
+    "pleaseWait": "Fadlan sug...",
+    "maintenance": "Dayactirka"
   },
   "buttons": {
     "previous": "Hore",
@@ -217,6 +218,84 @@
       "attestationHeader": "Fadlan xaqiiji inaad adigu howshaas fulisay adiga oo calaamadeeya sanduuqa hoose.",
       "completed": "Dhameystiray",
       "introduction": "Hordhac"
+    },
+    "topics": {
+      "name": "Mawduuca Tababarka",
+      "name_plural": "Mawduucyada Tababarka",
+      "nonefound": "Mowduucyo lama helin"
+    },
+    "systems": {
+      "name": "Nidaamka Biyaha",
+      "name_plural": "Nidaamyada Biyaha",
+      "nonefound": "Lama helin Nidaam Biyood"
+    }
+  },
+  "maintenance": {
+    "modals": {
+      "stepComplete": "Buuxi {{step}}",
+      "startMaintenance": "Ku bilow Dayactirka {{system}}"
+    },
+    "checklist": {
+      "choose": "Fadlan dooro liiska hubinta dayactirka",
+      "notfound": "Awoodin in la helo liiska hubinta dayactirka",
+      "stepCount": "{{count}} tallaabo",
+      "stepCount_plural": "{{count}} talaabo",
+      "schedule-daily": "Jadwalka Maalin kasta",
+      "schedule-weekly": "Jadwalka hal mar usbuucii",
+      "schedule-biweekly": "Waxaa loo qorsheeyay 2dii Asbuucba mar",
+      "schedule-monthly": "Loo qorsheeyay Bishiiba Halmar",
+      "schedule-quarterly": "La qorsheeyay 3dii Biloodba mar",
+      "schedule-semiannual": "Loogu tala galay laba jeer sanadkii",
+      "schedule-annual": "Jadwal sanadle ah"
+    },
+    "step": {
+      "notStarted": "Wali lama bilaabin",
+      "completed": "Si guul leh loo dhammeeyay",
+      "incomplete": "Aan dhameystiri karin",
+      "repairs-needed": "Dayactir ayaa loo baahan yahay"
+    },
+    "logs": {
+      "listhdr": "Dayactirka Dhawaan",
+      "activehdr": "Xilligan-In-horumarka",
+      "recenthdr": "Dhawaan Dhameystiray",
+      "noactive": "Ma jiraan wax hadda socda",
+      "norecent": "Weli wax dayactir ah lama dhameystirin",
+      "infolabel": "Haddii aadan awoodin inaad dhammaystirto ama dayactir u baahato, fadlan faahfaahin dheeraad ah hoos ku bixi:",
+      "status": {
+        "choose": "Waa maxay xaaladda tallaabadani?",
+        "completed": "Dhameystiray",
+        "incomplete": "Lama dhameystiri karo",
+        "repairs": "Dayactir Loo Baahan Yahay"
+      },
+      "startedOn": "Ka bilaabmay {{date, dateAndTime}}",
+      "completedOn": "Lagu dhammaystiray {{date, dateAndTime}}",
+      "stepCount": "{{remaining}} tallaabo ayaa hadhay si loo dhammaystiro",
+      "stepCount_plural": "<span>0 ka</span> mid ah {{count}} talaabo ee haray si loo dhamaystiro",
+      "completedCount": "{{count}} tallaabo si guul leh loo dhammaystiray",
+      "completedCount_plural": "{{count}} talaabooyin si guul leh loo dhammeeyay",
+      "incompleteCount": "Lama dhammaystiri karo {{count}} tallaabo",
+      "incompleteCount_plural": "Aan dhameystiri karin {{count}} talaabo",
+      "repairsCount": "Dayactirka looga baahan yahay {{count}} tallaabo",
+      "repairsCount_plural": "Dayactirka looga baahan yahay {{count}} talaabo"
+    },
+    "buttons": {
+      "archive": "Tuur",
+      "resume": "Dib u bilow",
+      "review": "Dib u eegis",
+      "start": "Bilow Liis Cusub",
+      "startChecklist": "Bilow liiska hubinta",
+      "complete": "Cusboonaysiinta Xaaladda",
+      "completeStep": "Lagu dhammeeyay tallaabadan"
+    },
+    "messages": {
+      "step-completed": "Tallaabada lagu calaamadeeyay inay u dhammaatay si guul leh",
+      "step-incomplete": "Tallaabada lagu calaamadeeyay inay tahay mid aan dhammaystiri karin",
+      "step-repairs-needed": "Tallaabada lagu calaamadeeyay inay u baahan tahay dayactir",
+      "swipeInstructions": "Bidix u dhaafi si aad dib ugu bilawdo liisaska hubinta ama midig si aad u tuurto"
+    },
+    "errors": {
+      "checklistRequired": "Fadlan ka dooro mid ka mid ah liistada hubinta ee {{System}}",
+      "statusRequired": "Fadlan xaalad ku bixi tallaabadaas"
     }
   }
 }

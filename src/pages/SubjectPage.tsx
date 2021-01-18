@@ -18,7 +18,6 @@ import {
   IonToolbar
 } from '@ionic/react';
 import {Lesson, Subject, TrainingSession} from '../models/Training';
-import {TrainingSessions} from '../data/user/user.state';
 import {connect} from '../data/connect';
 import * as selectors from '../data/selectors';
 import './SubjectPage.scss';
@@ -28,6 +27,7 @@ import i18n from '../i18n';
 import SelfTraining from "../components/SelfTraining";
 import TrainingSessionItem from "../components/TrainingSessionItem";
 import {Organization} from "../models/User";
+import {TrainingSessions} from "../data/training/training.state";
 
 interface OwnProps extends RouteComponentProps {
   subject: Subject;
@@ -58,13 +58,14 @@ const SubjectPage: React.FC<SubjectProps> = ({ subject, lessons, trainingSession
     if (subject && lessons) {
       // For now, let anyone teach the subject
       setCanTeach(true);
+      i18n.changeLanguage(subject.locale || 'en');
     }
 
   }, [subject, lessons]);
 
   useEffect(() => {
     if (trainingSessions) {
-      const values = Object.values(trainingSessions);
+      const values = Object.values(trainingSessions).filter((s) => s.subjectId === subject.id);
       if (values.length) {
         // @ts-ignore
         const selfTrainingSession = values.find((s) => s.groupType === 'self');
@@ -82,7 +83,7 @@ const SubjectPage: React.FC<SubjectProps> = ({ subject, lessons, trainingSession
       }
     }
 
-  }, [trainingSessions]);
+  }, [subject, trainingSessions]);
 
 
   return (

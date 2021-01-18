@@ -58,6 +58,7 @@ const LessonIntroPage: React.FC<LessonIntroProps> = ({ subject,lesson, lessonPro
 
   useEffect(() => {
     if (subject && lesson && lessonProgress) {
+      i18n.changeLanguage(subject.locale || 'en');
       if (!lessonProgress.started) {
         lessonProgress.started = new Date();
         updateTrainingLesson(activeSession, lessonProgress);

@@ -1,14 +1,18 @@
-import * as firebase from 'firebase/app';
+import firebase from 'firebase/app';
 import 'firebase/auth';
 import 'firebase/firestore';
 import {Lesson, Subject, Topic} from '../../models/Training';
 import {getLessonIconUrl} from "../../util/cloudinary";
 import {checkIsAdmin} from "../user/userApi";
+import {isPlatform} from "@ionic/react";
 
-export const listenForTrainingData = async (collectionPath:string, callback:any) : Promise<any> => {
+export const listenForTrainingData = async (collectionPath:string, organizationId:string, callback:any) : Promise<any> => {
   const isAdmin:boolean = await checkIsAdmin();
   let query:firebase.firestore.Query<firebase.firestore.DocumentData> = firebase.firestore().collection(collectionPath);
-  query = isAdmin ? query : query.where('isPublished', '==', true);
+  if (!isAdmin && collectionPath !== 'topics') {
+    query = query.where('organizationId', '==', organizationId);
+    query = query.where('isPublished', '==', true);
+  }
   return query
     .onSnapshot(querySnapshot => {
       let results:any[] = [];
@@ -19,12 +23,23 @@ export const listenForTrainingData = async (collectionPath:string, callback:any)
           ...doc.data()
         });
       });
+      const trainingData:any ={};
+      trainingData[collectionPath] = results;
+      cacheImagesAndVideos(trainingData as TrainingData);
       callback(results);
     });
 };
 
+interface TrainingData {
+  topics?: Topic[];
+  subjects?: Subject[];
+  lessons?: Lesson[];
+}
 
-export const cacheImagesAndVideos = async (lessons:Lesson[], subjects:Subject[], topics:Topic[]) => {
+export const cacheImagesAndVideos = ({topics, subjects, lessons}:TrainingData) => {
+  if (isPlatform('hybrid')) {
+    return;
+  }
   const images:string[] = [];
   const videos:string[] = [];
   if (lessons && lessons.length) {
@@ -60,24 +75,14 @@ export const cacheImagesAndVideos = async (lessons:Lesson[], subjects:Subject[],
   });
 };
 
-export const addVideoToCache = async (url:string) : Promise<any> => {
-  const cache = await caches.open('video-cache');
-  await cache.add(url);
-}
-
-export const addImageToCache = async (url:string) : Promise<any> => {
-  const cache = await caches.open('image-cache');
-  await cache.add(url);
-}
-
 export const addVideosToCache = async (urls:string[]) : Promise<any> => {
   const cache = await caches.open('video-cache');
-  await cache.addAll(urls);
+  cache.addAll(urls);
 }
 
 export const addImagesToCache = async (urls:string[]) : Promise<any> => {
   const cache = await caches.open('image-cache');
-  await cache.addAll(urls);
+  cache.addAll(urls);
 }
 
 

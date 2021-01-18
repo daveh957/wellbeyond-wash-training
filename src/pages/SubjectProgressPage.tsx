@@ -34,6 +34,7 @@ const SubjectProgressPage: React.FC<SubjectProps> = ({ subject, lessons,  active
   const [lessonFlags, setLessonFlags] = useState<LessonFlags[]>();
   useEffect(() => {
     if (subject && lessons && activeSession) {
+      i18n.changeLanguage(subject.locale || 'en');
       const flags = new Array<LessonFlags>();
       lessons.forEach((l, idx) => {
         const pl = idx>0 ? lessons[idx-1] : undefined;

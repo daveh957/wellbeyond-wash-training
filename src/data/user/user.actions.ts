@@ -10,13 +10,14 @@ import {
   updateProfile
 } from './userApi';
 import {ActionType} from '../../util/types'
-import {TrainingSessions, UserState} from './user.state';
+import {UserState} from './user.state';
 import {LessonProgress, TrainingSession} from "../../models/Training";
 import {IntercomUser, Organization, UserProfile} from "../../models/User";
 import {Plugins, PushNotification, PushNotificationActionPerformed, PushNotificationToken} from '@capacitor/core';
-import * as firebase from 'firebase/app';
+import firebase from 'firebase/app';
 import 'firebase/functions';
 import 'firebase/messaging';
+import {TrainingSessions} from "../training/training.state";
 
 declare var intercom: any;
 
@@ -24,6 +25,12 @@ const { PushNotifications, LocalNotifications } = Plugins;
 export const loadOrganizations = () => async (dispatch: React.Dispatch<any>) => {
   await listenForOrganizationData(function(organizations:Organization[]) {
     dispatch(setOrganizations(organizations));
+  });
+}
+
+export const loadTrainingSessions = () => async (dispatch: React.Dispatch<any>) => {
+  await listenForTrainingSessions((sessions:TrainingSessions) => {
+    dispatch(setTrainingSessions(sessions));
   });
 }
 
@@ -211,9 +218,6 @@ export const watchAuthState = () => async (dispatch: React.Dispatch<any>) => {
           dispatch(setAcceptedTerms(false));
         }
       });
-      listenForTrainingSessions((sessions:TrainingSessions) => {
-        dispatch(setTrainingSessions(sessions));
-      });
     } else {
       dispatch(setIsLoggedIn(false));
       if (isPlatform('hybrid')) {
@@ -298,6 +302,13 @@ export const setIsRegistered = (registered: boolean) => {
   } as const)
 };
 
+export const setDefaultLanguage = (language: string) => {
+  return ({
+    type: 'set-default-language',
+    language
+  } as const);
+};
+
 export const setDarkMode = (darkMode: boolean) => ({
   type: 'set-dark-mode',
   darkMode
@@ -349,6 +360,7 @@ export type UserActions =
   | ActionType<typeof resetData>
   | ActionType<typeof setIsLoggedIn>
   | ActionType<typeof setIsRegistered>
+  | ActionType<typeof setDefaultLanguage>
   | ActionType<typeof setDarkMode>
   | ActionType<typeof setNotificationsOn>
   | ActionType<typeof setAcceptedTerms>

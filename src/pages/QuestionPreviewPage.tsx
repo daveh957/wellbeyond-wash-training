@@ -76,6 +76,7 @@ const QuestionPreviewPage: React.FC<QuestionPageProps> = ({ history, subject, le
 
   useEffect(() => {
     if (subject && lesson && idx > -1) {
+      i18n.changeLanguage(subject.locale || 'en');
       const path = '/tabs/subjects/' + subject.id + '/lessons/' + lesson.id;
       const prev = idx - 1;
       const next = idx + 1;

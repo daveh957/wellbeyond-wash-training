@@ -13,6 +13,10 @@ import {connect} from "../data/connect";
 import {useTranslation} from "react-i18next";
 import i18n from "../i18n";
 import StartSessionPage from "./StartSessionPage";
+import MaintenancePage from "./MaintenancePage";
+import SystemPage from "./SystemPage";
+import MaintenanceLogPage from "./MaintenanceLogPage";
+import MaintenanceStepPage from "./MaintenanceStepPage";
 
 interface OwnProps {}
 
@@ -58,7 +62,7 @@ const MainTabs: React.FC<MainTabsProps> = ({isLoggedIn, isRegistered, acceptedTe
           Using the render method prop cuts down the number of renders your components will have due to route changes.
           Use the component prop when your component depends on the RouterComponentProps passed in automatically.
         */}
-          <Route path="/tabs/training" render={() => <TrainingPage />} exact={true} />
+          <Route path="/tabs/training" component={TrainingPage} exact={true} />
           <Route path="/tabs/subjects/:subjectId" component={SubjectPage} exact={true} />
           <Route path="/tabs/subjects/:subjectId/progress" component={SubjectProgressPage} exact={true} />
           <Route path="/tabs/subjects/:subjectId/start" component={StartSessionPage} exact={true} />
@@ -68,6 +72,10 @@ const MainTabs: React.FC<MainTabsProps> = ({isLoggedIn, isRegistered, acceptedTe
           <Route path="/tabs/subjects/:subjectId/lessons/:lessonId/page/:pageId" component={LessonPage} exact={true} />
           <Route path="/tabs/subjects/:subjectId/lessons/:lessonId/question/:questionId" component={QuestionPage} exact={true} />
           <Route path="/tabs/subjects/:subjectId/lessons/:lessonId/preview/:questionId" component={QuestionPreviewPage} exact={true} />
+          <Route path="/tabs/maintenance" component={MaintenancePage} exact={true} />
+          <Route path="/tabs/systems/:systemId" component={SystemPage} exact={true} />
+          <Route path="/tabs/maintenance/:mlId" component={MaintenanceLogPage} exact={true} />
+          <Route path="/tabs/maintenance/:mlId/step/:stepId" component={MaintenanceStepPage} exact={true} />
         </Switch>
       </IonRouterOutlet>
   );

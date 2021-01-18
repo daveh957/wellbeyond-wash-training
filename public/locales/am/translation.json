@@ -15,7 +15,8 @@
     "support": "ድጋፍ",
     "darkMode": "ጨለማ ሁኔታ",
     "pleaseWait": "እባክህ በትእግስት ተጠባበቅ...",
-    "notificationsOn": "ማስታወቂያዎች ፍቀድ"
+    "notificationsOn": "ማስታወቂያዎች ፍቀድ",
+    "maintenance": "ጥገና"
   },
   "buttons": {
     "previous": "የቀድሞው",
@@ -217,6 +218,84 @@
       "attestationHeader": "እባክዎ ከዚህ በታች ባለው ሳጥን ላይ ምልክት በማድረግ ይህንን መረጃ ማካሄድዎን ያረጋግጡ ፡፡",
       "completed": "ተጠናቋል",
       "introduction": "መግቢያ"
+    },
+    "topics": {
+      "name": "የሥልጠና ርዕስ",
+      "name_plural": "የሥልጠና ርዕሶች",
+      "nonefound": "ምንም ርዕሶች አልተገኙም"
+    },
+    "systems": {
+      "name": "የውሃ ስርዓት",
+      "name_plural": "የውሃ ስርዓቶች",
+      "nonefound": "የውሃ ስርዓቶች አልተገኙም"
+    }
+  },
+  "maintenance": {
+    "modals": {
+      "stepComplete": "ተጠናቅቋል {{step}}",
+      "startMaintenance": "ለ {{system}} ጥገና ይጀምሩ"
+    },
+    "checklist": {
+      "choose": "እባክዎን የጥገና ዝርዝርን ይምረጡ",
+      "notfound": "የጥገና ማረጋገጫ ዝርዝር ማግኘት አልተቻለም",
+      "stepCount": "{{count}} ደረጃ",
+      "stepCount_plural": "{{count}} ደረጃዎች",
+      "schedule-daily": "በየቀኑ የታቀደ",
+      "schedule-weekly": "በሳምንት አንድ ጊዜ የታቀደ",
+      "schedule-biweekly": "በየ 2 ሳምንቱ የታቀደ",
+      "schedule-monthly": "በወር አንድ ጊዜ የታቀደ",
+      "schedule-quarterly": "በየ 3 ወሩ መርሐግብር ተይዞለታል",
+      "schedule-semiannual": "በዓመት ሁለት ጊዜ የታቀደ",
+      "schedule-annual": "በዓመት አንድ ጊዜ የታቀደ"
+    },
+    "step": {
+      "notStarted": "ገና አልተጀመረም",
+      "completed": "በተሳካ ሁኔታ ተጠናቅቋል",
+      "incomplete": "ማጠናቀቅ አልተቻለም",
+      "repairs-needed": "ጥገናዎች ያስፈልጋሉ"
+    },
+    "logs": {
+      "listhdr": "የቅርብ ጊዜ ጥገና",
+      "activehdr": "በአሁኑ ጊዜ በሂደት ላይ",
+      "recenthdr": "በቅርቡ ተጠናቅቋል",
+      "noactive": "በአሁኑ ጊዜ በሂደት ላይ ያለ ምንም ነገር የለም",
+      "norecent": "እስካሁን ድረስ የጥገና ሥራ አልተጠናቀቀም",
+      "infolabel": "ለማጠናቀቅ ወይም ለመጠገን ካልቻሉ እባክዎ ተጨማሪ መረጃ ከዚህ በታች ያቅርቡ",
+      "status": {
+        "choose": "የዚህ እርምጃ ሁኔታ ምን ይመስላል?",
+        "completed": "ተጠናቅቋል",
+        "incomplete": "ማጠናቀቅ አልተቻለም",
+        "repairs": "ጥገናዎች ያስፈልጋሉ"
+      },
+      "startedOn": "በ {{date, dateAndTime}} ተጀምሯል",
+      "completedOn": "በ {{date, dateAndTime}} ተጠናቅቋል",
+      "stepCount": "ለማጠናቀቅ {{remaining}} ደረጃ ይቀራል",
+      "stepCount_plural": "ለማጠናቀቅ ከ {{count}} እርምጃዎች {{remaining}} ቀርቷል",
+      "completedCount": "{{count}} ደረጃ በተሳካ ሁኔታ ተጠናቋል",
+      "completedCount_plural": "{{count}} ደረጃዎች በተሳካ ሁኔታ ተጠናቅቀዋል",
+      "incompleteCount": "{{count}} ደረጃን ማጠናቀቅ አልተቻለም",
+      "incompleteCount_plural": "{{count}} ደረጃዎችን ማጠናቀቅ አልተቻለም",
+      "repairsCount": "ለ {{count}} ደረጃ ጥገና ያስፈልጋል",
+      "repairsCount_plural": "ለ {{count}} ደረጃዎች ጥገና ያስፈልጋል"
+    },
+    "buttons": {
+      "archive": "አስወግድ",
+      "resume": "የራስ መግለጫ",
+      "review": "ግምገማ",
+      "start": "አዲስ የማረጋገጫ ዝርዝርን ይጀምሩ",
+      "startChecklist": "የማረጋገጫ ዝርዝሩን ይጀምሩ",
+      "complete": "ሁኔታን ያዘምኑ",
+      "completeStep": "በዚህ ደረጃ ተከናውኗል"
+    },
+    "messages": {
+      "step-completed": "ደረጃው በተሳካ ሁኔታ እንደተጠናቀቀ ምልክት ተደርጎበታል",
+      "step-incomplete": "ደረጃ ማጠናቀቅ እንዳልቻለ ምልክት ተደርጎበታል",
+      "step-repairs-needed": "ጥገና እንደሚያስፈልግ ምልክት ተደርጎበታል",
+      "swipeInstructions": "ከነዚህ የማረጋገጫ ዝርዝር ውስጥ አንዱን ለመቀጠል ግራውን ያንሸራትቱ ወይም እሱን ለማስወገድ በቀኝ በኩል ያንሸራትቱ"
+    },
+    "errors": {
+      "checklistRequired": "እባክዎ ለ {{System}} ከዝርዝሩ ዝርዝር ውስጥ አንዱን ይምረጡ",
+      "statusRequired": "እባክዎን ለዚህ እርምጃ ሁኔታ ያቅርቡ"
     }
   }
 }

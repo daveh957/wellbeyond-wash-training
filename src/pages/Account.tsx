@@ -38,6 +38,7 @@ interface StateProps {
   isRegistered?: boolean;
   profile?: UserProfile;
   organizations?: Organization[];
+  defaultLanguage?: string;
 }
 
 interface DispatchProps {
@@ -45,7 +46,7 @@ interface DispatchProps {
 
 interface AccountProps extends OwnProps, StateProps, DispatchProps { }
 
-const Account: React.FC<AccountProps> = ({ isLoggedIn, isRegistered, profile, organizations,   }) => {
+const Account: React.FC<AccountProps> = ({ isLoggedIn, isRegistered, profile, organizations, defaultLanguage  }) => {
 
   const { t } = useTranslation(['translation'], {i18n} );
 
@@ -58,6 +59,10 @@ const Account: React.FC<AccountProps> = ({ isLoggedIn, isRegistered, profile, or
   const [toastMessage, setToastMessage] = useState<string>();
   const [organization, setOrganization] = useState<Organization>();
   const [community, setCommunity] = useState<string>();
+
+  useEffect(() => {
+    i18n.changeLanguage(defaultLanguage || 'en');
+  }, [defaultLanguage]);
 
   useEffect(() => {
     if (!profile || !organizations) {
@@ -150,7 +155,8 @@ export default connect<OwnProps, StateProps, DispatchProps>({
     isLoggedIn: state.user.isLoggedIn,
     isRegistered: state.user.isRegistered,
     profile: selectors.getUserProfile(state),
-    organizations: selectors.getOrganizations(state)
+    organizations: selectors.getOrganizations(state),
+    defaultLanguage: state.user.defaultLanguage,
   }),
   component: Account
 })

@@ -209,3 +209,29 @@ exports.updateIntercomUser = functions.firestore.document('users/{userId}').onWr
   }
   return doIntercomUpdate(userId, after.organizationId, after.community)
 });
+
+
+exports.setMaintenanceSteps = functions.firestore.document('maintenanceLogs/{logId}').onCreate((snap, context) => {
+  const newValue = snap.data() || {};
+
+  if (newValue.checklistId) {
+    // Copy the
+    admin.firestore().collection('checklists').doc(newValue.checklistId).get().then(doc => {
+      if (doc.exists) {
+        const checklist = {
+          id: doc.id,
+          ...doc.data()
+        };
+        return admin.firestore().collection('maintenanceLogs').doc(logId).update({"steps": checklist.steps.map(step => {
+          return {name: step.name};
+        })});
+      }
+      else {
+        console.log('Checklist not found');
+      }
+      return cb();
+    }).catch(error => {
+      console.log("Error getting checklist:", error);
+    });
+  }
+});

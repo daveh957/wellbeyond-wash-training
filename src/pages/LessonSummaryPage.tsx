@@ -53,7 +53,8 @@ const LessonSummaryPage: React.FC<LessonSummaryProps> = ({ history, subject, les
   const [nextLesson, setNextLesson] = useState<Lesson>();
 
   useEffect(() => {
-    if (lesson && lessons && lessonProgress) {
+    if (subject && lesson && lessons && lessonProgress) {
+      i18n.changeLanguage(subject.locale || 'en');
       const lastPage = ('/tabs/subjects/' + subject.id + '/lessons/' + lesson.id) + (lesson.pages && lesson.pages.length ?  + ('/page/' + lesson.pages.length) : '/intro');
       const lastQuestion = lesson.questions && lesson.questions.length ? ('/tabs/subjects/' + subject.id + '/lessons/' + lesson.id + '/question/' + lesson.questions.length) : lastPage;
 

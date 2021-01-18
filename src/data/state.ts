@@ -1,4 +1,5 @@
 import {combineReducers} from './combineReducers';
+import {maintenanceReducer} from './maintenance/maintenance.reducer';
 import {trainingReducer} from './training/training.reducer';
 import {userReducer} from './user/user.reducer';
 
@@ -10,6 +11,11 @@ export const initialState: AppState = {
     loading: false,
     menuEnabled: true
   },
+  maintenance: {
+    systems: [],
+    checklists: [],
+    maintenanceLogs: {}
+  },
   user: {
     darkMode: false,
     notificationsOn: true,
@@ -20,6 +26,7 @@ export const initialState: AppState = {
 
 export const reducers = combineReducers({
   data: trainingReducer,
+  maintenance: maintenanceReducer,
   user: userReducer
 });
 

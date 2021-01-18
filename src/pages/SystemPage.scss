@@ -1,0 +1,50 @@
+#lesson-list {
+  .lesson-card {
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* Due to the fact the cards are inside of columns the margins don't overlap
+   * properly so we want to remove the extra margin between cards
+   */
+  ion-col:not(:last-of-type) .lesson-card {
+    margin-bottom: 0;
+  }
+
+  .lesson-card .lesson-item {
+    --min-height: 85px;
+  }
+
+  .lesson-card .lesson-item h2 {
+    font-size: 14px;
+    font-weight: 500;
+    letter-spacing: 0.02em;
+    white-space: normal;
+    text-align: center;
+  }
+
+  .lesson-card .lesson-item p {
+    font-size: 13px;
+    letter-spacing: 0.02em;
+  }
+
+  .lesson-card ion-card-header {
+    padding: 0;
+  }
+
+  .lesson-card ion-card-content {
+    flex: 1 1 auto;
+
+    padding: 0;
+  }
+
+  .ios ion-list {
+    margin-bottom: 10px;
+  }
+
+  .md ion-list {
+    border-top: 1px solid var(--ion-color-step-150, #d7d8da);
+
+    padding: 0;
+  }
+}

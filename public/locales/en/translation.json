@@ -8,6 +8,7 @@
     "privacy": "Privacy Policy",
     "terms": "Terms Of Service",
     "training": "Training",
+    "maintenance": "Maintenance",
     "account": "Account",
     "login": "Login",
     "logout": "Logout",
@@ -189,10 +190,20 @@
     }
   },
   "resources": {
+    "topics": {
+      "name": "Training Topic",
+      "name_plural": "Training Topics",
+      "nonefound": "No Topics Found"
+    },
     "subjects": {
       "name": "Subject",
       "name_plural": "Subjects",
       "nonefound": "No Subjects Found"
+    },
+    "systems": {
+      "name": "Water System",
+      "name_plural": "Water Systems",
+      "nonefound": "No Water Systems Found"
     },
     "lessons": {
       "name": "Lesson",
@@ -217,6 +228,75 @@
       "attestationHeader": "Please confirm that you undertand this information by checking the box below.",
       "completed": "Completed",
       "introduction": "Introduction"
+    }
+  },
+  "maintenance" :
+  {
+    "modals": {
+      "stepComplete": "Complete {{step}}",
+      "startMaintenance": "Start Maintenance for {{system}}"
+    },
+    "checklist": {
+      "choose": "Please choose a maintenance checklist",
+      "notfound": "Unable to find maintenance checklist",
+      "stepCount": "{{count}} step",
+      "stepCount_plural": "{{count}} steps",
+      "schedule-daily": "Scheduled Every Day",
+      "schedule-weekly": "Scheduled Once a Week",
+      "schedule-biweekly": "Scheduled Every 2 Weeks",
+      "schedule-monthly": "Scheduled Once a Month",
+      "schedule-quarterly": "Scheduled Every 3 Months",
+      "schedule-semiannual": "Scheduled Twice a Year",
+      "schedule-annual": "Scheduled Once a Year"
+    },
+    "step": {
+      "notStarted": "Not yet started",
+      "completed": "Completed successfully",
+      "incomplete": "Unable to complete",
+      "repairs-needed": "Repairs needed"
+    },
+    "logs": {
+      "listhdr": "Recent Maintenance",
+      "activehdr": "Currently In-progress",
+      "recenthdr": "Recently Completed",
+      "noactive": "Nothing currently in-progress",
+      "norecent": "No maintenance has been completed yet",
+      "infolabel": "If unable to complete or repairs needed, please provide additional information below:",
+      "status": {
+        "choose": "What is the status of this step?",
+        "completed": "Completed",
+        "incomplete": "Unable to Complete",
+        "repairs": "Repairs Needed"
+      },
+      "startedOn": "Started on {{date, dateAndTime}}",
+      "completedOn": "Completed on {{date, dateAndTime}}",
+      "stepCount": "{{remaining}} step remaining to complete",
+      "stepCount_plural": "{{remaining}} of {{count}} steps remaining to complete",
+      "completedCount": "{{count}} step successfully completed",
+      "completedCount_plural": "{{count}} steps successfully completed",
+      "incompleteCount": "Unable to complete {{count}} step",
+      "incompleteCount_plural": "Unable to complete {{count}} steps",
+      "repairsCount": "Repairs required for {{count}} step",
+      "repairsCount_plural": "Repairs required for {{count}} steps"
+    },
+    "buttons": {
+      "archive": "Discard",
+      "resume": "Resume",
+      "review": "Review",
+      "start": "Start A New Checklist",
+      "startChecklist": "Start the Checklist",
+      "complete": "Update Status",
+      "completeStep": "Done with this step"
+    },
+    "messages": {
+      "step-completed": "Step marked as completed successfully",
+      "step-incomplete": "Step marked as unable to complete",
+      "step-repairs-needed": "Step marked as needing repairs",
+      "swipeInstructions": "Swipe left to resume one of these checklists or right to discard it"
+    },
+    "errors": {
+      "checklistRequired": "Please select one of the checklists for {{System}}",
+      "statusRequired": "Please provide a status for this step"
     }
   }
 }

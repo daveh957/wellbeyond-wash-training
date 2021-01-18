@@ -1,4 +1,4 @@
-import {Lesson, Subject, Topic} from '../../models/Training';
+import {Lesson, Subject, Topic, TrainingSession} from '../../models/Training';
 
 export interface TrainingState {
   topics: Topic[];
@@ -6,4 +6,8 @@ export interface TrainingState {
   lessons: Lesson[];
   loading?: boolean;
   menuEnabled: boolean;
+}
+
+export interface TrainingSessions {
+    [id: string]: TrainingSession
 }

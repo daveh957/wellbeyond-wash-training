@@ -1,6 +1,6 @@
 import React, {useRef} from 'react';
 import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth';
-import firebase, {UserInfo} from 'firebase/app';
+import firebase from 'firebase/app';
 import {cfaSignIn, mapUserToUserInfo} from 'capacitor-firebase-auth';
 import {
   IonButtons,
@@ -48,7 +48,7 @@ const Login: React.FC<LoginProps> = ({isLoggedIn, isRegistered, acceptedTerms, }
     cfaSignIn('google.com').pipe(
       mapUserToUserInfo(),
     ).subscribe(
-      (user: UserInfo) => console.log(user.displayName)
+      (user: any) => console.log(user.displayName)
     )
     return false;
   };

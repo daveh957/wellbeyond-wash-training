@@ -1,12 +1,9 @@
-import {TrainingSession} from "../../models/Training";
 import {IntercomUser, Organization, UserProfile} from "../../models/User";
-
-export interface TrainingSessions {
-  [id: string]: TrainingSession
-}
+import {TrainingSessions} from "../training/training.state";
 
 export interface UserState {
   id?: string;
+  defaultLanguage?: string;
   isLoggedIn?: boolean;
   isRegistered?: boolean;
   acceptedTerms?: boolean;

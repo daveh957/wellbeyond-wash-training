@@ -21,7 +21,7 @@ import '@ionic/react/css/display.css';
 /* Theme variables */
 import './theme/variables.css';
 /* Firebase */
-import * as firebase from 'firebase/app';
+import firebase from 'firebase/app';
 import 'firebase/auth';
 import 'firebase/firestore';
 import 'firebase/functions';
@@ -31,7 +31,13 @@ import * as selectors from './data/selectors';
 import MainTabs from './pages/MainTabs';
 import {connect} from './data/connect';
 import {AppContextProvider} from './data/AppContext';
-import {loadOrganizations, logoutUser, watchAuthState} from './data/user/user.actions';
+import {
+  loadOrganizations,
+  loadTrainingSessions,
+  logoutUser,
+  setDefaultLanguage,
+  watchAuthState
+} from './data/user/user.actions';
 import {loadTrainingData} from './data/training/training.actions';
 import AcceptTerms from './pages/AcceptTerms';
 import Account from './pages/Account';
@@ -41,6 +47,7 @@ import {useTranslation} from "react-i18next";
 import i18n from "./i18n";
 import Terms from "./pages/Terms";
 import Privacy from "./pages/Privacy";
+import {loadMaintenanceData} from "./data/maintenance/maintenance.actions";
 
 const App: React.FC = () => {
   return (
@@ -59,11 +66,15 @@ const App: React.FC = () => {
 interface StateProps {
   darkMode: boolean;
   loading: boolean;
+  isLoggedIn?: boolean;
   intercomUser: any;
+  userOrganizationId?: string;
 }
 
 interface DispatchProps {
+  loadMaintenanceData: typeof loadMaintenanceData;
   loadTrainingData: typeof loadTrainingData;
+  loadTrainingSessions: typeof loadTrainingSessions;
   loadOrganizations: typeof loadOrganizations;
   watchAuthState: typeof watchAuthState;
   logoutUser: typeof logoutUser;
@@ -72,7 +83,7 @@ interface DispatchProps {
 interface IonicAppProps extends StateProps, DispatchProps { }
 
 
-const IonicApp: React.FC<IonicAppProps> = ({ darkMode, loading, intercomUser, loadTrainingData, loadOrganizations, watchAuthState, logoutUser}) => {
+const IonicApp: React.FC<IonicAppProps> = ({ darkMode, loading, isLoggedIn, intercomUser, userOrganizationId, loadMaintenanceData, loadTrainingData, loadTrainingSessions, loadOrganizations, watchAuthState, logoutUser}) => {
 
   const { t } = useTranslation(['translation'], {i18n} );
 
@@ -96,9 +107,23 @@ const IonicApp: React.FC<IonicAppProps> = ({ darkMode, loading, intercomUser, lo
         }
       });
     loadOrganizations();
-    loadTrainingData();
     watchAuthState();
-  }, [loadTrainingData, loadOrganizations, watchAuthState]);
+  }, [loadOrganizations, watchAuthState]);
+
+  useEffect(() => {
+    if (isLoggedIn) {
+      setDefaultLanguage(i18n.language);
+      loadTrainingSessions();
+    }
+  }, [isLoggedIn, loadTrainingSessions]);
+
+  useEffect(() => {
+    if (userOrganizationId) {
+      loadTrainingData(userOrganizationId);
+      loadMaintenanceData(userOrganizationId);
+    }
+  }, [userOrganizationId, loadTrainingData, loadMaintenanceData]);
+
 
   // @ts-ignore
   return (
@@ -145,8 +170,10 @@ const IonicAppConnected = connect<{}, StateProps, DispatchProps>({
   mapStateToProps: (state) => ({
     darkMode: selectors.getDarkMode(state),
     loading: selectors.getLoading(state),
+    isLoggedIn: state.user.isLoggedIn,
     intercomUser: selectors.getIntercomUser(state),
+    userOrganizationId: selectors.getUserOrganizationId(state),
   }),
-  mapDispatchToProps: { loadTrainingData, loadOrganizations, watchAuthState, logoutUser},
+  mapDispatchToProps: { loadTrainingSessions,loadMaintenanceData, loadTrainingData, loadOrganizations, watchAuthState, logoutUser},
   component: IonicApp
 });

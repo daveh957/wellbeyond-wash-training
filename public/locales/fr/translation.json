@@ -15,7 +15,8 @@
     "support": "Soutien",
     "darkMode": "Mode sombre",
     "pleaseWait": "S'il vous plaît, attendez...",
-    "notificationsOn": "Autoriser les notifications"
+    "notificationsOn": "Autoriser les notifications",
+    "maintenance": "Entretien"
   },
   "buttons": {
     "previous": "Précédent",
@@ -217,6 +218,84 @@
       "attestationHeader": "Veuillez confirmer que vous avez pris connaissance de ces informations en cochant la case ci-dessous.",
       "completed": "Terminé",
       "introduction": "introduction"
+    },
+    "topics": {
+      "name": "Sujet de formation",
+      "name_plural": "Sujets de formation",
+      "nonefound": "Aucun sujet trouvé"
+    },
+    "systems": {
+      "name": "Système d'eau",
+      "name_plural": "Systèmes d'eau",
+      "nonefound": "Aucun système d'eau trouvé"
+    }
+  },
+  "maintenance": {
+    "modals": {
+      "stepComplete": "Terminer {{step}}",
+      "startMaintenance": "Démarrer la maintenance pour {{system}}"
+    },
+    "checklist": {
+      "choose": "Veuillez choisir une liste de contrôle de maintenance",
+      "notfound": "Impossible de trouver la liste de contrôle de maintenance",
+      "stepCount": "{{count}} pas",
+      "stepCount_plural": "{{count}} pas",
+      "schedule-daily": "Programmé tous les jours",
+      "schedule-weekly": "Programmé une fois par semaine",
+      "schedule-biweekly": "Programmé toutes les 2 semaines",
+      "schedule-monthly": "Programmé une fois par mois",
+      "schedule-quarterly": "Programmé tous les 3 mois",
+      "schedule-semiannual": "Programmé deux fois par an",
+      "schedule-annual": "Programmé une fois par an"
+    },
+    "step": {
+      "notStarted": "Pas encore commencé",
+      "completed": "Complété avec succès",
+      "incomplete": "Impossible de terminer",
+      "repairs-needed": "Réparations nécessaires"
+    },
+    "logs": {
+      "listhdr": "Maintenance récente",
+      "activehdr": "Actuellement en cours",
+      "recenthdr": "Complété récemment",
+      "noactive": "Rien actuellement en cours",
+      "norecent": "Aucune maintenance n'est encore terminée",
+      "infolabel": "En cas d'impossibilité de terminer ou de réparations nécessaires, veuillez fournir des informations supplémentaires ci-dessous:",
+      "status": {
+        "choose": "Quel est le statut de cette étape?",
+        "completed": "Terminé",
+        "incomplete": "Impossible de terminer",
+        "repairs": "Réparations nécessaires"
+      },
+      "startedOn": "Commencé le {{date, dateAndTime}}",
+      "completedOn": "Terminé le {{date, dateAndTime}}",
+      "stepCount": "{{remaining}} étape restante pour terminer",
+      "stepCount_plural": "<span>Il</span> reste {{remaining}} étapes sur {{count}} à compléter",
+      "completedCount": "{{count}} étape terminée avec succès",
+      "completedCount_plural": "{{count}} étape terminée avec succès",
+      "incompleteCount": "Impossible de terminer {{count}} étape",
+      "incompleteCount_plural": "Impossible d&#39;effectuer {{count}} étape",
+      "repairsCount": "Réparations requises pour {{count}} étape",
+      "repairsCount_plural": "Réparations requises pour {{count}} étapes"
+    },
+    "buttons": {
+      "archive": "Jeter",
+      "resume": "CV",
+      "review": "La revue",
+      "start": "Commencer une nouvelle liste de contrôle",
+      "startChecklist": "Commencer la liste de contrôle",
+      "complete": "État de mise à jour",
+      "completeStep": "Terminé cette étape"
+    },
+    "messages": {
+      "step-completed": "Étape marquée comme terminée avec succès",
+      "step-incomplete": "Étape marquée comme impossible à terminer",
+      "step-repairs-needed": "Étape marquée comme nécessitant des réparations",
+      "swipeInstructions": "Balayez vers la gauche pour reprendre l'une de ces listes de contrôle ou vers la droite pour la supprimer"
+    },
+    "errors": {
+      "checklistRequired": "Veuillez sélectionner l&#39;une des listes de contrôle pour {{System}}",
+      "statusRequired": "Veuillez fournir un statut pour cette étape"
     }
   }
 }
