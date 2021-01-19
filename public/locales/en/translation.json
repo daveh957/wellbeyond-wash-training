@@ -163,7 +163,8 @@
       "sessionDescription_plural": "Training for {{type}} group of {{count}} people",
       "sessionStartedAt": "Started {{date, dateAndTime}}",
       "sessionCompletedAt": "Completed {{date, dateAndTime}}",
-      "swipeInstructions": "Swipe left to resume session or right to discard it"
+      "swipeInstructions": "Swipe left to resume session or right to discard it",
+      "noSubjects": "No training modules have been created for your organization.  Please contact {{contactName}} at {{contactEmail}} if you have questions."
     },
     "errors": {
       "locationRequired": "Please provide a location for the training",
@@ -292,7 +293,8 @@
       "step-completed": "Step marked as completed successfully",
       "step-incomplete": "Step marked as unable to complete",
       "step-repairs-needed": "Step marked as needing repairs",
-      "swipeInstructions": "Swipe left to resume one of these checklists or right to discard it"
+      "swipeInstructions": "Swipe left to resume one of these checklists or right to discard it",
+      "noSystems": "No water systems have been identified for your organization.  Please contact {{contactName}} at {{contactEmail}} if you have questions."
     },
     "errors": {
       "checklistRequired": "Please select one of the checklists for {{System}}",

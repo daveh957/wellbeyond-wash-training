@@ -10,12 +10,13 @@ import {
   IonMenuButton,
   IonPage,
   IonTitle,
-  IonToolbar
+  IonToolbar,
+  IonItem
 } from '@ionic/react';
 
 import './MaintenancePage.scss'
 
-import {useTranslation} from "react-i18next";
+import {Trans, useTranslation} from "react-i18next";
 import i18n from '../i18n';
 import * as selectors from '../data/selectors';
 import {connect} from '../data/connect';
@@ -23,12 +24,14 @@ import {System} from '../models/Maintenance';
 import SystemItem from "../components/SystemItem";
 import {Redirect} from "react-router-dom";
 import {RouteComponentProps} from "react-router";
+import {Organization} from "../models/User";
 
 interface OwnProps extends RouteComponentProps {
 }
 
 interface StateProps {
   systems: System[],
+  organization?: Organization,
   defaultLanguage?: string
 }
 
@@ -37,7 +40,7 @@ interface DispatchProps {
 
 type MaintenancePageProps = OwnProps & StateProps & DispatchProps;
 
-const MaintenancePage: React.FC<MaintenancePageProps> = ({ systems, defaultLanguage}) => {
+const MaintenancePage: React.FC<MaintenancePageProps> = ({ systems, organization, defaultLanguage}) => {
 
   const pageRef = useRef<HTMLElement>(null);
   const { t } = useTranslation(['translation'], {i18n} );
@@ -73,12 +76,22 @@ const MaintenancePage: React.FC<MaintenancePageProps> = ({ systems, defaultLangu
       </IonHeader>
 
       <IonContent fullscreen={true}>
-        {systems && systems.length ?
+        {organization && systems ?
             (<IonList>
-              {systemList.map((system, index: number) => (
+              {systems.length ? systemList.map((system, index: number) => (
                 <IonItemGroup key={`system-${index}`}>
                     <SystemItem system={system} />
                 </IonItemGroup>))
+              :
+                <IonItemGroup>
+                  <IonItem lines="none">
+                    <p>
+                      <Trans
+                        i18nKey="maintenance.messages.noSystems"
+                        values={{contactName: organization.contactName, contactEmail: organization.contactEmail}}/>
+                    </p>
+                  </IonItem>
+                </IonItemGroup>
               }
             </IonList>)
           :
@@ -96,6 +109,7 @@ const MaintenancePage: React.FC<MaintenancePageProps> = ({ systems, defaultLangu
 export default connect<OwnProps, StateProps, DispatchProps>({
   mapStateToProps: (state) => ({
     systems: selectors.getSystemsForOrganization(state),
+    organization: selectors.getUserOrganization(state),
     defaultLanguage: state.user.defaultLanguage
   }),
   component: React.memo(MaintenancePage)

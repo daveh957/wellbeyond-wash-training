@@ -163,7 +163,8 @@
       "sessionDescription_plural": "Tababar loogu talagalay {{type}} koox oo ka kooban {{count}} qof",
       "sessionStartedAt": "Bilaabay {{date, dateAndTime}}",
       "sessionCompletedAt": "Dhameystiray {{date, dateAndTime}}",
-      "swipeInstructions": "Bidix u mari si aad dib ugu bilowdo kalfadhiga ama midig si aad u tuurto"
+      "swipeInstructions": "Bidix u mari si aad dib ugu bilowdo kalfadhiga ama midig si aad u tuurto",
+      "noSubjects": "Noocyo tababar ah looma abuurin ururkaaga. Fadlan la xiriir {{contactName}} at {{contactEmail}} haddii aad su&#39;aalo qabtid."
     },
     "errors": {
       "locationRequired": "Fadlan bixi goobta tababarka",
@@ -291,7 +292,8 @@
       "step-completed": "Tallaabada lagu calaamadeeyay inay u dhammaatay si guul leh",
       "step-incomplete": "Tallaabada lagu calaamadeeyay inay tahay mid aan dhammaystiri karin",
       "step-repairs-needed": "Tallaabada lagu calaamadeeyay inay u baahan tahay dayactir",
-      "swipeInstructions": "Bidix u dhaafi si aad dib ugu bilawdo liisaska hubinta ama midig si aad u tuurto"
+      "swipeInstructions": "Bidix u dhaafi si aad dib ugu bilawdo liisaska hubinta ama midig si aad u tuurto",
+      "noSystems": "Nidaam biyo ah looma aqoonsan ururkaaga. Fadlan la xiriir {{contactName}} at {{contactEmail}} haddii aad su&#39;aalo qabtid."
     },
     "errors": {
       "checklistRequired": "Fadlan ka dooro mid ka mid ah liistada hubinta ee {{System}}",

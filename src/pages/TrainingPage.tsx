@@ -3,7 +3,7 @@ import React, {useEffect, useRef} from 'react';
 import {
   IonButtons,
   IonContent,
-  IonHeader,
+  IonHeader, IonItem,
   IonItemGroup,
   IonList,
   IonLoading,
@@ -15,7 +15,7 @@ import {
 
 import './TrainingPage.scss'
 
-import {useTranslation} from "react-i18next";
+import {Trans, useTranslation} from "react-i18next";
 import i18n from '../i18n';
 import * as selectors from '../data/selectors';
 import {connect} from '../data/connect';
@@ -24,6 +24,7 @@ import SubjectItem from "../components/SubjectItem";
 import TopicItem from "../components/TopicItem";
 import {Redirect} from "react-router-dom";
 import {RouteComponentProps} from "react-router";
+import {Organization} from "../models/User";
 
 interface OwnProps extends RouteComponentProps {
 }
@@ -32,6 +33,7 @@ interface StateProps {
   subjects: Subject[],
   topics: Topic[],
   topic?: Topic,
+  organization?: Organization,
   defaultLanguage?: string
 }
 
@@ -40,7 +42,7 @@ interface DispatchProps {
 
 type TrainingPageProps = OwnProps & StateProps & DispatchProps;
 
-const TrainingPage: React.FC<TrainingPageProps> = ({ subjects, topics, topic, defaultLanguage}) => {
+const TrainingPage: React.FC<TrainingPageProps> = ({ subjects, topics, topic, organization, defaultLanguage}) => {
 
   const pageRef = useRef<HTMLElement>(null);
   const { t } = useTranslation(['translation'], {i18n} );
@@ -68,15 +70,29 @@ const TrainingPage: React.FC<TrainingPageProps> = ({ subjects, topics, topic, de
       </IonHeader>
 
       <IonContent fullscreen={true}>
-        {topics && subjects && subjects.length ?
+        {organization && topics && subjects ?
           topic || topics.length < 2 ?
+            (subjects.length ?
             (<IonList>
               {subjects.map((subject, index: number) => (
                 <IonItemGroup key={`subject-${index}`}>
                     <SubjectItem subject={subject} />
                 </IonItemGroup>))
               }
-            </IonList>)
+            </IonList>) :
+            <IonList>
+              <IonItemGroup>
+                <IonItem lines="none">
+                  <p>
+                    <Trans
+                      i18nKey="training.messages.noSubjects"
+                      values={{contactName: organization.contactName, contactEmail: organization.contactEmail}}/>
+                  </p>
+                </IonItem>
+              </IonItemGroup>
+
+            </IonList>
+            )
           :
             (<IonList>
               {topics.map((topic, index: number) => (
@@ -102,6 +118,7 @@ export default connect<OwnProps, StateProps, DispatchProps>({
     subjects: selectors.getSubjectsForTopic(state, ownProps),
     topics: selectors.getTopicsForOrganization(state),
     topic: selectors.getTopic(state, ownProps),
+    organization: selectors.getUserOrganization(state),
     defaultLanguage: state.user.defaultLanguage
   }),
   component: React.memo(TrainingPage)

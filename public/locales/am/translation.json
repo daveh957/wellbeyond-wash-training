@@ -163,7 +163,8 @@
       "sessionStartedAt": "{{date, dateAndTime}} ተጀምሯል",
       "sessionCompletedAt": "{{date, dateAndTime}} ተጠናቋል",
       "swipeInstructions": "ክፍለ-ጊዜን ለመቀጠል ወደ ግራ ያንሸራትቱ ወይም እሱን ለማስወገድ ቀኝ",
-      "sessionDescription_plural": "{{count}} ሰዎች {{type}} ቡድን ስልጠና"
+      "sessionDescription_plural": "{{count}} ሰዎች {{type}} ቡድን ስልጠና",
+      "noSubjects": "ለድርጅትዎ የሥልጠና ሞጁሎች አልተፈጠሩም ፡፡ ጥያቄዎች ካሉዎት እባክዎን {{contactName}} በ {{contactEmail}} ያነጋግሩ ፡"
     },
     "errors": {
       "locationRequired": "እባክዎን ለስልጠና አንድ ቦታ ያቅርቡ",
@@ -291,7 +292,8 @@
       "step-completed": "ደረጃው በተሳካ ሁኔታ እንደተጠናቀቀ ምልክት ተደርጎበታል",
       "step-incomplete": "ደረጃ ማጠናቀቅ እንዳልቻለ ምልክት ተደርጎበታል",
       "step-repairs-needed": "ጥገና እንደሚያስፈልግ ምልክት ተደርጎበታል",
-      "swipeInstructions": "ከነዚህ የማረጋገጫ ዝርዝር ውስጥ አንዱን ለመቀጠል ግራውን ያንሸራትቱ ወይም እሱን ለማስወገድ በቀኝ በኩል ያንሸራትቱ"
+      "swipeInstructions": "ከነዚህ የማረጋገጫ ዝርዝር ውስጥ አንዱን ለመቀጠል ግራውን ያንሸራትቱ ወይም እሱን ለማስወገድ በቀኝ በኩል ያንሸራትቱ",
+      "noSystems": "ለድርጅትዎ ምንም የውሃ ስርዓት አልተለየም ፡፡ ጥያቄዎች ካሉዎት እባክዎን {{contactName}} በ {{contactEmail}} ያነጋግሩ ፡"
     },
     "errors": {
       "checklistRequired": "እባክዎ ለ {{System}} ከዝርዝሩ ዝርዝር ውስጥ አንዱን ይምረጡ",

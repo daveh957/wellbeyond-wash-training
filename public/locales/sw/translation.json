@@ -163,7 +163,8 @@
       "sessionStartedAt": "Imeanza {{date, dateAndTime}}",
       "sessionCompletedAt": "Imekamilika {{date, dateAndTime}}",
       "swipeInstructions": "Swipe kushoto ili kuendelea tena na kikao au kulia ili uitupe",
-      "sessionDescription_plural": "Mafunzo kwa kikundi {{type}} cha watu {{count}}"
+      "sessionDescription_plural": "Mafunzo kwa kikundi {{type}} cha watu {{count}}",
+      "noSubjects": "Hakuna moduli za mafunzo iliyoundwa kwa shirika lako. Tafadhali wasiliana na {{contactName}} kwa {{contactEmail}} ikiwa una maswali."
     },
     "errors": {
       "locationRequired": "Tafadhali toa eneo la mafunzo",
@@ -291,7 +292,8 @@
       "step-completed": "Hatua iliyotiwa alama kuwa imekamilika kwa mafanikio",
       "step-incomplete": "Hatua imetiwa alama kuwa haiwezi kukamilika",
       "step-repairs-needed": "Hatua iliyowekwa alama kama inayohitaji ukarabati",
-      "swipeInstructions": "Telezesha kidole kushoto ili uendelee moja ya orodha hizi au kulia ili uitupe"
+      "swipeInstructions": "Telezesha kidole kushoto ili uendelee moja ya orodha hizi au kulia ili uitupe",
+      "noSystems": "Hakuna mifumo ya maji iliyotambuliwa kwa shirika lako. Tafadhali wasiliana na {{contactName}} kwa {{contactEmail}} ikiwa una maswali."
     },
     "errors": {
       "checklistRequired": "Tafadhali chagua orodha moja ya orodha ya {{System}}",
