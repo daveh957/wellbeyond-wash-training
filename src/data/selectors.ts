@@ -72,9 +72,6 @@ const getTrainingSessionIdParam  = (_state: AppState, props: any) => {
 const getSystemIdParam = (_state: AppState, props: any) => {
   return props.match.params['systemId'];
 }
-const getChecklistIdParam = (_state: AppState, props: any) => {
-  return props.match.params['checklistId'];
-}
 const getMaintenceLogIdParam = (_state: AppState, props: any) => {
   return props.match.params['mlId'];
 }

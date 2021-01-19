@@ -48,7 +48,6 @@ const StartMaintenanceModal: React.FC<StartMaintenanceProps> = ({showModal, clos
   const {navigate} = useContext(NavContext);
   const { t } = useTranslation(['translation'], {i18n} );
 
-  const [formSubmitted, setFormSubmitted] = useState(false);
   const [checklist, setChecklist] = useState<Checklist>();
   const [checklistError, setChecklistError] = useState<string>();
 
@@ -66,7 +65,6 @@ const StartMaintenanceModal: React.FC<StartMaintenanceProps> = ({showModal, clos
 
   const save = async (e: React.FormEvent) => {
     e.preventDefault();
-    setFormSubmitted(true);
     if(validate() && profile && checklist) {
       const now = new Date();
       const log:MaintenanceLog = {

@@ -92,6 +92,7 @@ const Menu: React.FC<MenuProps> = ({ darkMode, notificationsOn, isLoggedIn, menu
       ));
   }
 
+  /*
   function renderSubjects() {
     return subjects
       .map(subject => (
@@ -115,6 +116,7 @@ const Menu: React.FC<MenuProps> = ({ darkMode, notificationsOn, isLoggedIn, menu
         </IonMenuToggle>
       ));
   }
+   */
 
   return (
     <IonMenu  type="overlay" disabled={!menuEnabled} contentId="main">
