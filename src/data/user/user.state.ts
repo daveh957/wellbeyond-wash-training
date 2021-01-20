@@ -4,6 +4,7 @@ import {TrainingSessions} from "../training/training.state";
 export interface UserState {
   id?: string;
   defaultLanguage?: string;
+  isAdmin?: boolean;
   isLoggedIn?: boolean;
   isRegistered?: boolean;
   acceptedTerms?: boolean;

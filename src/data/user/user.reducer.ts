@@ -19,6 +19,8 @@ export function userReducer(state: UserState, action: UserActions): UserState {
       return { ...state, acceptedTerms: action.acceptedTerms };
     case 'set-is-loggedin':
       return { ...state, isLoggedIn: action.loggedIn };
+    case 'set-is-admin':
+      return { ...state, isAdmin: action.isAdmin };
     case 'set-is-registered':
       return { ...state, isRegistered: action.registered };
     case 'set-user-profile':

@@ -2,6 +2,7 @@ import React from 'react';
 import {isPlatform} from "@ionic/react";
 import {
   authCheck,
+  checkIsAdmin,
   createOrUpdateTrainingSession,
   listenForOrganizationData,
   listenForTrainingSessions,
@@ -190,6 +191,9 @@ export const watchAuthState = () => async (dispatch: React.Dispatch<any>) => {
               name: profile.name || undefined,
               user_hash: result.data.hash
             };
+            checkIsAdmin().then((isAdmin) => {
+              dispatch(setIsAdmin(!!isAdmin));
+            });
             console.log('Intercom User: ', intercomUser);
             // @ts-ignore
             if (isPlatform('hybrid')) {
@@ -295,6 +299,13 @@ export const setIsLoggedIn = (loggedIn: boolean) => {
   } as const);
 };
 
+export const setIsAdmin = (isAdmin: boolean) => {
+  return ({
+    type: 'set-is-admin',
+    isAdmin
+  } as const);
+};
+
 export const setIsRegistered = (registered: boolean) => {
   return ({
     type: 'set-is-registered',
@@ -359,6 +370,7 @@ export type UserActions =
   | ActionType<typeof setData>
   | ActionType<typeof resetData>
   | ActionType<typeof setIsLoggedIn>
+  | ActionType<typeof setIsAdmin>
   | ActionType<typeof setIsRegistered>
   | ActionType<typeof setDefaultLanguage>
   | ActionType<typeof setDarkMode>

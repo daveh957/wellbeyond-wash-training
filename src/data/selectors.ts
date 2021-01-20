@@ -3,6 +3,7 @@ import {AppState} from './state';
 import {Lesson} from '../models/Training';
 import queryString from 'query-string';
 import i18n from '../i18n';
+import {Organization} from "../models/User";
 
 export const getLoading  = (state: AppState) => {
   return !!state.data.loading;
@@ -49,6 +50,9 @@ export const getUserOrganizationId = (state: AppState) => {
 export const getUserCommunity = (state: AppState) => {
   return state.user.profile ? state.user.profile.community : undefined;
 }
+export const getIsAdmin = (state: AppState) => {
+  return state.user.isAdmin;
+}
 const getSubjectIdParam = (_state: AppState, props: any) => {
   return props.match.params['subjectId'];
 }
@@ -79,8 +83,11 @@ const getStepIdParam = (_state: AppState, props: any) => {
   return props.match.params['stepId'];
 }
 export const getUserOrganization = createSelector(
-  getOrganizations, getUserOrganizationId,
-  (organizations, organizationId) => {
+  getOrganizations, getUserOrganizationId, getIsAdmin,
+  (organizations, organizationId, isAdmin) => {
+    if (isAdmin) {
+      return {id: '', name: 'Administrator', contactName: 'System Administrator', contactEmail: 'admin@wellbeyondwater.com', communities:[]} as Organization
+    }
     if (organizations) {
       if (organizationId) {
         return organizations.find((o) => o.id === organizationId)

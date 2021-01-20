@@ -3,7 +3,8 @@ import React, {useEffect, useRef} from 'react';
 import {
   IonButtons,
   IonContent,
-  IonHeader, IonItem,
+  IonHeader,
+  IonItem,
   IonItemGroup,
   IonList,
   IonLoading,
@@ -86,7 +87,9 @@ const TrainingPage: React.FC<TrainingPageProps> = ({ subjects, topics, topic, or
                   <p>
                     <Trans
                       i18nKey="training.messages.noSubjects"
-                      values={{contactName: organization.contactName, contactEmail: organization.contactEmail}}/>
+                      values={{
+                        contactName:organization.contactName,
+                        contactEmail: organization.contactEmail}}/>
                   </p>
                 </IonItem>
               </IonItemGroup>

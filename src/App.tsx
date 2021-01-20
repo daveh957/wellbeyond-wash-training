@@ -67,6 +67,7 @@ interface StateProps {
   darkMode: boolean;
   loading: boolean;
   isLoggedIn?: boolean;
+  isAdmin?: boolean;
   intercomUser: any;
   userOrganizationId?: string;
 }
@@ -83,7 +84,7 @@ interface DispatchProps {
 interface IonicAppProps extends StateProps, DispatchProps { }
 
 
-const IonicApp: React.FC<IonicAppProps> = ({ darkMode, loading, isLoggedIn, intercomUser, userOrganizationId, loadMaintenanceData, loadTrainingData, loadTrainingSessions, loadOrganizations, watchAuthState, logoutUser}) => {
+const IonicApp: React.FC<IonicAppProps> = ({ darkMode, loading, isLoggedIn, isAdmin, intercomUser, userOrganizationId, loadMaintenanceData, loadTrainingData, loadTrainingSessions, loadOrganizations, watchAuthState, logoutUser}) => {
 
   const { t } = useTranslation(['translation'], {i18n} );
 
@@ -123,6 +124,13 @@ const IonicApp: React.FC<IonicAppProps> = ({ darkMode, loading, isLoggedIn, inte
       loadMaintenanceData(userOrganizationId);
     }
   }, [userOrganizationId, loadTrainingData, loadMaintenanceData]);
+
+  useEffect(() => {
+    if (isAdmin) {
+      loadTrainingData('');
+      loadMaintenanceData('');
+    }
+  }, [isAdmin, loadTrainingData, loadMaintenanceData]);
 
 
   // @ts-ignore
@@ -171,6 +179,7 @@ const IonicAppConnected = connect<{}, StateProps, DispatchProps>({
     darkMode: selectors.getDarkMode(state),
     loading: selectors.getLoading(state),
     isLoggedIn: state.user.isLoggedIn,
+    isAdmin: state.user.isAdmin,
     intercomUser: selectors.getIntercomUser(state),
     userOrganizationId: selectors.getUserOrganizationId(state),
   }),
