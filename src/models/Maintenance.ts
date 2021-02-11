@@ -35,6 +35,7 @@ export interface System {
   name: string;
   organizationId: string;
   systemTypeId: string;
+  systemTypeIds: string[];
   latitude: number;
   longitude: number;
   description: string;

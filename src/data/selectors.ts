@@ -250,7 +250,11 @@ export const getChecklistsForSystem = createSelector(
   getChecklists, getSystem,
   (checklists, system) => {
     if (checklists && system) {
-      return checklists.filter((c) => !c.systemTypeId || c.systemTypeId === system.systemTypeId);
+      return checklists.filter((c) => {
+        return !c.systemTypeId ||                                                                 // applies to all system types
+          c.systemTypeId === system.systemTypeId ||                                               // system has a single type
+          (system.systemTypeIds && system.systemTypeIds.find((t) => t === c.systemTypeId)); // system has multiple types
+      });
     }
     return [];
   }
